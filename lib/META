@@ -1,0 +1,12 @@
+# OASIS_START
+# DO NOT EDIT (digest: bd5bf60f9139606b458e940da520258e)
+version = "0.0.0"
+description = "Sized Linear Algebra Package"
+requires = "bigarray lacaml"
+archive(byte) = "slap.cma"
+archive(byte, plugin) = "slap.cma"
+archive(native) = "slap.cmxa"
+archive(native, plugin) = "slap.cmxs"
+exists_if = "slap.cma"
+# OASIS_STOP
+
