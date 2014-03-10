@@ -1,0 +1,296 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="Up" href="Slap_mat.S.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Slap" rel="Chapter" href="Slap.html">
+<link title="Slap_common" rel="Chapter" href="Slap_common.html">
+<link title="Slap_size" rel="Chapter" href="Slap_size.html">
+<link title="Slap_vec" rel="Chapter" href="Slap_vec.html">
+<link title="Slap_mat" rel="Chapter" href="Slap_mat.html">
+<link title="Slap_utils" rel="Chapter" href="Slap_utils.html">
+<link title="Slap_io" rel="Chapter" href="Slap_io.html">
+<link title="Slap_SD" rel="Chapter" href="Slap_SD.html">
+<link title="Slap_CZ" rel="Chapter" href="Slap_CZ.html">
+<link title="Slap_SDCZ_types" rel="Chapter" href="Slap_SDCZ_types.html">
+<link title="Slap_SDCZ_vec" rel="Chapter" href="Slap_SDCZ_vec.html">
+<link title="Slap_SDCZ_mat" rel="Chapter" href="Slap_SDCZ_mat.html">
+<link title="Slap_SDCZ_la" rel="Chapter" href="Slap_SDCZ_la.html">
+<link title="Slap_SD_vec" rel="Chapter" href="Slap_SD_vec.html">
+<link title="Slap_SD_mat" rel="Chapter" href="Slap_SD_mat.html">
+<link title="Slap_SD_la" rel="Chapter" href="Slap_SD_la.html">
+<link title="Slap_CZ_vec" rel="Chapter" href="Slap_CZ_vec.html">
+<link title="Slap_CZ_mat" rel="Chapter" href="Slap_CZ_mat.html">
+<link title="Slap_CZ_la" rel="Chapter" href="Slap_CZ_la.html"><link title="Size representation of vectors and matrices" rel="Section" href="#2_Sizerepresentationofvectorsandmatrices">
+<link title="Data structures" rel="Section" href="#2_Datastructures">
+<link title="Flags" rel="Section" href="#2_Flags">
+<link title="Vectors" rel="Subsection" href="#3_Vectors">
+<link title="Matrices" rel="Subsection" href="#3_Matrices">
+<link title="Transpose flags" rel="Subsection" href="#3_Transposeflags">
+<link title="Direction of matrix multiplication" rel="Subsection" href="#3_Directionofmatrixmultiplication">
+<link title="Matrix norms" rel="Subsection" href="#3_Matrixnorms">
+<link title="SVD computation flags" rel="Subsection" href="#3_SVDcomputationflags">
+<title>Slap_mat.S.Common</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="Slap_mat.S.html" title="Slap_mat.S">Up</a>
+&nbsp;</div>
+<h1>Module <a href="type_Slap_mat.S.Common.html">Slap_mat.S.Common</a></h1>
+
+<pre><span class="keyword">module</span> Common: <code class="type"><a href="Slap_common.S.html">Slap_common.S</a></code><code class="type"> </code></pre><div class="info module top">
+= <a href="Slap.Common.html"><code class="code">Slap.Common</code></a><br>
+</div>
+<hr width="100%">
+<br>
+<h2 id="2_Sizerepresentationofvectorsandmatrices">Size representation of vectors and matrices</h2>
+   The following types represent free algebraic operations on natural numbers.<br>
+
+<pre><span id="TYPEsize"><span class="keyword">type</span> <code class="type">'n</code> size</span> = private <code class="type">int</code> </pre>
+<div class="info ">
+Singleton type on non-negative integers.<br>
+</div>
+
+
+<pre><span id="TYPEz"><span class="keyword">type</span> <code class="type"></code>z</span> </pre>
+<div class="info ">
+zero<br>
+</div>
+
+
+<pre><span id="TYPEs"><span class="keyword">type</span> <code class="type">'n</code> s</span> </pre>
+<div class="info ">
+successor<br>
+</div>
+
+
+<pre><span id="TYPEadd"><span class="keyword">type</span> <code class="type">('m, 'n)</code> add</span> </pre>
+<div class="info ">
+addition of two sizes<br>
+</div>
+
+
+<pre><span id="TYPEmul"><span class="keyword">type</span> <code class="type">('m, 'n)</code> mul</span> </pre>
+<div class="info ">
+multiplication of two sizes<br>
+</div>
+
+
+<pre><span id="TYPEmin"><span class="keyword">type</span> <code class="type">('m, 'n)</code> min</span> </pre>
+<div class="info ">
+minimum of two sizes<br>
+</div>
+
+
+<pre><span id="TYPEmax"><span class="keyword">type</span> <code class="type">('m, 'n)</code> max</span> </pre>
+<div class="info ">
+maximum of two sizes<br>
+</div>
+
+
+<pre><span id="TYPEpacked"><span class="keyword">type</span> <code class="type">'n</code> packed</span> </pre>
+<div class="info ">
+Packed storage size of <code class="code">n</code>-by-<code class="code">n</code> matrix.
+   It is <code class="code">n*(n+1)/2</code>.<br>
+<b>See also</b> <a href="http://www.netlib.org/lapack/lug/node123.html">Packed Storage (NetLib)</a><br>
+</div>
+
+<br>
+<h2 id="2_Datastructures">Data structures</h2><br>
+
+<pre><span id="TYPEcnt"><span class="keyword">type</span> <code class="type"></code>cnt</span> </pre>
+
+
+<pre><span id="TYPEdsc"><span class="keyword">type</span> <code class="type"></code>dsc</span> </pre>
+
+<br>
+<h3 id="3_Vectors">Vectors</h3><br>
+
+<pre><span id="TYPEvec"><span class="keyword">type</span> <code class="type">('n, 'num, 'prec, +'cnt_or_dsc)</code> vec</span> </pre>
+<div class="info ">
+<code class="code">('n, 'num, 'prec, 'cnt_or_dsc) vec</code> is the type of <code class="code">'n</code>-dimensional
+   vector whose elements have OCaml type <code class="code">'num</code>, representation kind <code class="code">'prec</code> and
+   memory continuity <code class="code">'cnt_or_dsc</code>.
+   The internal implementation is fortran-style one-dimensional big array.<br>
+</div>
+
+
+<pre><span id="TYPEint_vec"><span class="keyword">type</span> <code class="type">('n, 'cnt_or_dsc)</code> int_vec</span> = <code class="type">('n, int, Bigarray.int_elt, 'cnt_or_dsc) <a href="Slap_common.S.html#TYPEvec">vec</a></code> </pre>
+
+
+<pre><span id="VALcreate_int_vec"><span class="keyword">val</span> create_int_vec</span> : <code class="type">'n <a href="Slap_common.S.html#TYPEsize">size</a> -> ('n, 'cnt) <a href="Slap_common.S.html#TYPEint_vec">int_vec</a></code></pre>
+<pre><span id="TYPEint32_vec"><span class="keyword">type</span> <code class="type">('n, 'cnt_or_dsc)</code> int32_vec</span> = <code class="type">('n, int32, Bigarray.int32_elt, 'cnt_or_dsc) <a href="Slap_common.S.html#TYPEvec">vec</a></code> </pre>
+
+
+<pre><span id="VALcreate_int32_vec"><span class="keyword">val</span> create_int32_vec</span> : <code class="type">'n <a href="Slap_common.S.html#TYPEsize">size</a> -> ('n, 'cnt) <a href="Slap_common.S.html#TYPEint32_vec">int32_vec</a></code></pre><br>
+<h3 id="3_Matrices">Matrices</h3><br>
+
+<pre><span id="TYPEmat"><span class="keyword">type</span> <code class="type">('m, 'n, 'num, 'prec, +'cnt_or_dsc)</code> mat</span> </pre>
+<div class="info ">
+<code class="code">('m, 'n, 'num, 'prec) mat</code> is the type of <code class="code">'m</code>-by-<code class="code">'n</code> matrix whose
+   elements have OCaml type <code class="code">'num</code>, representation kind <code class="code">'prec</code> and
+   memory continuity <code class="code">'cnt_or_dsc</code>.
+   The internal implementation is fortran-style two-dimensional big array.<br>
+</div>
+
+<br>
+<h2 id="2_Flags">Flags</h2><br>
+<br>
+<h3 id="3_Transposeflags">Transpose flags</h3><br>
+
+<pre><span id="TYPEtrans"><span class="keyword">type</span> <code class="type">('a, +'tag)</code> trans</span> </pre>
+
+
+<pre><span id="TYPEtrans2_tag"><span class="keyword">type</span> <code class="type"></code>trans2_tag</span> </pre>
+
+
+<pre><span id="TYPEtrans2"><span class="keyword">type</span> <code class="type">'a</code> trans2</span> = <code class="type">('a, <a href="Slap_common.S.html#TYPEtrans2_tag">trans2_tag</a>) <a href="Slap_common.S.html#TYPEtrans">trans</a></code> </pre>
+<div class="info ">
+Types of transpose flags for real vectors or matrices.
+      Values of this type are<ul>
+<li><code class="code">Slap.Common.normal</code> and</li>
+<li><code class="code">Slap.Common.trans</code>.</li>
+</ul>
+<br>
+</div>
+
+
+<pre><span id="TYPEtrans3_tag"><span class="keyword">type</span> <code class="type"></code>trans3_tag</span> </pre>
+
+
+<pre><span id="TYPEtrans3"><span class="keyword">type</span> <code class="type">'a</code> trans3</span> = <code class="type">('a, <a href="Slap_common.S.html#TYPEtrans2_tag">trans2_tag</a>) <a href="Slap_common.S.html#TYPEtrans">trans</a></code> </pre>
+<div class="info ">
+Types of transpose flags for complex vectors or matrices.
+      Values of this type are<ul>
+<li><code class="code">Slap.Common.normal</code>,</li>
+<li><code class="code">Slap.Common.trans</code> and</li>
+<li><code class="code">Slap.Common.conjtr</code>.</li>
+</ul>
+<br>
+</div>
+
+
+<pre><span id="VALnormal"><span class="keyword">val</span> normal</span> : <code class="type">(('m, 'n, 'num, 'prec, 'cd) <a href="Slap_common.S.html#TYPEmat">mat</a> -><br>        ('m, 'n, 'num, 'prec, 'cd) <a href="Slap_common.S.html#TYPEmat">mat</a>, 'a)<br>       <a href="Slap_common.S.html#TYPEtrans">trans</a></code></pre><div class="info ">
+Non-transposed matrix.<br>
+</div>
+
+<pre><span id="VALtrans"><span class="keyword">val</span> trans</span> : <code class="type">(('m, 'n, 'num, 'prec, 'cd) <a href="Slap_common.S.html#TYPEmat">mat</a> -><br>        ('n, 'm, 'num, 'prec, 'cd) <a href="Slap_common.S.html#TYPEmat">mat</a>, 'a)<br>       <a href="Slap_common.S.html#TYPEtrans">trans</a></code></pre><div class="info ">
+Transpose of a matrix.<br>
+</div>
+
+<pre><span id="VALconjtr"><span class="keyword">val</span> conjtr</span> : <code class="type">(('m, 'n, 'num, 'prec, 'cd) <a href="Slap_common.S.html#TYPEmat">mat</a> -><br>        ('n, 'm, 'num, 'prec, 'cd) <a href="Slap_common.S.html#TYPEmat">mat</a>, <a href="Slap_common.S.html#TYPEtrans3_tag">trans3_tag</a>)<br>       <a href="Slap_common.S.html#TYPEtrans">trans</a></code></pre><div class="info ">
+Conjugate transpose of a matrix.<br>
+</div>
+<br>
+<h3 id="3_Directionofmatrixmultiplication">Direction of matrix multiplication</h3><br>
+
+<pre><span id="TYPEside"><span class="keyword">type</span> <code class="type">('k, 'm, 'n)</code> side</span> </pre>
+<div class="info ">
+<code class="code">('k, 'm, 'n) side</code> represents a relation between left- or
+      right-multiplication of two matrices and their sizes.
+<p>
+
+      Let <code class="code">A</code> be a <code class="code">'k</code>-by-<code class="code">'k</code> square matrix and <code class="code">B</code> be a <code class="code">'m</code>-by-<code class="code">'n</code>
+      general matrix.
+      The following flags in this type correspond to directions of
+      multiplication of <code class="code">A</code> and <code class="code">B</code>:<ul>
+<li><code class="code">Slap.Common.left</code> means to <em>left</em> multiply <code class="code">A</code> by <code class="code">B</code>,
+        i.e. <code class="code">AB</code>. In this case, <code class="code">'k</code> should be <code class="code">'m</code>; therefore its type is
+        <code class="code">('m, 'm, 'n) side</code>.</li>
+<li><code class="code">Slap.Common.right</code> means to <em>right</em> multiply <code class="code">A</code> by <code class="code">B</code>,
+        i.e. <code class="code">BA</code>. In this case, <code class="code">'k</code> should be <code class="code">'n</code>; therefore its type is
+        <code class="code">('n, 'm, 'n) side</code>.</li>
+</ul>
+<br>
+</div>
+
+
+<pre><span id="VALleft"><span class="keyword">val</span> left</span> : <code class="type">('m, 'm, 'n) <a href="Slap_common.S.html#TYPEside">side</a></code></pre>
+<pre><span id="VALright"><span class="keyword">val</span> right</span> : <code class="type">('n, 'm, 'n) <a href="Slap_common.S.html#TYPEside">side</a></code></pre><br>
+<h3 id="3_Matrixnorms">Matrix norms</h3><br>
+
+<pre><span id="TYPEnorm"><span class="keyword">type</span> <code class="type">('a, +'tag)</code> norm</span> </pre>
+
+
+<pre><span id="TYPEnorm2_tag"><span class="keyword">type</span> <code class="type"></code>norm2_tag</span> </pre>
+
+
+<pre><span id="TYPEnorm2"><span class="keyword">type</span> <code class="type">'a</code> norm2</span> = <code class="type">('a, <a href="Slap_common.S.html#TYPEnorm2_tag">norm2_tag</a>) <a href="Slap_common.S.html#TYPEnorm">norm</a></code> </pre>
+<div class="info ">
+Values of this type are<ul>
+<li><code class="code">Slap.Common.norm_1</code></li>
+<li><code class="code">Slap.Common.norm_inf</code></li>
+</ul>
+<br>
+</div>
+
+
+<pre><span id="TYPEnorm4_tag"><span class="keyword">type</span> <code class="type"></code>norm4_tag</span> </pre>
+
+
+<pre><span id="TYPEnorm4"><span class="keyword">type</span> <code class="type">'a</code> norm4</span> = <code class="type">('a, <a href="Slap_common.S.html#TYPEnorm4_tag">norm4_tag</a>) <a href="Slap_common.S.html#TYPEnorm">norm</a></code> </pre>
+<div class="info ">
+Values of this type are<ul>
+<li><code class="code">Slap.Common.norm_1</code></li>
+<li><code class="code">Slap.Common.norm_inf</code></li>
+<li><code class="code">Slap.Common.norm_amax</code></li>
+<li><code class="code">Slap.Common.norm_frob</code></li>
+</ul>
+<br>
+</div>
+
+
+<pre><span id="TYPEnorm_1"><span class="keyword">type</span> <code class="type"></code>norm_1</span> </pre>
+
+
+<pre><span id="VALnorm_1"><span class="keyword">val</span> norm_1</span> : <code class="type">(<a href="Slap_common.S.html#TYPEnorm_1">norm_1</a>, 'a) <a href="Slap_common.S.html#TYPEnorm">norm</a></code></pre><div class="info ">
+1-norm of a matrix (maximum column sum).<br>
+</div>
+
+<pre><span id="TYPEnorm_inf"><span class="keyword">type</span> <code class="type"></code>norm_inf</span> </pre>
+
+
+<pre><span id="VALnorm_inf"><span class="keyword">val</span> norm_inf</span> : <code class="type">(<a href="Slap_common.S.html#TYPEnorm_inf">norm_inf</a>, 'a) <a href="Slap_common.S.html#TYPEnorm">norm</a></code></pre><div class="info ">
+Infinity-norm of a matrix (maximum row sum).<br>
+</div>
+
+<pre><span id="TYPEnorm_amax"><span class="keyword">type</span> <code class="type"></code>norm_amax</span> </pre>
+
+
+<pre><span id="VALnorm_amax"><span class="keyword">val</span> norm_amax</span> : <code class="type">(<a href="Slap_common.S.html#TYPEnorm_amax">norm_amax</a>, <a href="Slap_common.S.html#TYPEnorm4_tag">norm4_tag</a>) <a href="Slap_common.S.html#TYPEnorm">norm</a></code></pre><div class="info ">
+Largest absolute value of a matrix. (not a matrix norm)<br>
+</div>
+
+<pre><span id="TYPEnorm_frob"><span class="keyword">type</span> <code class="type"></code>norm_frob</span> </pre>
+
+
+<pre><span id="VALnorm_frob"><span class="keyword">val</span> norm_frob</span> : <code class="type">(<a href="Slap_common.S.html#TYPEnorm_frob">norm_frob</a>, <a href="Slap_common.S.html#TYPEnorm4_tag">norm4_tag</a>) <a href="Slap_common.S.html#TYPEnorm">norm</a></code></pre><div class="info ">
+Frobenius norm of a matrix.<br>
+</div>
+<br>
+<h3 id="3_SVDcomputationflags">SVD computation flags</h3><br>
+
+<pre><span id="TYPEsvd_job"><span class="keyword">type</span> <code class="type">'a</code> svd_job</span> </pre>
+
+
+<pre><span id="TYPEsvd_all"><span class="keyword">type</span> <code class="type"></code>svd_all</span> </pre>
+
+
+<pre><span id="VALsvd_all"><span class="keyword">val</span> svd_all</span> : <code class="type"><a href="Slap_common.S.html#TYPEsvd_all">svd_all</a> <a href="Slap_common.S.html#TYPEsvd_job">svd_job</a></code></pre>
+<pre><span id="TYPEsvd_top"><span class="keyword">type</span> <code class="type"></code>svd_top</span> </pre>
+
+
+<pre><span id="VALsvd_top"><span class="keyword">val</span> svd_top</span> : <code class="type"><a href="Slap_common.S.html#TYPEsvd_top">svd_top</a> <a href="Slap_common.S.html#TYPEsvd_job">svd_job</a></code></pre>
+<pre><span id="TYPEsvd_overwrite"><span class="keyword">type</span> <code class="type"></code>svd_overwrite</span> </pre>
+
+
+<pre><span id="VALsvd_overwrite"><span class="keyword">val</span> svd_overwrite</span> : <code class="type"><a href="Slap_common.S.html#TYPEsvd_overwrite">svd_overwrite</a> <a href="Slap_common.S.html#TYPEsvd_job">svd_job</a></code></pre>
+<pre><span id="TYPEsvd_no"><span class="keyword">type</span> <code class="type"></code>svd_no</span> </pre>
+
+
+<pre><span id="VALsvd_no"><span class="keyword">val</span> svd_no</span> : <code class="type"><a href="Slap_common.S.html#TYPEsvd_no">svd_no</a> <a href="Slap_common.S.html#TYPEsvd_job">svd_job</a></code></pre></body></html>

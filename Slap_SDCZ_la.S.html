@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="Up" href="Slap_SDCZ_la.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Slap" rel="Chapter" href="Slap.html">
+<link title="Slap_common" rel="Chapter" href="Slap_common.html">
+<link title="Slap_size" rel="Chapter" href="Slap_size.html">
+<link title="Slap_vec" rel="Chapter" href="Slap_vec.html">
+<link title="Slap_mat" rel="Chapter" href="Slap_mat.html">
+<link title="Slap_utils" rel="Chapter" href="Slap_utils.html">
+<link title="Slap_io" rel="Chapter" href="Slap_io.html">
+<link title="Slap_SD" rel="Chapter" href="Slap_SD.html">
+<link title="Slap_CZ" rel="Chapter" href="Slap_CZ.html">
+<link title="Slap_SDCZ_types" rel="Chapter" href="Slap_SDCZ_types.html">
+<link title="Slap_SDCZ_vec" rel="Chapter" href="Slap_SDCZ_vec.html">
+<link title="Slap_SDCZ_mat" rel="Chapter" href="Slap_SDCZ_mat.html">
+<link title="Slap_SDCZ_la" rel="Chapter" href="Slap_SDCZ_la.html">
+<link title="Slap_SD_vec" rel="Chapter" href="Slap_SD_vec.html">
+<link title="Slap_SD_mat" rel="Chapter" href="Slap_SD_mat.html">
+<link title="Slap_SD_la" rel="Chapter" href="Slap_SD_la.html">
+<link title="Slap_CZ_vec" rel="Chapter" href="Slap_CZ_vec.html">
+<link title="Slap_CZ_mat" rel="Chapter" href="Slap_CZ_mat.html">
+<link title="Slap_CZ_la" rel="Chapter" href="Slap_CZ_la.html"><link title="BLAS interface" rel="Section" href="#2_BLASinterface">
+<link title="LAPACK interface" rel="Section" href="#2_LAPACKinterface">
+<link title="Level 1" rel="Subsection" href="#3_Level1">
+<link title="Level 2" rel="Subsection" href="#3_Level2">
+<link title="Level 3" rel="Subsection" href="#3_Level3">
+<link title="Auxiliary routines" rel="Subsection" href="#3_Auxiliaryroutines">
+<link title="Linear equations (computational routines)" rel="Subsection" href="#3_Linearequationscomputationalroutines">
+<title>Slap_SDCZ_la.S</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="Slap_SDCZ_la.html" title="Slap_SDCZ_la">Up</a>
+&nbsp;</div>
+<h1>Module type <a href="type_Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a></h1>
+
+<pre><span class="keyword">module type</span> S = <code class="code">sig</code> <a href="Slap_SDCZ_la.S.html">..</a> <code class="code">end</code></pre><hr width="100%">
+
+<pre><span class="keyword">include</span> <a href="Slap_SDCZ_types.S.html">Slap_SDCZ_types.S</a></pre>
+
+<pre><span id="VALkind"><span class="keyword">val</span> kind</span> : <code class="type">(num_type, prec) Bigarray.kind</code></pre>
+<pre><span id="VALreal_kind"><span class="keyword">val</span> real_kind</span> : <code class="type">(float, real_prec) Bigarray.kind</code></pre>
+<pre><span id="VALprec"><span class="keyword">val</span> prec</span> : <code class="type">(num_type, prec) Bigarray.kind</code></pre><div class="info ">
+An alias of <code class="code">kind</code>.<br>
+</div>
+
+<pre><span id="VALpp_num"><span class="keyword">val</span> pp_num</span> : <code class="type">Format.formatter -> num_type -> unit</code></pre><div class="info ">
+A pretty-printer for elements in vectors and matrices.<br>
+</div>
+
+<pre><span id="VALpp_vec"><span class="keyword">val</span> pp_vec</span> : <code class="type">Format.formatter -> ('n, Common.cnt) vec -> unit</code></pre><div class="info ">
+A pretty-printer for column vectors.<br>
+</div>
+
+<pre><span id="VALpp_mat"><span class="keyword">val</span> pp_mat</span> : <code class="type">Format.formatter -> ('m, 'n, Common.cnt) mat -> unit</code></pre><div class="info ">
+A pretty-printer for matrices.<br>
+</div>
+<br>
+<h2 id="2_BLASinterface">BLAS interface</h2><br>
+<br>
+<h3 id="3_Level1">Level 1</h3><br>
+
+<pre><span id="VALswap"><span class="keyword">val</span> swap</span> : <code class="type">x:('n, 'x_cd) vec -> ('n, 'y_cd) vec -> unit</code></pre>
+<pre><span id="VALscal"><span class="keyword">val</span> scal</span> : <code class="type">num_type -> ('n, 'cd) vec -> unit</code></pre>
+<pre><span id="VALcopy"><span class="keyword">val</span> copy</span> : <code class="type">?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec</code></pre>
+<pre><span id="VALnrm2"><span class="keyword">val</span> nrm2</span> : <code class="type">('n, 'cd) vec -> float</code></pre>
+<pre><span id="VALaxpy"><span class="keyword">val</span> axpy</span> : <code class="type">?alpha:num_type -> x:('n, 'x_cd) vec -> ('n, 'y_cd) vec -> unit</code></pre>
+<pre><span id="VALiamax"><span class="keyword">val</span> iamax</span> : <code class="type">('n, 'cd) vec -> int</code></pre>
+<pre><span id="VALamax"><span class="keyword">val</span> amax</span> : <code class="type">('n, 'cd) vec -> num_type</code></pre><br>
+<h3 id="3_Level2">Level 2</h3><br>
+
+<pre><span id="VALgemv"><span class="keyword">val</span> gemv</span> : <code class="type">?beta:num_type -><br>       ?y:('m, 'y_cd) vec -><br>       trans:(('a_m, 'a_n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) trans -><br>       ?alpha:num_type -><br>       ('a_m, 'a_n, 'a_cd) mat -> ('n, 'x_cd) vec -> ('m, 'y_cd) vec</code></pre>
+<pre><span id="VALsymv"><span class="keyword">val</span> symv</span> : <code class="type">?beta:num_type -><br>       ?y:('n, 'y_cd) vec -><br>       ?up:bool -><br>       ?alpha:num_type -> ('n, 'n, 'a_cd) mat -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec</code></pre><br>
+<h3 id="3_Level3">Level 3</h3><br>
+
+<pre><span id="VALgemm"><span class="keyword">val</span> gemm</span> : <code class="type">?beta:num_type -><br>       ?c:('m, 'n, 'c_cd) mat -><br>       transa:(('a_m, 'a_k, 'a_cd) mat -> ('m, 'k, 'a_cd) mat) trans -><br>       ?alpha:num_type -><br>       ('a_m, 'a_k, 'a_cd) mat -><br>       transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans -><br>       ('b_k, 'b_n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat</code></pre>
+<pre><span id="VALsymm"><span class="keyword">val</span> symm</span> : <code class="type">side:('k, 'm, 'n) Common.side -><br>       ?up:bool -><br>       ?beta:num_type -><br>       ?c:('m, 'n, 'c_cd) mat -><br>       ?alpha:num_type -><br>       ('k, 'k, 'a_cd) mat -> ('m, 'n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat</code></pre><br>
+<h2 id="2_LAPACKinterface">LAPACK interface</h2><br>
+<br>
+<h3 id="3_Auxiliaryroutines">Auxiliary routines</h3><br>
+
+<pre><span id="VALlacpy"><span class="keyword">val</span> lacpy</span> : <code class="type">?uplo:[ `L | `U ] -><br>       ?b:('m, 'n, 'b_cd) mat -> ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat</code></pre><div class="info ">
+<code class="code">lacpy ?uplo ?b a</code> copies the matrix <code class="code">a</code> into the matrix <code class="code">b</code>.<ul>
+<li>If <code class="code">uplo</code> is omitted, all elements in <code class="code">a</code> is copied.</li>
+<li>If <code class="code">uplo</code> is <code class="code">`U</code>, the upper trapezoidal part of <code class="code">a</code> is copied.</li>
+<li>If <code class="code">uplo</code> is <code class="code">`L</code>, the lower trapezoidal part of <code class="code">a</code> is copied.</li>
+</ul>
+<br>
+<b>Returns</b> <code class="code">b</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">uplo</code> : default = all elements in <code class="code">a</code> is copied.</div>
+<div class="param_info"><code class="code">b</code> : default = a fresh matrix.</div>
+
+<pre><span id="VALlange"><span class="keyword">val</span> lange</span> : <code class="type">?norm:'a Common.norm4 -> ('m, 'n, 'cd) mat -> float</code></pre><div class="info ">
+<code class="code">lange ?norm a</code><br>
+<b>Returns</b> the norm of the matrix <code class="code">a</code>.<br>
+</div>
+<div class="param_info"><code class="code">norm</code> : default = <code class="code">Slap.Common.norm_1</code></div>
+<br>
+<h3 id="3_Linearequationscomputationalroutines">Linear equations (computational routines)</h3><br>
+
+<pre><span id="VALgetrf"><span class="keyword">val</span> getrf</span> : <code class="type">?ipiv:(('m, 'n) Common.min, Common.cnt) Common.int32_vec -><br>       ('m, 'n, 'cd) mat -> (('m, 'n) Common.min, Common.cnt) Common.int32_vec</code></pre>
+<pre><span id="VALgeqrf"><span class="keyword">val</span> geqrf</span> : <code class="type">?tau:(('m, 'n) Common.min, Common.cnt) vec -><br>       ('m, 'n, 'cd) mat -> (('m, 'n) Common.min, 'cnt) vec</code></pre></body></html>

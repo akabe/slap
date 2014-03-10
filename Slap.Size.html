@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Slap.Common.html">
+<link rel="next" href="Slap.Vec.html">
+<link rel="Up" href="Slap.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Slap" rel="Chapter" href="Slap.html">
+<link title="Slap_common" rel="Chapter" href="Slap_common.html">
+<link title="Slap_size" rel="Chapter" href="Slap_size.html">
+<link title="Slap_vec" rel="Chapter" href="Slap_vec.html">
+<link title="Slap_mat" rel="Chapter" href="Slap_mat.html">
+<link title="Slap_utils" rel="Chapter" href="Slap_utils.html">
+<link title="Slap_io" rel="Chapter" href="Slap_io.html">
+<link title="Slap_SD" rel="Chapter" href="Slap_SD.html">
+<link title="Slap_CZ" rel="Chapter" href="Slap_CZ.html">
+<link title="Slap_SDCZ_types" rel="Chapter" href="Slap_SDCZ_types.html">
+<link title="Slap_SDCZ_vec" rel="Chapter" href="Slap_SDCZ_vec.html">
+<link title="Slap_SDCZ_mat" rel="Chapter" href="Slap_SDCZ_mat.html">
+<link title="Slap_SDCZ_la" rel="Chapter" href="Slap_SDCZ_la.html">
+<link title="Slap_SD_vec" rel="Chapter" href="Slap_SD_vec.html">
+<link title="Slap_SD_mat" rel="Chapter" href="Slap_SD_mat.html">
+<link title="Slap_SD_la" rel="Chapter" href="Slap_SD_la.html">
+<link title="Slap_CZ_vec" rel="Chapter" href="Slap_CZ_vec.html">
+<link title="Slap_CZ_mat" rel="Chapter" href="Slap_CZ_mat.html">
+<link title="Slap_CZ_la" rel="Chapter" href="Slap_CZ_la.html"><link title="Constants and arithmetric operations" rel="Section" href="#2_Constantsandarithmetricoperations">
+<link title="Iterators" rel="Section" href="#2_Iterators">
+<link title="Conversion between sizes and integers" rel="Section" href="#2_Conversionbetweensizesandintegers">
+<title>Slap.Size</title>
+</head>
+<body>
+<div class="navbar"><a class="pre" href="Slap.Common.html" title="Slap.Common">Previous</a>
+&nbsp;<a class="up" href="Slap.html" title="Slap">Up</a>
+&nbsp;<a class="post" href="Slap.Vec.html" title="Slap.Vec">Next</a>
+</div>
+<h1>Module <a href="type_Slap.Size.html">Slap.Size</a></h1>
+
+<pre><span class="keyword">module</span> Size: <code class="type"><a href="Slap_size.S.html">Slap_size.S</a></code><code class="type">  with module Common = Common</code></pre><div class="info module top">
+Operations on sizes.<br>
+</div>
+<hr width="100%">
+
+<pre><span class="keyword">module</span> <a href="Slap_size.S.Common.html">Common</a>: <code class="type"><a href="Slap_common.S.html">Slap_common.S</a></code><code class="type"> </code></pre><div class="info">
+= <a href="Slap.Common.html"><code class="code">Slap.Common</code></a>
+</div>
+<br>
+<h2 id="2_Constantsandarithmetricoperations">Constants and arithmetric operations</h2><br>
+
+<pre><span id="VALzero"><span class="keyword">val</span> zero</span> : <code class="type">Common.z Common.size</code></pre>
+<pre><span id="VALone"><span class="keyword">val</span> one</span> : <code class="type">Common.z Common.s Common.size</code></pre>
+<pre><span id="VALsucc"><span class="keyword">val</span> succ</span> : <code class="type">'n Common.size -> 'n Common.s Common.size</code></pre>
+<pre><span id="VALadd"><span class="keyword">val</span> add</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.add Common.size</code></pre>
+<pre><span id="VALmul"><span class="keyword">val</span> mul</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.mul Common.size</code></pre>
+<pre><span id="VALmin"><span class="keyword">val</span> min</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.min Common.size</code></pre>
+<pre><span id="VALmax"><span class="keyword">val</span> max</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.max Common.size</code></pre><br>
+<h2 id="2_Iterators">Iterators</h2>
+<p>
+
+      The following functions are iterators over <code class="code">[1; 2; ...; n]</code> where <code class="code">n</code> is
+      a size.<br>
+
+<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">f:('a -> int -> 'a) -> init:'a -> 'n Common.size -> 'a</code></pre><div class="info ">
+<code class="code">fold_left ~f ~init n</code> is
+      <code class="code">f (... (f (f init 1) 2) ...) (to_int n)</code>.<br>
+</div>
+
+<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">f:(int -> 'a -> 'a) -> 'n Common.size -> init:'a -> 'a</code></pre><div class="info ">
+<code class="code">fold_right ~f n ~init</code> is
+      <code class="code">f 1 (f 2 (... (f (to_int n) init) ...))</code>.<br>
+</div>
+
+<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">f:(int -> unit) -> 'n Common.size -> unit</code></pre><div class="info ">
+<code class="code">iter ~f n</code> is <code class="code">f 1; f 2; ...; f (to_int n)</code>.<br>
+</div>
+
+<pre><span id="VALriter"><span class="keyword">val</span> riter</span> : <code class="type">f:(int -> unit) -> 'n Common.size -> unit</code></pre><div class="info ">
+<code class="code">riter ~f n</code> is <code class="code">f (to_int n); ...; f 2; f 1</code>.<br>
+</div>
+<br>
+<h2 id="2_Conversionbetweensizesandintegers">Conversion between sizes and integers</h2><br>
+
+<pre><span id="VALto_int"><span class="keyword">val</span> to_int</span> : <code class="type">'n Common.size -> int</code></pre><div class="info ">
+Return the integer correponding to the given size.<br>
+</div>
+
+<pre><span class="keyword">module type</span> <a href="Slap_size.S.SIZE.html">SIZE</a> = <code class="code">sig</code> <a href="Slap_size.S.SIZE.html">..</a> <code class="code">end</code></pre>
+<pre><span class="keyword">module</span> <a href="Slap_size.S.Of_int_dyn.html">Of_int_dyn</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">N</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block">
+<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type">int</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap_size.S.SIZE.html">SIZE</a></code><code class="type"> </code></div></pre></body></html>

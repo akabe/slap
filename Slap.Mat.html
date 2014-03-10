@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Slap.Vec.html">
+<link rel="next" href="Slap.Utils.html">
+<link rel="Up" href="Slap.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Slap" rel="Chapter" href="Slap.html">
+<link title="Slap_common" rel="Chapter" href="Slap_common.html">
+<link title="Slap_size" rel="Chapter" href="Slap_size.html">
+<link title="Slap_vec" rel="Chapter" href="Slap_vec.html">
+<link title="Slap_mat" rel="Chapter" href="Slap_mat.html">
+<link title="Slap_utils" rel="Chapter" href="Slap_utils.html">
+<link title="Slap_io" rel="Chapter" href="Slap_io.html">
+<link title="Slap_SD" rel="Chapter" href="Slap_SD.html">
+<link title="Slap_CZ" rel="Chapter" href="Slap_CZ.html">
+<link title="Slap_SDCZ_types" rel="Chapter" href="Slap_SDCZ_types.html">
+<link title="Slap_SDCZ_vec" rel="Chapter" href="Slap_SDCZ_vec.html">
+<link title="Slap_SDCZ_mat" rel="Chapter" href="Slap_SDCZ_mat.html">
+<link title="Slap_SDCZ_la" rel="Chapter" href="Slap_SDCZ_la.html">
+<link title="Slap_SD_vec" rel="Chapter" href="Slap_SD_vec.html">
+<link title="Slap_SD_mat" rel="Chapter" href="Slap_SD_mat.html">
+<link title="Slap_SD_la" rel="Chapter" href="Slap_SD_la.html">
+<link title="Slap_CZ_vec" rel="Chapter" href="Slap_CZ_vec.html">
+<link title="Slap_CZ_mat" rel="Chapter" href="Slap_CZ_mat.html">
+<link title="Slap_CZ_la" rel="Chapter" href="Slap_CZ_la.html"><link title="Creation of matrices" rel="Section" href="#2_Creationofmatrices">
+<link title="Accessors" rel="Section" href="#2_Accessors">
+<link title="Basic operations" rel="Section" href="#2_Basicoperations">
+<link title="Iterators" rel="Section" href="#2_Iterators">
+<link title="Type conversion" rel="Section" href="#2_Typeconversion">
+<link title="Submatrices" rel="Section" href="#2_Submatrices">
+<title>Slap.Mat</title>
+</head>
+<body>
+<div class="navbar"><a class="pre" href="Slap.Vec.html" title="Slap.Vec">Previous</a>
+&nbsp;<a class="up" href="Slap.html" title="Slap">Up</a>
+&nbsp;<a class="post" href="Slap.Utils.html" title="Slap.Utils">Next</a>
+</div>
+<h1>Module <a href="type_Slap.Mat.html">Slap.Mat</a></h1>
+
+<pre><span class="keyword">module</span> Mat: <code class="type"><a href="Slap_mat.S.html">Slap_mat.S</a></code><code class="type">  with module Common = Common</code></pre><div class="info module top">
+Operations on matrices.<br>
+</div>
+<hr width="100%">
+
+<pre><span class="keyword">module</span> <a href="Slap_mat.S.Common.html">Common</a>: <code class="type"><a href="Slap_common.S.html">Slap_common.S</a></code><code class="type"> </code></pre><div class="info">
+= <a href="Slap.Common.html"><code class="code">Slap.Common</code></a>
+</div>
+<br>
+<h2 id="2_Creationofmatrices">Creation of matrices</h2><br>
+
+<pre><span id="VALcreate"><span class="keyword">val</span> create</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'm Common.size -> 'n Common.size -> ('m, 'n, 'num, 'prec, 'cnt) Common.mat</code></pre><div class="info ">
+<code class="code">create kind m n</code><br>
+<b>Returns</b> a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix (not initialized).<br>
+</div>
+
+<pre><span id="VALmake"><span class="keyword">val</span> make</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'm Common.size -><br>       'n Common.size -> 'num -> ('m, 'n, 'num, 'prec, 'cnt) Common.mat</code></pre><div class="info ">
+<code class="code">make kind m n x</code><br>
+<b>Returns</b> a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix initialized with <code class="code">x</code>.<br>
+</div>
+
+<pre><span id="VALinit_cols"><span class="keyword">val</span> init_cols</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'm Common.size -><br>       'n Common.size -><br>       f:(int -> int -> 'num) -> ('m, 'n, 'num, 'prec, 'cnt) Common.mat</code></pre><div class="info ">
+<code class="code">init_cols kind m n ~f</code> returns a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix whose
+   the <code class="code">(i,j)</code> element is initialized by the result of calling <code class="code">f i j</code>.
+   The elements are passed by column-major order.<br>
+</div>
+
+<pre><span id="VALinit_rows"><span class="keyword">val</span> init_rows</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'm Common.size -><br>       'n Common.size -><br>       f:(int -> int -> 'num) -> ('m, 'n, 'num, 'prec, 'cnt) Common.mat</code></pre><div class="info ">
+<code class="code">init_rows kind m n ~f</code> returns a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix whose
+   the <code class="code">(i,j)</code> element is initialized by the result of calling <code class="code">f i j</code>.
+   The elements are passed by row-major order.<br>
+</div>
+<br>
+<h2 id="2_Accessors">Accessors</h2><br>
+
+<pre><span id="VALkind"><span class="keyword">val</span> kind</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> ('num, 'prec) Bigarray.kind</code></pre><div class="info ">
+<b>Returns</b> the kind of the given big array.<br>
+</div>
+
+<pre><span id="VALdim"><span class="keyword">val</span> dim</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> 'm Common.size * 'n Common.size</code></pre><div class="info ">
+<code class="code">dim a</code> is <code class="code">(dim1 a, dim2 a)</code>.<br>
+</div>
+
+<pre><span id="VALdim1"><span class="keyword">val</span> dim1</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> 'm Common.size</code></pre><div class="info ">
+<code class="code">dim1 a</code><br>
+<b>Returns</b> the number of rows in <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALdim2"><span class="keyword">val</span> dim2</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> 'n Common.size</code></pre><div class="info ">
+<code class="code">dim1 a</code><br>
+<b>Returns</b> the number of columns in <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALget_dyn"><span class="keyword">val</span> get_dyn</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> int -> int -> 'num</code></pre><div class="info ">
+<code class="code">get_dyn a i j</code><br>
+<b>Returns</b> the <code class="code">(i,j)</code> element of the matrix <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALset_dyn"><span class="keyword">val</span> set_dyn</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> int -> int -> 'num -> unit</code></pre><div class="info ">
+<code class="code">set_dyn a i j x</code> assigns <code class="code">x</code> to the <code class="code">(i,j)</code> element of the matrix <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALunsafe_get"><span class="keyword">val</span> unsafe_get</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> int -> int -> 'num</code></pre><div class="info ">
+Like <code class="code">Slap.Mat.get_dyn</code>, but size checking is not always performed.<br>
+</div>
+
+<pre><span id="VALunsafe_set"><span class="keyword">val</span> unsafe_set</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> int -> int -> 'num -> unit</code></pre><div class="info ">
+Like <code class="code">Slap.Mat.set_dyn</code>, but size checking is not always performed.<br>
+</div>
+
+<pre><span id="VALreplace_dyn"><span class="keyword">val</span> replace_dyn</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -><br>       int -> int -> f:('num -> 'num) -> unit</code></pre><div class="info ">
+<code class="code">replace_dyn a i j ~f</code> is <code class="code">set a i j (f (get a i j))</code>.<br>
+</div>
+
+<pre><span id="VALcol_dyn"><span class="keyword">val</span> col_dyn</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -><br>       int -> ('m, 'num, 'prec, 'cnt) Common.vec</code></pre><div class="info ">
+<code class="code">col_dyn a i</code><br>
+<b>Returns</b> the <code class="code">i</code>-th column of the matrix <code class="code">a</code>. The data are shared.<br>
+</div>
+
+<pre><span id="VALrow_dyn"><span class="keyword">val</span> row_dyn</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -><br>       int -> ('n, 'num, 'prec, Common.dsc) Common.vec</code></pre><div class="info ">
+<code class="code">row_dyn a i</code><br>
+<b>Returns</b> the <code class="code">i</code>-th row of the matrix <code class="code">a</code>. The data are shared.<br>
+</div>
+
+<pre><span id="VALdiag"><span class="keyword">val</span> diag</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -><br>       (('m, 'n) Common.min, 'num, 'prec, Common.dsc) Common.vec</code></pre><div class="info ">
+<code class="code">diag a</code><br>
+<b>Returns</b> the diagonal elements of the matrix <code class="code">a</code>. The data are shared.<br>
+</div>
+
+<pre><span id="VALas_vec"><span class="keyword">val</span> as_vec</span> : <code class="type">('m, 'n, 'num, 'prec, Common.cnt) Common.mat -><br>       (('m, 'n) Common.mul, 'num, 'prec, 'cnt) Common.vec</code></pre><div class="info ">
+<code class="code">as_vec a</code><br>
+<b>Returns</b> the vector containing all elements of the matrix in column-major
+           order. The data are shared.<br>
+</div>
+<br>
+<h2 id="2_Basicoperations">Basic operations</h2><br>
+
+<pre><span id="VALfill"><span class="keyword">val</span> fill</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> 'num -> unit</code></pre><div class="info ">
+Fill the given matrix with the given value.<br>
+</div>
+
+<pre><span id="VALcopy"><span class="keyword">val</span> copy</span> : <code class="type">?b:('m, 'n, 'num, 'prec, 'b_cd) Common.mat -><br>       ('m, 'n, 'num, 'prec, 'a_cd) Common.mat -><br>       ('m, 'n, 'num, 'prec, 'b_cd) Common.mat</code></pre><div class="info ">
+<code class="code">copy ?b a</code> copies the matrix <code class="code">a</code> into the matrix <code class="code">b</code>.<br>
+<b>Returns</b> <code class="code">b</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">b</code> : default = a fresh matrix.</div>
+<br>
+<h2 id="2_Iterators">Iterators</h2><br>
+
+<pre><span id="VALreplace_all"><span class="keyword">val</span> replace_all</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> f:('num -> 'num) -> unit</code></pre><div class="info ">
+<code class="code">replace_all a ~f</code> modifies the matrix <code class="code">a</code> in place
+   -- the <code class="code">(i,j)</code>-element <code class="code">aij</code> of <code class="code">a</code> will be set to <code class="code">f aij</code>.<br>
+</div>
+
+<pre><span id="VALreplace_alli"><span class="keyword">val</span> replace_alli</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -><br>       f:(int -> int -> 'num -> 'num) -> unit</code></pre><div class="info ">
+<code class="code">replace_all a ~f</code> modifies the matrix <code class="code">a</code> in place
+   -- the <code class="code">(i,j)</code>-element <code class="code">aij</code> of <code class="code">a</code> will be set to <code class="code">f i j aij</code>.<br>
+</div>
+<br>
+<h2 id="2_Typeconversion">Type conversion</h2><br>
+
+<pre><span id="VALto_array"><span class="keyword">val</span> to_array</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> 'num array array</code></pre><div class="info ">
+<code class="code">to_array a</code><br>
+<b>Returns</b> the array of arrays of all the elements of <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALof_array_dyn"><span class="keyword">val</span> of_array_dyn</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'm Common.size -><br>       'n Common.size -> 'num array array -> ('m, 'n, 'num, 'prec, 'cnt) Common.mat</code></pre><div class="info ">
+Build a matrix initialized from the given array of arrays.<br>
+<b>Raises</b> <code>Invalid_argument</code> the given array of arrays is not rectangular or
+   its size is not <code class="code">m</code>-by-<code class="code">n</code>.<br>
+</div>
+
+<pre><span id="VALto_list"><span class="keyword">val</span> to_list</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) Common.mat -> 'num list list</code></pre><div class="info ">
+<code class="code">to_list a</code><br>
+<b>Returns</b> the list of lists of all the elements of <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALof_list_dyn"><span class="keyword">val</span> of_list_dyn</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'm Common.size -><br>       'n Common.size -> 'num list list -> ('m, 'n, 'num, 'prec, 'cnt) Common.mat</code></pre><div class="info ">
+Build a matrix initialized from the given list of lists.<br>
+<b>Raises</b> <code>Invalid_argument</code> the given list of lists is not rectangular or
+   its size is not <code class="code">m</code>-by-<code class="code">n</code>.<br>
+</div>
+<br>
+<h2 id="2_Submatrices">Submatrices</h2><br>
+
+<pre><span id="VALsubmat_dyn"><span class="keyword">val</span> submat_dyn</span> : <code class="type">'m Common.size -><br>       'n Common.size -><br>       ?ar:int -><br>       ?ac:int -><br>       ('a, 'b, 'num, 'prec, 'cd) Common.mat -><br>       ('m, 'n, 'num, 'prec, Common.dsc) Common.mat</code></pre><div class="info ">
+<code class="code">submat_dyn m n ?ar ?ac a</code><br>
+<b>Returns</b> a <code class="code">m</code>-by-<code class="code">n</code> submatrix of the matrix <code class="code">a</code>.
+      The <code class="code">(i,j)</code> element of the returned matrix refers the <code class="code">(ar+i-1,ac+j-1)</code>
+      element of <code class="code">a</code>. The data are shared.<br>
+</div>
+<div class="param_info"><code class="code">ar</code> : default = 1</div>
+<div class="param_info"><code class="code">ac</code> : default = 1</div>
+</body></html>
