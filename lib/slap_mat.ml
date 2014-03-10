@@ -117,8 +117,8 @@ sig
    @return the [i]-th row of the matrix [a]. The data are shared.
    *)
 
-  val diag : ('m, 'n, 'num, 'prec, 'cd) mat ->
-             (('m, 'n) min, 'num, 'prec, dsc) vec
+  val diag : ('n, 'n, 'num, 'prec, 'cd) mat ->
+             ('n, 'num, 'prec, dsc) vec
   (** [diag a]
    @return the diagonal elements of the matrix [a]. The data are shared.
    *)

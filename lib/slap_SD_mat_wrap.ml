@@ -24,4 +24,10 @@ struct
   (* interface: slap_SD_mat.ml *)
 
   include Slap_SDCZ_mat_wrap.F(I)(SDCZ)
+
+  (** {2 Creation of matrices} *)
+
+  let random ?rnd_state ?from ?range m n =
+    let a = SD.Mat.random ?rnd_state ?from ?range m n in
+    (m, n, 1, 1, a)
 end

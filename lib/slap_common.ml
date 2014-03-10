@@ -27,17 +27,19 @@ sig
    The following types represent free algebraic operations on natural numbers.
    *)
 
-  type 'n size = private int
+  type +'n size = private int
   (** Singleton type on non-negative integers. *)
 
-  type z            (** zero *)
-  type 'n s         (** successor *)
-  type ('m, 'n) add (** addition of two sizes *)
-  type ('m, 'n) mul (** multiplication of two sizes *)
-  type ('m, 'n) min (** minimum of two sizes *)
-  type ('m, 'n) max (** maximum of two sizes *)
+  type z              (** zero *)
+  type +'n s          (** successor *)
+  type (+'m, +'n) add (** addition of two sizes *)
+  type (+'m, +'n) sub (** difference of two sizes *)
+  type (+'m, +'n) mul (** multiplication of two sizes *)
+  type (+'m, +'n) div (** ['m / 'n] *)
+  type (+'m, +'n) min (** minimum of two sizes *)
+  type (+'m, +'n) max (** maximum of two sizes *)
 
-  type 'n packed
+  type +'n packed
   (** Packed storage size of [n]-by-[n] matrix.
    It is [n*(n+1)/2].
    @see <http://www.netlib.org/lapack/lug/node123.html> Packed Storage (NetLib)
@@ -51,26 +53,26 @@ sig
 
   (** {3 Vectors} *)
 
-  type ('n, 'num, 'prec, +'cnt_or_dsc) vec
+  type (+'n, 'num, 'prec, +'cnt_or_dsc) vec
   (** [('n, 'num, 'prec, 'cnt_or_dsc) vec] is the type of ['n]-dimensional
    vector whose elements have OCaml type ['num], representation kind ['prec] and
    memory continuity ['cnt_or_dsc].
    The internal implementation is fortran-style one-dimensional big array.
    *)
 
-  type ('n, 'cnt_or_dsc) int_vec =
+  type (+'n, +'cnt_or_dsc) int_vec =
       ('n, int, Bigarray.int_elt, 'cnt_or_dsc) vec
 
   val create_int_vec : 'n size -> ('n, 'cnt) int_vec
 
-  type ('n, 'cnt_or_dsc) int32_vec =
+  type (+'n, +'cnt_or_dsc) int32_vec =
       ('n, int32, Bigarray.int32_elt, 'cnt_or_dsc) vec
 
   val create_int32_vec : 'n size -> ('n, 'cnt) int32_vec
 
   (** {3 Matrices} *)
 
-  type ('m, 'n, 'num, 'prec, +'cnt_or_dsc) mat
+  type (+'m, +'n, 'num, 'prec, +'cnt_or_dsc) mat
   (** [('m, 'n, 'num, 'prec) mat] is the type of ['m]-by-['n] matrix whose
    elements have OCaml type ['num], representation kind ['prec] and
    memory continuity ['cnt_or_dsc].
@@ -81,11 +83,11 @@ sig
 
   (** {3 Transpose flags} *)
 
-  type ('a, +'tag) trans
+  type (+'a, +'tag) trans
 
   type trans2_tag
 
-  type 'a trans2 = ('a, trans2_tag) trans
+  type +'a trans2 = ('a, trans2_tag) trans
   (** Types of transpose flags for real vectors or matrices.
       Values of this type are
       - {!Slap.Common.normal} and
@@ -94,7 +96,7 @@ sig
 
   type trans3_tag
 
-  type 'a trans3 = ('a, trans2_tag) trans
+  type +'a trans3 = ('a, trans2_tag) trans
   (** Types of transpose flags for complex vectors or matrices.
       Values of this type are
       - {!Slap.Common.normal},
@@ -114,7 +116,7 @@ sig
 
   (** {3 Direction of matrix multiplication} *)
 
-  type ('k, 'm, 'n) side
+  type (+'k, +'m, +'n) side
   (** [('k, 'm, 'n) side] represents a relation between left- or
       right-multiplication of two matrices and their sizes.
 
@@ -136,7 +138,7 @@ sig
 
   (** {3 Matrix norms} *)
 
-  type ('a, +'tag) norm
+  type (+'a, +'tag) norm
 
   type norm2_tag
 
@@ -178,7 +180,7 @@ sig
 
   (** {3 SVD computation flags} *)
 
-  type 'a svd_job
+  type +'a svd_job
 
   type svd_all
 
@@ -195,4 +197,8 @@ sig
   type svd_no
 
   val svd_no : svd_no svd_job
+
+  (** {3 Other flags} *)
+
+  type diag = [ `N | `U ]
 end

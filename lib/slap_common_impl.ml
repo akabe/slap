@@ -23,16 +23,18 @@ open Bigarray
 
 (** {2 Size representation of vectors and matrices} *)
 
-type 'n size = int
+type +'n size = int
 
 type z
-type 'n s
-type ('m, 'n) add
-type ('m, 'n) mul
-type ('m, 'n) min
-type ('m, 'n) max
+type +'n s
+type (+'m, +'n) add
+type (+'m, +'n) sub
+type (+'m, +'n) mul
+type (+'m, +'n) div
+type (+'m, +'n) min
+type (+'m, +'n) max
 
-type 'n packed
+type +'n packed
 
 (** {2 Data structures} *)
 
@@ -42,7 +44,7 @@ type dsc
 
 (** {3 Vectors} *)
 
-type ('n, 'num, 'prec, 'cnt_or_dsc) vec =
+type (+'n, 'num, 'prec, 'cnt_or_dsc) vec =
     int   (* the number of elements in a vector (>= 0) *)
     * int (* offset (>= 1) *)
     * int (* incrementation *)
@@ -50,14 +52,14 @@ type ('n, 'num, 'prec, 'cnt_or_dsc) vec =
 
 (** {3 Integer vectors} *)
 
-type ('n, 'cnt_or_dsc) int_vec =
+type (+'n, 'cnt_or_dsc) int_vec =
     ('n, int, int_elt, 'cnt_or_dsc) vec
 
 let create_int_vec n =
   let x = Array1.create int fortran_layout n in
   (n, 1, 1, x)
 
-type ('n, 'cnt_or_dsc) int32_vec =
+type (+'n, 'cnt_or_dsc) int32_vec =
     ('n, int32, int32_elt, 'cnt_or_dsc) vec
 
 let create_int32_vec n =
@@ -66,7 +68,7 @@ let create_int32_vec n =
 
 (** {3 Matrices} *)
 
-type ('m, 'n, 'num, 'prec, +'cnt_or_dsc) mat =
+type (+'m, +'n, 'num, 'prec, +'cnt_or_dsc) mat =
     int   (* the number of rows in a matrix    (>= 0) *)
     * int (* the number of columns in a matrix (>= 0) *)
     * int (* offset of rows    (>= 1) *)
@@ -77,15 +79,15 @@ type ('m, 'n, 'num, 'prec, +'cnt_or_dsc) mat =
 
 (** {3 Transpose flags} *)
 
-type ('a, 'tag) trans = [ `N | `T | `C ]
+type (+'a, +'tag) trans = [ `N | `T | `C ]
 
 type trans2_tag
 
-type 'a trans2 = ('a, trans2_tag) trans
+type +'a trans2 = ('a, trans2_tag) trans
 
 type trans3_tag
 
-type 'a trans3 = ('a, trans3_tag) trans
+type +'a trans3 = ('a, trans3_tag) trans
 
 let normal = `N
 
@@ -95,7 +97,7 @@ let conjtr = `C
 
 (** {3 Direction of multiplication of matrices} *)
 
-type ('a, 'b, 'c) side = [ `L | `R ]
+type (+'k, +'m, +'n) side = [ `L | `R ]
 
 let left = `L
 
@@ -103,15 +105,15 @@ let right = `R
 
 (** {3 Matrix norms} *)
 
-type ('a, 'tag) norm = [ `O | `I | `M | `F ]
+type (+'a, +'tag) norm = [ `O | `I | `M | `F ]
 
 type norm2_tag
 
-type 'a norm2 = ('a, norm2_tag) norm
+type +'a norm2 = ('a, norm2_tag) norm
 
 type norm4_tag
 
-type 'a norm4 = ('a, norm4_tag) norm
+type +'a norm4 = ('a, norm4_tag) norm
 
 type norm_1
 
@@ -131,7 +133,7 @@ let norm_frob = `F
 
 (** {3 SVD computation flags} *)
 
-type 'a svd_job = [ `A | `S | `O | `N ]
+type +'a svd_job = [ `A | `S | `O | `N ]
 
 type svd_all
 
@@ -148,3 +150,7 @@ let svd_overwrite = `O
 type svd_no
 
 let svd_no = `N
+
+(** {3 Other flags} *)
+
+type diag = [ `N | `U ]

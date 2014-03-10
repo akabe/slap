@@ -24,4 +24,10 @@ sig
   (* implementation: slap_SD_mat_wrap.ml *)
 
   include Slap_SDCZ_mat.S
+
+  (** {2 Creation of matrices} *)
+
+  val random : ?rnd_state:Random.State.t ->
+               ?from:float -> ?range:float ->
+               'm Common.size -> 'n Common.size -> ('m, 'n, 'cnt) mat
 end

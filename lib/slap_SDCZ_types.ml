@@ -46,18 +46,18 @@ sig
    - [type real_prec = Bigarray.float64_elt] in {!Slap.Z}.
    *)
 
-  type ('n, 'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) Common.vec
+  type (+'n, +'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) Common.vec
   (** The type of ['n]-dimensional real/complex vectors. *)
 
-  type ('n, 'cnt_or_dsc) real_vec =
+  type (+'n, +'cnt_or_dsc) real_vec =
       ('n, float, real_prec, 'cnt_or_dsc) Common.vec
   (** The type of ['n]-dimensional real vectors. *)
 
-  type ('m, 'n, 'cnt_or_dsc) mat =
+  type (+'m, +'n, +'cnt_or_dsc) mat =
       ('m, 'n, num_type, prec, 'cnt_or_dsc) Common.mat
   (** The type of ['m]-by-['n] real/complex matrices. *)
 
-  type 'a trans
+  type +'a trans
   (** The type of transpose flags:
    - [type 'a trans = 'a Slap.Common.trans2] in {!Slap.S} and {!Slap.D}.
    - [type 'a trans = 'a Slap.Common.trans3] in {!Slap.C} and {!Slap.Z}.

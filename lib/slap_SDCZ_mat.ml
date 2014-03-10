@@ -34,6 +34,9 @@ sig
 
   (** {2 Creation of matrices} *)
 
+  val empty : (Common.z, Common.z, 'cnt) mat
+  (** An empty matrix. *)
+
   val create : 'm Common.size -> 'n Common.size -> ('m, 'n, 'cnt) mat
   (** [create m n]
    @return a fresh [m]-by-[n] matrix (not initialized).
@@ -116,15 +119,16 @@ sig
    @return the [i]-th row of the matrix [a]. The data are shared.
    *)
 
-  val diag : ('m, 'n, 'cd) mat -> (('m, 'n) Common.min, Common.dsc) vec
+  val copy_row_dyn : ('m, 'n, 'cd) mat -> int -> ('n, 'cnt) vec
+  (** [copy_row_dyn a i] is [Vec.copy (Mat.row_dyn a i)]. *)
+
+  val diag : ('n, 'n, 'cd) mat -> ('n, Common.dsc) vec
   (** [diag a]
    @return the diagonal elements of the matrix [a]. The data are shared.
    *)
 
-  val copy_diag : ('m, 'n, 'cd) mat -> (('m, 'n) Common.min, Common.dsc) vec
-  (** [copy_diag a] is [Vec.copy (Mat.diag a)].
-   @return the diagonal elements of the matrix [a].
-   *)
+  val copy_diag : ('n, 'n, 'cd) mat -> ('n, 'cnt) vec
+  (** [copy_diag a] is [Vec.copy (Mat.diag a)]. *)
 
   val as_vec : ('m, 'n, Common.cnt) mat -> (('m, 'n) Common.mul, 'cnt) vec
   (** [as_vec a]
@@ -146,6 +150,11 @@ sig
    @param uplo default = all elements in [a] is copied.
    @param b    default = a fresh matrix.
    *)
+
+  val of_col_vecs_dyn : 'm Common.size ->
+                        'n Common.size ->
+                        ('m, Common.cnt) vec array ->
+                        ('m, 'n, 'cnt) mat
 
   (** {2 Type conversion} *)
 
@@ -217,4 +226,23 @@ sig
              x:('m, 'n, 'x_cd) mat ->
              ('m, 'n, 'y_cd) mat -> unit
   (** [axpy ?alpha ~x y] computes [y := alpha * x + y]. *)
+
+  val syrk_diag : ?beta:num_type ->
+                  ?y:('n, Common.cnt) vec ->
+                  trans:(('a_n, 'a_k, 'a_cd) mat ->
+                         ('n, 'k, 'a_cd) mat) Common.trans2 ->
+                  ?alpha:num_type ->
+                  ('a_n, 'a_k, 'a_cd) mat -> ('n, 'cnt) vec
+
+  val gemm_trace : transa:(('a_n, 'a_k, 'a_cd) mat ->
+                           ('n, 'k, 'a_cd) mat) trans ->
+                   ('a_n, 'a_k, 'a_cd) mat ->
+                   transb:(('b_k, 'b_n, 'b_cd) mat ->
+                           ('k, 'n, 'b_cd) mat) trans ->
+                   ('b_k, 'b_n, 'b_cd) mat -> num_type
+
+  val symm2_trace : ?upa:bool ->
+                    ('n, 'n, 'a_cd) mat ->
+                    ?upb:bool ->
+                    ('n, 'n, 'b_cd) mat -> num_type
 end

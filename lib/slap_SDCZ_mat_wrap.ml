@@ -40,6 +40,8 @@ struct
 
   (** {2 Creation of matrices} *)
 
+  let empty = (0, 0, 1, 1, SDCZ.Mat.empty)
+
   let create m n = Mat.create I.kind m n
 
   let make m n x = Mat.make I.kind m n x
@@ -76,6 +78,11 @@ struct
 
   let row_dyn = Mat.row_dyn
 
+  let copy_row_dyn mat i =
+    let n, ofsx, incx, x = row_dyn mat i in
+    ignore (SDCZ.copy ~n ~ofsx ~incx x);
+    (n, ofsx, incx, x)
+
   let diag = Mat.diag
 
   let copy_diag mat =
@@ -89,8 +96,20 @@ struct
 
   let copy ?uplo ?b (m, n, ar, ac, a) =
     let br, bc, b = default_mat m n b in
-    let _ = SDCZ.lacpy ?uplo ~m ~n ~br ~bc ~b ~ar ~ac a in
+    if m <> 0 && n <> 0
+    then ignore (SDCZ.lacpy ?uplo ~m ~n ~br ~bc ~b ~ar ~ac a);
     (m, n, br, bc, b)
+
+  let of_col_vecs_dyn m n vec_array =
+    let convert (m', ofsx, incx, x) =
+      assert(m = m');
+      if not (Slap_vec_impl.check_cnt m' ofsx incx x) then
+        invalid_arg "Mat.of_col_vecs_dyn";
+      x
+    in
+    if n <> Array.length vec_array then invalid_arg "Mat.of_col_vecs_dyn";
+    let mat = SDCZ.Mat.of_col_vecs (Array.map convert vec_array) in
+    (m, n, 1, 1, mat)
 
   (** {2 Type conversion} *)
 
@@ -151,4 +170,24 @@ struct
   let axpy ?alpha ~x:(m, n, xr, xc, x) (m', n', yr, yc, y) =
     assert(m = m' && n = n');
     SDCZ.Mat.axpy ~m ~n ?alpha ~xr ~xc ~x ~yr ~yc y
+
+  let syrk_diag ?beta ?y ~trans ?alpha (an, ak, ar, ac, a) =
+    let n, k = get_transposed_dim trans an ak in
+    let ofsy, incy, y = default_vec n y in
+    assert(Slap_vec_impl.check_cnt n ofsy incy y);
+    ignore (SDCZ.Mat.syrk_diag ~n ~k ?beta ~y
+                               ~trans:(lacaml_trans2_of_trans trans)
+                               ?alpha ~ar ~ac a);
+    (n, ofsy, incy, y)
+
+  let gemm_trace ~transa (an, ak, ar, ac, a) ~transb (bk, bn, br, bc, b) =
+    let n, k = get_transposed_dim transa an ak in
+    assert((k, n) = get_transposed_dim transb bk bn);
+    SDCZ.Mat.gemm_trace ~n ~k
+                        ~transa:(lacaml_trans3_of_trans transa) ~ar ~ac a
+                        ~transb:(lacaml_trans3_of_trans transb) ~br ~bc b
+
+  let symm2_trace ?upa (n, n', ar, ac, a) ?upb (n'', n''', br, bc, b) =
+    assert(n = n' && n = n'' && n = n''');
+    SDCZ.Mat.symm2_trace ~n ?upa ~ar ~ac a ?upb ~br ~bc b
 end

@@ -85,7 +85,7 @@ struct
     let ofsy, incy, y = default_vec m y in
     if m <> 0 && n <> 0
     then ignore (SDCZ.gemv ~m:am ~n:an ?beta ~ofsy ~incy ~y
-                           ~trans:(I.lacaml_trans_of_trans trans)
+                           ~trans:(lacaml_trans3_of_trans trans)
                            ?alpha ~ar ~ac a ~ofsx ~incx x)
     else Slap_vec_impl.fill (m, ofsy, incy, y) I.zero;
     (m, ofsy, incy, y)
@@ -99,6 +99,18 @@ struct
     else Slap_vec_impl.fill (n, ofsy, incy, y) I.zero;
     (n, ofsy, incy, y)
 
+  let trmv ~trans ?diag ?up (n, n', ar, ac, a) (n'', ofsx, incx, x) =
+    assert(n = n' && n = n'');
+    if n <> 0
+    then SDCZ.trmv ~n ~trans:(lacaml_trans3_of_trans trans)
+                   ?diag ?up ~ar ~ac a ~ofsx ~incx x
+
+  let trsv ~trans ?diag ?up (n, n', ar, ac, a) (n'', ofsx, incx, x) =
+    assert(n = n' && n = n'');
+    if n <> 0
+    then SDCZ.trsv ~n ~trans:(lacaml_trans3_of_trans trans)
+                   ?diag ?up ~ar ~ac a ~ofsx ~incx x
+
   (** {3 Level 3} *)
 
   let gemm ?beta ?c ~transa ?alpha (am, ak, ar, ac, a)
@@ -109,9 +121,9 @@ struct
     let cr, cc, c = default_mat m n c in
     if m <> 0 && n <> 0 && k <> 0
     then ignore (SDCZ.gemm ~m ~n ~k ?beta ~cr ~cc ~c
-                           ~transa:(I.lacaml_trans_of_trans transa)
+                           ~transa:(lacaml_trans3_of_trans transa)
                            ?alpha ~ar ~ac a
-                           ~transb:(I.lacaml_trans_of_trans transb)
+                           ~transb:(lacaml_trans3_of_trans transb)
                            ~br ~bc b)
     else Slap_mat_impl.fill (m, n, cr, cc, c) I.zero;
     (m, n, cr, cc, c)
@@ -125,31 +137,70 @@ struct
     else Slap_mat_impl.fill (m, n, cr, cc, c) I.zero;
     (m, n, cr, cc, c)
 
+  let trmm ~side ?up ~transa ?diag ?alpha
+           ~a:(k, k', ar, ac, a) (m, n, br, bc, b) =
+    assert(k = k' && (if side = `L then k = m else k = n));
+    if m <> 0 && n <> 0
+    then SDCZ.trmm ~m ~n ~side ?up ~transa:(lacaml_trans3_of_trans transa)
+                   ?diag ?alpha ~ar ~ac ~a ~br ~bc b
+
+  let trsm ~side ?up ~transa ?diag ?alpha
+           ~a:(k, k', ar, ac, a) (m, n, br, bc, b) =
+    assert(k = k' && (if side = `L then k = m else k = n));
+    if m <> 0 && n <> 0
+    then SDCZ.trsm ~m ~n ~side ?up ~transa:(lacaml_trans3_of_trans transa)
+                   ?diag ?alpha ~ar ~ac ~a ~br ~bc b
+
+  let syrk ?up ?beta ?c ~trans ?alpha (an, ak, ar, ac, a) =
+    let n, k = get_transposed_dim trans an ak in
+    let cr, cc, c = default_mat n n c in
+    if k <> 0
+    then ignore (SDCZ.syrk ~n ~k ?up ?beta ~cr ~cc ~c
+                           ~trans:(lacaml_trans2_of_trans trans)
+                           ?alpha ~ar ~ac a)
+    else Slap_mat_impl.fill (n, n, cr, cc, c) I.zero;
+    (n, n, cr, cc, c)
+
   (** {2 LAPACK interface} *)
 
   (** {3 Auxiliary routines} *)
 
   let lacpy ?uplo ?b (m, n, ar, ac, a) =
     let br, bc, b = default_mat m n b in
-    ignore (SDCZ.lacpy ?uplo ~m ~n ~br ~bc ~b ~ar ~ac a);
+    if m <> 0 && n <> 0
+    then ignore (SDCZ.lacpy ?uplo ~m ~n ~br ~bc ~b ~ar ~ac a);
     (m, n, br, bc, b)
 
   let lange ?norm (m, n, ar, ac, a) =
-    SDCZ.lange ~m ~n ?norm ~ar ~ac a
+    if m <> 0 && n <> 0 then SDCZ.lange ~m ~n ?norm ~ar ~ac a else 0.0
 
   (** {3 Linear equations (computational routines)} *)
 
   let getrf ?ipiv (m, n, ar, ac, a) =
     let k = min m n in
     let ofs, inc, ipiv = Slap_vec_impl.default_vec Bigarray.int32 k ipiv in
-    assert(ofs = 1 && inc = 1); (* ipiv must be a cntvector. *)
-    ignore(SDCZ.getrf ~m ~n ~ipiv ~ar ~ac a);
+    assert(Slap_vec_impl.check_cnt k ofs inc ipiv);
+    if m <> 0 && n <> 0 then ignore(SDCZ.getrf ~m ~n ~ipiv ~ar ~ac a);
     (k, 1, 1, ipiv)
+
+  let potrf ?up ?jitter (n, n', ar, ac, a) =
+    assert(n = n');
+    if n <> 0 then SDCZ.potrf ~n ?up ?jitter ~ar ~ac a
+
+  let potri ?up ?factorize ?jitter (n, n', ar, ac, a) =
+    assert(n = n');
+    if n <> 0 then SDCZ.potri ~n ?up ?factorize ?jitter ~ar ~ac a
+
+  let trtrs ?up ~trans ?diag (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
+    assert(n = n' && n = n'');
+    if n <> 0 && nrhs <> 0
+    then SDCZ.trtrs ~n ?up ~trans:(lacaml_trans3_of_trans trans)
+                    ?diag ~ar ~ac a ~nrhs ~br ~bc b
 
   let geqrf ?tau (m, n, ar, ac, a) =
     let k = min m n in
     let ofs, inc, tau = default_vec k tau in
-    assert(ofs = 1 && inc = 1); (* tau must be a cntvector. *)
-    ignore(SDCZ.geqrf ~m ~n ~tau ~ar ~ac a);
+    assert(Slap_vec_impl.check_cnt k ofs inc tau);
+    if m <> 0 && n <> 0 then ignore(SDCZ.geqrf ~m ~n ~tau ~ar ~ac a);
     (k, 1, 1, tau)
 end

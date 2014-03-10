@@ -17,6 +17,3 @@ _build/
 *.native
 *.mlpack
 *.mllib
-
-lib/slap.ml
-lib/slap.mli

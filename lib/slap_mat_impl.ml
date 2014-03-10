@@ -77,9 +77,10 @@ let row_dyn (m, n, ar, ac, a) i =
   let lda = Array2.dim1 a in
   (n, lda * (ac - 1) + ar + i - 1, lda, reshape a)
 
-let diag (m, n, ar, ac, a) =
+let diag (n, n', ar, ac, a) =
+  assert(n = n');
   let lda = Array2.dim1 a in
-  (min m n, lda * (ac - 1) + ar, lda + 1, reshape a)
+  (n, lda * (ac - 1) + ar, lda + 1, reshape a)
 
 let as_vec (m, n, ar, ac, a) =
   assert(check_cnt m n ar ac a);

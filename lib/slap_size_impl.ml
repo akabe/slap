@@ -23,17 +23,37 @@ module Common = Slap_common_impl
 
 open Common
 
-(** {2 Constants and arithmetric operations} *)
+(** {2 Constants} *)
 
 let zero = 0
 
 let one = 1
 
+let two = 2
+
+let three = 3
+
+let four = 4
+
+let five = 5
+
+type ten = z s s s s s s s s s s
+
+let ten = 10
+
+(** {2 Arithmetric operations} *)
+
 let succ = Pervasives.succ
 
 let add = ( + )
 
+let sub_dyn m n =
+  if m >= n then m - n else invalid_arg "Slap.Size.sub_dyn: negative integer"
+
 let mul = ( * )
+
+let div_dyn m n =
+  if n <> 0 then m / n else invalid_arg "Slap.Size.div_dyn: zero division"
 
 let min = Pervasives.min
 
@@ -62,16 +82,32 @@ let riter ~f n = for i = n downto 1 do f i done
 let to_int n = n
 
 module type SIZE =
-sig
-  type n
-  val value : n size
-end
+  sig
+    type n
+    val value : n size
+  end
 
-module Of_int_dyn =
-  functor (N : sig val value : int end) ->
+module Of_int_dyn (N : sig val value : int end) : SIZE =
 struct
   type n
   let value =
     if N.value < 0 then invalid_arg "Slap.Size.Of_int_dyn";
     N.value
+end
+
+module type SIZE_OPT =
+  sig
+    type n
+    val value : n size option
+  end
+
+module Opt_of_int_dyn (N : sig val value : int option end) : SIZE_OPT =
+struct
+  type n
+  let value =
+    match N.value with
+    | None -> None
+    | Some n ->
+       if n < 0 then invalid_arg "Slap.Size.Opt_of_int_dyn";
+       Some n
 end

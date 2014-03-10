@@ -26,12 +26,12 @@ struct
   type num_type = I.num_type
   type prec = I.prec
   type real_prec = I.real_prec
-  type ('n, 'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) Common.vec
-  type ('n, 'cnt_or_dsc) real_vec =
+  type (+'n, +'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) Common.vec
+  type (+'n, +'cnt_or_dsc) real_vec =
       ('n, float, real_prec, 'cnt_or_dsc) Common.vec
-  type ('m, 'n, 'cnt_or_dsc) mat =
+  type (+'m, +'n, +'cnt_or_dsc) mat =
       ('m, 'n, num_type, prec, 'cnt_or_dsc) Common.mat
-  type 'a trans = ('a, I.trans_tag) Common.trans
+  type +'a trans = ('a, I.trans_tag) Common.trans
 
   (* internal functions *)
 
@@ -42,4 +42,15 @@ struct
   let default_vec n x = Slap_vec_impl.default_vec I.kind n x
 
   let default_mat m n a = Slap_mat_impl.default_mat I.kind m n a
+
+  let get_transposed_dim trans m n =
+    match trans with
+    | `N -> (m, n)
+    | `T | `C -> (n, m)
+
+  let lacaml_trans3_of_trans = I.lacaml_trans_of_trans
+
+  let lacaml_trans2_of_trans = function
+    | `N | `T as trans -> trans
+    | `C -> assert(false)
 end

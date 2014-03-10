@@ -27,17 +27,35 @@ sig
 
   open Common
 
-  (** {2 Constants and arithmetric operations} *)
+  (** {2 Constants} *)
 
   val zero : z size
 
   val one : z s size
 
+  val two : z s s size
+
+  val three : z s s s size
+
+  val four : z s s s s size
+
+  val five : z s s s s s size
+
+  type ten = z s s s s s s s s s s
+
+  val ten : ten size
+
+  (** {2 Arithmetric operations} *)
+
   val succ : 'n size -> 'n s size
 
   val add : 'm size -> 'n size -> ('m, 'n) add size
 
+  val sub_dyn : 'm size -> 'n size -> ('m, 'n) sub size
+
   val mul : 'm size -> 'n size -> ('m, 'n) mul size
+
+  val div_dyn : 'm size -> 'n size -> ('m, 'n) div size
 
   val min : 'm size -> 'n size -> ('m, 'n) min size
 
@@ -77,10 +95,20 @@ sig
   (** Return the integer correponding to the given size. *)
 
   module type SIZE =
-  sig
-    type n
-    val value : n size
-  end
+    sig
+      type n
+      val value : n size
+    end
 
-  module Of_int_dyn : functor (N : sig val value : int end) -> SIZE
+  module Of_int_dyn :
+  functor (N : sig val value : int end) -> SIZE
+
+  module type SIZE_OPT =
+    sig
+      type n
+      val value : n size option
+    end
+
+  module Opt_of_int_dyn :
+  functor (N : sig val value : int option end) -> SIZE_OPT
 end

@@ -75,6 +75,18 @@ sig
              ('n, 'n, 'a_cd) mat ->
              ('n, 'x_cd) vec -> ('n, 'y_cd) vec
 
+  val trmv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans ->
+             ?diag:Common.diag ->
+             ?up:bool ->
+             ('n, 'n, 'a_cd) mat ->
+             ('n, 'x_cd) vec -> unit
+
+  val trsv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans ->
+             ?diag:Common.diag ->
+             ?up:bool ->
+             ('n, 'n, 'a_cd) mat ->
+             ('n, 'x_cd) vec -> unit
+
   (** {3 Level 3} *)
 
   val gemm : ?beta:num_type ->
@@ -92,6 +104,30 @@ sig
              ?alpha:num_type ->
              ('k, 'k, 'a_cd) mat ->
              ('m, 'n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat
+
+  val trmm : side:('k, 'm, 'n) Common.side ->
+             ?up:bool ->
+             transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans ->
+             ?diag:Common.diag ->
+             ?alpha:num_type ->
+             a:('k, 'k, 'a_cd) mat ->
+             ('m, 'n, 'b_cd) mat -> unit
+
+  val trsm : side:('k, 'm, 'n) Common.side ->
+             ?up:bool ->
+             transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans ->
+             ?diag:Common.diag ->
+             ?alpha:num_type ->
+             a:('k, 'k, 'a_cd) mat ->
+             ('m, 'n, 'b_cd) mat -> unit
+
+  val syrk : ?up:bool ->
+             ?beta:num_type ->
+             ?c:('n, 'n, 'c_cd) mat ->
+             trans:(('a_n, 'a_k, 'a_cd) mat ->
+                    ('n, 'k, 'a_cd) mat) Common.trans2 ->
+             ?alpha:num_type ->
+             ('a_n, 'a_k, 'a_cd) mat -> ('n, 'n, 'c_cd) mat
 
   (** {2 LAPACK interface} *)
 
@@ -121,6 +157,21 @@ sig
   val getrf : ?ipiv:(('m, 'n) Common.min, Common.cnt) Common.int32_vec ->
               ('m, 'n, 'cd) mat ->
               (('m, 'n) Common.min, Common.cnt) Common.int32_vec
+
+  val potrf : ?up:bool ->
+              ?jitter:num_type ->
+              ('n, 'n, 'cd) mat -> unit
+
+  val potri : ?up:bool ->
+              ?factorize:bool ->
+              ?jitter:num_type ->
+              ('n, 'n, 'cd) mat -> unit
+
+  val trtrs : ?up:bool ->
+              trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans ->
+              ?diag:Common.diag ->
+              ('n, 'n, 'a_cd) mat ->
+              ('n, 'nrhs, 'b_cd) mat -> unit
 
   val geqrf : ?tau:(('m, 'n) Common.min, Common.cnt) vec ->
               ('m, 'n, 'cd) mat -> (('m, 'n) Common.min, 'cnt) vec
