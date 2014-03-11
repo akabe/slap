@@ -203,6 +203,8 @@ Conjugate transpose of a matrix.
 </td></tr>
 <tr><td><a href="Slap_SDCZ_vec.S.html#VALdiv">div</a> [<a href="Slap_SDCZ_vec.S.html">Slap_SDCZ_vec.S</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap_size.S.html#VALdiv_dyn">div_dyn</a> [<a href="Slap_size.S.html">Slap_size.S</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap_SD_la.S.html#VALdot">dot</a> [<a href="Slap_SD_la.S.html">Slap_SD_la.S</a>]</td>
 <td><div class="info">
 <code class="code">dot ~x y</code>
@@ -224,6 +226,8 @@ Fill the given matrix with the given value.
 Fill the given vector with the given value.
 </div>
 </td></tr>
+<tr><td><a href="Slap_size.S.html#VALfive">five</a> [<a href="Slap_size.S.html">Slap_size.S</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap_SDCZ_vec.S.html#VALfold_left">fold_left</a> [<a href="Slap_SDCZ_vec.S.html">Slap_SDCZ_vec.S</a>]</td>
 <td><div class="info">
 <code class="code">fold_left ~f ~init (x1, x2, ..., xn)</code> is
@@ -284,8 +288,12 @@ Fill the given vector with the given value.
    <code class="code">f 1 x1 (f 2 x2 (... (f n xn init) ...))</code> with the vector's dimension <code class="code">n</code>.
 </div>
 </td></tr>
+<tr><td><a href="Slap_size.S.html#VALfour">four</a> [<a href="Slap_size.S.html">Slap_size.S</a>]</td>
+<td></td></tr>
 <tr><td align="left"><br>G</td></tr>
 <tr><td><a href="Slap_SDCZ_la.S.html#VALgemm">gemm</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_SDCZ_mat.S.html#VALgemm_trace">gemm_trace</a> [<a href="Slap_SDCZ_mat.S.html">Slap_SDCZ_mat.S</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap_SDCZ_la.S.html#VALgemv">gemv</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
 <td></td></tr>
@@ -529,6 +537,8 @@ Build a matrix initialized from the given array of arrays.
 <code class="code">of_array_dyn kind n [|a1; ...; an|]</code>
 </div>
 </td></tr>
+<tr><td><a href="Slap_SDCZ_mat.S.html#VALof_col_vecs_dyn">of_col_vecs_dyn</a> [<a href="Slap_SDCZ_mat.S.html">Slap_SDCZ_mat.S</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap_SDCZ_mat.S.html#VALof_list_dyn">of_list_dyn</a> [<a href="Slap_SDCZ_mat.S.html">Slap_SDCZ_mat.S</a>]</td>
 <td><div class="info">
 Build a matrix initialized from the given list of lists.
@@ -568,6 +578,10 @@ Build a matrix initialized from the given list of lists.
 </div>
 </td></tr>
 <tr><td align="left"><br>P</td></tr>
+<tr><td><a href="Slap_SDCZ_la.S.html#VALpotrf">potrf</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_SDCZ_la.S.html#VALpotri">potri</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap_io.S.html#VALpp_cmat">pp_cmat</a> [<a href="Slap_io.S.html">Slap_io.S</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap_io.S.html#VALpp_cvec">pp_cvec</a> [<a href="Slap_io.S.html">Slap_io.S</a>]</td>
@@ -610,6 +624,8 @@ An alias of <code class="code">kind</code>.
 <td></td></tr>
 <tr><td align="left"><br>R</td></tr>
 <tr><td><a href="Slap_CZ_vec.S.html#VALrandom">random</a> [<a href="Slap_CZ_vec.S.html">Slap_CZ_vec.S</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_SD_mat.S.html#VALrandom">random</a> [<a href="Slap_SD_mat.S.html">Slap_SD_mat.S</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap_SD_vec.S.html#VALrandom">random</a> [<a href="Slap_SD_vec.S.html">Slap_SD_vec.S</a>]</td>
 <td></td></tr>
@@ -754,6 +770,8 @@ A row-wise <code class="code">scal</code> function for matrices.
 <td></td></tr>
 <tr><td><a href="Slap_SDCZ_vec.S.html#VALsub">sub</a> [<a href="Slap_SDCZ_vec.S.html">Slap_SDCZ_vec.S</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap_size.S.html#VALsub_dyn">sub_dyn</a> [<a href="Slap_size.S.html">Slap_size.S</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap_mat.S.html#VALsubmat_dyn">submat_dyn</a> [<a href="Slap_mat.S.html">Slap_mat.S</a>]</td>
 <td><div class="info">
 <code class="code">submat_dyn m n ?ar ?ac a</code>
@@ -782,6 +800,8 @@ Subvectors
 <td></td></tr>
 <tr><td><a href="Slap_SDCZ_la.S.html#VALsymm">symm</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap_SDCZ_mat.S.html#VALsymm2_trace">symm2_trace</a> [<a href="Slap_SDCZ_mat.S.html">Slap_SDCZ_mat.S</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap_SDCZ_la.S.html#VALsymv">symv</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap_SD_la.S.html#VALsyr">syr</a> [<a href="Slap_SD_la.S.html">Slap_SD_la.S</a>]</td>
@@ -791,7 +811,15 @@ Subvectors
    the transposed vector <code class="code">x^T</code> of <code class="code">x</code>.
 </div>
 </td></tr>
+<tr><td><a href="Slap_SDCZ_la.S.html#VALsyrk">syrk</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_SDCZ_mat.S.html#VALsyrk_diag">syrk_diag</a> [<a href="Slap_SDCZ_mat.S.html">Slap_SDCZ_mat.S</a>]</td>
+<td></td></tr>
 <tr><td align="left"><br>T</td></tr>
+<tr><td><a href="Slap_size.S.html#VALten">ten</a> [<a href="Slap_size.S.html">Slap_size.S</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_size.S.html#VALthree">three</a> [<a href="Slap_size.S.html">Slap_size.S</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap_SDCZ_mat.S.html#VALto_array">to_array</a> [<a href="Slap_SDCZ_mat.S.html">Slap_SDCZ_mat.S</a>]</td>
 <td><div class="info">
 <code class="code">to_array a</code>
@@ -847,6 +875,18 @@ Return the integer correponding to the given size.
 Transpose of a matrix.
 </div>
 </td></tr>
+<tr><td><a href="Slap_SDCZ_la.S.html#VALtrmm">trmm</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_SDCZ_la.S.html#VALtrmv">trmv</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_SDCZ_la.S.html#VALtrsm">trsm</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_SDCZ_la.S.html#VALtrsv">trsv</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_SDCZ_la.S.html#VALtrtrs">trtrs</a> [<a href="Slap_SDCZ_la.S.html">Slap_SDCZ_la.S</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_size.S.html#VALtwo">two</a> [<a href="Slap_size.S.html">Slap_size.S</a>]</td>
+<td></td></tr>
 <tr><td align="left"><br>U</td></tr>
 <tr><td><a href="Slap_SDCZ_mat.S.html#VALunsafe_get">unsafe_get</a> [<a href="Slap_SDCZ_mat.S.html">Slap_SDCZ_mat.S</a>]</td>
 <td><div class="info">

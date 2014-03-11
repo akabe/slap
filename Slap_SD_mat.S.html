@@ -27,7 +27,8 @@
 <link title="Slap_SD_la" rel="Chapter" href="Slap_SD_la.html">
 <link title="Slap_CZ_vec" rel="Chapter" href="Slap_CZ_vec.html">
 <link title="Slap_CZ_mat" rel="Chapter" href="Slap_CZ_mat.html">
-<link title="Slap_CZ_la" rel="Chapter" href="Slap_CZ_la.html"><title>Slap_SD_mat.S</title>
+<link title="Slap_CZ_la" rel="Chapter" href="Slap_CZ_la.html"><link title="Creation of matrices" rel="Section" href="#2_Creationofmatrices">
+<title>Slap_SD_mat.S</title>
 </head>
 <body>
 <div class="navbar">&nbsp;<a class="up" href="Slap_SD_mat.html" title="Slap_SD_mat">Up</a>
@@ -37,4 +38,7 @@
 <pre><span class="keyword">module type</span> S = <code class="code">sig</code> <a href="Slap_SD_mat.S.html">..</a> <code class="code">end</code></pre><hr width="100%">
 
 <pre><span class="keyword">include</span> <a href="Slap_SDCZ_mat.S.html">Slap_SDCZ_mat.S</a></pre>
-</body></html>
+<br>
+<h2 id="2_Creationofmatrices">Creation of matrices</h2><br>
+
+<pre><span id="VALrandom"><span class="keyword">val</span> random</span> : <code class="type">?rnd_state:Random.State.t -><br>       ?from:float -><br>       ?range:float -> 'm Common.size -> 'n Common.size -> ('m, 'n, 'cnt) mat</code></pre></body></html>

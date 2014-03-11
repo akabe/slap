@@ -37,7 +37,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n,&nbsp;float,&nbsp;real_prec,&nbsp;<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;<span class="constructor">Common</span>.vec<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;mat&nbsp;=<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n,&nbsp;num_type,&nbsp;prec,&nbsp;<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;<span class="constructor">Common</span>.mat<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;trans<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;+<span class="keywordsign">'</span>a&nbsp;trans<br>
 &nbsp;&nbsp;<span class="keyword">module</span>&nbsp;<span class="keyword">type</span>&nbsp;<span class="constructor">VEC</span>&nbsp;=<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">sig</span>&nbsp;<span class="keyword">type</span>&nbsp;n&nbsp;<span class="keyword">val</span>&nbsp;value&nbsp;:&nbsp;(<span class="constructor">Slap_SDCZ_vec</span>.<span class="constructor">S</span>.<span class="constructor">VEC</span>.n,&nbsp;<span class="keywordsign">'</span>cnt)&nbsp;vec&nbsp;<span class="keyword">end</span><br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;create&nbsp;:&nbsp;<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Common</span>.size&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>cnt)&nbsp;vec<br>

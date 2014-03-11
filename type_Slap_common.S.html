@@ -28,17 +28,19 @@
 </head>
 <body>
 <code class="code"><span class="keyword">sig</span><br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;<span class="keywordsign">'</span>n&nbsp;size&nbsp;=&nbsp;<span class="keyword">private</span>&nbsp;int<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;+<span class="keywordsign">'</span>n&nbsp;size&nbsp;=&nbsp;<span class="keyword">private</span>&nbsp;int<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;z<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;<span class="keywordsign">'</span>n&nbsp;s<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n)&nbsp;add<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n)&nbsp;mul<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n)&nbsp;min<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n)&nbsp;max<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;<span class="keywordsign">'</span>n&nbsp;packed<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;+<span class="keywordsign">'</span>n&nbsp;s<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>m,&nbsp;+<span class="keywordsign">'</span>n)&nbsp;add<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>m,&nbsp;+<span class="keywordsign">'</span>n)&nbsp;sub<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>m,&nbsp;+<span class="keywordsign">'</span>n)&nbsp;mul<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>m,&nbsp;+<span class="keywordsign">'</span>n)&nbsp;div<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>m,&nbsp;+<span class="keywordsign">'</span>n)&nbsp;min<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>m,&nbsp;+<span class="keywordsign">'</span>n)&nbsp;max<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;+<span class="keywordsign">'</span>n&nbsp;packed<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;cnt<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;dsc<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;+<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;vec<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;+<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;vec<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;int_vec&nbsp;=<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n,&nbsp;int,&nbsp;<span class="constructor">Bigarray</span>.int_elt,&nbsp;<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.vec<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;create_int_vec&nbsp;:<br>
@@ -47,8 +49,8 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n,&nbsp;int32,&nbsp;<span class="constructor">Bigarray</span>.int32_elt,&nbsp;<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.vec<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;create_int32_vec&nbsp;:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.size&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>cnt)&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.int32_vec<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;+<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;mat<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>a,&nbsp;+<span class="keywordsign">'</span>tag)&nbsp;trans<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>m,&nbsp;+<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;+<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;mat<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>a,&nbsp;+<span class="keywordsign">'</span>tag)&nbsp;trans<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;trans2_tag<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;trans2&nbsp;=&nbsp;(<span class="keywordsign">'</span>a,&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.trans2_tag)&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.trans<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;trans3_tag<br>
@@ -65,10 +67,10 @@
 &nbsp;&nbsp;&nbsp;&nbsp;((<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cd)&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.mat&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cd)&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.mat,&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.trans3_tag)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.trans<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>k,&nbsp;<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n)&nbsp;side<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>k,&nbsp;+<span class="keywordsign">'</span>m,&nbsp;+<span class="keywordsign">'</span>n)&nbsp;side<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;left&nbsp;:&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n)&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.side<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;right&nbsp;:&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n)&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.side<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>a,&nbsp;+<span class="keywordsign">'</span>tag)&nbsp;norm<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>a,&nbsp;+<span class="keywordsign">'</span>tag)&nbsp;norm<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;norm2_tag<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;norm2&nbsp;=&nbsp;(<span class="keywordsign">'</span>a,&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.norm2_tag)&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.norm<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;norm4_tag<br>
@@ -83,7 +85,7 @@
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;norm_frob<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;norm_frob&nbsp;:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.norm_frob,&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.norm4_tag)&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.norm<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;svd_job<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;+<span class="keywordsign">'</span>a&nbsp;svd_job<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;svd_all<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;svd_all&nbsp;:&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.svd_all&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.svd_job<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;svd_top<br>
@@ -92,4 +94,5 @@
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;svd_overwrite&nbsp;:&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.svd_overwrite&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.svd_job<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;svd_no<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;svd_no&nbsp;:&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.svd_no&nbsp;<span class="constructor">Slap_common</span>.<span class="constructor">S</span>.svd_job<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;diag&nbsp;=&nbsp;[&nbsp;<span class="keywordsign">`</span><span class="constructor">N</span>&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="keywordsign">`</span><span class="constructor">U</span>&nbsp;]<br>
 <span class="keyword">end</span></code></body></html>

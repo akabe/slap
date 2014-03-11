@@ -36,6 +36,7 @@
 <link title="Direction of matrix multiplication" rel="Subsection" href="#3_Directionofmatrixmultiplication">
 <link title="Matrix norms" rel="Subsection" href="#3_Matrixnorms">
 <link title="SVD computation flags" rel="Subsection" href="#3_SVDcomputationflags">
+<link title="Other flags" rel="Subsection" href="#3_Otherflags">
 <title>Slap_mat.S.Common</title>
 </head>
 <body>
@@ -63,37 +64,49 @@ zero<br>
 </div>
 
 
-<pre><span id="TYPEs"><span class="keyword">type</span> <code class="type">'n</code> s</span> </pre>
+<pre><span id="TYPEs"><span class="keyword">type</span> <code class="type">+'n</code> s</span> </pre>
 <div class="info ">
 successor<br>
 </div>
 
 
-<pre><span id="TYPEadd"><span class="keyword">type</span> <code class="type">('m, 'n)</code> add</span> </pre>
+<pre><span id="TYPEadd"><span class="keyword">type</span> <code class="type">(+'m, +'n)</code> add</span> </pre>
 <div class="info ">
 addition of two sizes<br>
 </div>
 
 
-<pre><span id="TYPEmul"><span class="keyword">type</span> <code class="type">('m, 'n)</code> mul</span> </pre>
+<pre><span id="TYPEsub"><span class="keyword">type</span> <code class="type">(+'m, +'n)</code> sub</span> </pre>
+<div class="info ">
+difference of two sizes<br>
+</div>
+
+
+<pre><span id="TYPEmul"><span class="keyword">type</span> <code class="type">(+'m, +'n)</code> mul</span> </pre>
 <div class="info ">
 multiplication of two sizes<br>
 </div>
 
 
-<pre><span id="TYPEmin"><span class="keyword">type</span> <code class="type">('m, 'n)</code> min</span> </pre>
+<pre><span id="TYPEdiv"><span class="keyword">type</span> <code class="type">(+'m, +'n)</code> div</span> </pre>
+<div class="info ">
+<code class="code">'m / 'n</code><br>
+</div>
+
+
+<pre><span id="TYPEmin"><span class="keyword">type</span> <code class="type">(+'m, +'n)</code> min</span> </pre>
 <div class="info ">
 minimum of two sizes<br>
 </div>
 
 
-<pre><span id="TYPEmax"><span class="keyword">type</span> <code class="type">('m, 'n)</code> max</span> </pre>
+<pre><span id="TYPEmax"><span class="keyword">type</span> <code class="type">(+'m, +'n)</code> max</span> </pre>
 <div class="info ">
 maximum of two sizes<br>
 </div>
 
 
-<pre><span id="TYPEpacked"><span class="keyword">type</span> <code class="type">'n</code> packed</span> </pre>
+<pre><span id="TYPEpacked"><span class="keyword">type</span> <code class="type">+'n</code> packed</span> </pre>
 <div class="info ">
 Packed storage size of <code class="code">n</code>-by-<code class="code">n</code> matrix.
    It is <code class="code">n*(n+1)/2</code>.<br>
@@ -111,7 +124,7 @@ Packed storage size of <code class="code">n</code>-by-<code class="code">n</code
 <br>
 <h3 id="3_Vectors">Vectors</h3><br>
 
-<pre><span id="TYPEvec"><span class="keyword">type</span> <code class="type">('n, 'num, 'prec, +'cnt_or_dsc)</code> vec</span> </pre>
+<pre><span id="TYPEvec"><span class="keyword">type</span> <code class="type">(+'n, 'num, 'prec, +'cnt_or_dsc)</code> vec</span> </pre>
 <div class="info ">
 <code class="code">('n, 'num, 'prec, 'cnt_or_dsc) vec</code> is the type of <code class="code">'n</code>-dimensional
    vector whose elements have OCaml type <code class="code">'num</code>, representation kind <code class="code">'prec</code> and
@@ -130,7 +143,7 @@ Packed storage size of <code class="code">n</code>-by-<code class="code">n</code
 <pre><span id="VALcreate_int32_vec"><span class="keyword">val</span> create_int32_vec</span> : <code class="type">'n <a href="Slap_common.S.html#TYPEsize">size</a> -> ('n, 'cnt) <a href="Slap_common.S.html#TYPEint32_vec">int32_vec</a></code></pre><br>
 <h3 id="3_Matrices">Matrices</h3><br>
 
-<pre><span id="TYPEmat"><span class="keyword">type</span> <code class="type">('m, 'n, 'num, 'prec, +'cnt_or_dsc)</code> mat</span> </pre>
+<pre><span id="TYPEmat"><span class="keyword">type</span> <code class="type">(+'m, +'n, 'num, 'prec, +'cnt_or_dsc)</code> mat</span> </pre>
 <div class="info ">
 <code class="code">('m, 'n, 'num, 'prec) mat</code> is the type of <code class="code">'m</code>-by-<code class="code">'n</code> matrix whose
    elements have OCaml type <code class="code">'num</code>, representation kind <code class="code">'prec</code> and
@@ -143,7 +156,7 @@ Packed storage size of <code class="code">n</code>-by-<code class="code">n</code
 <br>
 <h3 id="3_Transposeflags">Transpose flags</h3><br>
 
-<pre><span id="TYPEtrans"><span class="keyword">type</span> <code class="type">('a, +'tag)</code> trans</span> </pre>
+<pre><span id="TYPEtrans"><span class="keyword">type</span> <code class="type">(+'a, +'tag)</code> trans</span> </pre>
 
 
 <pre><span id="TYPEtrans2_tag"><span class="keyword">type</span> <code class="type"></code>trans2_tag</span> </pre>
@@ -189,7 +202,7 @@ Conjugate transpose of a matrix.<br>
 <br>
 <h3 id="3_Directionofmatrixmultiplication">Direction of matrix multiplication</h3><br>
 
-<pre><span id="TYPEside"><span class="keyword">type</span> <code class="type">('k, 'm, 'n)</code> side</span> </pre>
+<pre><span id="TYPEside"><span class="keyword">type</span> <code class="type">(+'k, +'m, +'n)</code> side</span> </pre>
 <div class="info ">
 <code class="code">('k, 'm, 'n) side</code> represents a relation between left- or
       right-multiplication of two matrices and their sizes.
@@ -214,7 +227,7 @@ Conjugate transpose of a matrix.<br>
 <pre><span id="VALright"><span class="keyword">val</span> right</span> : <code class="type">('n, 'm, 'n) <a href="Slap_common.S.html#TYPEside">side</a></code></pre><br>
 <h3 id="3_Matrixnorms">Matrix norms</h3><br>
 
-<pre><span id="TYPEnorm"><span class="keyword">type</span> <code class="type">('a, +'tag)</code> norm</span> </pre>
+<pre><span id="TYPEnorm"><span class="keyword">type</span> <code class="type">(+'a, +'tag)</code> norm</span> </pre>
 
 
 <pre><span id="TYPEnorm2_tag"><span class="keyword">type</span> <code class="type"></code>norm2_tag</span> </pre>
@@ -275,7 +288,7 @@ Frobenius norm of a matrix.<br>
 <br>
 <h3 id="3_SVDcomputationflags">SVD computation flags</h3><br>
 
-<pre><span id="TYPEsvd_job"><span class="keyword">type</span> <code class="type">'a</code> svd_job</span> </pre>
+<pre><span id="TYPEsvd_job"><span class="keyword">type</span> <code class="type">+'a</code> svd_job</span> </pre>
 
 
 <pre><span id="TYPEsvd_all"><span class="keyword">type</span> <code class="type"></code>svd_all</span> </pre>
@@ -293,4 +306,9 @@ Frobenius norm of a matrix.<br>
 <pre><span id="TYPEsvd_no"><span class="keyword">type</span> <code class="type"></code>svd_no</span> </pre>
 
 
-<pre><span id="VALsvd_no"><span class="keyword">val</span> svd_no</span> : <code class="type"><a href="Slap_common.S.html#TYPEsvd_no">svd_no</a> <a href="Slap_common.S.html#TYPEsvd_job">svd_job</a></code></pre></body></html>
+<pre><span id="VALsvd_no"><span class="keyword">val</span> svd_no</span> : <code class="type"><a href="Slap_common.S.html#TYPEsvd_no">svd_no</a> <a href="Slap_common.S.html#TYPEsvd_job">svd_job</a></code></pre><br>
+<h3 id="3_Otherflags">Other flags</h3><br>
+
+<pre><span id="TYPEdiag"><span class="keyword">type</span> <code class="type"></code>diag</span> = <code class="type">[ `N | `U ]</code> </pre>
+
+</body></html>

@@ -29,7 +29,8 @@
 <link title="Slap_SD_la" rel="Chapter" href="Slap_SD_la.html">
 <link title="Slap_CZ_vec" rel="Chapter" href="Slap_CZ_vec.html">
 <link title="Slap_CZ_mat" rel="Chapter" href="Slap_CZ_mat.html">
-<link title="Slap_CZ_la" rel="Chapter" href="Slap_CZ_la.html"><link title="Constants and arithmetric operations" rel="Section" href="#2_Constantsandarithmetricoperations">
+<link title="Slap_CZ_la" rel="Chapter" href="Slap_CZ_la.html"><link title="Constants" rel="Section" href="#2_Constants">
+<link title="Arithmetric operations" rel="Section" href="#2_Arithmetricoperations">
 <link title="Iterators" rel="Section" href="#2_Iterators">
 <link title="Conversion between sizes and integers" rel="Section" href="#2_Conversionbetweensizesandintegers">
 <title>Slap.Size</title>
@@ -50,13 +51,25 @@ Operations on sizes.<br>
 = <a href="Slap.Common.html"><code class="code">Slap.Common</code></a>
 </div>
 <br>
-<h2 id="2_Constantsandarithmetricoperations">Constants and arithmetric operations</h2><br>
+<h2 id="2_Constants">Constants</h2><br>
 
 <pre><span id="VALzero"><span class="keyword">val</span> zero</span> : <code class="type">Common.z Common.size</code></pre>
 <pre><span id="VALone"><span class="keyword">val</span> one</span> : <code class="type">Common.z Common.s Common.size</code></pre>
+<pre><span id="VALtwo"><span class="keyword">val</span> two</span> : <code class="type">Common.z Common.s Common.s Common.size</code></pre>
+<pre><span id="VALthree"><span class="keyword">val</span> three</span> : <code class="type">Common.z Common.s Common.s Common.s Common.size</code></pre>
+<pre><span id="VALfour"><span class="keyword">val</span> four</span> : <code class="type">Common.z Common.s Common.s Common.s Common.s Common.size</code></pre>
+<pre><span id="VALfive"><span class="keyword">val</span> five</span> : <code class="type">Common.z Common.s Common.s Common.s Common.s Common.s Common.size</code></pre>
+<pre><span id="TYPEten"><span class="keyword">type</span> <code class="type"></code>ten</span> = <code class="type">Common.z Common.s Common.s Common.s Common.s Common.s Common.s Common.s<br>       Common.s Common.s Common.s</code> </pre>
+
+
+<pre><span id="VALten"><span class="keyword">val</span> ten</span> : <code class="type"><a href="Slap_size.S.html#TYPEten">ten</a> Common.size</code></pre><br>
+<h2 id="2_Arithmetricoperations">Arithmetric operations</h2><br>
+
 <pre><span id="VALsucc"><span class="keyword">val</span> succ</span> : <code class="type">'n Common.size -> 'n Common.s Common.size</code></pre>
 <pre><span id="VALadd"><span class="keyword">val</span> add</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.add Common.size</code></pre>
+<pre><span id="VALsub_dyn"><span class="keyword">val</span> sub_dyn</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.sub Common.size</code></pre>
 <pre><span id="VALmul"><span class="keyword">val</span> mul</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.mul Common.size</code></pre>
+<pre><span id="VALdiv_dyn"><span class="keyword">val</span> div_dyn</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.div Common.size</code></pre>
 <pre><span id="VALmin"><span class="keyword">val</span> min</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.min Common.size</code></pre>
 <pre><span id="VALmax"><span class="keyword">val</span> max</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.max Common.size</code></pre><br>
 <h2 id="2_Iterators">Iterators</h2>

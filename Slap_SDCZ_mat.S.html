@@ -131,12 +131,12 @@ Like <code class="code">Slap.Mat.set_dyn</code>, but size checking is not always
 <b>Returns</b> the <code class="code">i</code>-th row of the matrix <code class="code">a</code>. The data are shared.<br>
 </div>
 
-<pre><span id="VALdiag"><span class="keyword">val</span> diag</span> : <code class="type">('m, 'n, 'cd) mat -> (('m, 'n) Common.min, Common.dsc) vec</code></pre><div class="info ">
+<pre><span id="VALdiag"><span class="keyword">val</span> diag</span> : <code class="type">('n, 'n, 'cd) mat -> ('n, Common.dsc) vec</code></pre><div class="info ">
 <code class="code">diag a</code><br>
 <b>Returns</b> the diagonal elements of the matrix <code class="code">a</code>. The data are shared.<br>
 </div>
 
-<pre><span id="VALcopy_diag"><span class="keyword">val</span> copy_diag</span> : <code class="type">('m, 'n, 'cd) mat -> (('m, 'n) Common.min, Common.dsc) vec</code></pre><div class="info ">
+<pre><span id="VALcopy_diag"><span class="keyword">val</span> copy_diag</span> : <code class="type">('n, 'n, 'cd) mat -> ('n, 'cnt) vec</code></pre><div class="info ">
 <code class="code">copy_diag a</code> is <code class="code">Vec.copy (Mat.diag a)</code>.<br>
 <b>Returns</b> the diagonal elements of the matrix <code class="code">a</code>.<br>
 </div>
@@ -161,7 +161,8 @@ Like <code class="code">Slap.Mat.set_dyn</code>, but size checking is not always
 </div>
 <div class="param_info"><code class="code">uplo</code> : default = all elements in <code class="code">a</code> is copied.</div>
 <div class="param_info"><code class="code">b</code> : default = a fresh matrix.</div>
-<br>
+
+<pre><span id="VALof_col_vecs_dyn"><span class="keyword">val</span> of_col_vecs_dyn</span> : <code class="type">'m Common.size -><br>       'n Common.size -> ('m, Common.cnt) vec array -> ('m, 'n, 'cnt) mat</code></pre><br>
 <h2 id="2_Typeconversion">Type conversion</h2><br>
 
 <pre><span id="VALto_array"><span class="keyword">val</span> to_array</span> : <code class="type">('m, 'n, 'cd) mat -> num_type array array</code></pre><div class="info ">
@@ -226,4 +227,7 @@ A row-wise <code class="code">scal</code> function for matrices.<br>
 <pre><span id="VALaxpy"><span class="keyword">val</span> axpy</span> : <code class="type">?alpha:num_type -> x:('m, 'n, 'x_cd) mat -> ('m, 'n, 'y_cd) mat -> unit</code></pre><div class="info ">
 <code class="code">axpy ?alpha ~x y</code> computes <code class="code">y := alpha * x + y</code>.<br>
 </div>
-</body></html>
+
+<pre><span id="VALsyrk_diag"><span class="keyword">val</span> syrk_diag</span> : <code class="type">?beta:num_type -><br>       ?y:('n, Common.cnt) vec -><br>       trans:(('a_n, 'a_k, 'a_cd) mat -> ('n, 'k, 'a_cd) mat) Common.trans2 -><br>       ?alpha:num_type -> ('a_n, 'a_k, 'a_cd) mat -> ('n, 'cnt) vec</code></pre>
+<pre><span id="VALgemm_trace"><span class="keyword">val</span> gemm_trace</span> : <code class="type">transa:(('a_n, 'a_k, 'a_cd) mat -> ('n, 'k, 'a_cd) mat) trans -><br>       ('a_n, 'a_k, 'a_cd) mat -><br>       transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans -><br>       ('b_k, 'b_n, 'b_cd) mat -> num_type</code></pre>
+<pre><span id="VALsymm2_trace"><span class="keyword">val</span> symm2_trace</span> : <code class="type">?upa:bool -><br>       ('n, 'n, 'a_cd) mat -> ?upb:bool -> ('n, 'n, 'b_cd) mat -> num_type</code></pre></body></html>

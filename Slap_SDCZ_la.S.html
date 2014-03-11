@@ -77,11 +77,16 @@ A pretty-printer for matrices.<br>
 <h3 id="3_Level2">Level 2</h3><br>
 
 <pre><span id="VALgemv"><span class="keyword">val</span> gemv</span> : <code class="type">?beta:num_type -><br>       ?y:('m, 'y_cd) vec -><br>       trans:(('a_m, 'a_n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) trans -><br>       ?alpha:num_type -><br>       ('a_m, 'a_n, 'a_cd) mat -> ('n, 'x_cd) vec -> ('m, 'y_cd) vec</code></pre>
-<pre><span id="VALsymv"><span class="keyword">val</span> symv</span> : <code class="type">?beta:num_type -><br>       ?y:('n, 'y_cd) vec -><br>       ?up:bool -><br>       ?alpha:num_type -> ('n, 'n, 'a_cd) mat -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec</code></pre><br>
+<pre><span id="VALsymv"><span class="keyword">val</span> symv</span> : <code class="type">?beta:num_type -><br>       ?y:('n, 'y_cd) vec -><br>       ?up:bool -><br>       ?alpha:num_type -> ('n, 'n, 'a_cd) mat -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec</code></pre>
+<pre><span id="VALtrmv"><span class="keyword">val</span> trmv</span> : <code class="type">trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans -><br>       ?diag:Common.diag -><br>       ?up:bool -> ('n, 'n, 'a_cd) mat -> ('n, 'x_cd) vec -> unit</code></pre>
+<pre><span id="VALtrsv"><span class="keyword">val</span> trsv</span> : <code class="type">trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans -><br>       ?diag:Common.diag -><br>       ?up:bool -> ('n, 'n, 'a_cd) mat -> ('n, 'x_cd) vec -> unit</code></pre><br>
 <h3 id="3_Level3">Level 3</h3><br>
 
 <pre><span id="VALgemm"><span class="keyword">val</span> gemm</span> : <code class="type">?beta:num_type -><br>       ?c:('m, 'n, 'c_cd) mat -><br>       transa:(('a_m, 'a_k, 'a_cd) mat -> ('m, 'k, 'a_cd) mat) trans -><br>       ?alpha:num_type -><br>       ('a_m, 'a_k, 'a_cd) mat -><br>       transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans -><br>       ('b_k, 'b_n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat</code></pre>
-<pre><span id="VALsymm"><span class="keyword">val</span> symm</span> : <code class="type">side:('k, 'm, 'n) Common.side -><br>       ?up:bool -><br>       ?beta:num_type -><br>       ?c:('m, 'n, 'c_cd) mat -><br>       ?alpha:num_type -><br>       ('k, 'k, 'a_cd) mat -> ('m, 'n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat</code></pre><br>
+<pre><span id="VALsymm"><span class="keyword">val</span> symm</span> : <code class="type">side:('k, 'm, 'n) Common.side -><br>       ?up:bool -><br>       ?beta:num_type -><br>       ?c:('m, 'n, 'c_cd) mat -><br>       ?alpha:num_type -><br>       ('k, 'k, 'a_cd) mat -> ('m, 'n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat</code></pre>
+<pre><span id="VALtrmm"><span class="keyword">val</span> trmm</span> : <code class="type">side:('k, 'm, 'n) Common.side -><br>       ?up:bool -><br>       transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans -><br>       ?diag:Common.diag -><br>       ?alpha:num_type -> a:('k, 'k, 'a_cd) mat -> ('m, 'n, 'b_cd) mat -> unit</code></pre>
+<pre><span id="VALtrsm"><span class="keyword">val</span> trsm</span> : <code class="type">side:('k, 'm, 'n) Common.side -><br>       ?up:bool -><br>       transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans -><br>       ?diag:Common.diag -><br>       ?alpha:num_type -> a:('k, 'k, 'a_cd) mat -> ('m, 'n, 'b_cd) mat -> unit</code></pre>
+<pre><span id="VALsyrk"><span class="keyword">val</span> syrk</span> : <code class="type">?up:bool -><br>       ?beta:num_type -><br>       ?c:('n, 'n, 'c_cd) mat -><br>       trans:(('a_n, 'a_k, 'a_cd) mat -> ('n, 'k, 'a_cd) mat) Common.trans2 -><br>       ?alpha:num_type -> ('a_n, 'a_k, 'a_cd) mat -> ('n, 'n, 'c_cd) mat</code></pre><br>
 <h2 id="2_LAPACKinterface">LAPACK interface</h2><br>
 <br>
 <h3 id="3_Auxiliaryroutines">Auxiliary routines</h3><br>
@@ -107,4 +112,7 @@ A pretty-printer for matrices.<br>
 <h3 id="3_Linearequationscomputationalroutines">Linear equations (computational routines)</h3><br>
 
 <pre><span id="VALgetrf"><span class="keyword">val</span> getrf</span> : <code class="type">?ipiv:(('m, 'n) Common.min, Common.cnt) Common.int32_vec -><br>       ('m, 'n, 'cd) mat -> (('m, 'n) Common.min, Common.cnt) Common.int32_vec</code></pre>
+<pre><span id="VALpotrf"><span class="keyword">val</span> potrf</span> : <code class="type">?up:bool -> ?jitter:num_type -> ('n, 'n, 'cd) mat -> unit</code></pre>
+<pre><span id="VALpotri"><span class="keyword">val</span> potri</span> : <code class="type">?up:bool -> ?factorize:bool -> ?jitter:num_type -> ('n, 'n, 'cd) mat -> unit</code></pre>
+<pre><span id="VALtrtrs"><span class="keyword">val</span> trtrs</span> : <code class="type">?up:bool -><br>       trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans -><br>       ?diag:Common.diag -> ('n, 'n, 'a_cd) mat -> ('n, 'nrhs, 'b_cd) mat -> unit</code></pre>
 <pre><span id="VALgeqrf"><span class="keyword">val</span> geqrf</span> : <code class="type">?tau:(('m, 'n) Common.min, Common.cnt) vec -><br>       ('m, 'n, 'cd) mat -> (('m, 'n) Common.min, 'cnt) vec</code></pre></body></html>
