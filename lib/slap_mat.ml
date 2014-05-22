@@ -49,9 +49,9 @@ sig
   val init_cols : ('num, 'prec) Bigarray.kind ->
                   'm size ->
                   'n size ->
-                  f:(int -> int -> 'num) ->
+                  (int -> int -> 'num) ->
                   ('m, 'n, 'num, 'prec, 'cnt) mat
-  (** [init_cols kind m n ~f] returns a fresh [m]-by-[n] matrix whose
+  (** [init_cols kind m n f] returns a fresh [m]-by-[n] matrix whose
    the [(i,j)] element is initialized by the result of calling [f i j].
    The elements are passed by column-major order.
    *)
@@ -59,9 +59,9 @@ sig
   val init_rows : ('num, 'prec) Bigarray.kind ->
                   'm size ->
                   'n size ->
-                  f:(int -> int -> 'num) ->
+                  (int -> int -> 'num) ->
                   ('m, 'n, 'num, 'prec, 'cnt) mat
-  (** [init_rows kind m n ~f] returns a fresh [m]-by-[n] matrix whose
+  (** [init_rows kind m n f] returns a fresh [m]-by-[n] matrix whose
    the [(i,j)] element is initialized by the result of calling [f i j].
    The elements are passed by row-major order.
    *)
@@ -100,8 +100,8 @@ sig
   (** Like {!Slap.Mat.set_dyn}, but size checking is not always performed. *)
 
   val replace_dyn : ('m, 'n, 'num, 'prec, 'cd) mat -> int -> int ->
-    f:('num -> 'num) -> unit
-  (** [replace_dyn a i j ~f] is [set a i j (f (get a i j))]. *)
+                    ('num -> 'num) -> unit
+  (** [replace_dyn a i j f] is [set a i j (f (get a i j))]. *)
 
   val col_dyn : ('m, 'n, 'num, 'prec, 'cd) mat ->
                 int ->
@@ -145,14 +145,14 @@ sig
 
   (** {2 Iterators} *)
 
-  val replace_all : ('m, 'n, 'num, 'prec, 'cd) mat -> f:('num -> 'num) -> unit
-  (** [replace_all a ~f] modifies the matrix [a] in place
+  val replace_all : ('m, 'n, 'num, 'prec, 'cd) mat -> ('num -> 'num) -> unit
+  (** [replace_all a f] modifies the matrix [a] in place
    -- the [(i,j)]-element [aij] of [a] will be set to [f aij].
    *)
 
   val replace_alli : ('m, 'n, 'num, 'prec, 'cd) mat ->
-                     f:(int -> int -> 'num -> 'num) -> unit
-  (** [replace_all a ~f] modifies the matrix [a] in place
+                     (int -> int -> 'num -> 'num) -> unit
+  (** [replace_all a f] modifies the matrix [a] in place
    -- the [(i,j)]-element [aij] of [a] will be set to [f i j aij].
    *)
 

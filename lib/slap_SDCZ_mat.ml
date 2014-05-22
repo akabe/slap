@@ -66,15 +66,15 @@ sig
    *)
 
   val init_cols : 'm Common.size -> 'n Common.size ->
-                  f:(int -> int -> num_type) -> ('m, 'n, 'cnt) mat
-  (** [init_cols m n ~f] returns a fresh [m]-by-[n] matrix whose
+                  (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
+  (** [init_cols m n f] returns a fresh [m]-by-[n] matrix whose
    the [(i,j)] element is initialized by the result of calling [f i j].
    The elements are passed by column-major order.
    *)
 
   val init_rows : 'm Common.size -> 'n Common.size ->
-                  f:(int -> int -> num_type) -> ('m, 'n, 'cnt) mat
-  (** [init_rows m n ~f] returns a fresh [m]-by-[n] matrix whose
+                  (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
+  (** [init_rows m n f] returns a fresh [m]-by-[n] matrix whose
    the [(i,j)] element is initialized by the result of calling [f i j].
    The elements are passed by row-major order.
    *)
@@ -190,17 +190,17 @@ sig
 
   (** {2 Iterators} *)
 
-  val map : ?b:('m, 'n, 'b_cd) mat -> f:(num_type -> num_type) ->
+  val map : (num_type -> num_type) -> ?b:('m, 'n, 'b_cd) mat ->
             ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
 
-  val replace_all : ('m, 'n, 'cd) mat -> f:(num_type -> num_type) -> unit
-  (** [replace_all a ~f] modifies the matrix [a] in place
+  val replace_all : ('m, 'n, 'cd) mat -> (num_type -> num_type) -> unit
+  (** [replace_all a f] modifies the matrix [a] in place
    -- the [(i,j)]-element [aij] of [a] will be set to [f aij].
    *)
 
   val replace_alli : ('m, 'n, 'cd) mat ->
-                     f:(int -> int -> num_type -> num_type) -> unit
-  (** [replace_all a ~f] modifies the matrix [a] in place
+                     (int -> int -> num_type -> num_type) -> unit
+  (** [replace_all a f] modifies the matrix [a] in place
    -- the [(i,j)]-element [aij] of [a] will be set to [f i j aij].
    *)
 

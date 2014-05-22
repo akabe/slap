@@ -54,9 +54,9 @@ struct
 
   let identity n = (n, n, 1, 1, SDCZ.Mat.identity n)
 
-  let init_cols m n ~f = Mat.init_cols I.kind m n ~f
+  let init_cols m n f = Mat.init_cols I.kind m n f
 
-  let init_rows m n ~f = Mat.init_rows I.kind m n ~f
+  let init_rows m n f = Mat.init_rows I.kind m n f
 
   (** {2 Accessors} *)
 
@@ -141,7 +141,7 @@ struct
 
   (** {2 Iterators} *)
 
-  let map ?b ~f (m, n, ar, ac, a) =
+  let map f ?b (m, n, ar, ac, a) =
     let br, bc, b = default_mat m n b in
     let _ = SDCZ.Mat.map f ~m ~n ~br ~bc ~b ~ar ~ac a in
     (m, n, br, bc, b)

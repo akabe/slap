@@ -60,8 +60,8 @@ sig
    *)
 
   val init : 'n Common.size ->
-             f:(int -> num_type) -> ('n, 'cnt) vec
-  (** [init n ~f]
+             (int -> num_type) -> ('n, 'cnt) vec
+  (** [init n f]
    @return a fresh vector [(f 1, ..., f n)] with [n] elements.
    *)
 
@@ -89,8 +89,8 @@ sig
 
   val replace_dyn : ('n, 'cd) vec ->
     int ->
-    f:(num_type -> num_type) -> unit
-  (** [replace_dyn v i ~f] is [set_dyn v i (f (get_dyn v i))]. *)
+    (num_type -> num_type) -> unit
+  (** [replace_dyn v i f] is [set_dyn v i (f (get_dyn v i))]. *)
 
   (** {2 Basic operations} *)
 
@@ -142,72 +142,72 @@ sig
 
   (** {2 Iterators} *)
 
-  val map : ?y:('n, 'y_cd) vec ->
-            f:(num_type -> num_type) ->
+  val map : (num_type -> num_type) ->
+            ?y:('n, 'y_cd) vec ->
             ('n, 'x_cd) vec -> ('n, 'y_cd) vec
-  (** [map ?y ~f (x1, ..., xn)] is [(f x1, ..., f xn)].
+  (** [map f ?y (x1, ..., xn)] is [(f x1, ..., f xn)].
    @return the vector [y], which is overwritten.
    @param y default = a fresh vector.
    *)
 
-  val mapi : ?y:('n, 'y_cd) vec ->
-             f:(int -> num_type -> num_type) ->
+  val mapi : (int -> num_type -> num_type) ->
+             ?y:('n, 'y_cd) vec ->
              ('n, 'x_cd) vec ->
              ('n, 'y_cd) vec
-  (** [mapi ?y ~f (x1, ..., xn)] is [(f 1 x1, ..., f n xn)] with
+  (** [mapi f ?y (x1, ..., xn)] is [(f 1 x1, ..., f n xn)] with
    the vector's dimension [n].
    @return the vector [y], which is overwritten.
    @param y default = a fresh vector.
    *)
 
-  val fold_left : f:('accum -> num_type -> 'accum) ->
-                  init:'accum ->
+  val fold_left : ('accum -> num_type -> 'accum) ->
+                  'accum ->
                   ('n, 'cd) vec -> 'accum
-  (** [fold_left ~f ~init (x1, x2, ..., xn)] is
+  (** [fold_left f init (x1, x2, ..., xn)] is
    [f (... (f (f init x1) x2) ...) xn].
    *)
 
-  val fold_lefti : f:(int -> 'accum -> num_type -> 'accum) ->
-                   init:'accum ->
+  val fold_lefti : (int -> 'accum -> num_type -> 'accum) ->
+                   'accum ->
                    ('n, 'cd) vec -> 'accum
-  (** [fold_lefti ~f ~init (x1, x2, ..., xn)] is
+  (** [fold_lefti f init (x1, x2, ..., xn)] is
    [f n (... (f 2 (f 1 init x1) x2) ...) xn] with the vector's dimension [n].
    *)
 
-  val fold_right : f:(num_type -> 'accum -> 'accum) ->
+  val fold_right : (num_type -> 'accum -> 'accum) ->
                    ('n, 'cd) vec ->
-                   init:'accum -> 'accum
-  (** [fold_right ~f (x1, x2, ..., xn) ~init] is
+                   'accum -> 'accum
+  (** [fold_right f (x1, x2, ..., xn) init] is
    [f x1 (f x2 (... (f xn init) ...))].
    *)
 
-  val fold_righti : f:(int -> num_type -> 'accum -> 'accum) ->
+  val fold_righti : (int -> num_type -> 'accum -> 'accum) ->
                     ('n, 'cd) vec ->
-                    init:'accum -> 'accum
-  (** [fold_righti ~f (x1, x2, ..., xn) ~init] is
+                    'accum -> 'accum
+  (** [fold_righti f (x1, x2, ..., xn) init] is
    [f 1 x1 (f 2 x2 (... (f n xn init) ...))] with the vector's dimension [n].
    *)
 
   val replace_all : ('n, 'cd) vec ->
-    f:(num_type -> num_type) -> unit
-  (** [replace_all x ~f] modifies the vector [x] in place
+                    (num_type -> num_type) -> unit
+  (** [replace_all x f] modifies the vector [x] in place
    -- the [i]-th element [xi] of [x] will be set to [f xi].
    *)
 
   val replace_alli : ('n, 'cd) vec ->
-    f:(int -> num_type -> num_type) -> unit
-  (** [replace_alli x ~f] modifies the vector [x] in place
+                     (int -> num_type -> num_type) -> unit
+  (** [replace_alli x f] modifies the vector [x] in place
    -- the [i]-th element [xi] of [x] will be set to [f i xi].
    *)
 
-  val iter : f:(num_type -> unit) ->
+  val iter : (num_type -> unit) ->
              ('n, 'cd) vec -> unit
-  (** [iter ~f (x1, x2, ..., xn)] is [f x1; f x2; ...; f xn].
+  (** [iter f (x1, x2, ..., xn)] is [f x1; f x2; ...; f xn].
   *)
 
-  val iteri : f:(int -> num_type -> unit) ->
+  val iteri : (int -> num_type -> unit) ->
               ('n, 'cd) vec -> unit
-  (** [iteri ~f (x1, x2, ..., xn)] is [f 1 x1; f 2 x2; ...; f n xn].
+  (** [iteri f (x1, x2, ..., xn)] is [f 1 x1; f 2 x2; ...; f n xn].
   *)
 
   (** {2 Arithmetic operations} *)

@@ -15,5 +15,3 @@ _build/
 *.docdir
 *.byte
 *.native
-*.mlpack
-*.mllib

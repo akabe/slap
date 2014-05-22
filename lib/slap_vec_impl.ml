@@ -40,9 +40,9 @@ let make kind n a =
   Array1.fill x a ;
   (n, 1, 1, x)
 
-let init kind n ~f =
+let init kind n f =
   let x = create_array1 kind n in
-  Size.iter n ~f:(fun i -> Array1.unsafe_set x i (f i));
+  Size.iter (fun i -> Array1.unsafe_set x i (f i)) n;
   (n, 1, 1, x)
 
 let default_vec kind n = function
@@ -72,14 +72,14 @@ let unsafe_get (_, ofsx, incx, x) i =
 let unsafe_set (_, ofsx, incx, x) i a =
   Array1.unsafe_set x (ofsx + (i - 1) * incx) a
 
-let replace_dyn (n, ofsx, incx, x) i ~f =
+let replace_dyn (n, ofsx, incx, x) i f =
   if i < 1 || i > n then invalid_arg "Slap.VecView.replace_dyn";
   let j = ofsx + (i - 1) * incx in
   Array1.unsafe_set x j (f (Array1.unsafe_get x j))
 
 (* Iterators *)
 
-let mapi kind ?y ~f (n, ofsx, incx, x) =
+let mapi kind f ?y (n, ofsx, incx, x) =
   let ofsy, incy, y = default_vec kind n y in
   let rec loop count ix iy =
     if count <= n then
@@ -92,10 +92,10 @@ let mapi kind ?y ~f (n, ofsx, incx, x) =
   loop 1 ofsx ofsy;
   (n, ofsy, incy, y)
 
-let map kind ?y ~f vx =
-  mapi kind ?y ~f:(fun _ x -> f x) vx
+let map kind f ?y vx =
+  mapi kind (fun _ x -> f x) ?y vx
 
-let fold_lefti ~f ~init (n, ofsx, incx, x) =
+let fold_lefti f init (n, ofsx, incx, x) =
   let rec loop count i acc =
     if count > n then acc else
       begin
@@ -105,10 +105,10 @@ let fold_lefti ~f ~init (n, ofsx, incx, x) =
   in
   loop 1 ofsx init
 
-let fold_left ~f ~init vx =
-  fold_lefti ~f:(fun _ acc x -> f acc x) ~init vx
+let fold_left f init vx =
+  fold_lefti (fun _ acc x -> f acc x) init vx
 
-let fold_righti ~f (n, ofsx, incx, x) ~init =
+let fold_righti f (n, ofsx, incx, x) init =
   let rec loop count i acc =
     if count = 0 then acc else
       begin
@@ -118,16 +118,16 @@ let fold_righti ~f (n, ofsx, incx, x) ~init =
   in
   loop n ((n - 1) * incx + ofsx) init
 
-let fold_right ~f vx ~init =
-  fold_righti ~f:(fun _ xi acc -> f xi acc) vx ~init
+let fold_right f vx init =
+  fold_righti (fun _ xi acc -> f xi acc) vx init
 
-let replace_alli px ~f =
-  ignore (mapi (kind px) ~y:px ~f px)
+let replace_alli px f =
+  ignore (mapi (kind px) f ~y:px px)
 
-let replace_all v ~f =
-  replace_alli v ~f:(fun _ xi -> f xi)
+let replace_all v f =
+  replace_alli v (fun _ xi -> f xi)
 
-let iteri ~f (n, ofsx, incx, x) =
+let iteri f (n, ofsx, incx, x) =
   let rec loop count i =
     if count <= n then begin
       f count (Array1.unsafe_get x i);
@@ -136,8 +136,8 @@ let iteri ~f (n, ofsx, incx, x) =
   in
   loop 1 ofsx
 
-let iter ~f vx =
-  iteri ~f:(fun _ x -> f x) vx
+let iter f vx =
+  iteri (fun _ x -> f x) vx
 
 (* Basic operations *)
 
@@ -175,7 +175,7 @@ let of_array_dyn kind n arr =
   unsafe_of_array kind n arr
 
 let to_list x =
-  fold_right ~f:(fun a acc -> a :: acc) x ~init:[]
+  fold_right (fun a acc -> a :: acc) x []
 
 let unsafe_of_list kind n lst =
   let x = create_array1 kind n in

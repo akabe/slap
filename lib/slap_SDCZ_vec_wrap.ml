@@ -47,7 +47,7 @@ struct
 
   let make0 = zeros
 
-  let init n ~f = Vec.init I.kind n ~f
+  let init n f = Vec.init I.kind n f
 
   (** {2 Accessors} *)
 
@@ -96,9 +96,9 @@ struct
 
   (** {2 Iterators} *)
 
-  let map ?y ~f x = Vec.map I.kind ?y ~f x
+  let map f ?y x = Vec.map I.kind f ?y x
 
-  let mapi ?y ~f x = Vec.mapi I.kind ?y ~f x
+  let mapi f ?y x = Vec.mapi I.kind f ?y x
 
   let fold_left = Vec.fold_left
 

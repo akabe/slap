@@ -67,26 +67,26 @@ sig
       a size.
   *)
 
-  val fold_left : f:('a -> int -> 'a) ->
-    init:'a ->
-    'n size -> 'a
-  (** [fold_left ~f ~init n] is
+  val fold_left : ('accum -> int -> 'accum) ->
+    'accum ->
+    'n size -> 'accum
+  (** [fold_left f init n] is
       [f (... (f (f init 1) 2) ...) (to_int n)].
   *)
 
-  val fold_right : f:(int -> 'a -> 'a) ->
+  val fold_right : (int -> 'accum -> 'accum) ->
     'n size ->
-    init:'a -> 'a
-  (** [fold_right ~f n ~init] is
+    'accum -> 'accum
+  (** [fold_right f n init] is
       [f 1 (f 2 (... (f (to_int n) init) ...))].
   *)
 
-  val iter : f:(int -> unit) -> 'n size -> unit
-  (** [iter ~f n] is [f 1; f 2; ...; f (to_int n)].
+  val iter : (int -> unit) -> 'n size -> unit
+  (** [iter f n] is [f 1; f 2; ...; f (to_int n)].
   *)
 
-  val riter : f:(int -> unit) -> 'n size -> unit
-  (** [riter ~f n] is [f (to_int n); ...; f 2; f 1].
+  val riter : (int -> unit) -> 'n size -> unit
+  (** [riter f n] is [f (to_int n); ...; f 2; f 1].
   *)
 
   (** {2 Conversion between sizes and integers} *)

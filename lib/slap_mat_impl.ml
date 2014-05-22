@@ -56,7 +56,7 @@ let unsafe_get (_, _, ar, ac, a) i j =
 let unsafe_set (_, _, ar, ac, a) i j x =
   Bigarray.Array2.unsafe_set a (i + ar - 1) (j + ac - 1) x
 
-let replace_dyn (m, n, ar, ac, a) i j ~f =
+let replace_dyn (m, n, ar, ac, a) i j f =
   if i < 1 || i > m || j < 1 || j > n then invalid_arg "Slap.Mat.replace_dyn";
   let i = i + ar - 1 in
   let j = j + ac - 1 in
@@ -100,7 +100,7 @@ let make kind m n x =
   Array2.fill a x;
   (m, n, 1, 1, a)
 
-let init_cols kind m n ~f =
+let init_cols kind m n f =
   let a = create_bigarray kind m n in
   for j = 1 to n do
     for i = 1 to m do
@@ -109,7 +109,7 @@ let init_cols kind m n ~f =
   done;
   (m, n, 1, 1, a)
 
-let init_rows kind m n ~f =
+let init_rows kind m n f =
   let a = create_bigarray kind m n in
   for i = 1 to m do
     for j = 1 to n do
@@ -146,14 +146,14 @@ let copy ?b (m, n, ar, ac, a) =
 
 (** {2 Iterators} *)
 
-let replace_all (m, n, ar, ac, a) ~f =
+let replace_all (m, n, ar, ac, a) f =
   for j = ac to n + ac - 1 do
     for i = ar to m + ar - 1 do
       Array2.unsafe_set a i j (f (Array2.unsafe_get a i j))
     done
   done
 
-let replace_alli (m, n, ar, ac, a) ~f =
+let replace_alli (m, n, ar, ac, a) f =
   let ar = ar - 1 in
   let ac = ac - 1 in
   for j = 1 to n do
@@ -183,9 +183,9 @@ let to_list (m, n, ar, ac, a) =
   let ar = ar - 1 in
   let ac = ac - 1 in
   let col_to_list i =
-    Size.fold_right ~f:(fun j l -> a.{i+ar, j+ac} :: l) ~init:[] n
+    Size.fold_right (fun j l -> a.{i+ar, j+ac} :: l) n []
   in
-  Size.fold_right ~f:(fun i ll -> (col_to_list i) :: ll) ~init:[] m
+  Size.fold_right (fun i ll -> (col_to_list i) :: ll) m []
 
 let unsafe_of_list kind m n ll =
   assert(Utils.dim_list_list ll <> None);

@@ -61,21 +61,21 @@ let max = Pervasives.max
 
 (** {2 Iterators} *)
 
-let fold_left ~f ~init n =
+let fold_left f init n =
   let rec loop i e =
     if i > n then e else loop (i + 1) (f e i)
   in
   loop 1 init
 
-let fold_right ~f n ~init =
+let fold_right f n init =
   let rec loop i e =
     if i = 0 then e else loop (i - 1) (f i e)
   in
   loop n init
 
-let iter ~f n = for i = 1 to n do f i done
+let iter f n = for i = 1 to n do f i done
 
-let riter ~f n = for i = n downto 1 do f i done
+let riter f n = for i = n downto 1 do f i done
 
 (** {2 Conversion between a size and an integer} *)
 
