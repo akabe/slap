@@ -17,188 +17,113 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** The signature of {!Slap.Common}. *)
+open Bigarray
 
-module type S =
-sig
-  (* implementation: slap_common_impl.ml *)
+(** {2 Flags} *)
 
-  (** {2 Size representation of vectors and matrices}
-   The following types represent free algebraic operations on natural numbers.
-   *)
+type diag = [ `N | `U ]
 
-  type +'n size = private int
-  (** Singleton type on non-negative integers. *)
+(** {3 Transpose flags} *)
 
-  type z              (** zero *)
-  type +'n s          (** successor *)
-  type (+'m, +'n) add (** addition of two sizes *)
-  type (+'m, +'n) sub (** difference of two sizes *)
-  type (+'m, +'n) mul (** multiplication of two sizes *)
-  type (+'m, +'n) div (** ['m / 'n] *)
-  type (+'m, +'n) min (** minimum of two sizes *)
-  type (+'m, +'n) max (** maximum of two sizes *)
+type ('a, 'tag) trans = [ `N | `T | `C ]
 
+type transNT
+
+type 'a trans2 = ('a, transNT) trans
+
+type transNTC
+
+type 'a trans3 = ('a, transNTC) trans
+
+let normal = `N
+
+let trans = `T
+
+let conjtr = `C
+
+let get_transposed_dim t m n =
+  match t with
+  | `N -> (m, n)
+  | _ -> (n, m)
+
+let lacaml_trans2 = function
+  | `N -> `N
+  | `T | `C -> `T
+
+(** {3 Direction of multiplication of matrices} *)
+
+type ('k, 'm, 'n) side = [ `L | `R ]
+
+let left = `L
+
+let right = `R
+
+(** {3 Matrix norms} *)
+
+type ('a, 'tag) norm = [ `O | `I | `M | `F ]
+
+type norm2_tag
+
+type 'a norm2 = ('a, norm2_tag) norm
+
+let lacaml_norm2 v : Lacaml.Common.norm2 =
+  match v with
+  | `O -> `O
+  | `I -> `I
+  | _ -> assert(false)
+
+let lacaml_norm2_opt = function
+  | None -> None
+  | Some v -> Some (lacaml_norm2 v)
+
+type norm4_tag
+
+type 'a norm4 = ('a, norm4_tag) norm
+
+type norm_1
+
+let norm_1 = `O
+
+type norm_inf
+
+let norm_inf = `I
+
+type norm_amax
+
+let norm_amax = `M
+
+type norm_frob
+
+let norm_frob = `F
+
+(** {3 SVD computation flags} *)
+
+type ('a, 'b, 'c, 'd, 'e) svd_job = [ `A | `S | `O | `N ]
+
+let svd_all = `A
+
+let svd_top = `S
+
+let svd_overwrite = `O
+
+let svd_no = `N
+
+(** {2 Integer vectors} *)
+
+type ('n, 'cnt_or_dsc) int_vec =
+    ('n, int, int_elt, 'cnt_or_dsc) Vec.t
+
+let create_int_vec n = Vec.create int n
+
+type ('n, 'cnt_or_dsc) int32_vec =
+    ('n, int32, int32_elt, 'cnt_or_dsc) Vec.t
+
+let create_int32_vec n = Vec.create int32 n
+
+(*
   type +'n packed
   (** Packed storage size of [n]-by-[n] matrix.
    It is [n*(n+1)/2].
    @see <http://www.netlib.org/lapack/lug/node123.html> Packed Storage (NetLib)
    *)
-
-  (** {2 Data structures} *)
-
-  type cnt
-
-  type dsc
-
-  (** {3 Vectors} *)
-
-  type (+'n, 'num, 'prec, +'cnt_or_dsc) vec
-  (** [('n, 'num, 'prec, 'cnt_or_dsc) vec] is the type of ['n]-dimensional
-   vector whose elements have OCaml type ['num], representation kind ['prec] and
-   memory continuity ['cnt_or_dsc].
-   The internal implementation is fortran-style one-dimensional big array.
-   *)
-
-  type (+'n, +'cnt_or_dsc) int_vec =
-      ('n, int, Bigarray.int_elt, 'cnt_or_dsc) vec
-
-  val create_int_vec : 'n size -> ('n, 'cnt) int_vec
-
-  type (+'n, +'cnt_or_dsc) int32_vec =
-      ('n, int32, Bigarray.int32_elt, 'cnt_or_dsc) vec
-
-  val create_int32_vec : 'n size -> ('n, 'cnt) int32_vec
-
-  (** {3 Matrices} *)
-
-  type (+'m, +'n, 'num, 'prec, +'cnt_or_dsc) mat
-  (** [('m, 'n, 'num, 'prec) mat] is the type of ['m]-by-['n] matrix whose
-   elements have OCaml type ['num], representation kind ['prec] and
-   memory continuity ['cnt_or_dsc].
-   The internal implementation is fortran-style two-dimensional big array.
-   *)
-
-  (** {2 Flags} *)
-
-  (** {3 Transpose flags} *)
-
-  type (+'a, +'tag) trans
-
-  type trans2_tag
-
-  type +'a trans2 = ('a, trans2_tag) trans
-  (** Types of transpose flags for real vectors or matrices.
-      Values of this type are
-      - {!Slap.Common.normal} and
-      - {!Slap.Common.trans}.
-  *)
-
-  type trans3_tag
-
-  type +'a trans3 = ('a, trans2_tag) trans
-  (** Types of transpose flags for complex vectors or matrices.
-      Values of this type are
-      - {!Slap.Common.normal},
-      - {!Slap.Common.trans} and
-      - {!Slap.Common.conjtr}.
-  *)
-
-  val normal : (('m, 'n, 'num, 'prec, 'cd) mat -> ('m, 'n, 'num, 'prec, 'cd) mat, _) trans
-  (** Non-transposed matrix. *)
-
-  val trans : (('m, 'n, 'num, 'prec, 'cd) mat -> ('n, 'm, 'num, 'prec, 'cd) mat, _) trans
-  (** Transpose of a matrix. *)
-
-  val conjtr : (('m, 'n, 'num, 'prec, 'cd) mat -> ('n, 'm, 'num, 'prec, 'cd) mat,
-                trans3_tag) trans
-  (** Conjugate transpose of a matrix. *)
-
-  (** {3 Direction of matrix multiplication} *)
-
-  type (+'k, +'m, +'n) side
-  (** [('k, 'm, 'n) side] represents a relation between left- or
-      right-multiplication of two matrices and their sizes.
-
-      Let [A] be a ['k]-by-['k] square matrix and [B] be a ['m]-by-['n]
-      general matrix.
-      The following flags in this type correspond to directions of
-      multiplication of [A] and [B]:
-      - {!Slap.Common.left} means to {e left} multiply [A] by [B],
-        i.e. [AB]. In this case, ['k] should be ['m]; therefore its type is
-        [('m, 'm, 'n) side].
-      - {!Slap.Common.right} means to {e right} multiply [A] by [B],
-        i.e. [BA]. In this case, ['k] should be ['n]; therefore its type is
-        [('n, 'm, 'n) side].
-  *)
-
-  val left : ('m, 'm, 'n) side
-
-  val right : ('n, 'm, 'n) side
-
-  (** {3 Matrix norms} *)
-
-  type (+'a, +'tag) norm
-
-  type norm2_tag
-
-  type 'a norm2 = ('a, norm2_tag) norm
-  (** Values of this type are
-      - {!Slap.Common.norm_1}
-      - {!Slap.Common.norm_inf}
-  *)
-
-  type norm4_tag
-
-  type 'a norm4 = ('a, norm4_tag) norm
-  (** Values of this type are
-      - {!Slap.Common.norm_1}
-      - {!Slap.Common.norm_inf}
-      - {!Slap.Common.norm_amax}
-      - {!Slap.Common.norm_frob}
-  *)
-
-  type norm_1
-
-  val norm_1 : (norm_1, _) norm
-  (** 1-norm of a matrix (maximum column sum). *)
-
-  type norm_inf
-
-  val norm_inf : (norm_inf, _) norm
-  (** Infinity-norm of a matrix (maximum row sum). *)
-
-  type norm_amax
-
-  val norm_amax : (norm_amax, norm4_tag) norm
-  (** Largest absolute value of a matrix. (not a matrix norm) *)
-
-  type norm_frob
-
-  val norm_frob : (norm_frob, norm4_tag) norm
-  (** Frobenius norm of a matrix. *)
-
-  (** {3 SVD computation flags} *)
-
-  type +'a svd_job
-
-  type svd_all
-
-  val svd_all : svd_all svd_job
-
-  type svd_top
-
-  val svd_top : svd_top svd_job
-
-  type svd_overwrite
-
-  val svd_overwrite : svd_overwrite svd_job
-
-  type svd_no
-
-  val svd_no : svd_no svd_job
-
-  (** {3 Other flags} *)
-
-  type diag = [ `N | `U ]
-end
+ *)

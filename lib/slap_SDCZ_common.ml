@@ -17,29 +17,21 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-module F (I    : Slap_module_info.SD)
-         (SDCZ : Slap_lacaml.SDCZ_SD with type prec = I.prec)
-         (SD   : Slap_lacaml.SD      with type prec = I.prec) =
-struct
-  (* interface: slap_SD_vec.ml *)
+open Bigarray
 
-  include Slap_SDCZ_vec_wrap.F(I)(SDCZ)
+module PVec = Vec
+module PMat = Mat
 
-  (** {2 Creation of vectors} *)
+type ('n, 'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) Vec.t
 
-  let random ?rnd_state ?from ?range n =
-    let x = SD.Vec.random ?rnd_state ?from ?range n in
-    (n, 1, 1, x)
+type ('m, 'n, 'cnt_or_dsc) mat = ('m, 'n, num_type, prec, 'cnt_or_dsc) Mat.t
 
-  (** {2 Arithmetic operations} *)
+type rprec = CONCAT(CONCAT(float, SLAP_SDCZ_BITS), _elt)
 
-  let sqr ?y (n, ofsx, incx, x) =
-    let ofsy, incy, y = default_vec n y in
-    let _ = SD.Vec.sqr ~n ~ofsy ~incy ~y ~ofsx ~incx x in
-    (n, ofsy, incy, y)
+type ('n, 'cnt_or_dsc) rvec = ('n, float, rprec, 'cnt_or_dsc) Vec.t
 
-  let sqrt ?y (n, ofsx, incx, x) =
-    let ofsy, incy, y = default_vec n y in
-    let _ = SD.Vec.sqrt ~n ~ofsy ~incy ~y ~ofsx ~incx x in
-    (n, ofsy, incy, y)
-end
+let rprec = CONCAT(float, SLAP_SDCZ_BITS)
+
+let invalid_arg msg = Pervasives.invalid_arg ("Slap." ^ module_name ^ "." ^ msg)
+
+let invalid_argf fmt = Printf.kprintf (fun s () -> invalid_arg s) fmt

@@ -16,16 +16,3 @@
    License along with this library; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
-
-module F (I    : Slap_module_info.SD)
-         (SDCZ : Slap_lacaml.SDCZ_SD with type prec = I.prec)
-         (SD   : Slap_lacaml.SD      with type prec = I.prec) =
-struct
-  (* interface: slap_SD.ml *)
-
-  include Slap_SD_la_wrap.F(I)(SDCZ)(SD)
-
-  module Vec = Slap_SD_vec_wrap.F(I)(SDCZ)(SD)
-
-  module Mat = Slap_SD_mat_wrap.F(I)(SDCZ)(SD)
-end

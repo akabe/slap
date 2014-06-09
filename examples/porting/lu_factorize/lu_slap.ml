@@ -38,7 +38,7 @@ let check_result a l u p =
   diff_norm < 1e-6
 
 let main () =
-  let module A = Mat.Of_array_dyn(struct
+  let module A = Mat.Of_array(struct
       let value = [|[|-2.; 2.;-3.; 4.|];
                     [|-1.; 1.; 3.; 0.|];
                     [| 2.; 0.;-1.;-3.|]|]

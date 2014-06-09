@@ -17,231 +17,162 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** A part of the signature of [Slap.[SDCZ].Vec]. *)
+module type CNTVEC =
+  sig
+    type n
+    val value : (n, 'cnt) vec
+  end
 
-module type S =
-sig
-  (* implementation: slap_SDCZ_vec_wrap.ml *)
+module type DSCVEC =
+  sig
+    type n
+    val value : (n, dsc) vec
+  end
 
-  include Slap_SDCZ_types.S
+(** {2 Creation of vectors} *)
 
-  (** The type of modules including a generative phantom type and
-   a dynamically-sized vector.
-   *)
-  module type VEC =
-    sig
-      type n
-      val value : (n, 'cnt) vec
-    end
+let empty = PVec.create prec 0
 
-  (** {2 Creation of vectors} *)
+let create n = PVec.create prec n
 
-  val create : 'n Common.size -> ('n, 'cnt) vec
-  (** [create n]
-   @return a fresh [n]-dimensional vector (not initialized).
-   *)
+let make n a = PVec.make prec n a
 
-  val make : 'n Common.size -> num_type -> ('n, 'cnt) vec
-  (** [make n a]
-   @return a fresh [n]-dimensional vector initialized with [a].
-   *)
+let make0 n = make n zero
 
-  val make0 : 'n Common.size -> ('n, 'cnt) vec
-  (** [make0] is an alias of [zeros]. *)
+let make1 n = make n one
 
-  val zeros : 'n Common.size -> ('n, 'cnt) vec
-  (** [zeros n]
-   @return a fresh [n]-dimensional vector initialized with [0].
-   *)
+let init n f = PVec.init prec n f
 
-  val ones : 'n Common.size -> ('n, 'cnt) vec
-  (** [ones n]
-   @return a fresh [n]-dimensional vector initialized with [1].
-   *)
+(** {2 Accessors} *)
 
-  val init : 'n Common.size ->
-             (int -> num_type) -> ('n, 'cnt) vec
-  (** [init n f]
-   @return a fresh vector [(f 1, ..., f n)] with [n] elements.
-   *)
+let dim = PVec.dim
 
-  (** {2 Accessors} *)
+let get_dyn = PVec.get_dyn
 
-  val dim : ('n, 'cd) vec -> 'n Common.size
-  (** [dim x]
-   @return the dimension of the vector [x].
-   *)
+let set_dyn = PVec.set_dyn
 
-  val get_dyn : ('n, 'cd) vec -> int -> num_type
-  (** [get_dyn x i]
-   @return the [i]-th element of the vector [x].
-   *)
+let unsafe_get = PVec.unsafe_get
 
-  val set_dyn : ('n, 'cd) vec -> int -> num_type -> unit
-  (** [set_dyn x i a] assigns [a] to the [i]-th element of the vector [x].
-   *)
+let unsafe_set = PVec.unsafe_set
 
-  val unsafe_get : ('n, 'cd) vec -> int -> num_type
-  (** Like {!Slap.Vec.get_dyn}, but size checking is not always performed. *)
+let replace_dyn = PVec.replace_dyn
 
-  val unsafe_set : ('n, 'cd) vec -> int -> num_type -> unit
-  (** Like {!Slap.Vec.set_dyn}, but size checking is not always performed. *)
+(** {2 Basic operations} *)
 
-  val replace_dyn : ('n, 'cd) vec ->
-    int ->
-    (num_type -> num_type) -> unit
-  (** [replace_dyn v i f] is [set_dyn v i (f (get_dyn v i))]. *)
+let copy ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  let _ = I.copy ~n ~ofsy ~incy ~y ~ofsx ~incx x in
+  (n, ofsy, incy, y)
 
-  (** {2 Basic operations} *)
+let fill = PVec.fill
 
-  val copy : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
-  (** [copy ?y x] copies the vector [x] to the vector [y] with the BLAS-1
-   function [[sdcz]copy].
-   @return the vector [y], which is overwritten.
-   @param y default = a fresh vector.
-   *)
+let append = PVec.append
 
-  val fill : ('n, 'cd) vec -> num_type -> unit
-  (** Fill the given vector with the given value. *)
+(** {2 Type conversion} *)
 
-  (** {2 Type conversion} *)
+let to_array = PVec.to_array
 
-  val to_array : ('n, 'cd) vec -> num_type array
-  (** [to_array x]
-   @return the array of all the elements of the vector [x].
-   *)
+let of_array_dyn n array = PVec.of_array_dyn prec n array
 
-  val of_array_dyn : 'n Common.size ->
-                     num_type array -> ('n, 'cnt) vec
-  (** [of_array_dyn n [|a1; ...; an|]]
-   @raise Invalid_argument the length of the given array is not equal to [n].
-   @return a fresh vector [(a1, ..., an)].
-   *)
+module Of_array (X : sig val value : num_type array end) : CNTVEC =
+  struct
+    type n
+    let value = PVec.unsafe_of_array prec (Array.length X.value) X.value
+  end
 
-  module Of_array (X : sig val value : num_type array end) : VEC
-  (** [Of_array(struct let value = [|a1; ...; an|] end)] returns a fresh module
-    including the dynamically-sized vector [(a1, ..., an)].
-   *)
+let of_array a =
+  let module V = Of_array(struct let value = a end) in
+  (module V : CNTVEC)
 
-  val to_list : ('n, 'cd) vec -> num_type list
-  (** [to_list x]
-   @return the list of all the elements of the vector [x].
-   *)
+let to_list = PVec.to_list
 
-  val of_list_dyn : 'n Common.size ->
-                     num_type list -> ('n, 'cnt) vec
-  (** [of_list_dyn n [a1; ...; an]]
-   @raise Invalid_argument the length of the given list is not equal to [n].
-   @return a fresh vector [(a1, ..., an)].
-   *)
+let of_list_dyn n list = PVec.of_list_dyn prec n list
 
-  module Of_list (X : sig val value : num_type list end) : VEC
-  (** [Of_list(struct let value = [a1; ...; an] end)] returns a fresh module
-    including the dynamically-sized vector [(a1, ..., an)].
-   *)
+module Of_list (X : sig val value : num_type list end) : CNTVEC =
+  struct
+    type n
+    let value = PVec.unsafe_of_list prec (List.length X.value) X.value
+  end
 
-  (** {2 Iterators} *)
+let of_list l =
+  let module V = Of_list(struct let value = l end) in
+  (module V : CNTVEC)
 
-  val map : (num_type -> num_type) ->
-            ?y:('n, 'y_cd) vec ->
-            ('n, 'x_cd) vec -> ('n, 'y_cd) vec
-  (** [map f ?y (x1, ..., xn)] is [(f x1, ..., f xn)].
-   @return the vector [y], which is overwritten.
-   @param y default = a fresh vector.
-   *)
+(** {2 Iterators} *)
 
-  val mapi : (int -> num_type -> num_type) ->
-             ?y:('n, 'y_cd) vec ->
-             ('n, 'x_cd) vec ->
-             ('n, 'y_cd) vec
-  (** [mapi f ?y (x1, ..., xn)] is [(f 1 x1, ..., f n xn)] with
-   the vector's dimension [n].
-   @return the vector [y], which is overwritten.
-   @param y default = a fresh vector.
-   *)
+let map f ?y x = PVec.map prec f ?y x
 
-  val fold_left : ('accum -> num_type -> 'accum) ->
-                  'accum ->
-                  ('n, 'cd) vec -> 'accum
-  (** [fold_left f init (x1, x2, ..., xn)] is
-   [f (... (f (f init x1) x2) ...) xn].
-   *)
+let mapi f ?y x = PVec.mapi prec f ?y x
 
-  val fold_lefti : (int -> 'accum -> num_type -> 'accum) ->
-                   'accum ->
-                   ('n, 'cd) vec -> 'accum
-  (** [fold_lefti f init (x1, x2, ..., xn)] is
-   [f n (... (f 2 (f 1 init x1) x2) ...) xn] with the vector's dimension [n].
-   *)
+let fold_left = PVec.fold_left
 
-  val fold_right : (num_type -> 'accum -> 'accum) ->
-                   ('n, 'cd) vec ->
-                   'accum -> 'accum
-  (** [fold_right f (x1, x2, ..., xn) init] is
-   [f x1 (f x2 (... (f xn init) ...))].
-   *)
+let fold_lefti = PVec.fold_lefti
 
-  val fold_righti : (int -> num_type -> 'accum -> 'accum) ->
-                    ('n, 'cd) vec ->
-                    'accum -> 'accum
-  (** [fold_righti f (x1, x2, ..., xn) init] is
-   [f 1 x1 (f 2 x2 (... (f n xn init) ...))] with the vector's dimension [n].
-   *)
+let fold_right = PVec.fold_right
 
-  val replace_all : ('n, 'cd) vec ->
-                    (num_type -> num_type) -> unit
-  (** [replace_all x f] modifies the vector [x] in place
-   -- the [i]-th element [xi] of [x] will be set to [f xi].
-   *)
+let fold_righti = PVec.fold_righti
 
-  val replace_alli : ('n, 'cd) vec ->
-                     (int -> num_type -> num_type) -> unit
-  (** [replace_alli x f] modifies the vector [x] in place
-   -- the [i]-th element [xi] of [x] will be set to [f i xi].
-   *)
+let replace_all = PVec.replace_all
 
-  val iter : (num_type -> unit) ->
-             ('n, 'cd) vec -> unit
-  (** [iter f (x1, x2, ..., xn)] is [f x1; f x2; ...; f xn].
-  *)
+let replace_alli = PVec.replace_alli
 
-  val iteri : (int -> num_type -> unit) ->
-              ('n, 'cd) vec -> unit
-  (** [iteri f (x1, x2, ..., xn)] is [f 1 x1; f 2 x2; ...; f n xn].
-  *)
+let iter = PVec.iter
 
-  (** {2 Arithmetic operations} *)
+let iteri = PVec.iteri
 
-  val max : ('n, 'cd) vec -> num_type
+(** {2 Arithmetic operations} *)
 
-  val min : ('n, 'cd) vec -> num_type
+let max (n, ofsx, incx, x) = I.Vec.max ~n ~ofsx ~incx x
 
-  val sum : ('n, 'cd) vec -> num_type
+let min (n, ofsx, incx, x) = I.Vec.min ~n ~ofsx ~incx x
 
-  val prod : ('n, 'cd) vec -> num_type
+let sum (n, ofsx, incx, x) = I.Vec.sum ~n ~ofsx ~incx x
 
-  val sqr_nrm2 : ?stable:bool -> ('n, 'cd) vec -> float
+let prod (n, ofsx, incx, x) = I.Vec.prod ~n ~ofsx ~incx x
 
-  val ssqr : ?c:num_type -> ('n, 'cd) vec -> num_type
+let sqr_nrm2 ?stable (n, ofsx, incx, x) =
+  I.Vec.sqr_nrm2 ?stable ~n ~ofsx ~incx x
 
-  val sort : ?cmp:(num_type -> num_type -> int) ->
-             ?decr:bool ->
-             ?p:('n, 'p_cd) Common.int_vec ->
-             ('n, 'x_cd) vec -> unit
+let ssqr ?c (n, ofsx, incx, x) =
+  I.Vec.ssqr ~n ?c ~ofsx ~incx x
 
-  val neg : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+let sort ?cmp ?decr ?p (n, ofsx, incx, x) =
+  match p with
+  | None ->
+     I.Vec.sort ?cmp ?decr ~n ~ofsx ~incx x
+  | Some (n', ofsp, incp, p) ->
+     assert(n = n');
+     I.Vec.sort ?cmp ?decr ~n ~ofsp ~incp ~p ~ofsx ~incx x
 
-  val add : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
-            ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+let neg ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  let _ = I.Vec.neg ~n ~ofsy ~incy ~y ~ofsx ~incx x in
+  (n, ofsy, incy, y)
 
-  val sub : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
-            ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+let add ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  let ofsz, incz, z = PVec.opt_vec_alloc prec n z in
+  let _ = I.Vec.add ~n ~ofsz ~incz ~z ~ofsx ~incx x ~ofsy ~incy y in
+  (n, ofsz, incz, z)
 
-  val mul : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
-            ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+let sub ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  let ofsz, incz, z = PVec.opt_vec_alloc prec n z in
+  let _ = I.Vec.sub ~n ~ofsz ~incz ~z ~ofsx ~incx x ~ofsy ~incy y in
+  (n, ofsz, incz, z)
 
-  val div : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
-            ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+let mul ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  let ofsz, incz, z = PVec.opt_vec_alloc prec n z in
+  let _ = I.Vec.mul ~n ~ofsz ~incz ~z ~ofsx ~incx x ~ofsy ~incy y in
+  (n, ofsz, incz, z)
 
-  val ssqr_diff : ('n, 'x_cd) vec -> ('n, 'y_cd) vec -> num_type
-end
+let div ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  let ofsz, incz, z = PVec.opt_vec_alloc prec n z in
+  let _ = I.Vec.div ~n ~ofsz ~incz ~z ~ofsx ~incx x ~ofsy ~incy y in
+  (n, ofsz, incz, z)
+
+let ssqr_diff (n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  I.Vec.ssqr_diff ~n ~ofsx ~incx x ~ofsy ~incy y

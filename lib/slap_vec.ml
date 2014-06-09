@@ -17,209 +17,231 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** The signature of [Slap.Vec]. *)
+open Bigarray
 
-module type S =
-sig
-  (* implementation: slap_vec_impl.ml *)
+type ('n, 'num, 'prec, 'cnt_or_dsc) t =
+    int   (* the number of elements in a vector (>= 0) *)
+    * int (* an offset (>= 1) *)
+    * int (* an incrementation *)
+    * ('num, 'prec, fortran_layout) Array1.t
 
-  module Common : Slap_common.S (** = {!Slap.Common} *)
+let cnt v = v
 
-  open Common
+let create_array1 kind n = Array1.create kind fortran_layout n
 
-  (** {2 Creation of vectors} *)
+let check_cnt n ofsx incx x =
+  n = Array1.dim x && ofsx = 1 && incx = 1
 
-  val create : ('num, 'prec) Bigarray.kind ->
-               'n size -> ('n, 'num, 'prec, 'cnt) vec
-  (** [create kind n]
-   @return a fresh [n]-dimensional vector (not initialized).
-   *)
+let opt_work = function
+  | None -> None
+  | Some (n, ofsx, incx, x) ->
+     assert(check_cnt n ofsx incx x);
+     Some x
 
-  val make : ('num, 'prec) Bigarray.kind ->
-             'n size ->
-             'num -> ('n, 'num, 'prec, 'cnt) vec
-  (** [make kind n a]
-   @return a fresh [n]-dimensional vector initialized with [a].
-   *)
+let opt_cnt_vec n = function
+  | None -> None
+  | Some (n', ofsx, incx, x) ->
+     assert(n = n' && check_cnt n ofsx incx x);
+     Some x
 
-  val init : ('a, 'b) Bigarray.kind ->
-             'n size ->
-             (int -> 'a) -> ('n, 'a, 'b, 'cnt) vec
-  (** [init kind n f]
-   @return a fresh vector [(f 1, ..., f n)] with [n] elements.
-   *)
+let opt_cnt_vec_alloc kind n = function
+  | None -> create_array1 kind n
+  | Some (n', ofsx, incx, x) ->
+     assert(n = n' && check_cnt n ofsx incx x);
+     x
 
-  (** {2 Accessors} *)
+let opt_vec n = function
+  | None ->
+     None, None, None
+  | Some (n', ofsx, incx, x) ->
+     assert(n = n');
+     Some ofsx, Some incx, Some x
 
-  val kind : ('n, 'num, 'prec, 'cd) vec -> ('num, 'prec) Bigarray.kind
-  (** @return the kind of the given big array. *)
+let opt_vec_alloc kind n = function
+  | None -> 1, 1, create_array1 kind n
+  | Some (n', ofsx, incx, x) ->
+     assert(n = n');
+     ofsx, incx, x
 
-  val dim : ('n, 'num, 'prec, 'cd) vec -> 'n size
-  (** [dim x]
-   @return the dimension of the vector [x].
-   *)
+(** {2 Creation of vectors} *)
 
-  val get_dyn : ('n, 'num, 'prec, 'cd) vec -> int -> 'num
-  (** [get_dyn x i]
-   @return the [i]-th element of the vector [x].
-   *)
+let create kind n =
+  (n, 1, 1, create_array1 kind n)
 
-  val set_dyn : ('n, 'num, 'prec, 'cd) vec -> int -> 'num -> unit
-  (** [set_dyn x i a] assigns [a] to the [i]-th element of the vector [x].
-   *)
+let make kind n a =
+  let x = create_array1 kind n in
+  Array1.fill x a ;
+  (n, 1, 1, x)
 
-  val unsafe_get : ('n, 'num, 'prec, 'cd) vec -> int -> 'num
-  (** Like {!Slap.Vec.get_dyn}, but size checking is not always performed. *)
+let init kind n f =
+  let x = create_array1 kind n in
+  Size.iter (fun i -> Array1.unsafe_set x i (f i)) n;
+  (n, 1, 1, x)
 
-  val unsafe_set : ('n, 'num, 'prec, 'cd) vec -> int -> 'num -> unit
-  (** Like {!Slap.Vec.set_dyn}, but size checking is not always performed. *)
+(** {2 Accessors} *)
 
-  val replace_dyn : ('n, 'num, 'prec, 'cd) vec ->
-    int ->
-    ('num -> 'num) -> unit
-  (** [replace_dyn v i f] is [set_dyn v i (f (get_dyn v i))]. *)
+let kind (_, _, _, x) = Array1.kind x
 
-  (** {2 Basic operations} *)
+let dim (n, _, _, x) = n
 
-  val copy : ?y:('n, 'num, 'prec, 'y_cd) vec ->
-    ('n, 'num, 'prec, 'x_cd) vec -> ('n, 'num, 'prec, 'y_cd) vec
-  (** [copy ?y x] copies the vector [x] to the vector [y].
-   @return the vector [y], which is overwritten.
-   @param y default = a fresh vector.
-   *)
+let get_dyn (n, ofsx, incx, x) i =
+  if i < 1 || i > n then invalid_arg "Slap.Vec.get_dyn";
+  Array1.get x (ofsx + (i - 1) * incx)
 
-  val fill : ('n, 'num, 'prec, 'cd) vec -> 'num -> unit
-  (** Fill the given vector with the given value. *)
+let set_dyn (n, ofsx, incx, x) i a =
+  if i < 1 || i > n then invalid_arg "Slap.Vec.set_dyn";
+  Array1.set x (ofsx + (i - 1) * incx) a
 
-  (** {2 Type conversion} *)
+let unsafe_get (_, ofsx, incx, x) i =
+  Array1.unsafe_get x (ofsx + (i - 1) * incx)
 
-  val to_array : ('n, 'num, 'prec, 'cd) vec -> 'num array
-  (** [to_array x]
-   @return the array of all the elements of the vector [x].
-   *)
+let unsafe_set (_, ofsx, incx, x) i a =
+  Array1.unsafe_set x (ofsx + (i - 1) * incx) a
 
-  val of_array_dyn : ('num, 'prec) Bigarray.kind ->
-                     'n size ->
-                     'num array -> ('n, 'num, 'prec, 'cnt) vec
-  (** [of_array_dyn kind n [|a1; ...; an|]]
-   @raise Invalid_argument the length of the given array is not equal to [n].
-   @return a fresh vector [(a1, ..., an)].
-   *)
+let replace_dyn (n, ofsx, incx, x) i f =
+  if i < 1 || i > n then invalid_arg "Slap.Vec.replace_dyn";
+  let j = ofsx + (i - 1) * incx in
+  Array1.unsafe_set x j (f (Array1.unsafe_get x j))
 
-  val to_list : ('n, 'num, 'prec, 'cd) vec -> 'num list
-  (** [to_list x]
-   @return the list of all the elements of the vector [x].
-   *)
+(** {2 Iterators} *)
 
-  val of_list_dyn : ('num, 'prec) Bigarray.kind ->
-                     'n size ->
-                     'num list -> ('n, 'num, 'prec, 'cnt) vec
-  (** [of_list_dyn kind n [a1; ...; an]]
-   @raise Invalid_argument the length of the given list is not equal to [n].
-   @return a fresh vector [(a1, ..., an)].
-   *)
+let mapi kind f ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = opt_vec_alloc kind n y in
+  let rec loop count ix iy =
+    if count <= n then
+      begin
+        let xi = Array1.unsafe_get x ix in
+        Array1.unsafe_set y iy (f count xi);
+        loop (count + 1) (ix + incx) (iy + incy)
+      end
+  in
+  loop 1 ofsx ofsy;
+  (n, ofsy, incy, y)
 
-  (** {2 Iterators} *)
+let map kind f ?y vx =
+  mapi kind (fun _ x -> f x) ?y vx
 
-  val map : ('y_num, 'y_prec) Bigarray.kind ->
-            ('x_num -> 'y_num) ->
-            ?y:('n, 'y_num, 'y_prec, 'y_cd) vec ->
-            ('n, 'x_num, 'x_prec, 'x_cd) vec ->
-            ('n, 'y_num, 'y_prec, 'y_cd) vec
-  (** [map kind f ?y (x1, ..., xn)] is [(f x1, ..., f xn)].
-   @return the vector [y], which is overwritten.
-   @param y default = a fresh vector.
-   *)
+let fold_lefti f init (n, ofsx, incx, x) =
+  let rec loop count i acc =
+    if count > n then acc else
+      begin
+        let xi = Array1.unsafe_get x i in
+        loop (count + 1) (i + incx) (f count acc xi)
+      end
+  in
+  loop 1 ofsx init
 
-  val mapi : ('y_num, 'y_prec) Bigarray.kind ->
-             (int -> 'x_num -> 'y_num) ->
-             ?y:('n, 'y_num, 'y_prec, 'y_cd) vec ->
-             ('n, 'x_num, 'x_prec, 'x_cd) vec ->
-             ('n, 'y_num, 'y_prec, 'y_cd) vec
-  (** [mapi kind f ?y (x1, ..., xn)] is [(f 1 x1, ..., f n xn)] with
-   the vector's dimension [n].
-   @return the vector [y], which is overwritten.
-   @param y default = a fresh vector.
-   *)
+let fold_left f init vx =
+  fold_lefti (fun _ acc x -> f acc x) init vx
 
-  val fold_left : ('accum -> 'x_num -> 'accum) ->
-                  'accum ->
-                  ('n, 'x_num, 'prec, 'cd) vec -> 'accum
-  (** [fold_left f init (x1, x2, ..., xn)] is
-   [f (... (f (f init x1) x2) ...) xn].
-   *)
+let fold_righti f (n, ofsx, incx, x) init =
+  let rec loop count i acc =
+    if count = 0 then acc else
+      begin
+        let xi = Array1.unsafe_get x i in
+        loop (count - 1) (i - incx) (f count xi acc)
+      end
+  in
+  loop n ((n - 1) * incx + ofsx) init
 
-  val fold_lefti : (int -> 'accum -> 'num -> 'accum) ->
-                   'accum ->
-                   ('n, 'num, 'prec, 'cd) vec -> 'accum
-  (** [fold_lefti f init (x1, x2, ..., xn)] is
-   [f n (... (f 2 (f 1 init x1) x2) ...) xn] with the vector's dimension [n].
-   *)
+let fold_right f vx init =
+  fold_righti (fun _ xi acc -> f xi acc) vx init
 
-  val fold_right : ('num -> 'accum -> 'accum) ->
-                   ('n, 'num, 'prec, 'cd) vec ->
-                   'accum -> 'accum
-  (** [fold_right f (x1, x2, ..., xn) init] is
-   [f x1 (f x2 (... (f xn init) ...))].
-   *)
+let replace_alli px f =
+  ignore (mapi (kind px) f ~y:px px)
 
-  val fold_righti : (int -> 'num -> 'accum -> 'accum) ->
-                    ('n, 'num, 'prec, 'cd) vec ->
-                    'accum -> 'accum
-  (** [fold_righti f (x1, x2, ..., xn) init] is
-   [f 1 x1 (f 2 x2 (... (f n xn init) ...))] with the vector's dimension [n].
-   *)
+let replace_all v f =
+  replace_alli v (fun _ xi -> f xi)
 
-  val replace_all : ('n, 'num, 'prec, 'cd) vec ->
-    ('num -> 'num) -> unit
-  (** [replace_all x f] modifies the vector [x] in place
-   -- the [i]-th element [xi] of [x] will be set to [f xi].
-   *)
+let iteri f (n, ofsx, incx, x) =
+  let rec loop count i =
+    if count <= n then begin
+      f count (Array1.unsafe_get x i);
+      loop (count + 1) (i + incx)
+    end
+  in
+  loop 1 ofsx
 
-  val replace_alli : ('n, 'num, 'prec, 'cd) vec ->
-    (int -> 'num -> 'num) -> unit
-  (** [replace_alli x f] modifies the vector [x] in place
-   -- the [i]-th element [xi] of [x] will be set to [f i xi].
-   *)
+let iter f vx =
+  iteri (fun _ x -> f x) vx
 
-  val iter : ('num -> unit) ->
-             ('n, 'num, 'prec, 'cd) vec -> unit
-  (** [iter f (x1, x2, ..., xn)] is [f x1; f x2; ...; f xn].
-  *)
+(** {2 Basic operations} *)
 
-  val iteri : (int -> 'num -> unit) ->
-              ('n, 'num, 'prec, 'cd) vec -> unit
-  (** [iteri f (x1, x2, ..., xn)] is [f 1 x1; f 2 x2; ...; f n xn].
-  *)
+let copy_aux n ofsx incx x ofsy incy y =
+  let rec loop count ix iy =
+    if count <> 0 then begin
+      Array1.unsafe_set y iy (Array1.unsafe_get x ix);
+      loop (count - 1) (ix + incx) (iy + incy)
+    end
+  in
+  loop n ofsx ofsy
 
-  (** {2 Subvectors} *)
-(*
-  val subvec_dyn : 'm size ->
-                   ?ofs:int ->
-                   ('n, 'num, 'prec, 'cd) vec ->
-                   ('m, 'num, 'prec, 'cd) vec
-  (** [subvec_dyn m ?ofs x]
-   @return a subvector of the vector [x].
-   The [i]-th element of it refers [(ofs+i-1)]-th element of [x].
-   The data are shared.
-   @param ofs default = 1
-   @param inc default = 1
-   @raise Invalid_argument [m] and [ofs] do not designate a valid subvector of
-   [x].
-   *)
-                   *)
-  val subvec_dyn : 'm size ->
-                   ?ofsx:int ->
-                   ?incx:int ->
-                   ('n, 'num, 'prec, 'cd) vec ->
-                   ('m, 'num, 'prec, dsc) vec
-  (** [subvec_dyn m ?ofsx ?incx x]
-   @return a subvector of the vector [x].
-   The [i]-th element of it refers [(ofsx+(i-1)*incx)]-th element of [x].
-   The data are shared.
-   @param ofs default = 1
-   @param inc default = 1
-   @raise Invalid_argument [m], [ofsx] and [incx] do not designate
-   a valid subvector of [x].
-   *)
-end
+let copy ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = opt_vec_alloc (Array1.kind x) n y in
+  copy_aux n ofsx incx x ofsy incy y;
+  (n, ofsy, incy, y)
+
+let fill (n, ofsx, incx, x) c =
+  let rec loop count i =
+    if count <= n then begin
+      Array1.unsafe_set x i c;
+      loop (count + 1) (i + incx)
+    end
+  in
+  loop 1 ofsx
+
+let append (m, ofsx, incx, x) (n, ofsy, incy, y) =
+  let k = m + n in
+  let z = create_array1 (Array1.kind x) k in
+  copy_aux m ofsx incx x 1 1 z;
+  copy_aux n ofsy incy y (m + 1) 1 z;
+  (k, 1, 1, z)
+
+(** {2 Type conversion} *)
+
+let to_array (n, ofsx, incx, x) =
+  Array.init n (fun i -> x.{incx * i + ofsx})
+
+let unsafe_of_array kind n arr =
+  let x = Array1.of_array kind fortran_layout arr in
+  (n, 1, 1, x)
+
+let of_array_dyn kind n arr =
+  if n <> Array.length arr then invalid_arg "Slap.Vec.of_array_dyn";
+  unsafe_of_array kind n arr
+
+let to_list x =
+  fold_right (fun a acc -> a :: acc) x []
+
+let unsafe_of_list kind n lst =
+  let x = create_array1 kind n in
+  let f i xi =
+    Array1.unsafe_set x i xi;
+    i + 1 in
+  ignore (List.fold_left f 1 lst);
+  (n, 1, 1, x)
+
+let of_list_dyn kind n lst =
+  if n <> List.length lst then invalid_arg "Slap.Vec.of_list_dyn";
+  unsafe_of_list kind n lst
+
+(** {2 Subvectors} *)
+
+let internal_subvec_dyn loc n ofsx incx (n', ofsx', incx', x) =
+  (* check the first index *)
+  let i1 = ofsx in
+  if i1 < 1 || i1 > n' then invalid_arg loc;
+  (* check the last index *)
+  let iN = ofsx + (n - 1) * incx in
+  if n <> 0 && (iN < 1 || iN > n') then invalid_arg loc;
+  (n, ofsx' + (ofsx - 1) * incx', incx * incx', x)
+
+let subcntvec_dyn n ?(ofsx = 1) (n', ofsx', incx', x) =
+  assert(check_cnt n' ofsx' incx' x);
+  (n, 1, 1, Array1.sub x ofsx n)
+
+let subdscvec_dyn n ?(ofsx = 1) ?(incx = 1) vx =
+  internal_subvec_dyn "Slap.Vec.subdscvec_dyn" n ofsx incx vx
+
+let subvec_dyn n ?(ofsx = 1) ?(incx = 1) vx =
+  internal_subvec_dyn "Slap.Vec.subvec_dyn" n ofsx incx vx

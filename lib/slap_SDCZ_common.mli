@@ -17,17 +17,17 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-module F (I    : Slap_module_info.SD)
-         (SDCZ : Slap_lacaml.SDCZ_SD with type prec = I.prec)
-         (SD   : Slap_lacaml.SD      with type prec = I.prec) =
-struct
-  (* interface: slap_SD_mat.ml *)
+type ('n, 'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) Vec.t
+(** Vectors. *)
 
-  include Slap_SDCZ_mat_wrap.F(I)(SDCZ)
+type ('m, 'n, 'cnt_or_dsc) mat = ('m, 'n, num_type, prec, 'cnt_or_dsc) Mat.t
+(** Matrices. *)
 
-  (** {2 Creation of matrices} *)
+type rprec = CONCAT(CONCAT(float, SLAP_SDCZ_BITS), _elt)
 
-  let random ?rnd_state ?from ?range m n =
-    let a = SD.Mat.random ?rnd_state ?from ?range m n in
-    (m, n, 1, 1, a)
-end
+type ('n, 'cnt_or_dsc) rvec = ('n, float, rprec, 'cnt_or_dsc) Vec.t
+(** Real vectors. (In {!Slap.S} and {!Slap.D}, [rvec] is equal to [vec].) *)
+
+val prec : (num_type, prec) kind
+
+val rprec : (float, rprec) kind

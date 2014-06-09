@@ -17,98 +17,104 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** The signature of {!Slap.Size}. *)
+type 'n t = int
 
-module type S =
-sig
-  (* implementation: slap_size_impl.ml *)
+(** {2 Constants} *)
 
-  module Common : Slap_common.S (** = {!Slap.Common} *)
+type z
 
-  open Common
+type 'n s
 
-  (** {2 Constants} *)
+let zero = 0
 
-  val zero : z size
+let one = 1
 
-  val one : z s size
+let two = 2
 
-  val two : z s s size
+let three = 3
 
-  val three : z s s s size
+let four = 4
 
-  val four : z s s s s size
+let five = 5
 
-  val five : z s s s s s size
+type ten = z s s s s s s s s s s
 
-  type ten = z s s s s s s s s s s
+let ten = 10
 
-  val ten : ten size
+(** {2 Arithmetric operations} *)
 
-  (** {2 Arithmetric operations} *)
+let succ = Pervasives.succ
 
-  val succ : 'n size -> 'n s size
+type ('m, 'n) add
 
-  val add : 'm size -> 'n size -> ('m, 'n) add size
+let add = ( + )
 
-  val sub_dyn : 'm size -> 'n size -> ('m, 'n) sub size
+type ('m, 'n) sub
 
-  val mul : 'm size -> 'n size -> ('m, 'n) mul size
+let sub_dyn m n =
+  if m >= n then m - n else invalid_arg "Slap.Size.sub_dyn: negative integer"
 
-  val div_dyn : 'm size -> 'n size -> ('m, 'n) div size
+type ('m, 'n) mul
 
-  val min : 'm size -> 'n size -> ('m, 'n) min size
+let mul = ( * )
 
-  val max : 'm size -> 'n size -> ('m, 'n) max size
+type ('m, 'n) div
 
-  (** {2 Iterators}
+let div_dyn m n =
+  if n <> 0 then m / n else invalid_arg "Slap.Size.div_dyn: zero division"
 
-      The following functions are iterators over [[1; 2; ...; n]] where [n] is
-      a size.
-  *)
+type ('m, 'n) min
 
-  val fold_left : ('accum -> int -> 'accum) ->
-    'accum ->
-    'n size -> 'accum
-  (** [fold_left f init n] is
-      [f (... (f (f init 1) 2) ...) (to_int n)].
-  *)
+let min = Pervasives.min
 
-  val fold_right : (int -> 'accum -> 'accum) ->
-    'n size ->
-    'accum -> 'accum
-  (** [fold_right f n init] is
-      [f 1 (f 2 (... (f (to_int n) init) ...))].
-  *)
+type ('m, 'n) max
 
-  val iter : (int -> unit) -> 'n size -> unit
-  (** [iter f n] is [f 1; f 2; ...; f (to_int n)].
-  *)
+let max = Pervasives.max
 
-  val riter : (int -> unit) -> 'n size -> unit
-  (** [riter f n] is [f (to_int n); ...; f 2; f 1].
-  *)
+(** {2 Iterators} *)
 
-  (** {2 Conversion between sizes and integers} *)
+let fold_left f init n =
+  let rec loop i e =
+    if i > n then e else loop (i + 1) (f e i)
+  in
+  loop 1 init
 
-  val to_int : 'n size -> int
-  (** Return the integer correponding to the given size. *)
+let fold_right f n init =
+  let rec loop i e =
+    if i = 0 then e else loop (i - 1) (f i e)
+  in
+  loop n init
 
-  module type SIZE =
-    sig
+let iter f n = for i = 1 to n do f i done
+
+let riter f n = for i = n downto 1 do f i done
+
+(** {2 Conversion between sizes and integers} *)
+
+module type SIZE =
+  sig
+    type n
+    val value : n t
+  end
+
+let to_int n = n
+
+let unsafe_of_int (n : int) =
+  let module N =
+    struct
       type n
-      val value : n size
-    end
+      let value = n
+    end in
+  (module N : SIZE)
 
-  module Of_int_dyn :
-  functor (N : sig val value : int end) -> SIZE
+let of_int_dyn n =
+  if n < 0 then invalid_arg "Slap.Size.of_int_dyn";
+  unsafe_of_int n
 
-  module type SIZE_OPT =
-    sig
-      type n
-      val value : n size option
-    end
-
-  module Opt_of_int_dyn :
-  functor (N : sig val value : int option end) -> SIZE_OPT
+module Of_int_dyn (N : sig val value : int end) : SIZE =
+struct
+  type n
+  let value =
+    if N.value < 0 then invalid_arg "Slap.Size.Of_int_dyn";
+    N.value
 end

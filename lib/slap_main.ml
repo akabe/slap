@@ -17,25 +17,64 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** The signature of [Slap.[SD]]. *)
+type cnt
+type dsc
 
-module type S =
-sig
-  (* implementation: slap_SD_wrap.ml *)
+let (|>) x f = f x
 
-  include Slap_SD_la.S
+module Size =
+  struct
+    #include "slap_size.ml"
+  end
 
-  module Vec : Slap_SD_vec.S with
-           module Common = Common and
-           type num_type = num_type and
-           type prec = prec and
-           type real_prec = real_prec and
-           type 'a trans = 'a trans
+module Vec =
+  struct
+    #include "slap_vec.ml"
+  end
 
-  module Mat : Slap_SD_mat.S with
-           module Common = Common and
-           type num_type = num_type and
-           type prec = prec and
-           type real_prec = real_prec and
-           type 'a trans = 'a trans
-end
+module Mat =
+  struct
+    #include "slap_mat.ml"
+  end
+
+(** {2 Pretty printing} *)
+
+module Io =
+  struct
+    #include "slap_io.ml"
+  end
+
+(** {2 Precision dependent modules} *)
+
+module Common =
+  struct
+#include "slap_common.ml"
+  end
+
+module D =
+  struct
+#define SLAP_SDCZ_BITS 64
+#include "slap_SD.ml"
+#undef SLAP_SDCZ_BITS
+  end
+
+module S =
+  struct
+#define SLAP_SDCZ_BITS 32
+#include "slap_SD.ml"
+#undef SLAP_SDCZ_BITS
+  end
+
+module Z =
+  struct
+#define SLAP_SDCZ_BITS 64
+#include "slap_CZ.ml"
+#undef SLAP_SDCZ_BITS
+  end
+
+module C =
+  struct
+#define SLAP_SDCZ_BITS 32
+#include "slap_CZ.ml"
+#undef SLAP_SDCZ_BITS
+  end

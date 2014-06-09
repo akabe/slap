@@ -9,6 +9,8 @@
 *.cmxs
 *.cmxa
 
+lib/slap.mli
+lib/slap.ml
 _build/
 /setup.data
 /setup.log

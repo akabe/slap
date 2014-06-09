@@ -17,232 +17,194 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** A part of the signature of [Slap.[SDCZ].Mat]. *)
+(* Sized Linear Algebra Package (SLAP)
 
-module type S =
-sig
-  (* implementation: slap_SDCZ_mat_wrap.ml *)
+   Copyright (C) 2013- Akinori ABE <abe@kb.ecei.tohoku.ac.jp>
 
-  include Slap_SDCZ_types.S
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
-  module type MAT =
-    sig
-      type m
-      type n
-      val value : (m, n, 'cnt) mat
-    end
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+   Lesser General Public License for more details.
 
-  (** {2 Creation of matrices} *)
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+*)
 
-  val empty : (Common.z, Common.z, 'cnt) mat
-  (** An empty matrix. *)
+module type CNTMAT =
+  sig
+    type m (** A generative phantom type. *)
+    type n (** A generative phantom type. *)
+    val value : (m, n, 'cnt) mat
+  end
 
-  val create : 'm Common.size -> 'n Common.size -> ('m, 'n, 'cnt) mat
-  (** [create m n]
-   @return a fresh [m]-by-[n] matrix (not initialized).
-   *)
+module type DSCMAT =
+  sig
+    type m (** A generative phantom type. *)
+    type n (** A generative phantom type. *)
+    val value : (m, n, dsc) mat
+  end
 
-  val make : 'm Common.size -> 'n Common.size -> num_type -> ('m, 'n, 'cnt) mat
-  (** [make m n x]
-   @return a fresh [m]-by-[n] matrix initialized with [x].
-   *)
+(** {2 Creation of matrices} *)
 
-  val make0 : 'm Common.size -> 'n Common.size -> ('m, 'n, 'cnt) mat
-  (** [make0] is an alias of [zeros]. *)
+let empty = (0, 0, 1, 1, I.Mat.empty)
 
-  val zeros : 'm Common.size -> 'n Common.size -> ('m, 'n, 'cnt) mat
-  (** [zeros m n]
-   @return a fresh [m]-by-[n] matrix initialized with [0].
-   *)
+let create m n = PMat.create prec m n
 
-  val ones : 'm Common.size -> 'n Common.size -> ('m, 'n, 'cnt) mat
-  (** [ones m n]
-   @return a fresh [m]-by-[n] matrix initialized with [1].
-   *)
+let make m n x = PMat.make prec m n x
 
-  val identity : 'n Common.size -> ('n, 'n, 'cnt) mat
-  (** [identity n]
-   @return a fresh [n]-by-[n] identity matrix.
-   *)
+let make0 m n = make m n zero
 
-  val init_cols : 'm Common.size -> 'n Common.size ->
-                  (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
-  (** [init_cols m n f] returns a fresh [m]-by-[n] matrix whose
-   the [(i,j)] element is initialized by the result of calling [f i j].
-   The elements are passed by column-major order.
-   *)
+let make1 m n = make m n one
 
-  val init_rows : 'm Common.size -> 'n Common.size ->
-                  (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
-  (** [init_rows m n f] returns a fresh [m]-by-[n] matrix whose
-   the [(i,j)] element is initialized by the result of calling [f i j].
-   The elements are passed by row-major order.
-   *)
+let identity n = (n, n, 1, 1, I.Mat.identity n)
 
-  (** {2 Accessors} *)
+let init_cols m n f = PMat.init_cols prec m n f
 
-  val dim : ('m, 'n, 'cd) mat -> 'm Common.size * 'n Common.size
-  (** [dim a] is [(dim1 a, dim2 a)]. *)
+let init_rows m n f = PMat.init_rows prec m n f
 
-  val dim1 : ('m, 'n, 'cd) mat -> 'm Common.size
-  (** [dim1 a]
-   @return the number of rows in [a].
-   *)
+(** {2 Accessors} *)
 
-  val dim2 : ('m, 'n, 'cd) mat -> 'n Common.size
-  (** [dim1 a]
-   @return the number of columns in [a].
-   *)
+let dim = PMat.dim
 
-  val get_dyn : ('m, 'n, 'cd) mat -> int -> int -> num_type
-  (** [get_dyn a i j]
-   @return the [(i,j)] element of the matrix [a].
-   *)
+let dim1 = PMat.dim1
 
-  val set_dyn : ('m, 'n, 'cd) mat -> int -> int -> num_type -> unit
-  (** [set_dyn a i j x] assigns [x] to the [(i,j)] element of the matrix [a].
-   *)
+let dim2 = PMat.dim2
 
-  val unsafe_get : ('m, 'n, 'cd) mat -> int -> int -> num_type
-  (** Like {!Slap.Mat.get_dyn}, but size checking is not always performed. *)
+let get_dyn = PMat.get_dyn
 
-  val unsafe_set : ('m, 'n, 'cd) mat -> int -> int -> num_type -> unit
-  (** Like {!Slap.Mat.set_dyn}, but size checking is not always performed. *)
+let set_dyn = PMat.set_dyn
 
-  val col_dyn : ('m, 'n, 'cd) mat -> int -> ('m, 'cnt) vec
-  (** [col_dyn a i]
-   @return the [i]-th column of the matrix [a]. The data are shared.
-   *)
+let unsafe_get = PMat.unsafe_get
 
-  val row_dyn : ('m, 'n, 'cd) mat -> int -> ('n, Common.dsc) vec
-  (** [row_dyn a i]
-   @return the [i]-th row of the matrix [a]. The data are shared.
-   *)
+let unsafe_set = PMat.unsafe_set
 
-  val copy_row_dyn : ('m, 'n, 'cd) mat -> int -> ('n, 'cnt) vec
-  (** [copy_row_dyn a i] is [Vec.copy (Mat.row_dyn a i)]. *)
+let col_dyn = PMat.col_dyn
 
-  val diag : ('n, 'n, 'cd) mat -> ('n, Common.dsc) vec
-  (** [diag a]
-   @return the diagonal elements of the matrix [a]. The data are shared.
-   *)
+let row_dyn = PMat.row_dyn
 
-  val copy_diag : ('n, 'n, 'cd) mat -> ('n, 'cnt) vec
-  (** [copy_diag a] is [Vec.copy (Mat.diag a)]. *)
+let copy_row_dyn mat i =
+  let n, ofsx, incx, x = row_dyn mat i in
+  ignore (I.copy ~n ~ofsx ~incx x);
+  (n, ofsx, incx, x)
 
-  val as_vec : ('m, 'n, Common.cnt) mat -> (('m, 'n) Common.mul, 'cnt) vec
-  (** [as_vec a]
-   @return the vector containing all elements of the matrix in column-major
-           order. The data are shared.
-   *)
+let diag = PMat.diag
 
-  (** {2 Basic operations} *)
+let copy_diag mat =
+  let n, ofsx, incx, x = diag mat in
+  ignore (I.copy ~n ~ofsx ~incx x);
+  (n, ofsx, incx, x)
 
-  val copy : ?uplo:[ `L | `U ] ->
-             ?b:('m, 'n, 'b_cd) mat ->
-             ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
-  (** [copy ?uplo ?b a] copies the matrix [a] into the matrix [b] with
-   the LAPACK function [lacpy].
-   - If [uplo] is omitted, all elements in [a] is copied.
-   - If [uplo] is [`U], the upper trapezoidal part of [a] is copied.
-   - If [uplo] is [`L], the lower trapezoidal part of [a] is copied.
-   @return [b], which is overwritten.
-   @param uplo default = all elements in [a] is copied.
-   @param b    default = a fresh matrix.
-   *)
+let as_vec = PMat.as_vec
 
-  val of_col_vecs_dyn : 'm Common.size ->
-                        'n Common.size ->
-                        ('m, Common.cnt) vec array ->
-                        ('m, 'n, 'cnt) mat
+(** {2 Basic operations} *)
 
-  (** {2 Type conversion} *)
+let copy ?uplo ?b (m, n, ar, ac, a) =
+  let br, bc, b = PMat.opt_mat_alloc prec m n b in
+  if m <> 0 && n <> 0
+  then ignore (I.lacpy ?uplo ~m ~n ~br ~bc ~b ~ar ~ac a);
+  (m, n, br, bc, b)
 
-  val to_array : ('m, 'n, 'cd) mat -> num_type array array
-  (** [to_array a]
-   @return the array of arrays of all the elements of [a].
-   *)
+let of_col_vecs_dyn m n vec_array =
+  let convert (m', ofsx, incx, x) =
+    assert(m = m');
+    if not (PVec.check_cnt m' ofsx incx x) then
+      invalid_arg "Mat.of_col_vecs_dyn";
+    x
+  in
+  if n <> Array.length vec_array then invalid_arg "Mat.of_col_vecs_dyn";
+  let mat = I.Mat.of_col_vecs (Array.map convert vec_array) in
+  (m, n, 1, 1, mat)
 
-  val of_array_dyn : 'm Common.size -> 'n Common.size ->
-                     num_type array array ->
-                     ('m, 'n, 'cnt) mat
-  (** Build a matrix initialized from the given array of arrays.
-   @raise Invalid_argument the given array of arrays is not rectangular or
-   its size is not [m]-by-[n].
-   *)
+(** {2 Type conversion} *)
 
-  module Of_array_dyn (X : sig val value : num_type array array end) : MAT
+let to_array = PMat.to_array
 
-  val to_list : ('m, 'n, 'cd) mat -> num_type list list
-  (** [to_list a]
-   @return the list of lists of all the elements of [a].
-   *)
+let of_array_dyn m n array = PMat.of_array_dyn prec m n array
 
-  val of_list_dyn : 'm Common.size -> 'n Common.size ->
-                     num_type list list ->
-                     ('m, 'n, 'cnt) mat
-  (** Build a matrix initialized from the given list of lists.
-   @raise Invalid_argument the given list of lists is not rectangular or
-   its size is not [m]-by-[n].
-  *)
+module Of_array (X : sig val value : num_type array array end) : CNTMAT =
+  struct
+    type m and n
+    let value =
+      match PMat.dim_array_array X.value with
+      | None -> invalid_arg "Mat.Of_array_dyn"
+      | Some (m, n) -> PMat.unsafe_of_array prec m n X.value
+  end
 
-  module Of_list_dyn (X : sig val value : num_type list list end) : MAT
+let of_array aa =
+  let module M = Of_array(struct let value = aa end) in
+  (module M : CNTMAT)
 
-  (** {2 Iterators} *)
+let to_list = PMat.to_list
 
-  val map : (num_type -> num_type) -> ?b:('m, 'n, 'b_cd) mat ->
-            ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
+let of_list_dyn m n list = PMat.of_list_dyn prec m n list
 
-  val replace_all : ('m, 'n, 'cd) mat -> (num_type -> num_type) -> unit
-  (** [replace_all a f] modifies the matrix [a] in place
-   -- the [(i,j)]-element [aij] of [a] will be set to [f aij].
-   *)
+module Of_list (X : sig val value : num_type list list end) : CNTMAT =
+  struct
+    type m and n
+    let value =
+      match PMat.dim_list_list X.value with
+      | None -> invalid_arg "Mat.Of_list_dyn"
+      | Some (m, n) -> PMat.unsafe_of_list prec m n X.value
+  end
 
-  val replace_alli : ('m, 'n, 'cd) mat ->
-                     (int -> int -> num_type -> num_type) -> unit
-  (** [replace_all a f] modifies the matrix [a] in place
-   -- the [(i,j)]-element [aij] of [a] will be set to [f i j aij].
-   *)
+let of_list ll =
+  let module M = Of_list(struct let value = ll end) in
+  (module M : CNTMAT)
 
-  (** {2 Arithmetic operations} *)
+(** {2 Iterators} *)
 
-  val trace : ('m, 'n, 'cd) mat -> num_type
-  (** [trace a]
-   @return the sum of diagonal elements of the matrix [a].
-   *)
+let map f ?b (m, n, ar, ac, a) =
+  let br, bc, b = PMat.opt_mat_alloc prec m n b in
+  let _ = I.Mat.map f ~m ~n ~br ~bc ~b ~ar ~ac a in
+  (m, n, br, bc, b)
 
-  val scal : num_type -> ('m, 'n, 'cd) mat -> unit
-  (** [scal alpha a] computes [a := alpha * a] with the scalar value [alpha] and
-   the matrix [a].
-   *)
+let replace_all = PMat.replace_all
 
-  val scal_cols : ('m, 'n, 'cd) mat -> ('n, Common.cnt) vec -> unit
-  (** A column-wise [scal] function for matrices. *)
+let replace_alli = PMat.replace_alli
 
-  val scal_rows : ('m, Common.cnt) vec -> ('m, 'n, 'cd) mat -> unit
-  (** A row-wise [scal] function for matrices. *)
+(** {2 Arithmetic operations} *)
 
-  val axpy : ?alpha:num_type ->
-             x:('m, 'n, 'x_cd) mat ->
-             ('m, 'n, 'y_cd) mat -> unit
-  (** [axpy ?alpha ~x y] computes [y := alpha * x + y]. *)
+let trace a =
+  let n, ofsx, incx, x = diag a in
+  I.Vec.sum ~n ~ofsx ~incx x
 
-  val syrk_diag : ?beta:num_type ->
-                  ?y:('n, Common.cnt) vec ->
-                  trans:(('a_n, 'a_k, 'a_cd) mat ->
-                         ('n, 'k, 'a_cd) mat) Common.trans2 ->
-                  ?alpha:num_type ->
-                  ('a_n, 'a_k, 'a_cd) mat -> ('n, 'cnt) vec
+let scal alpha (m, n, ar, ac, a) =
+  I.Mat.scal ~m ~n alpha ~ar ~ac a
 
-  val gemm_trace : transa:(('a_n, 'a_k, 'a_cd) mat ->
-                           ('n, 'k, 'a_cd) mat) trans ->
-                   ('a_n, 'a_k, 'a_cd) mat ->
-                   transb:(('b_k, 'b_n, 'b_cd) mat ->
-                           ('k, 'n, 'b_cd) mat) trans ->
-                   ('b_k, 'b_n, 'b_cd) mat -> num_type
+let scal_cols (m, n', ar, ac, a) (n, ofsx, incx, x) =
+  assert(n = n' && incx = 1);
+  I.Mat.scal_cols ~m ~n ~ar ~ac a ~ofs:ofsx x
 
-  val symm2_trace : ?upa:bool ->
-                    ('n, 'n, 'a_cd) mat ->
-                    ?upb:bool ->
-                    ('n, 'n, 'b_cd) mat -> num_type
-end
+let scal_rows (m, ofsx, incx, x) (m', n, ar, ac, a) =
+  assert(m = m' && incx = 1);
+  I.Mat.scal_rows ~m ~n ~ofs:ofsx x ~ar ~ac a
+
+let axpy ?alpha ~x:(m, n, xr, xc, x) (m', n', yr, yc, y) =
+  assert(m = m' && n = n');
+  I.Mat.axpy ~m ~n ?alpha ~xr ~xc ~x ~yr ~yc y
+
+let syrk_diag ?beta ?y ~trans ?alpha (an, ak, ar, ac, a) =
+  let n, k = Common.get_transposed_dim trans an ak in
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  assert(PVec.check_cnt n ofsy incy y);
+  ignore (I.Mat.syrk_diag ~n ~k ?beta ~y
+                          ~trans:(Common.lacaml_trans2 trans)
+                          ?alpha ~ar ~ac a);
+  (n, ofsy, incy, y)
+
+let gemm_trace ~transa (an, ak, ar, ac, a) ~transb (bk, bn, br, bc, b) =
+  let n, k = Common.get_transposed_dim transa an ak in
+  assert((k, n) = Common.get_transposed_dim transb bk bn);
+  I.Mat.gemm_trace ~n ~k
+                   ~transa:(lacaml_trans3 transa) ~ar ~ac a
+                   ~transb:(lacaml_trans3 transb) ~br ~bc b
+
+let symm2_trace ?upa (n, n', ar, ac, a) ?upb (n'', n''', br, bc, b) =
+  assert(n = n' && n = n'' && n = n''');
+  I.Mat.symm2_trace ~n ?upa ~ar ~ac a ?upb ~br ~bc b

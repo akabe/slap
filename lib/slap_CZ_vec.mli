@@ -17,15 +17,9 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-module F (I    : Slap_module_info.CZ)
-         (SDCZ : Slap_lacaml.SDCZ_CZ with
-            type prec = I.prec and
-            type rvec = I.lacaml_rvec)
-         (CZ   : Slap_lacaml.CZ with
-            type prec = I.prec and
-            type rvec = I.lacaml_rvec) =
-struct
-  (* interface: slap_CZ_la.ml *)
+(** {2 Creation of vectors} *)
 
-  include Slap_SDCZ_la_wrap.F(I)(SDCZ)
-end
+val random : ?rnd_state:Random.State.t ->
+             ?re_from:float -> ?re_range:float ->
+             ?im_from:float -> ?im_range:float ->
+             'n Size.t -> ('n, 'cnt) vec

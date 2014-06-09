@@ -17,163 +17,310 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** A part of the signature of [Slap.[SDCZ]]. *)
+let pp_num = I.pp_num
 
-module type S =
-sig
-  (* implementation: slap_SDCZ_la_wrap.ml *)
+let pp_vec fmt (n, ofsx, incx, x) =
+  assert(PVec.check_cnt n ofsx incx x);
+  I.pp_vec fmt x
 
-  include Slap_SDCZ_types.S
+let pp_mat fmt (m, n, ar, ac, a) =
+  assert(PMat.check_cnt m n ar ac a);
+  I.pp_mat fmt a
 
-  val kind : (num_type, prec) Bigarray.kind
+(** {2 BLAS interface} *)
 
-  val real_kind : (float, real_prec) Bigarray.kind
+(** {3 Level 1} *)
 
-  val prec : (num_type, prec) Bigarray.kind
-  (** An alias of [kind]. *)
+let swap ~x:(n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  I.swap ~n ~ofsx ~incx ~x ~ofsy ~incy y
 
-  val pp_num : Format.formatter -> num_type -> unit
-  (** A pretty-printer for elements in vectors and matrices. *)
+let scal alpha (n, ofsx, incx, x) =
+  I.scal ~n alpha ~ofsx ~incx x
 
-  val pp_vec : Format.formatter -> ('n, Common.cnt) vec -> unit
-  (** A pretty-printer for column vectors. *)
+let copy ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  let _ = I.copy ~n ~ofsy ~incy ~y ~ofsx ~incx x in
+  (n, ofsy, incy, y)
 
-  val pp_mat : Format.formatter -> ('m, 'n, Common.cnt) mat -> unit
-  (** A pretty-printer for matrices. *)
+let nrm2 (n, ofsx, incx, x) =
+  I.nrm2 ~n ~ofsx ~incx x
 
-  (** {2 BLAS interface} *)
+let axpy ?alpha ~x:(n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  I.axpy ~n ?alpha ~ofsx ~incx ~x ~ofsy ~incy y
 
-  (** {3 Level 1} *)
+let iamax (n, ofsx, incx, x) =
+  I.iamax ~n ~ofsx ~incx x
 
-  val swap : x:('n, 'x_cd) vec -> ('n, 'y_cd) vec -> unit
+let amax (n, ofsx, incx, x) =
+  I.amax ~n ~ofsx ~incx x
 
-  val scal : num_type -> ('n, 'cd) vec -> unit
+(** {3 Level 2} *)
 
-  val copy : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+let gemv ?beta ?y ~trans ?alpha (am, an, ar, ac, a) (n', ofsx, incx, x) =
+  let m, n = Common.get_transposed_dim trans am an in
+  assert(n = n');
+  let ofsy, incy, y = PVec.opt_vec_alloc prec m y in
+  if m <> 0 && n <> 0
+  then ignore (I.gemv ~m:am ~n:an ?beta ~ofsy ~incy ~y
+                      ~trans:(lacaml_trans3 trans)
+                      ?alpha ~ar ~ac a ~ofsx ~incx x)
+  else PVec.fill (m, ofsy, incy, y) zero;
+  (m, ofsy, incy, y)
 
-  val nrm2 : ('n, 'cd) vec -> float
+let symv ?beta ?y ?up ?alpha (n, n', ar, ac, a) (n'', ofsx, incx, x) =
+  assert(n = n' && n = n'');
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  if n <> 0
+  then ignore (I.symv ~n ?beta ~ofsy ~incy ~y
+                      ?alpha ~ar ~ac a ~ofsx ~incx x)
+  else PVec.fill (n, ofsy, incy, y) zero;
+  (n, ofsy, incy, y)
 
-  val axpy : ?alpha:num_type -> x:('n, 'x_cd) vec -> ('n, 'y_cd) vec -> unit
+let trmv ~trans ?diag ?up (n, n', ar, ac, a) (n'', ofsx, incx, x) =
+  assert(n = n' && n = n'');
+  if n <> 0
+  then I.trmv ~n ~trans:(lacaml_trans3 trans)
+                 ?diag ?up ~ar ~ac a ~ofsx ~incx x
 
-  val iamax : ('n, 'cd) vec -> int
+let trsv ~trans ?diag ?up (n, n', ar, ac, a) (n'', ofsx, incx, x) =
+  assert(n = n' && n = n'');
+  if n <> 0
+  then I.trsv ~n ~trans:(lacaml_trans3 trans)
+              ?diag ?up ~ar ~ac a ~ofsx ~incx x
 
-  val amax : ('n, 'cd) vec -> num_type
+(** {3 Level 3} *)
 
-  (** {3 Level 2} *)
+let gemm ?beta ?c ~transa ?alpha (am, ak, ar, ac, a)
+         ~transb (bk, bn, br, bc, b) =
+  let m, k = Common.get_transposed_dim transa am ak in
+  let k', n = Common.get_transposed_dim transb bk bn in
+  assert(k = k');
+  let cr, cc, c = PMat.opt_mat_alloc prec m n c in
+  if m <> 0 && n <> 0 && k <> 0
+  then ignore (I.gemm ~m ~n ~k ?beta ~cr ~cc ~c
+                      ~transa:(lacaml_trans3 transa)
+                      ?alpha ~ar ~ac a
+                      ~transb:(lacaml_trans3 transb)
+                      ~br ~bc b)
+  else PMat.fill (m, n, cr, cc, c) zero;
+  (m, n, cr, cc, c)
 
-  val gemv : ?beta:num_type ->
-             ?y:('m, 'y_cd) vec ->
-             trans:(('a_m, 'a_n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) trans ->
-             ?alpha:num_type ->
-             ('a_m, 'a_n, 'a_cd) mat ->
-             ('n, 'x_cd) vec -> ('m, 'y_cd) vec
+let symm ~side ?up ?beta ?c ?alpha (k, k', ar, ac, a) (m, n, br, bc, b) =
+  assert(k = k' && (if side = `L then k = m else k = n));
+  let cr, cc, c = PMat.opt_mat_alloc prec m n c in
+  if m <> 0 && n <> 0
+  then ignore (I.symm ~m ~n ~side ?up ?beta ~cr ~cc ~c
+                      ?alpha ~ar ~ac a ~br ~bc b)
+  else PMat.fill (m, n, cr, cc, c) zero;
+  (m, n, cr, cc, c)
 
-  val symv : ?beta:num_type ->
-             ?y:('n, 'y_cd) vec ->
-             ?up:bool ->
-             ?alpha:num_type ->
-             ('n, 'n, 'a_cd) mat ->
-             ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+let trmm ~side ?up ~transa ?diag ?alpha
+         ~a:(k, k', ar, ac, a) (m, n, br, bc, b) =
+  assert(k = k' && (if side = `L then k = m else k = n));
+  if m <> 0 && n <> 0
+  then I.trmm ~m ~n ~side ?up ~transa:(lacaml_trans3 transa)
+                 ?diag ?alpha ~ar ~ac ~a ~br ~bc b
 
-  val trmv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans ->
-             ?diag:Common.diag ->
-             ?up:bool ->
-             ('n, 'n, 'a_cd) mat ->
-             ('n, 'x_cd) vec -> unit
+let trsm ~side ?up ~transa ?diag ?alpha
+         ~a:(k, k', ar, ac, a) (m, n, br, bc, b) =
+  assert(k = k' && (if side = `L then k = m else k = n));
+  if m <> 0 && n <> 0
+  then I.trsm ~m ~n ~side ?up ~transa:(lacaml_trans3 transa)
+                 ?diag ?alpha ~ar ~ac ~a ~br ~bc b
 
-  val trsv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans ->
-             ?diag:Common.diag ->
-             ?up:bool ->
-             ('n, 'n, 'a_cd) mat ->
-             ('n, 'x_cd) vec -> unit
+let syrk ?up ?beta ?c ~trans ?alpha (an, ak, ar, ac, a) =
+  let n, k = Common.get_transposed_dim trans an ak in
+  let cr, cc, c = PMat.opt_mat_alloc prec n n c in
+  if k <> 0
+  then ignore (I.syrk ~n ~k ?up ?beta ~cr ~cc ~c
+                      ~trans:(Common.lacaml_trans2 trans)
+                      ?alpha ~ar ~ac a)
+  else PMat.fill (n, n, cr, cc, c) zero;
+  (n, n, cr, cc, c)
 
-  (** {3 Level 3} *)
+let syr2k ?up ?beta ?c ~trans ?alpha (am, an, ar, ac, a) (bm, bn, br, bc, b) =
+  assert(am = bm && an = bn);
+  let n, k = Common.get_transposed_dim trans am an in
+  let cr, cc, c = PMat.opt_mat_alloc prec n n c in
+  if k <> 0
+  then ignore (I.syr2k ~n ~k ?up ?beta ~cr ~cc ~c
+                       ~trans:(Common.lacaml_trans2 trans)
+                       ?alpha ~ar ~ac a ~br ~bc b)
+  else PMat.fill (n, n, cr, cc, c) zero;
+  (n, n, cr, cc, c)
 
-  val gemm : ?beta:num_type ->
-             ?c:('m, 'n, 'c_cd) mat ->
-             transa:(('a_m, 'a_k, 'a_cd) mat -> ('m, 'k, 'a_cd) mat) trans ->
-             ?alpha:num_type ->
-             ('a_m, 'a_k, 'a_cd) mat ->
-             transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans ->
-             ('b_k, 'b_n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat
+(** {2 LAPACK interface} *)
 
-  val symm : side:('k, 'm, 'n) Common.side ->
-             ?up:bool ->
-             ?beta:num_type ->
-             ?c:('m, 'n, 'c_cd) mat ->
-             ?alpha:num_type ->
-             ('k, 'k, 'a_cd) mat ->
-             ('m, 'n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat
+(** {3 Auxiliary routines} *)
 
-  val trmm : side:('k, 'm, 'n) Common.side ->
-             ?up:bool ->
-             transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans ->
-             ?diag:Common.diag ->
-             ?alpha:num_type ->
-             a:('k, 'k, 'a_cd) mat ->
-             ('m, 'n, 'b_cd) mat -> unit
+let lacpy ?uplo ?b (m, n, ar, ac, a) =
+  let br, bc, b = PMat.opt_mat_alloc prec m n b in
+  if m <> 0 && n <> 0
+  then ignore (I.lacpy ?uplo ~m ~n ~br ~bc ~b ~ar ~ac a);
+  (m, n, br, bc, b)
 
-  val trsm : side:('k, 'm, 'n) Common.side ->
-             ?up:bool ->
-             transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans ->
-             ?diag:Common.diag ->
-             ?alpha:num_type ->
-             a:('k, 'k, 'a_cd) mat ->
-             ('m, 'n, 'b_cd) mat -> unit
+let lassq ?scale ?sumsq (n, ofsx, incx, x) =
+  I.lassq ~n ?scale ?sumsq ~ofsx ~incx x
 
-  val syrk : ?up:bool ->
-             ?beta:num_type ->
-             ?c:('n, 'n, 'c_cd) mat ->
-             trans:(('a_n, 'a_k, 'a_cd) mat ->
-                    ('n, 'k, 'a_cd) mat) Common.trans2 ->
-             ?alpha:num_type ->
-             ('a_n, 'a_k, 'a_cd) mat -> ('n, 'n, 'c_cd) mat
+type larnv_liseed = Size.z Size.s Size.s Size.s Size.s
 
-  (** {2 LAPACK interface} *)
+let larnv ?idist ?iseed ~x:(n, ofsx, incx, x) () =
+  assert(PVec.check_cnt n ofsx incx x);
+  ignore (I.larnv ?idist ?iseed:(PVec.opt_cnt_vec 4 iseed) ~n ~x ());
+  (n, 1, 1, x)
 
-  (** {3 Auxiliary routines} *)
+type ('m, 'a) lange_min_lwork
 
-  val lacpy : ?uplo:[ `L | `U ] ->
-              ?b:('m, 'n, 'b_cd) mat ->
-              ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
-  (** [lacpy ?uplo ?b a] copies the matrix [a] into the matrix [b].
-   - If [uplo] is omitted, all elements in [a] is copied.
-   - If [uplo] is [`U], the upper trapezoidal part of [a] is copied.
-   - If [uplo] is [`L], the lower trapezoidal part of [a] is copied.
-   @return [b], which is overwritten.
-   @param uplo default = all elements in [a] is copied.
-   @param b    default = a fresh matrix.
-   *)
+let lange_min_lwork = I.lange_min_lwork
 
-  val lange : ?norm:'a Common.norm4 ->
-              ('m, 'n, 'cd) mat -> float
-  (** [lange ?norm a]
-   @return the norm of the matrix [a].
-   @param norm default = [Slap.Common.norm_1]
-   *)
+let lange ?norm ?work (m, n, ar, ac, a) =
+  if m <> 0 && n <> 0
+  then I.lange ~m ~n ?norm ?work:(PVec.opt_work work) ~ar ~ac a
+  else 0.0
 
-  (** {3 Linear equations (computational routines)} *)
+let lauum ?up (n, n', ar, ac, a) =
+  assert(n = n');
+  if n <> 0 then I.lauum ?up ~n ~ar ~ac a
 
-  val getrf : ?ipiv:(('m, 'n) Common.min, Common.cnt) Common.int32_vec ->
-              ('m, 'n, 'cd) mat ->
-              (('m, 'n) Common.min, Common.cnt) Common.int32_vec
+(** {3 Linear equations (computational routines)} *)
 
-  val potrf : ?up:bool ->
-              ?jitter:num_type ->
-              ('n, 'n, 'cd) mat -> unit
+let getrf ?ipiv (m, n, ar, ac, a) =
+  let k = min m n in
+  let ipiv = PVec.opt_cnt_vec_alloc int32 k ipiv in
+  if m <> 0 && n <> 0 then ignore (I.getrf ~m ~n ~ipiv ~ar ~ac a);
+  (k, 1, 1, ipiv)
 
-  val potri : ?up:bool ->
-              ?factorize:bool ->
-              ?jitter:num_type ->
-              ('n, 'n, 'cd) mat -> unit
+let getrs ?ipiv ~trans (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
+  assert(n = n' && n = n'');
+  if n <> 0 then I.getrs ~n ?ipiv:(PVec.opt_cnt_vec n ipiv)
+                         ~trans:(lacaml_trans3 trans)
+                         ~ar ~ac a ~nrhs ~br ~bc b
 
-  val trtrs : ?up:bool ->
-              trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans ->
-              ?diag:Common.diag ->
-              ('n, 'n, 'a_cd) mat ->
-              ('n, 'nrhs, 'b_cd) mat -> unit
+type 'n getri_min_lwork
 
-  val geqrf : ?tau:(('m, 'n) Common.min, Common.cnt) vec ->
-              ('m, 'n, 'cd) mat -> (('m, 'n) Common.min, 'cnt) vec
+let getri_min_lwork = I.getri_min_lwork
 
-end
+let getri_opt_lwork (n, n', ar, ac, a) =
+  assert(n = n');
+  I.getri_opt_lwork ~n ~ar ~ac a
+  |> Size.unsafe_of_int
+
+let getri ?ipiv ?work (n, n', ar, ac, a) =
+  assert(n = n');
+  if n <> 0 then I.getri ~n ?ipiv:(PVec.opt_cnt_vec n ipiv)
+                         ?work:(PVec.opt_work work)
+                         ~ar ~ac a
+
+type sytrf_min_lwork
+
+let sytrf_min_lwork = I.sytrf_min_lwork
+
+let sytrf_opt_lwork ?up (n, n', ar, ac, a) =
+  assert(n = n');
+  I.sytrf_opt_lwork ~n ?up ~ar ~ac a
+  |> Size.unsafe_of_int
+
+let sytrf ?up ?ipiv ?work (n, n', ar, ac, a) =
+  assert(n = n');
+  let ipiv = PVec.opt_cnt_vec_alloc int32 n ipiv in
+  if n <> 0 then ignore (I.sytrf ~n ?up ~ipiv
+                                 ?work:(PVec.opt_work work)
+                                 ~ar ~ac a);
+  (n, 1, 1, ipiv)
+
+let sytrs ?up ?ipiv (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
+  assert(n = n' && n = n'');
+  if n <> 0 then I.sytrs ~n ?up ?ipiv:(PVec.opt_cnt_vec n ipiv)
+                         ~ar ~ac a ~nrhs ~br ~bc b
+
+type 'n sytri_min_lwork
+
+let sytri_min_lwork = I.sytri_min_lwork
+
+let sytri ?up ?ipiv ?work (n, n', ar, ac, a) =
+  assert(n = n');
+  if n <> 0 then I.sytri ~n ?up ?ipiv:(PVec.opt_cnt_vec n ipiv)
+                         ?work:(PVec.opt_work work)
+                         ~ar ~ac a
+
+let potrf ?up ?jitter (n, n', ar, ac, a) =
+  assert(n = n');
+  if n <> 0 then I.potrf ~n ?up ?jitter ~ar ~ac a
+
+let potrs ?up (n, n', ar, ac, a) ?factorize ?jitter (n'', nrhs, br, bc, b) =
+  assert(n = n' && n = n'');
+  if n <> 0 then I.potrs ~n ?up ~ar ~ac a ~nrhs ~br ~bc ?factorize ?jitter b
+
+let potri ?up ?factorize ?jitter (n, n', ar, ac, a) =
+  assert(n = n');
+  if n <> 0 then I.potri ~n ?up ?factorize ?jitter ~ar ~ac a
+
+let trtrs ?up ~trans ?diag (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
+  assert(n = n' && n = n'');
+  if n <> 0 && nrhs <> 0
+  then I.trtrs ~n ?up ~trans:(lacaml_trans3 trans)
+               ?diag ~ar ~ac a ~nrhs ~br ~bc b
+
+let trtri ?up ?diag (n, n', ar, ac, a) =
+  assert(n = n');
+  if n <> 0 then I.trtri ~n ?up ?diag ~ar ~ac a
+
+type 'n geqrf_min_lwork
+
+let geqrf_min_lwork = I.geqrf_min_lwork
+
+let geqrf_opt_lwork (m, n, ar, ac, a) =
+  I.geqrf_opt_lwork ~m ~n ~ar ~ac a
+  |> Size.unsafe_of_int
+
+let geqrf ?work ?tau (m, n, ar, ac, a) =
+  let k = min m n in
+  let tau = PVec.opt_cnt_vec_alloc prec k tau in
+  if m <> 0 && n <> 0
+  then ignore (I.geqrf ~m ~n ?work:(PVec.opt_work work)
+                       ~tau ~ar ~ac a);
+  (k, 1, 1, tau)
+
+(** {3 Linear equations (simple drivers)} *)
+
+let gesv ?ipiv (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
+  assert(n = n' && n = n'');
+  if n <> 0 && nrhs <> 0
+  then I.gesv ~n ?ipiv:(PVec.opt_cnt_vec n ipiv) ~ar ~ac a ~nrhs ~br ~bc b
+
+let posv ?up (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
+  assert(n = n' && n = n'');
+  if n <> 0 && nrhs <> 0
+  then I.posv ~n ?up ~ar ~ac a ~nrhs ~br ~bc b
+
+let sysv_opt_lwork ?up (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
+  assert(n = n' && n = n'');
+  I.sysv_opt_lwork ~n ?up ~ar ~ac a ~nrhs ~br ~bc b
+  |> Size.unsafe_of_int
+
+let sysv ?up ?ipiv ?work (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
+  assert(n = n' && n = n'');
+  I.sysv ~n ?up ?ipiv:(PVec.opt_cnt_vec n ipiv)
+         ?work:(PVec.opt_work work)
+         ~ar ~ac a ~nrhs ~br ~bc b
+
+(** {3 Least squares (simple drivers)} *)
+
+type ('m, 'n, 'nrhs) gels_min_lwork
+
+let gels_min_lwork = I.gels_min_lwork
+
+let gels_opt_lwork ~trans (am, an, ar, ac, a) (bm, nrhs, br, bc, b) =
+  assert(am = bm);
+  let m, n = Common.get_transposed_dim trans am an in
+  I.gels_opt_lwork ~m ~n ~trans:(Common.lacaml_trans2 trans)
+                   ~ar ~ac a ~nrhs ~br ~bc b
+  |> Size.unsafe_of_int
+
+let gels ?work ~trans (am, an, ar, ac, a) (bm, nrhs, br, bc, b) =
+  assert(am = bm);
+  let m, n = Common.get_transposed_dim trans am an in
+  I.gels ~m ~n ?work:(PVec.opt_work work)
+         ~trans:(Common.lacaml_trans2 trans) ~ar ~ac a ~nrhs ~br ~bc b

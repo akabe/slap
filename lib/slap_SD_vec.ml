@@ -17,29 +17,20 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** The signature of [Slap.[SD].Vec]. *)
+(** {2 Creation of vectors} *)
 
-module type S =
-sig
-  (* implementation: slap_SD_vec_wrap.ml *)
+let random ?rnd_state ?from ?range n =
+  let x = I.Vec.random ?rnd_state ?from ?range n in
+  (n, 1, 1, x)
 
-  include Slap_SDCZ_vec.S
+(** {2 Arithmetic operations} *)
 
-  (** {2 Creation of vectors} *)
+let sqr ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  let _ = I.Vec.sqr ~n ~ofsy ~incy ~y ~ofsx ~incx x in
+  (n, ofsy, incy, y)
 
-  val random : ?rnd_state:Random.State.t ->
-               ?from:float -> ?range:float -> 'n Common.size -> ('n, 'cnt) vec
-
-  (** {2 Arithmetic operations} *)
-
-  val sqr : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
-  (** [sqr ?y x] computes the square of elements of the vector [x].
-   @return the vector [y], which is overwritten.
-   *)
-
-  val sqrt : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
-  (** [sqr ?y x] computes the square root of elements of the vector [x].
-   @return the vector [y], which is overwritten.
-   *)
-
-end
+let sqrt ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  let _ = I.Vec.sqrt ~n ~ofsy ~incy ~y ~ofsx ~incx x in
+  (n, ofsy, incy, y)

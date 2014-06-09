@@ -17,17 +17,8 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** The signature of [Slap.[SD].Mat]. *)
+(** {2 Creation of matrices} *)
 
-module type S =
-sig
-  (* implementation: slap_SD_mat_wrap.ml *)
-
-  include Slap_SDCZ_mat.S
-
-  (** {2 Creation of matrices} *)
-
-  val random : ?rnd_state:Random.State.t ->
-               ?from:float -> ?range:float ->
-               'm Common.size -> 'n Common.size -> ('m, 'n, 'cnt) mat
-end
+let random ?rnd_state ?from ?range m n =
+  let a = I.Mat.random ?rnd_state ?from ?range m n in
+  (m, n, 1, 1, a)

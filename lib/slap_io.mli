@@ -17,48 +17,34 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
+open Bigarray
+
 (** {2 Pretty-printing in standard style} *)
 
 type ('n, 'num, 'prec, 'cnt_or_dsc) pp_vec =
     Format.formatter ->
     ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
+(** A type of standard pretty printers for vectors. *)
 
-let pp_fvec fmt (n, ofsx, incx, x) =
-  assert(Vec.check_cnt n ofsx incx x);
-  Lacaml.Io.pp_fvec fmt x
+val pp_fvec : ('n, float, 'prec, cnt) pp_vec
 
-let pp_cvec fmt (n, ofsx, incx, x) =
-  assert(Vec.check_cnt n ofsx incx x);
-  Lacaml.Io.pp_cvec fmt x
+val pp_cvec : ('n, Complex.t, 'prec, cnt) pp_vec
 
-let pp_ivec fmt (n, ofsx, incx, x) =
-  assert(Vec.check_cnt n ofsx incx x);
-  Lacaml.Io.pp_ivec fmt x
+val pp_ivec : ('n, int32, 'prec, cnt) pp_vec
 
-let pp_rfvec fmt (n, ofsx, incx, x) =
-  assert(Vec.check_cnt n ofsx incx x);
-  Lacaml.Io.pp_rfvec fmt x
+val pp_rfvec : ('n, float, 'prec, cnt) pp_vec
 
-let pp_rcvec fmt (n, ofsx, incx, x) =
-  assert(Vec.check_cnt n ofsx incx x);
-  Lacaml.Io.pp_rcvec fmt x
+val pp_rcvec : ('n, Complex.t, 'prec, cnt) pp_vec
 
-let pp_rivec fmt (n, ofsx, incx, x) =
-  assert(Vec.check_cnt n ofsx incx x);
-  Lacaml.Io.pp_rivec fmt x
+val pp_rivec : ('n, int32, 'prec, cnt) pp_vec
 
 type ('m, 'n, 'num, 'prec, 'cnt_or_dsc) pp_mat =
     Format.formatter ->
     ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Mat.t -> unit
+(** A type of standard pretty printers for matrices. *)
 
-let pp_fmat fmt (m, n, ar, ac, a) =
-  assert(Mat.check_cnt m n ar ac a);
-  Lacaml.Io.pp_fmat fmt a
+val pp_fmat : ('m, 'n, float, 'prec, cnt) pp_mat
 
-let pp_cmat fmt (m, n, ar, ac, a) =
-  assert(Mat.check_cnt m n ar ac a);
-  Lacaml.Io.pp_cmat fmt a
+val pp_cmat : ('m, 'n, Complex.t, 'prec, cnt) pp_mat
 
-let pp_imat fmt (m, n, ar, ac, a) =
-  assert(Mat.check_cnt m n ar ac a);
-  Lacaml.Io.pp_imat fmt a
+val pp_imat : ('m, 'n, int32, 'prec, cnt) pp_mat

@@ -17,16 +17,19 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
+(** {2 Creation of vectors} *)
 
-module F (I    : Slap_module_info.CZ)
-         (SDCZ : Slap_lacaml.SDCZ_CZ with
-            type prec = I.prec and
-            type rvec = I.lacaml_rvec)
-         (CZ   : Slap_lacaml.CZ with
-            type prec = I.prec and
-            type rvec = I.lacaml_rvec) =
-struct
-  (* interface: slap_CZ_mat.ml *)
+val random : ?rnd_state:Random.State.t ->
+             ?from:float -> ?range:float -> 'n Size.t -> ('n, 'cnt) vec
 
-  include Slap_SDCZ_mat_wrap.F(I)(SDCZ)
-end
+(** {2 Arithmetic operations} *)
+
+val sqr : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+(** [sqr ?y x] computes the square of elements of the vector [x].
+    @return the vector [y], which is overwritten.
+ *)
+
+val sqrt : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+ (** [sqr ?y x] computes the square root of elements of the vector [x].
+     @return the vector [y], which is overwritten.
+  *)

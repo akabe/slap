@@ -17,18 +17,8 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** The signature of [Slap.[CZ].Vec]. *)
+(** {2 Creation of vectors} *)
 
-module type S =
-sig
-  (* implementation: slap_CZ_vec_wrap.ml *)
-
-  include Slap_SDCZ_vec.S
-
-  (** {2 Creation of vectors} *)
-
-  val random : ?rnd_state:Random.State.t ->
-               ?re_from:float -> ?re_range:float ->
-               ?im_from:float -> ?im_range:float ->
-               'n Common.size -> ('n, 'cnt) vec
-end
+let random ?rnd_state ?re_from ?re_range ?im_from ?im_range n =
+  let x = I.Vec.random ?rnd_state ?re_from ?re_range ?im_from ?im_range n in
+  (n, 1, 1, x)
