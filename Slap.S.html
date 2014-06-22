@@ -4,58 +4,544 @@
 <link rel="stylesheet" href="style.css" type="text/css">
 <meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
 <link rel="Start" href="index.html">
-<link rel="previous" href="Slap.Io.html">
-<link rel="next" href="Slap.D.html">
+<link rel="previous" href="Slap.D.html">
+<link rel="next" href="Slap.Z.html">
 <link rel="Up" href="Slap.html">
 <link title="Index of types" rel=Appendix href="index_types.html">
 <link title="Index of values" rel=Appendix href="index_values.html">
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
-<link title="Slap" rel="Chapter" href="Slap.html">
-<link title="Slap_common" rel="Chapter" href="Slap_common.html">
-<link title="Slap_size" rel="Chapter" href="Slap_size.html">
-<link title="Slap_vec" rel="Chapter" href="Slap_vec.html">
-<link title="Slap_mat" rel="Chapter" href="Slap_mat.html">
-<link title="Slap_utils" rel="Chapter" href="Slap_utils.html">
-<link title="Slap_io" rel="Chapter" href="Slap_io.html">
-<link title="Slap_SD" rel="Chapter" href="Slap_SD.html">
-<link title="Slap_CZ" rel="Chapter" href="Slap_CZ.html">
-<link title="Slap_SDCZ_types" rel="Chapter" href="Slap_SDCZ_types.html">
-<link title="Slap_SDCZ_vec" rel="Chapter" href="Slap_SDCZ_vec.html">
-<link title="Slap_SDCZ_mat" rel="Chapter" href="Slap_SDCZ_mat.html">
-<link title="Slap_SDCZ_la" rel="Chapter" href="Slap_SDCZ_la.html">
-<link title="Slap_SD_vec" rel="Chapter" href="Slap_SD_vec.html">
-<link title="Slap_SD_mat" rel="Chapter" href="Slap_SD_mat.html">
-<link title="Slap_SD_la" rel="Chapter" href="Slap_SD_la.html">
-<link title="Slap_CZ_vec" rel="Chapter" href="Slap_CZ_vec.html">
-<link title="Slap_CZ_mat" rel="Chapter" href="Slap_CZ_mat.html">
-<link title="Slap_CZ_la" rel="Chapter" href="Slap_CZ_la.html"><title>Slap.S</title>
+<link title="Slap" rel="Chapter" href="Slap.html"><link title="BLAS interface" rel="Section" href="#2_BLASinterface">
+<link title="LAPACK interface" rel="Section" href="#2_LAPACKinterface">
+<link title="BLAS interface" rel="Section" href="#2_BLASinterface">
+<link title="LAPACK interface" rel="Section" href="#2_LAPACKinterface">
+<link title="Level 1" rel="Subsection" href="#3_Level1">
+<link title="Level 2" rel="Subsection" href="#3_Level2">
+<link title="Level 3" rel="Subsection" href="#3_Level3">
+<link title="Auxiliary routines" rel="Subsection" href="#3_Auxiliaryroutines">
+<link title="Linear equations (computational routines)" rel="Subsection" href="#3_Linearequationscomputationalroutines">
+<link title="Linear equations (simple drivers)" rel="Subsection" href="#3_Linearequationssimpledrivers">
+<link title="Least squares (simple drivers)" rel="Subsection" href="#3_Leastsquaressimpledrivers">
+<link title="Level 1" rel="Subsection" href="#3_Level1">
+<link title="Level 2" rel="Subsection" href="#3_Level2">
+<link title="Auxiliary routines" rel="Subsection" href="#3_Auxiliaryroutines">
+<link title="Linear equations (computational routines)" rel="Subsection" href="#3_Linearequationscomputationalroutines">
+<link title="Least squares (expert drivers)" rel="Subsection" href="#3_Leastsquaresexpertdrivers">
+<link title="General SVD routines" rel="Subsection" href="#3_GeneralSVDroutines">
+<link title="General eigenvalue problem (simple drivers)" rel="Subsection" href="#3_Generaleigenvalueproblemsimpledrivers">
+<link title="Symmetric-matrix eigenvalue and singular value problems
+         (simple drivers)" rel="Subsection" href="#3_Symmetricmatrixeigenvalueandsingularvalueproblemssimpledrivers">
+<link title="Symmetric-matrix eigenvalue and singular value problems
+       (expert & RRR drivers)" rel="Subsection" href="#3_SymmetricmatrixeigenvalueandsingularvalueproblemsexpertRRRdrivers">
+<title>Slap.S</title>
 </head>
 <body>
-<div class="navbar"><a class="pre" href="Slap.Io.html" title="Slap.Io">Previous</a>
+<div class="navbar"><a class="pre" href="Slap.D.html" title="Slap.D">Previous</a>
 &nbsp;<a class="up" href="Slap.html" title="Slap">Up</a>
-&nbsp;<a class="post" href="Slap.D.html" title="Slap.D">Next</a>
+&nbsp;<a class="post" href="Slap.Z.html" title="Slap.Z">Next</a>
 </div>
 <h1>Module <a href="type_Slap.S.html">Slap.S</a></h1>
 
-<pre><span class="keyword">module</span> S: <code class="type"><a href="Slap_SD.S.html">Slap_SD.S</a></code><code class="type">  with
-         module Common = Common and
-         type num_type = float and
-         type prec = Bigarray.float32_elt and
-         type real_prec = Bigarray.float32_elt and
-         type 'a trans = 'a Common.trans2</code></pre><hr width="100%">
+<pre><span class="keyword">module</span> S: <code class="code">sig</code> <a href="Slap.S.html">..</a> <code class="code">end</code></pre><div class="info module top">
+32-bit real BLAS and LAPACK functions.<br>
+</div>
+<hr width="100%">
 
-<pre><span class="keyword">include</span> <a href="Slap_SD_la.S.html">Slap_SD_la.S</a></pre>
+<pre><span id="TYPEprec"><span class="keyword">type</span> <code class="type"></code>prec</span> = <code class="type">Bigarray.float32_elt</code> </pre>
 
-<pre><span class="keyword">module</span> <a href="Slap_SD.S.Vec.html">Vec</a>: <code class="type"><a href="Slap_SD_vec.S.html">Slap_SD_vec.S</a></code><code class="type">  with
-           module Common = Common and
-           type num_type = num_type and
-           type prec = prec and
-           type real_prec = real_prec and
-           type 'a trans = 'a trans</code></pre>
-<pre><span class="keyword">module</span> <a href="Slap_SD.S.Mat.html">Mat</a>: <code class="type"><a href="Slap_SD_mat.S.html">Slap_SD_mat.S</a></code><code class="type">  with
-           module Common = Common and
-           type num_type = num_type and
-           type prec = prec and
-           type real_prec = real_prec and
-           type 'a trans = 'a trans</code></pre></body></html>
+
+<pre><span id="TYPEnum_type"><span class="keyword">type</span> <code class="type"></code>num_type</span> = <code class="type">float</code> </pre>
+
+
+<pre><span id="TYPEtrans3"><span class="keyword">type</span> <code class="type">'a</code> trans3</span> = <code class="type">'a <a href="Slap.Common.html#TYPEtrans2">Slap.Common.trans2</a></code> </pre>
+<div class="info ">
+Transpose parameter (<a href="Slap.Common.html#VALnormal"><code class="code">Slap.Common.normal</code></a> or <a href="Slap.Common.html#VALtrans"><code class="code">Slap.Common.trans</code></a>).
+    For complex matrices, <a href="Slap.Common.html#VALconjtr"><code class="code">Slap.Common.conjtr</code></a> is also offered, hence the name.<br>
+</div>
+
+
+<pre><span id="TYPEvec"><span class="keyword">type</span> <code class="type">('n, 'cnt_or_dsc)</code> vec</span> = <code class="type">('n, <a href="Slap.S.html#TYPEnum_type">num_type</a>, <a href="Slap.S.html#TYPEprec">prec</a>, 'cnt_or_dsc) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a></code> </pre>
+<div class="info ">
+Vectors.<br>
+</div>
+
+
+<pre><span id="TYPEmat"><span class="keyword">type</span> <code class="type">('m, 'n, 'cnt_or_dsc)</code> mat</span> = <code class="type">('m, 'n, <a href="Slap.S.html#TYPEnum_type">num_type</a>, <a href="Slap.S.html#TYPEprec">prec</a>, 'cnt_or_dsc) <a href="Slap.Mat.html#TYPEt">Slap.Mat.t</a></code> </pre>
+<div class="info ">
+Matrices.<br>
+</div>
+
+
+<pre><span id="TYPErprec"><span class="keyword">type</span> <code class="type"></code>rprec</span> = <code class="type">Bigarray.float32_elt</code> </pre>
+
+
+<pre><span id="TYPErvec"><span class="keyword">type</span> <code class="type">('n, 'cnt_or_dsc)</code> rvec</span> = <code class="type">('n, float, <a href="Slap.S.html#TYPErprec">rprec</a>, 'cnt_or_dsc) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a></code> </pre>
+<div class="info ">
+Real vectors. (In <a href="Slap.S.html"><code class="code">Slap.S</code></a> and <a href="Slap.D.html"><code class="code">Slap.D</code></a>, <code class="code">rvec</code> is equal to <code class="code">vec</code>.)<br>
+</div>
+
+
+<pre><span id="VALprec"><span class="keyword">val</span> prec</span> : <code class="type">(<a href="Slap.S.html#TYPEnum_type">num_type</a>, <a href="Slap.S.html#TYPEprec">prec</a>) Bigarray.kind</code></pre>
+<pre><span id="VALrprec"><span class="keyword">val</span> rprec</span> : <code class="type">(float, <a href="Slap.S.html#TYPErprec">rprec</a>) Bigarray.kind</code></pre>
+<pre><span class="keyword">module</span> <a href="Slap.S.Vec.html">Vec</a>: <code class="code">sig</code> <a href="Slap.S.Vec.html">..</a> <code class="code">end</code></pre>
+<pre><span class="keyword">module</span> <a href="Slap.S.Mat.html">Mat</a>: <code class="code">sig</code> <a href="Slap.S.Mat.html">..</a> <code class="code">end</code></pre>
+<pre><span id="VALpp_num"><span class="keyword">val</span> pp_num</span> : <code class="type">Format.formatter -> <a href="Slap.S.html#TYPEnum_type">num_type</a> -> unit</code></pre><div class="info ">
+A pretty-printer for elements in vectors and matrices.<br>
+</div>
+
+<pre><span id="VALpp_vec"><span class="keyword">val</span> pp_vec</span> : <code class="type">Format.formatter -> ('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
+A pretty-printer for column vectors.<br>
+</div>
+
+<pre><span id="VALpp_mat"><span class="keyword">val</span> pp_mat</span> : <code class="type">Format.formatter -> ('m, 'n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+A pretty-printer for matrices.<br>
+</div>
+<br>
+<h2 id="2_BLASinterface">BLAS interface</h2><br>
+<br>
+<h3 id="3_Level1">Level 1</h3><br>
+
+<pre><span id="VALswap"><span class="keyword">val</span> swap</span> : <code class="type">x:('n, 'x_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> unit</code></pre>
+<pre><span id="VALscal"><span class="keyword">val</span> scal</span> : <code class="type"><a href="Slap.S.html#TYPEnum_type">num_type</a> -> ('n, 'cd) <a href="Slap.S.html#TYPEvec">vec</a> -> unit</code></pre>
+<pre><span id="VALcopy"><span class="keyword">val</span> copy</span> : <code class="type">?y:('n, 'y_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'x_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap.S.html#TYPEvec">vec</a></code></pre>
+<pre><span id="VALnrm2"><span class="keyword">val</span> nrm2</span> : <code class="type">('n, 'cd) <a href="Slap.S.html#TYPEvec">vec</a> -> float</code></pre>
+<pre><span id="VALaxpy"><span class="keyword">val</span> axpy</span> : <code class="type">?alpha:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       x:('n, 'x_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> unit</code></pre>
+<pre><span id="VALiamax"><span class="keyword">val</span> iamax</span> : <code class="type">('n, 'cd) <a href="Slap.S.html#TYPEvec">vec</a> -> int</code></pre>
+<pre><span id="VALamax"><span class="keyword">val</span> amax</span> : <code class="type">('n, 'cd) <a href="Slap.S.html#TYPEvec">vec</a> -> <a href="Slap.S.html#TYPEnum_type">num_type</a></code></pre><br>
+<h3 id="3_Level2">Level 2</h3><br>
+
+<pre><span id="VALgemv"><span class="keyword">val</span> gemv</span> : <code class="type">?beta:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ?y:('m, 'y_cd) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       trans:(('a_m, 'a_n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>             <a href="Slap.S.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ('a_m, 'a_n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('n, 'x_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> ('m, 'y_cd) <a href="Slap.S.html#TYPEvec">vec</a></code></pre>
+<pre><span id="VALsymv"><span class="keyword">val</span> symv</span> : <code class="type">?beta:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ?y:('n, 'y_cd) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?up:bool -><br>       ?alpha:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('n, 'x_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap.S.html#TYPEvec">vec</a></code></pre>
+<pre><span id="VALtrmv"><span class="keyword">val</span> trmv</span> : <code class="type">trans:(('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>             <a href="Slap.S.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap.Common.html#TYPEdiag">Slap.Common.diag</a> -><br>       ?up:bool -> ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'x_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> unit</code></pre>
+<pre><span id="VALtrsv"><span class="keyword">val</span> trsv</span> : <code class="type">trans:(('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>             <a href="Slap.S.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap.Common.html#TYPEdiag">Slap.Common.diag</a> -><br>       ?up:bool -> ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'x_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> unit</code></pre><br>
+<h3 id="3_Level3">Level 3</h3><br>
+
+<pre><span id="VALgemm"><span class="keyword">val</span> gemm</span> : <code class="type">?beta:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ?c:('m, 'n, 'c_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       transa:(('a_m, 'a_k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>              <a href="Slap.S.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ('a_m, 'a_k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       transb:(('b_k, 'b_n, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('k, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>              <a href="Slap.S.html#TYPEtrans3">trans3</a> -><br>       ('b_k, 'b_n, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'n, 'c_cd) <a href="Slap.S.html#TYPEmat">mat</a></code></pre>
+<pre><span id="VALsymm"><span class="keyword">val</span> symm</span> : <code class="type">side:('k, 'm, 'n) <a href="Slap.Common.html#TYPEside">Slap.Common.side</a> -><br>       ?up:bool -><br>       ?beta:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ?c:('m, 'n, 'c_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?alpha:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ('k, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'n, 'c_cd) <a href="Slap.S.html#TYPEmat">mat</a></code></pre>
+<pre><span id="VALtrmm"><span class="keyword">val</span> trmm</span> : <code class="type">side:('k, 'm, 'n) <a href="Slap.Common.html#TYPEside">Slap.Common.side</a> -><br>       ?up:bool -><br>       transa:(('k, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('k, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>              <a href="Slap.S.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap.Common.html#TYPEdiag">Slap.Common.diag</a> -><br>       ?alpha:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       a:('k, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="VALtrsm"><span class="keyword">val</span> trsm</span> : <code class="type">side:('k, 'm, 'n) <a href="Slap.Common.html#TYPEside">Slap.Common.side</a> -><br>       ?up:bool -><br>       transa:(('k, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('k, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>              <a href="Slap.S.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap.Common.html#TYPEdiag">Slap.Common.diag</a> -><br>       ?alpha:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       a:('k, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="VALsyrk"><span class="keyword">val</span> syrk</span> : <code class="type">?up:bool -><br>       ?beta:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ?c:('n, 'n, 'c_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       trans:(('a_n, 'a_k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>             <a href="Slap.Common.html#TYPEtrans2">Slap.Common.trans2</a> -><br>       ?alpha:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'n, 'c_cd) <a href="Slap.S.html#TYPEmat">mat</a></code></pre>
+<pre><span id="VALsyr2k"><span class="keyword">val</span> syr2k</span> : <code class="type">?up:bool -><br>       ?beta:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ?c:('n, 'n, 'c_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       trans:(('n, 'k, 'a) <a href="Slap.S.html#TYPEmat">mat</a> -> ('p, 'q, 'b) <a href="Slap.S.html#TYPEmat">mat</a>) <a href="Slap.Common.html#TYPEtrans2">Slap.Common.trans2</a> -><br>       ?alpha:<a href="Slap.S.html#TYPEnum_type">num_type</a> -><br>       ('p, 'q, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('p, 'q, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'n, 'c_cd) <a href="Slap.S.html#TYPEmat">mat</a></code></pre><div class="info ">
+<code class="code">syr2k ?up ?beta ?c ~trans ?alpha a b</code> computes
+<p>
+<ul>
+<li><code class="code">c := alpha * a * b^T + alpha * b * a^T + beta * c</code> if <code class="code">trans</code> is
+      <a href="Slap.Common.html#VALnormal"><code class="code">Slap.Common.normal</code></a>, or</li>
+<li><code class="code">c := alpha * a^T * b + alpha * b^T * a + beta * c</code> if <code class="code">trans</code> is
+      <a href="Slap.Common.html#VALtrans"><code class="code">Slap.Common.trans</code></a></li>
+</ul>
+
+    with symmetric matrix <code class="code">c</code>, general matrices <code class="code">a</code> and <code class="code">b</code>.<br>
+</div>
+<br>
+<h2 id="2_LAPACKinterface">LAPACK interface</h2><br>
+<br>
+<h3 id="3_Auxiliaryroutines">Auxiliary routines</h3><br>
+
+<pre><span id="VALlacpy"><span class="keyword">val</span> lacpy</span> : <code class="type">?uplo:[ `L | `U ] -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a></code></pre><div class="info ">
+<code class="code">lacpy ?uplo ?b a</code> copies the matrix <code class="code">a</code> into the matrix <code class="code">b</code>.<ul>
+<li>If <code class="code">uplo</code> is omitted, all elements in <code class="code">a</code> is copied.</li>
+<li>If <code class="code">uplo</code> is <code class="code">`U</code>, the upper trapezoidal part of <code class="code">a</code> is copied.</li>
+<li>If <code class="code">uplo</code> is <code class="code">`L</code>, the lower trapezoidal part of <code class="code">a</code> is copied.</li>
+</ul>
+<br>
+<b>Returns</b> <code class="code">b</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">uplo</code> : default = all elements in <code class="code">a</code> is copied.</div>
+<div class="param_info"><code class="code">b</code> : default = a fresh matrix.</div>
+
+<pre><span id="VALlassq"><span class="keyword">val</span> lassq</span> : <code class="type">?scale:float -> ?sumsq:float -> ('n, 'cd) <a href="Slap.S.html#TYPEvec">vec</a> -> float * float</code></pre><div class="info ">
+<code class="code">lassq ?scale ?sumsq x</code> see LAPACK documentation.<br>
+<b>Returns</b> <code class="code">(scl, ssq)</code><br>
+</div>
+<div class="param_info"><code class="code">scale</code> : default = 0.</div>
+<div class="param_info"><code class="code">sumsq</code> : default = 1.</div>
+
+<pre><span id="TYPElarnv_liseed"><span class="keyword">type</span> <code class="type"></code>larnv_liseed</span> = <code class="type"><a href="Slap.Size.html#TYPEz">Slap.Size.z</a> <a href="Slap.Size.html#TYPEs">Slap.Size.s</a> <a href="Slap.Size.html#TYPEs">Slap.Size.s</a> <a href="Slap.Size.html#TYPEs">Slap.Size.s</a> <a href="Slap.Size.html#TYPEs">Slap.Size.s</a></code> </pre>
+
+
+<pre><span id="VALlarnv"><span class="keyword">val</span> larnv</span> : <code class="type">?idist:[ `Normal | `Uniform0 | `Uniform1 ] -><br>       ?iseed:(<a href="Slap.S.html#TYPElarnv_liseed">larnv_liseed</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       x:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -> unit -> ('n, 'cnt) <a href="Slap.S.html#TYPEvec">vec</a></code></pre>
+<pre><span id="TYPElange_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'a)</code> lange_min_lwork</span> </pre>
+
+
+<pre><span id="VALlange_min_lwork"><span class="keyword">val</span> lange_min_lwork</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'a <a href="Slap.Common.html#TYPEnorm4">Slap.Common.norm4</a> -> ('m, 'a) <a href="Slap.S.html#TYPElange_min_lwork">lange_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALlange"><span class="keyword">val</span> lange</span> : <code class="type">?norm:'a <a href="Slap.Common.html#TYPEnorm4">Slap.Common.norm4</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPErvec">rvec</a> -> ('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
+<code class="code">lange ?norm ?work a</code><br>
+<b>Returns</b> the norm of matrix <code class="code">a</code>.<br>
+</div>
+<div class="param_info"><code class="code">norm</code> : default = <a href="Slap.Common.html#VALnorm_1"><code class="code">Slap.Common.norm_1</code></a>.</div>
+<div class="param_info"><code class="code">work</code> : default = allocated work space for norm <a href="Slap.Common.html#VALnorm_inf"><code class="code">Slap.Common.norm_inf</code></a>.</div>
+
+<pre><span id="VALlauum"><span class="keyword">val</span> lauum</span> : <code class="type">?up:bool -> ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<code class="code">lauum ?up a</code> computes
+<p>
+<ul>
+<li><code class="code">U * U^T</code> where <code class="code">U</code> is the upper triangular part of matrix <code class="code">a</code>
+      if <code class="code">up</code> is <code class="code">true</code>.</li>
+<li><code class="code">L^T * L</code> where <code class="code">L</code> is the lower triangular part of matrix <code class="code">a</code>
+      if <code class="code">up</code> is <code class="code">false</code>.</li>
+</ul>
+
+    The upper or lower triangular part is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code>.</div>
+<br>
+<h3 id="3_Linearequationscomputationalroutines">Linear equations (computational routines)</h3><br>
+
+<pre><span id="VALgetrf"><span class="keyword">val</span> getrf</span> : <code class="type">?ipiv:(('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       (('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, 'cnt) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a></code></pre>
+<pre><span id="VALgetrs"><span class="keyword">val</span> getrs</span> : <code class="type">?ipiv:(('n, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       trans:(('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>             <a href="Slap.S.html#TYPEtrans3">trans3</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="TYPEgetri_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> getri_min_lwork</span> </pre>
+
+
+<pre><span id="VALgetri_min_lwork"><span class="keyword">val</span> getri_min_lwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'ngetri_min_lwork <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALgetri_opt_lwork"><span class="keyword">val</span> getri_opt_lwork</span> : <code class="type">('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALgetri"><span class="keyword">val</span> getri</span> : <code class="type">?ipiv:(('n, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<code class="code">getri ?ipiv ?work a</code> computes the inverse of general matrix <code class="code">a</code> by
+    LU-factorization of <code class="code">getrf</code>.<br>
+<b>Raises</b> <code>Failure</code> if the matrix is singular.<br>
+</div>
+
+<pre><span id="TYPEsytrf_min_lwork"><span class="keyword">type</span> <code class="type"></code>sytrf_min_lwork</span> </pre>
+
+
+<pre><span id="VALsytrf_min_lwork"><span class="keyword">val</span> sytrf_min_lwork</span> : <code class="type">unit -> <a href="Slap.S.html#TYPEsytrf_min_lwork">sytrf_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALsytrf_opt_lwork"><span class="keyword">val</span> sytrf_opt_lwork</span> : <code class="type">?up:bool -> ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALsytrf"><span class="keyword">val</span> sytrf</span> : <code class="type">?up:bool -><br>       ?ipiv:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'cnt) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a></code></pre>
+<pre><span id="VALsytrs"><span class="keyword">val</span> sytrs</span> : <code class="type">?up:bool -><br>       ?ipiv:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="TYPEsytri_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> sytri_min_lwork</span> </pre>
+
+
+<pre><span id="VALsytri_min_lwork"><span class="keyword">val</span> sytri_min_lwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEsytri_min_lwork">sytri_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALsytri"><span class="keyword">val</span> sytri</span> : <code class="type">?up:bool -><br>       ?ipiv:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="VALpotrf"><span class="keyword">val</span> potrf</span> : <code class="type">?up:bool -> ?jitter:<a href="Slap.S.html#TYPEnum_type">num_type</a> -> ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="VALpotrs"><span class="keyword">val</span> potrs</span> : <code class="type">?up:bool -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?factorize:bool -><br>       ?jitter:<a href="Slap.S.html#TYPEnum_type">num_type</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="VALpotri"><span class="keyword">val</span> potri</span> : <code class="type">?up:bool -><br>       ?factorize:bool -><br>       ?jitter:<a href="Slap.S.html#TYPEnum_type">num_type</a> -> ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="VALtrtrs"><span class="keyword">val</span> trtrs</span> : <code class="type">?up:bool -><br>       trans:(('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>             <a href="Slap.S.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap.Common.html#TYPEdiag">Slap.Common.diag</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="VALtrtri"><span class="keyword">val</span> trtri</span> : <code class="type">?up:bool -> ?diag:<a href="Slap.Common.html#TYPEdiag">Slap.Common.diag</a> -> ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="TYPEgeqrf_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> geqrf_min_lwork</span> </pre>
+
+
+<pre><span id="VALgeqrf_min_lwork"><span class="keyword">val</span> geqrf_min_lwork</span> : <code class="type">n:'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEgeqrf_min_lwork">geqrf_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALgeqrf_opt_lwork"><span class="keyword">val</span> geqrf_opt_lwork</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALgeqrf"><span class="keyword">val</span> geqrf</span> : <code class="type">?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?tau:(('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, 'cnt) <a href="Slap.S.html#TYPEvec">vec</a></code></pre><br>
+<h3 id="3_Linearequationssimpledrivers">Linear equations (simple drivers)</h3><br>
+
+<pre><span id="VALgesv"><span class="keyword">val</span> gesv</span> : <code class="type">?ipiv:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="VALposv"><span class="keyword">val</span> posv</span> : <code class="type">?up:bool -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre>
+<pre><span id="VALsysv_opt_lwork"><span class="keyword">val</span> sysv_opt_lwork</span> : <code class="type">?up:bool -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALsysv"><span class="keyword">val</span> sysv</span> : <code class="type">?up:bool -><br>       ?ipiv:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre><br>
+<h3 id="3_Leastsquaressimpledrivers">Least squares (simple drivers)</h3><br>
+
+<pre><span id="TYPEgels_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n, 'nrhs)</code> gels_min_lwork</span> </pre>
+
+
+<pre><span id="VALgels_min_lwork"><span class="keyword">val</span> gels_min_lwork</span> : <code class="type">m:'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       n:'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       nrhs:'nrhs <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('m, 'n, 'nrhs) <a href="Slap.S.html#TYPEgels_min_lwork">gels_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALgels_opt_lwork"><span class="keyword">val</span> gels_opt_lwork</span> : <code class="type">trans:(('am, 'an, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>             <a href="Slap.Common.html#TYPEtrans2">Slap.Common.trans2</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('m, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALgels"><span class="keyword">val</span> gels</span> : <code class="type">?work:('work, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       trans:(('am, 'an, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a>)<br>             <a href="Slap.Common.html#TYPEtrans2">Slap.Common.trans2</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<code class="code">gels ?work ~trans a b</code> see LAPACK documentation.<br>
+</div>
+<div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
+<br>
+<h2 id="2_BLASinterface">BLAS interface</h2><br>
+<br>
+<h3 id="3_Level1">Level 1</h3><br>
+
+<pre><span id="VALdot"><span class="keyword">val</span> dot</span> : <code class="type">x:('n, 'x_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> float</code></pre><div class="info ">
+<code class="code">dot ~x y</code><br>
+<b>Returns</b> the inner product of the vector <code class="code">x</code> and <code class="code">y</code>.<br>
+</div>
+
+<pre><span id="VALasum"><span class="keyword">val</span> asum</span> : <code class="type">('n, 'x_cd) <a href="Slap.S.html#TYPEvec">vec</a> -> float</code></pre><div class="info ">
+<code class="code">asum x</code><br>
+<b>Returns</b> the sum of absolute values of elements in the vector <code class="code">x</code>.<br>
+</div>
+<br>
+<h3 id="3_Level2">Level 2</h3><br>
+
+<pre><span id="VALger"><span class="keyword">val</span> ger</span> : <code class="type">?alpha:float -><br>       ('m, 'x_cd) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('n, 'y_cd) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a></code></pre><div class="info ">
+<code class="code">ger ?alpha x y a</code> computes <code class="code">a := alpha * x * y^T + a</code> with
+    the general matrix <code class="code">a</code>, the vector <code class="code">x</code> and
+    the transposed vector <code class="code">y^T</code> of <code class="code">y</code>.<br>
+<b>Returns</b> <code class="code">a</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
+
+<pre><span id="VALsyr"><span class="keyword">val</span> syr</span> : <code class="type">?alpha:float -><br>       ?up:bool -><br>       ('n, 'x_cd) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a></code></pre><div class="info ">
+<code class="code">syr ?alpha x a</code> computes <code class="code">a := alpha * x * x^T + a</code> with
+    the symmetric matrix <code class="code">a</code>, the vector <code class="code">x</code> and
+    the transposed vector <code class="code">x^T</code> of <code class="code">x</code>.<br>
+<b>Returns</b> <code class="code">a</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
+<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code>, i.e., the upper triangular part of <code class="code">a</code> is
+                 supplied.</div>
+<br>
+<h2 id="2_LAPACKinterface">LAPACK interface</h2><br>
+<br>
+<h3 id="3_Auxiliaryroutines">Auxiliary routines</h3><br>
+<br>
+<h4 id="4_lansy">lansy</h4><br>
+
+<pre><span id="TYPElansy_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'a)</code> lansy_min_lwork</span> </pre>
+
+
+<pre><span id="VALlansy_min_lwork"><span class="keyword">val</span> lansy_min_lwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'a <a href="Slap.Common.html#TYPEnorm4">Slap.Common.norm4</a> -> ('n, 'a) <a href="Slap.S.html#TYPElansy_min_lwork">lansy_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALlansy"><span class="keyword">val</span> lansy</span> : <code class="type">?up:bool -><br>       ?norm:'norm <a href="Slap.Common.html#TYPEnorm4">Slap.Common.norm4</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
+<code class="code">lansy ?up ?norm ?work a</code><br>
+<b>Returns</b> the norm of matrix <code class="code">a</code>.<br>
+</div>
+<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code></div>
+<div class="param_info"><code class="code">norm</code> : default = <code class="code">Slap.Common.norm_1</code></div>
+<div class="param_info"><code class="code">work</code> : workspace (the size must be equal to or greater than
+                <code class="code">lansy_min_lwork n norm</code>.)</div>
+<br>
+<h4 id="4_lamch">lamch</h4><br>
+
+<pre><span id="VALlamch"><span class="keyword">val</span> lamch</span> : <code class="type">[ `B | `E | `L | `M | `N | `O | `P | `R | `S | `U ] -> float</code></pre><div class="info ">
+<code class="code">lamch cmach</code> see LAPACK documentation.<br>
+</div>
+<br>
+<h3 id="3_Linearequationscomputationalroutines">Linear equations (computational routines)</h3><br>
+<br>
+<h4 id="4_orgqr">orgqr</h4><br>
+
+<pre><span id="TYPEorgqr_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> orgqr_min_lwork</span> </pre>
+
+
+<pre><span id="VALorgqr_min_lwork"><span class="keyword">val</span> orgqr_min_lwork</span> : <code class="type">n:'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEorgqr_min_lwork">orgqr_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALorgqr_opt_lwork"><span class="keyword">val</span> orgqr_opt_lwork</span> : <code class="type">tau:('k, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALorgqr_dyn"><span class="keyword">val</span> orgqr_dyn</span> : <code class="type">?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       tau:('k, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -> ('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<code class="code">orgqr_dyn ?work ~tau a</code> generates the orthogonal matrix <code class="code">Q</code> of the QR
+    factorization formed by <code class="code">geqrf</code>/<code class="code">geqpf</code>.
+<p>
+
+    Matrix <code class="code">a</code> and vector <code class="code">tau</code> must satisfy the following inequality:
+    <code class="code">(Mat.dim1 a) &gt;= (Mat.dim2 a) &gt;= (Vec.dim tau)</code>, i.e., <code class="code">'m &gt;= 'n &gt;= 'k</code>.<br>
+</div>
+<br>
+<h4 id="4_ormqr">ormqr</h4><br>
+
+<pre><span id="TYPEormqr_min_lwork"><span class="keyword">type</span> <code class="type">('r, 'm, 'n)</code> ormqr_min_lwork</span> </pre>
+
+
+<pre><span id="VALormqr_min_lwork"><span class="keyword">val</span> ormqr_min_lwork</span> : <code class="type">side:('r, 'm, 'n) <a href="Slap.Common.html#TYPEside">Slap.Common.side</a> -><br>       m:'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       n:'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('r, 'm, 'n) <a href="Slap.S.html#TYPEormqr_min_lwork">ormqr_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALormqr_opt_lwork"><span class="keyword">val</span> ormqr_opt_lwork</span> : <code class="type">side:('r, 'm, 'n) <a href="Slap.Common.html#TYPEside">Slap.Common.side</a> -><br>       trans:(('r, 'r, 'a) <a href="Slap.S.html#TYPEmat">mat</a> -> ('r, 'r, 'b) <a href="Slap.S.html#TYPEmat">mat</a>) <a href="Slap.Common.html#TYPEtrans2">Slap.Common.trans2</a> -><br>       tau:('k, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('r, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'c_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALormqr_dyn"><span class="keyword">val</span> ormqr_dyn</span> : <code class="type">side:('r, 'm, 'n) <a href="Slap.Common.html#TYPEside">Slap.Common.side</a> -><br>       trans:(('r, 'r, 'a) <a href="Slap.S.html#TYPEmat">mat</a> -> ('r, 'r, 'b) <a href="Slap.S.html#TYPEmat">mat</a>) <a href="Slap.Common.html#TYPEtrans2">Slap.Common.trans2</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       tau:('k, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('r, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('m, 'n, 'c_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<code class="code">ormqr_dyn ~side ~trans ?work ~tau a c</code> multiplies a matrix <code class="code">c</code> by the
+    orthogonal matrix <code class="code">Q</code> of the QR factorization formed by <code class="code">geqrf</code>/<code class="code">geqpf</code>.
+<p>
+
+    Type parameters <code class="code">'k</code>, <code class="code">'m</code> and <code class="code">'n</code> must satisfy the following inequality:<ul>
+<li><code class="code">'m &gt;= 'k</code> if <code class="code">side</code> = <code class="code">Common.left</code>;</li>
+<li><code class="code">'n &gt;= 'k</code> if <code class="code">side</code> = <code class="code">Common.right</code>.</li>
+</ul>
+<br>
+</div>
+<br>
+<h4 id="4_gecon">gecon</h4><br>
+
+<pre><span id="TYPEgecon_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> gecon_min_lwork</span> </pre>
+
+
+<pre><span id="VALgecon_min_lwork"><span class="keyword">val</span> gecon_min_lwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEgecon_min_lwork">gecon_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="TYPEgecon_min_liwork"><span class="keyword">type</span> <code class="type">'n</code> gecon_min_liwork</span> </pre>
+
+
+<pre><span id="VALgecon_min_liwork"><span class="keyword">val</span> gecon_min_liwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEgecon_min_liwork">gecon_min_liwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALgecon"><span class="keyword">val</span> gecon</span> : <code class="type">?norm:'a <a href="Slap.Common.html#TYPEnorm2">Slap.Common.norm2</a> -><br>       ?anorm:float -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
+<code class="code">gecon ?norm ?anorm ?work ?iwork a</code> estimates the reciprocal of the
+    condition number of general matrix <code class="code">a</code>.<br>
+</div>
+<br>
+<h4 id="4_sycon">sycon</h4><br>
+
+<pre><span id="TYPEsycon_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> sycon_min_lwork</span> </pre>
+
+
+<pre><span id="VALsycon_min_lwork"><span class="keyword">val</span> sycon_min_lwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEsycon_min_lwork">sycon_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="TYPEsycon_min_liwork"><span class="keyword">type</span> <code class="type">'n</code> sycon_min_liwork</span> </pre>
+
+
+<pre><span id="VALsycon_min_liwork"><span class="keyword">val</span> sycon_min_liwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEsycon_min_liwork">sycon_min_liwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALsycon"><span class="keyword">val</span> sycon</span> : <code class="type">?up:bool -><br>       ?ipiv:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ?anorm:float -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> float</code></pre><br>
+<h4 id="4_pocon">pocon</h4><br>
+
+<pre><span id="TYPEpocon_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> pocon_min_lwork</span> </pre>
+
+
+<pre><span id="VALpocon_min_lwork"><span class="keyword">val</span> pocon_min_lwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEpocon_min_lwork">pocon_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="TYPEpocon_min_liwork"><span class="keyword">type</span> <code class="type">'n</code> pocon_min_liwork</span> </pre>
+
+
+<pre><span id="VALpocon_min_liwork"><span class="keyword">val</span> pocon_min_liwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEpocon_min_liwork">pocon_min_liwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALpocon"><span class="keyword">val</span> pocon</span> : <code class="type">?up:bool -><br>       ?anorm:float -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> float</code></pre><br>
+<h3 id="3_Leastsquaresexpertdrivers">Least squares (expert drivers)</h3><br>
+<br>
+<h4 id="4_gelsy">gelsy</h4><br>
+
+<pre><span id="TYPEgelsy_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n, 'nrhs)</code> gelsy_min_lwork</span> </pre>
+
+
+<pre><span id="VALgelsy_min_lwork"><span class="keyword">val</span> gelsy_min_lwork</span> : <code class="type">m:'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       n:'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       nrhs:'nrhs <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('m, 'n, 'nrhs) <a href="Slap.S.html#TYPEgelsy_min_lwork">gelsy_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALgelsy_opt_lwork"><span class="keyword">val</span> gelsy_opt_lwork</span> : <code class="type">('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALgelsy"><span class="keyword">val</span> gelsy</span> : <code class="type">('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?rcond:float -><br>       ?jpvt:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> int</code></pre><br>
+<h4 id="4_gelsd">gelsd</h4><br>
+
+<pre><span id="TYPEgelsd_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n, 'nrhs)</code> gelsd_min_lwork</span> </pre>
+
+
+<pre><span id="VALgelsd_min_lwork"><span class="keyword">val</span> gelsd_min_lwork</span> : <code class="type">m:'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       n:'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       nrhs:'nrhs <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('m, 'n, 'nrhs) <a href="Slap.S.html#TYPEgelsd_min_lwork">gelsd_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALgelsd_opt_lwork"><span class="keyword">val</span> gelsd_opt_lwork</span> : <code class="type">('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="TYPEgelsd_min_iwork"><span class="keyword">type</span> <code class="type">('m, 'n, 'nrhs)</code> gelsd_min_iwork</span> </pre>
+
+
+<pre><span id="VALgelsd_min_iwork"><span class="keyword">val</span> gelsd_min_iwork</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('m, 'n, 'nrhs) <a href="Slap.S.html#TYPEgelsd_min_iwork">gelsd_min_iwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALgelsd"><span class="keyword">val</span> gelsd</span> : <code class="type">('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?rcond:float -><br>       ?s:(('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> int</code></pre><br>
+<h4 id="4_gelss">gelss</h4><br>
+
+<pre><span id="TYPEgelss_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n, 'nrhs)</code> gelss_min_lwork</span> </pre>
+
+
+<pre><span id="VALgelss_min_lwork"><span class="keyword">val</span> gelss_min_lwork</span> : <code class="type">m:'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       n:'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       nrhs:'nrhs <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('m, 'n, 'nrhs) <a href="Slap.S.html#TYPEgelss_min_lwork">gelss_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALgelss_opt_lwork"><span class="keyword">val</span> gelss_opt_lwork</span> : <code class="type">('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALgelss"><span class="keyword">val</span> gelss</span> : <code class="type">('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?rcond:float -><br>       ?s:(('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> int</code></pre><br>
+<h3 id="3_GeneralSVDroutines">General SVD routines</h3><br>
+<br>
+<h4 id="4_gesvd">gesvd</h4><br>
+
+<pre><span id="TYPEgesvd_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n)</code> gesvd_min_lwork</span> </pre>
+
+
+<pre><span id="VALgesvd_min_lwork"><span class="keyword">val</span> gesvd_min_lwork</span> : <code class="type">m:'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       n:'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('m, 'n) <a href="Slap.S.html#TYPEgesvd_min_lwork">gesvd_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALgesvd_opt_lwork"><span class="keyword">val</span> gesvd_opt_lwork</span> : <code class="type">jobu:('u_rows, 'm, ('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>, <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>)<br>            <a href="Slap.Common.html#TYPEsvd_job">Slap.Common.svd_job</a> -><br>       jobvt:('vt_cols, 'n, ('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>, <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>)<br>             <a href="Slap.Common.html#TYPEsvd_job">Slap.Common.svd_job</a> -><br>       ?s:(('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?u:('m, 'u_rows, 'u_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?vt:('vt_cols, 'n, 'vt_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALgesvd"><span class="keyword">val</span> gesvd</span> : <code class="type">jobu:('u_cols, 'm, ('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>, <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>)<br>            <a href="Slap.Common.html#TYPEsvd_job">Slap.Common.svd_job</a> -><br>       jobvt:('vt_rows, 'n, ('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>, <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>)<br>             <a href="Slap.Common.html#TYPEsvd_job">Slap.Common.svd_job</a> -><br>       ?s:(('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?u:('m, 'u_cols, 'u_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?vt:('vt_rows, 'n, 'vt_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       (('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, 'cnt) <a href="Slap.S.html#TYPEvec">vec</a> * ('m, 'u_rows, 'cnt) <a href="Slap.S.html#TYPEmat">mat</a> *<br>       ('vt_cols, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">mat</a></code></pre><br>
+<h4 id="4_gesdd">gesdd</h4><br>
+
+<pre><span id="TYPEgesdd_liwork"><span class="keyword">type</span> <code class="type">('m, 'n)</code> gesdd_liwork</span> </pre>
+
+
+<pre><span id="VALgesdd_liwork"><span class="keyword">val</span> gesdd_liwork</span> : <code class="type">m:'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       n:'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('m, 'n) <a href="Slap.S.html#TYPEgesdd_liwork">gesdd_liwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="TYPEgesdd_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n, 'jobz)</code> gesdd_min_lwork</span> </pre>
+
+
+<pre><span id="VALgesdd_min_lwork"><span class="keyword">val</span> gesdd_min_lwork</span> : <code class="type">jobz:('u_cols * 'vt_rows, 'm * 'n,<br>             ('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a> * ('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.Size.html#TYPEz">Slap.Size.z</a> * 'n,<br>             'm * <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>)<br>            <a href="Slap.Common.html#TYPEsvd_job">Slap.Common.svd_job</a> -><br>       m:'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       n:'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       unit -> ('m, 'n, 'u_cols * 'vt_rows) <a href="Slap.S.html#TYPEgesdd_min_lwork">gesdd_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALgesdd_opt_lwork"><span class="keyword">val</span> gesdd_opt_lwork</span> : <code class="type">jobz:('u_cols * 'vt_rows, 'm * 'n,<br>             ('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a> * ('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.Size.html#TYPEz">Slap.Size.z</a> * 'n,<br>             'm * <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>)<br>            <a href="Slap.Common.html#TYPEsvd_job">Slap.Common.svd_job</a> -><br>       ?s:(('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?u:('m, 'u_cols, 'u_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?vt:('vt_rows, 'n, 'vt_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?iwork:('liwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALgesdd"><span class="keyword">val</span> gesdd</span> : <code class="type">jobz:('u_cols * 'vt_rows, 'm * 'n,<br>             ('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a> * ('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, 'm * 'n,<br>             <a href="Slap.Size.html#TYPEz">Slap.Size.z</a> * <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>)<br>            <a href="Slap.Common.html#TYPEsvd_job">Slap.Common.svd_job</a> -><br>       ?s:(('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?u:('m, 'u_cols, 'u_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?vt:('vt_rows, 'n, 'vt_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       (('m, 'n) <a href="Slap.Size.html#TYPEmin">Slap.Size.min</a>, 'cnt) <a href="Slap.S.html#TYPEvec">vec</a> * ('m, 'u_cols, 'u_cd) <a href="Slap.S.html#TYPEmat">mat</a> *<br>       ('vt_rows, 'n, 'vt_cd) <a href="Slap.S.html#TYPEmat">mat</a></code></pre><div class="info ">
+<code class="code">gesdd ~jobz ?s ?u ?vt ?work ?iwork a</code> computes the singular value
+    decomposition of a general rectangular matrix using a divide and conquer
+    method.
+<p>
+<ul>
+<li>If <code class="code">jobz</code> is <a href="Slap.Common.html#VALsvd_all"><code class="code">Slap.Common.svd_all</code></a>, the all left and right singular
+      vectors are stored into <code class="code">'m</code>-by-<code class="code">'m</code> matrix <code class="code">u</code> and <code class="code">'n</code>-by-<code class="code">'n</code> matrix
+      <code class="code">vt</code>, respectively.</li>
+<li>If <code class="code">jobz</code> is <a href="Slap.Common.html#VALsvd_top"><code class="code">Slap.Common.svd_top</code></a>, the top <code class="code">(min m n)</code> left and right
+      singular vectors are computed. In this case, the sizes of matrices <code class="code">u</code> and
+      <code class="code">vt</code> are <code class="code">'m</code>-by-<code class="code">('m,'n) Size.min</code> and <code class="code">('m,'n) Size.min</code>-by-<code class="code">'n</code>,
+      respectively.</li>
+<li>If <code class="code">jobz</code> is <a href="Slap.Common.html#VALsvd_overwrite"><code class="code">Slap.Common.svd_overwrite</code></a>, then
+    <ul>
+<li>if <code class="code">'m &gt;= 'n</code>, <code class="code">a</code> is overwritten with the first <code class="code">(min m n)</code> columns of
+         <code class="code">u</code>, and all <code class="code">'n</code> rows of <code class="code">vt</code> is computed, thus <code class="code">vt</code> has <code class="code">'n</code>-by-<code class="code">'n</code>
+         size and <code class="code">u</code> is not used;</li>
+<li>if <code class="code">'m &lt; 'n</code>, <code class="code">a</code> is overwritten with the first <code class="code">(min m n)</code> rows of
+         <code class="code">vt</code>, and all <code class="code">'m</code> columns of <code class="code">u</code> is computed; thereby <code class="code">u</code> has
+         <code class="code">'m</code>-by-<code class="code">'m</code> size and <code class="code">vt</code> is not used.</li>
+</ul>
+</li>
+<li>If <code class="code">jobz</code> is <a href="Slap.Common.html#VALsvd_no"><code class="code">Slap.Common.svd_no</code></a>, no singular vectors are computed.</li>
+</ul>
+<br>
+<b>Returns</b> <code class="code">(s, u, vt)</code> with vector <code class="code">s</code> containing singular values, unitary
+            matrices <code class="code">u</code> and <code class="code">vt</code>.<br>
+</div>
+<br>
+<h3 id="3_Generaleigenvalueproblemsimpledrivers">General eigenvalue problem (simple drivers)</h3><br>
+<br>
+<h4 id="4_geev">geev</h4><br>
+
+<pre><span id="VALgeev_min_lwork"><span class="keyword">val</span> geev_min_lwork</span> : <code class="type">?vectors:bool -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALgeev_opt_lwork"><span class="keyword">val</span> geev_opt_lwork</span> : <code class="type">?vl:('n, 'n, 'vl_cd) <a href="Slap.S.html#TYPEmat">mat</a> option -><br>       ?vr:('n, 'n, 'vr_cd) <a href="Slap.S.html#TYPEmat">mat</a> option -><br>       ?wr:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?wi:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALgeev"><span class="keyword">val</span> geev</span> : <code class="type">?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?vl:('n, 'n, 'vl_cd) <a href="Slap.S.html#TYPEmat">mat</a> option -><br>       ?vr:('n, 'n, 'vr_cd) <a href="Slap.S.html#TYPEmat">mat</a> option -><br>       ?wr:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?wi:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('n, 'n, 'vl_cd) <a href="Slap.S.html#TYPEmat">mat</a> option * ('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> *<br>       ('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> * ('n, 'n, 'vr_cd) <a href="Slap.S.html#TYPEmat">mat</a> option</code></pre><br>
+<h3 id="3_Symmetricmatrixeigenvalueandsingularvalueproblemssimpledrivers">Symmetric-matrix eigenvalue and singular value problems
+         (simple drivers)</h3><br>
+<br>
+<h4 id="4_syev">syev</h4><br>
+
+<pre><span id="TYPEsyev_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> syev_min_lwork</span> </pre>
+
+
+<pre><span id="VALsyev_min_lwork"><span class="keyword">val</span> syev_min_lwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEsyev_min_lwork">syev_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALsyev_opt_lwork"><span class="keyword">val</span> syev_opt_lwork</span> : <code class="type">?vectors:bool -><br>       ?up:bool -> ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALsyev"><span class="keyword">val</span> syev</span> : <code class="type">?vectors:bool -><br>       ?up:bool -><br>       ?w:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'cnt) <a href="Slap.S.html#TYPEvec">vec</a></code></pre><br>
+<h4 id="4_syevd">syevd</h4><br>
+
+<pre><span id="VALsyevd_min_lwork"><span class="keyword">val</span> syevd_min_lwork</span> : <code class="type">vectors:bool -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALsyevd_min_liwork"><span class="keyword">val</span> syevd_min_liwork</span> : <code class="type">vectors:bool -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALsyevd_opt_lwork"><span class="keyword">val</span> syevd_opt_lwork</span> : <code class="type">?vectors:bool -><br>       ?up:bool -> ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALsyevd_opt_liwork"><span class="keyword">val</span> syevd_opt_liwork</span> : <code class="type">?vectors:bool -><br>       ?up:bool -> ('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALsyevd"><span class="keyword">val</span> syevd</span> : <code class="type">?vectors:bool -><br>       ?up:bool -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ?w:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'w_cd) <a href="Slap.S.html#TYPEvec">vec</a></code></pre><br>
+<h3 id="3_SymmetricmatrixeigenvalueandsingularvalueproblemsexpertRRRdrivers">Symmetric-matrix eigenvalue and singular value problems
+       (expert &amp; RRR drivers)</h3><br>
+<br>
+<h4 id="4_syevr">syevr</h4><br>
+
+<pre><span id="TYPEsyevr_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> syevr_min_lwork</span> </pre>
+
+
+<pre><span id="VALsyevr_min_lwork"><span class="keyword">val</span> syevr_min_lwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEsyevr_min_lwork">syevr_min_lwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="TYPEsyevr_min_liwork"><span class="keyword">type</span> <code class="type">'n</code> syevr_min_liwork</span> </pre>
+
+
+<pre><span id="VALsyevr_min_liwork"><span class="keyword">val</span> syevr_min_liwork</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.S.html#TYPEsyevr_min_liwork">syevr_min_liwork</a> <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre>
+<pre><span id="VALsyevr_opt_lwork"><span class="keyword">val</span> syevr_opt_lwork</span> : <code class="type">?vectors:bool -><br>       ?range:[ `A | `I of int * int | `V of float * float ] -><br>       ?up:bool -><br>       ?abstol:float -> ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALsyevr_opt_liwork"><span class="keyword">val</span> syevr_opt_liwork</span> : <code class="type">?vectors:bool -><br>       ?range:[ `A | `I of int * int | `V of float * float ] -><br>       ?up:bool -><br>       ?abstol:float -> ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span class="keyword">module type</span> <a href="Slap.S.SYEVR_RESULT.html">SYEVR_RESULT</a> = <code class="code">sig</code> <a href="Slap.S.SYEVR_RESULT.html">..</a> <code class="code">end</code></pre><div class="info">
+The signature of returned modules of <code class="code">syevr_dyn</code>.
+</div>
+
+<pre><span id="TYPEsyevr_result"><span class="keyword">type</span> <code class="type">'n</code> syevr_result</span> = <code class="type">(module Slap.S.SYEVR_RESULT with type n = 'n)</code> </pre>
+
+
+<pre><span id="VALsyevr_dyn"><span class="keyword">val</span> syevr_dyn</span> : <code class="type">?vectors:bool -><br>       ?range:[ `A | `I of int * int | `V of float * float ] -><br>       ?up:bool -><br>       ?abstol:float -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ?w:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?z:('n, 'k, 'z_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ?isuppz:(('k, 'k) <a href="Slap.Size.html#TYPEadd">Slap.Size.add</a>, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Common.html#TYPEint32_vec">Slap.Common.int32_vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> 'n <a href="Slap.S.html#TYPEsyevr_result">syevr_result</a></code></pre><div class="info ">
+<code class="code">syevr_dyn ?vectors ?range ?up ?abstol ?work ?iwork ?w ?z ?isuppz a</code>
+    computes selected eigenvalues <code class="code">w</code> and, optionally, eigenvectors <code class="code">z</code> of a
+    real symmetric matrix <code class="code">a</code>.
+<p>
+
+    Usage:
+<pre class="codepre"><code class="code">module X = (val syevr_dyn ?vectors ?range ?up ?abstol ?work ?iwork ?w ?z ?isuppz a
+                : SYEVR_RESULT with type N.n = nn)
+</code></pre>
+    where type <code class="code">nn</code> is the size of symmetric matrix <code class="code">a</code>.
+    The returned module <code class="code">X</code> contains tuple <code class="code">X.value = (m, w, z, isuppz)</code> and
+    type <code class="code">X.m</code> for the size <code class="code">m</code>:
+<p>
+<ul>
+<li>size <code class="code">m</code> (with type <code class="code">X.m</code>) is the number of eigenvalues.</li>
+<li><code class="code">n</code>-dimensional vector <code class="code">w</code> contains the <code class="code">m</code> eigenvalues in ascending order.</li>
+<li><code class="code">n</code>-by-<code class="code">m</code> matrix <code class="code">z</code> contains the <code class="code">m</code> eigenvectors in same order.</li>
+<li><code class="code">2*m</code>-dimensional vector <code class="code">isuppz</code> indicates the nonzero elements in <code class="code">z</code>.</li>
+</ul>
+<br>
+</div>
+<br>
+<h4 id="4_sygv">sygv</h4><br>
+
+<pre><span id="VALsygv_opt_lwork"><span class="keyword">val</span> sygv_opt_lwork</span> : <code class="type">?vectors:bool -><br>       ?up:bool -><br>       ?itype:[ `AB | `A_B | `BA ] -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('n, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> (module Slap.Size.SIZE)</code></pre>
+<pre><span id="VALsygv"><span class="keyword">val</span> sygv</span> : <code class="type">?vectors:bool -><br>       ?up:bool -><br>       ?work:('lwork, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?w:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">vec</a> -><br>       ?itype:[ `AB | `A_B | `BA ] -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">mat</a> -><br>       ('n, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">mat</a> -> ('n, 'cnt) <a href="Slap.S.html#TYPEvec">vec</a></code></pre><div class="info ">
+<code class="code">sygv ?vectors ?up ?work ?w ?itype a b</code> solves a real generalized symmetric
+    definite eigenproblem:<ul>
+<li><code class="code">a * x = lambda * b * x</code> if <code class="code">itype</code> is <code class="code">`A_B</code>;</li>
+<li><code class="code">a * b * x = lambda * x</code> if <code class="code">itype</code> is <code class="code">`AB</code>;</li>
+<li><code class="code">b * a * x = lambda * x</code> if <code class="code">itype</code> is <code class="code">`BA</code>.</li>
+</ul>
+<br>
+<b>Raises</b> <code>Failure</code> if the function fails to converge.<br>
+<b>Returns</b> vector <code class="code">w</code> of eigenvalues in ascending order.<br>
+</div>
+<div class="param_info"><code class="code">vectors</code> : default = <code class="code">true</code>.</div>
+<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code>.</div>
+<div class="param_info"><code class="code">work</code> : default = an optimum-length workspace.</div>
+<div class="param_info"><code class="code">w</code> : default = a newly-allocated <code class="code">'n</code>-dimensional vector.</div>
+</body></html>

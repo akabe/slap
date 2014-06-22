@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="next" href="Slap.C.Mat.html">
+<link rel="Up" href="Slap.C.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Slap" rel="Chapter" href="Slap.html"><link title="Creation of vectors" rel="Section" href="#2_Creationofvectors">
+<link title="Accessors" rel="Section" href="#2_Accessors">
+<link title="Basic operations" rel="Section" href="#2_Basicoperations">
+<link title="Type conversion" rel="Section" href="#2_Typeconversion">
+<link title="Iterators" rel="Section" href="#2_Iterators">
+<link title="Arithmetic operations" rel="Section" href="#2_Arithmeticoperations">
+<link title="Creation of vectors" rel="Section" href="#2_Creationofvectors">
+<title>Slap.C.Vec</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="Slap.C.html" title="Slap.C">Up</a>
+&nbsp;<a class="post" href="Slap.C.Mat.html" title="Slap.C.Mat">Next</a>
+</div>
+<h1>Module <a href="type_Slap.C.Vec.html">Slap.C.Vec</a></h1>
+
+<pre><span class="keyword">module</span> Vec: <code class="code">sig</code> <a href="Slap.C.Vec.html">..</a> <code class="code">end</code></pre><hr width="100%">
+
+<pre><span class="keyword">module type</span> <a href="Slap.C.Vec.CNTVEC.html">CNTVEC</a> = <code class="code">sig</code> <a href="Slap.C.Vec.CNTVEC.html">..</a> <code class="code">end</code></pre><div class="info">
+The signature of modules containing dynamically-sized contiguous vectors.
+</div>
+
+<pre><span class="keyword">module type</span> <a href="Slap.C.Vec.DSCVEC.html">DSCVEC</a> = <code class="code">sig</code> <a href="Slap.C.Vec.DSCVEC.html">..</a> <code class="code">end</code></pre><div class="info">
+The signature of modules containing dynamically-sized discrete vectors.
+</div>
+<br>
+<h2 id="2_Creationofvectors">Creation of vectors</h2><br>
+
+<pre><span id="VALempty"><span class="keyword">val</span> empty</span> : <code class="type">(<a href="Slap.Size.html#TYPEz">Slap.Size.z</a>, 'cnt) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+An empty vector.<br>
+</div>
+
+<pre><span id="VALcreate"><span class="keyword">val</span> create</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('n, 'cnt) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+<code class="code">create n</code><br>
+<b>Returns</b> a fresh <code class="code">n</code>-dimensional vector (not initialized).<br>
+</div>
+
+<pre><span id="VALmake"><span class="keyword">val</span> make</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> ('n, 'cnt) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+<code class="code">make n a</code><br>
+<b>Returns</b> a fresh <code class="code">n</code>-dimensional vector initialized with <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALmake0"><span class="keyword">val</span> make0</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('n, 'cnt) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+<code class="code">zeros n</code><br>
+<b>Returns</b> a fresh <code class="code">n</code>-dimensional vector initialized with <code class="code">0</code>.<br>
+</div>
+
+<pre><span id="VALmake1"><span class="keyword">val</span> make1</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('n, 'cnt) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+<code class="code">make1 n</code><br>
+<b>Returns</b> a fresh <code class="code">n</code>-dimensional vector initialized with <code class="code">1</code>.<br>
+</div>
+
+<pre><span id="VALinit"><span class="keyword">val</span> init</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> (int -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a>) -> ('n, 'cnt) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+<code class="code">init n f</code><br>
+<b>Returns</b> a fresh vector <code class="code">(f 1, ..., f n)</code> with <code class="code">n</code> elements.<br>
+</div>
+<br>
+<h2 id="2_Accessors">Accessors</h2><br>
+
+<pre><span id="VALdim"><span class="keyword">val</span> dim</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre><div class="info ">
+<code class="code">dim x</code><br>
+<b>Returns</b> the dimension of the vector <code class="code">x</code>.<br>
+</div>
+
+<pre><span id="VALget_dyn"><span class="keyword">val</span> get_dyn</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> int -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a></code></pre><div class="info ">
+<code class="code">get_dyn x i</code><br>
+<b>Returns</b> the <code class="code">i</code>-th element of the vector <code class="code">x</code>.<br>
+</div>
+
+<pre><span id="VALset_dyn"><span class="keyword">val</span> set_dyn</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> int -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> unit</code></pre><div class="info ">
+<code class="code">set_dyn x i a</code> assigns <code class="code">a</code> to the <code class="code">i</code>-th element of the vector <code class="code">x</code>.<br>
+</div>
+
+<pre><span id="VALunsafe_get"><span class="keyword">val</span> unsafe_get</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> int -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a></code></pre><div class="info ">
+Like <a href="Slap.Vec.html#VALget_dyn"><code class="code">Slap.Vec.get_dyn</code></a>, but size checking is not always performed.<br>
+</div>
+
+<pre><span id="VALunsafe_set"><span class="keyword">val</span> unsafe_set</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> int -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> unit</code></pre><div class="info ">
+Like <a href="Slap.Vec.html#VALset_dyn"><code class="code">Slap.Vec.set_dyn</code></a>, but size checking is not always performed.<br>
+</div>
+
+<pre><span id="VALreplace_dyn"><span class="keyword">val</span> replace_dyn</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> int -> (<a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a>) -> unit</code></pre><div class="info ">
+<code class="code">replace_dyn v i f</code> is <code class="code">set_dyn v i (f (get_dyn v i))</code>.<br>
+</div>
+<br>
+<h2 id="2_Basicoperations">Basic operations</h2><br>
+
+<pre><span id="VALcopy"><span class="keyword">val</span> copy</span> : <code class="type">?y:('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'x_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+<code class="code">copy ?y x</code> copies the vector <code class="code">x</code> to the vector <code class="code">y</code> with the BLAS-1
+    function <code class="code">[sdcz]copy</code>.<br>
+<b>Returns</b> the vector <code class="code">y</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">y</code> : default = a fresh vector.</div>
+
+<pre><span id="VALfill"><span class="keyword">val</span> fill</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> unit</code></pre><div class="info ">
+Fill the given vector with the given value.<br>
+</div>
+
+<pre><span id="VALappend"><span class="keyword">val</span> append</span> : <code class="type">('m, 'x_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -><br>       ('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> (('m, 'n) <a href="Slap.Size.html#TYPEadd">Slap.Size.add</a>, 'cnt) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+Concatenate two vectors.<br>
+</div>
+<br>
+<h2 id="2_Typeconversion">Type conversion</h2><br>
+
+<pre><span id="VALto_array"><span class="keyword">val</span> to_array</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> array</code></pre><div class="info ">
+<code class="code">to_array x</code><br>
+<b>Returns</b> the array of all the elements of the vector <code class="code">x</code>.<br>
+</div>
+
+<pre><span id="VALof_array_dyn"><span class="keyword">val</span> of_array_dyn</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> array -> ('n, 'cnt) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+<code class="code">of_array_dyn n [|a1; ...; an|]</code><br>
+<b>Raises</b> <code>Invalid_argument</code> the length of the given array is not equal to <code class="code">n</code>.<br>
+<b>Returns</b> a fresh vector <code class="code">(a1, ..., an)</code>.<br>
+</div>
+
+<pre><span id="VALof_array"><span class="keyword">val</span> of_array</span> : <code class="type"><a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> array -> (module Slap.C.Vec.CNTVEC)</code></pre><div class="info ">
+<code class="code">module V = (val of_array [|a1; ...; an|] : CNTVEC)</code><br>
+<b>Returns</b> module <code class="code">V</code> containing the vector <code class="code">V.value</code> (= <code class="code">(a1, ..., an)</code>) that
+    has the type <code class="code">(V.n, 'cnt) vec</code> with a generative phantom type <code class="code">V.n</code> as a
+    package of an existential quantified sized type like
+    <code class="code">exists n. (n, 'cnt) vec</code>.<br>
+</div>
+
+<pre><span class="keyword">module</span> <a href="Slap.C.Vec.Of_array.html">Of_array</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">X</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block">
+<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type"><a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> array</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap.C.Vec.CNTVEC.html">CNTVEC</a></code><code class="type"> </code></div></pre><div class="info">
+A functor version of <code class="code">of_array</code>.
+</div>
+
+<pre><span id="VALto_list"><span class="keyword">val</span> to_list</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> list</code></pre><div class="info ">
+<code class="code">to_list x</code><br>
+<b>Returns</b> the list of all the elements of the vector <code class="code">x</code>.<br>
+</div>
+
+<pre><span id="VALof_list_dyn"><span class="keyword">val</span> of_list_dyn</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> list -> ('n, 'cnt) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+<code class="code">of_list_dyn n [a1; ...; an]</code><br>
+<b>Raises</b> <code>Invalid_argument</code> the length of the given list is not equal to <code class="code">n</code>.<br>
+<b>Returns</b> a fresh vector <code class="code">(a1, ..., an)</code>.<br>
+</div>
+
+<pre><span id="VALof_list"><span class="keyword">val</span> of_list</span> : <code class="type"><a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> list -> (module Slap.C.Vec.CNTVEC)</code></pre><div class="info ">
+<code class="code">module V = (val of_list [a1; ...; an] : CNTVEC)</code><br>
+<b>Returns</b> module <code class="code">V</code> containing the vector <code class="code">V.value</code> (= <code class="code">(a1, ..., an)</code>) that
+    has the type <code class="code">(V.n, 'cnt) vec</code> with a generative phantom type <code class="code">V.n</code> as a
+    package of an existential quantified sized type like
+    <code class="code">exists n. (n, 'cnt) vec</code>.<br>
+</div>
+
+<pre><span class="keyword">module</span> <a href="Slap.C.Vec.Of_list.html">Of_list</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">X</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block">
+<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type"><a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> list</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap.C.Vec.CNTVEC.html">CNTVEC</a></code><code class="type"> </code></div></pre><div class="info">
+A functor version of <code class="code">of_list</code>.
+</div>
+<br>
+<h2 id="2_Iterators">Iterators</h2><br>
+
+<pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">(<a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a>) -><br>       ?y:('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'x_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+<code class="code">map f ?y (x1, ..., xn)</code> is <code class="code">(f x1, ..., f xn)</code>.<br>
+<b>Returns</b> the vector <code class="code">y</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">y</code> : default = a fresh vector.</div>
+
+<pre><span id="VALmapi"><span class="keyword">val</span> mapi</span> : <code class="type">(int -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a>) -><br>       ?y:('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'x_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
+<code class="code">mapi f ?y (x1, ..., xn)</code> is <code class="code">(f 1 x1, ..., f n xn)</code> with
+   the vector's dimension <code class="code">n</code>.<br>
+<b>Returns</b> the vector <code class="code">y</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">y</code> : default = a fresh vector.</div>
+
+<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">('accum -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> 'accum) -><br>       'accum -> ('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_left f init (x1, x2, ..., xn)</code> is
+   <code class="code">f (... (f (f init x1) x2) ...) xn</code>.<br>
+</div>
+
+<pre><span id="VALfold_lefti"><span class="keyword">val</span> fold_lefti</span> : <code class="type">(int -> 'accum -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> 'accum) -><br>       'accum -> ('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_lefti f init (x1, x2, ..., xn)</code> is
+   <code class="code">f n (... (f 2 (f 1 init x1) x2) ...) xn</code> with the vector's dimension <code class="code">n</code>.<br>
+</div>
+
+<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">(<a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> 'accum -> 'accum) -><br>       ('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_right f (x1, x2, ..., xn) init</code> is
+   <code class="code">f x1 (f x2 (... (f xn init) ...))</code>.<br>
+</div>
+
+<pre><span id="VALfold_righti"><span class="keyword">val</span> fold_righti</span> : <code class="type">(int -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> 'accum -> 'accum) -><br>       ('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_righti f (x1, x2, ..., xn) init</code> is
+   <code class="code">f 1 x1 (f 2 x2 (... (f n xn init) ...))</code> with the vector's dimension <code class="code">n</code>.<br>
+</div>
+
+<pre><span id="VALreplace_all"><span class="keyword">val</span> replace_all</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> (<a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a>) -> unit</code></pre><div class="info ">
+<code class="code">replace_all x f</code> modifies the vector <code class="code">x</code> in place
+   -- the <code class="code">i</code>-th element <code class="code">xi</code> of <code class="code">x</code> will be set to <code class="code">f xi</code>.<br>
+</div>
+
+<pre><span id="VALreplace_alli"><span class="keyword">val</span> replace_alli</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> (int -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a>) -> unit</code></pre><div class="info ">
+<code class="code">replace_alli x f</code> modifies the vector <code class="code">x</code> in place
+   -- the <code class="code">i</code>-th element <code class="code">xi</code> of <code class="code">x</code> will be set to <code class="code">f i xi</code>.<br>
+</div>
+
+<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">(<a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> unit) -> ('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> unit</code></pre><div class="info ">
+<code class="code">iter f (x1, x2, ..., xn)</code> is <code class="code">f x1; f x2; ...; f xn</code>.<br>
+</div>
+
+<pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">(int -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> unit) -> ('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> unit</code></pre><div class="info ">
+<code class="code">iteri f (x1, x2, ..., xn)</code> is <code class="code">f 1 x1; f 2 x2; ...; f n xn</code>.<br>
+</div>
+<br>
+<h2 id="2_Arithmeticoperations">Arithmetic operations</h2><br>
+
+<pre><span id="VALmax"><span class="keyword">val</span> max</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a></code></pre>
+<pre><span id="VALmin"><span class="keyword">val</span> min</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a></code></pre>
+<pre><span id="VALsum"><span class="keyword">val</span> sum</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a></code></pre>
+<pre><span id="VALprod"><span class="keyword">val</span> prod</span> : <code class="type">('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a></code></pre>
+<pre><span id="VALsqr_nrm2"><span class="keyword">val</span> sqr_nrm2</span> : <code class="type">?stable:bool -> ('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> float</code></pre>
+<pre><span id="VALssqr"><span class="keyword">val</span> ssqr</span> : <code class="type">?c:<a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> ('n, 'cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a></code></pre>
+<pre><span id="VALsort"><span class="keyword">val</span> sort</span> : <code class="type">?cmp:(<a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> -> int) -><br>       ?decr:bool -><br>       ?p:('n, 'p_cd) <a href="Slap.Common.html#TYPEint_vec">Slap.Common.int_vec</a> -> ('n, 'x_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> unit</code></pre>
+<pre><span id="VALneg"><span class="keyword">val</span> neg</span> : <code class="type">?y:('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'x_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre>
+<pre><span id="VALadd"><span class="keyword">val</span> add</span> : <code class="type">?z:('n, 'z_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -><br>       ('n, 'x_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'z_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre>
+<pre><span id="VALsub"><span class="keyword">val</span> sub</span> : <code class="type">?z:('n, 'z_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -><br>       ('n, 'x_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'z_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre>
+<pre><span id="VALmul"><span class="keyword">val</span> mul</span> : <code class="type">?z:('n, 'z_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -><br>       ('n, 'x_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'z_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre>
+<pre><span id="VALdiv"><span class="keyword">val</span> div</span> : <code class="type">?z:('n, 'z_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -><br>       ('n, 'x_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'z_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre>
+<pre><span id="VALssqr_diff"><span class="keyword">val</span> ssqr_diff</span> : <code class="type">('n, 'x_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> ('n, 'y_cd) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a> -> <a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a></code></pre><br>
+<h2 id="2_Creationofvectors">Creation of vectors</h2><br>
+
+<pre><span id="VALrandom"><span class="keyword">val</span> random</span> : <code class="type">?rnd_state:Random.State.t -><br>       ?re_from:float -><br>       ?re_range:float -><br>       ?im_from:float -> ?im_range:float -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('n, 'cnt) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre></body></html>

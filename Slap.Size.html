@@ -4,104 +4,160 @@
 <link rel="stylesheet" href="style.css" type="text/css">
 <meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
 <link rel="Start" href="index.html">
-<link rel="previous" href="Slap.Common.html">
 <link rel="next" href="Slap.Vec.html">
 <link rel="Up" href="Slap.html">
 <link title="Index of types" rel=Appendix href="index_types.html">
 <link title="Index of values" rel=Appendix href="index_values.html">
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
-<link title="Slap" rel="Chapter" href="Slap.html">
-<link title="Slap_common" rel="Chapter" href="Slap_common.html">
-<link title="Slap_size" rel="Chapter" href="Slap_size.html">
-<link title="Slap_vec" rel="Chapter" href="Slap_vec.html">
-<link title="Slap_mat" rel="Chapter" href="Slap_mat.html">
-<link title="Slap_utils" rel="Chapter" href="Slap_utils.html">
-<link title="Slap_io" rel="Chapter" href="Slap_io.html">
-<link title="Slap_SD" rel="Chapter" href="Slap_SD.html">
-<link title="Slap_CZ" rel="Chapter" href="Slap_CZ.html">
-<link title="Slap_SDCZ_types" rel="Chapter" href="Slap_SDCZ_types.html">
-<link title="Slap_SDCZ_vec" rel="Chapter" href="Slap_SDCZ_vec.html">
-<link title="Slap_SDCZ_mat" rel="Chapter" href="Slap_SDCZ_mat.html">
-<link title="Slap_SDCZ_la" rel="Chapter" href="Slap_SDCZ_la.html">
-<link title="Slap_SD_vec" rel="Chapter" href="Slap_SD_vec.html">
-<link title="Slap_SD_mat" rel="Chapter" href="Slap_SD_mat.html">
-<link title="Slap_SD_la" rel="Chapter" href="Slap_SD_la.html">
-<link title="Slap_CZ_vec" rel="Chapter" href="Slap_CZ_vec.html">
-<link title="Slap_CZ_mat" rel="Chapter" href="Slap_CZ_mat.html">
-<link title="Slap_CZ_la" rel="Chapter" href="Slap_CZ_la.html"><link title="Constants" rel="Section" href="#2_Constants">
+<link title="Slap" rel="Chapter" href="Slap.html"><link title="Constants" rel="Section" href="#2_Constants">
 <link title="Arithmetric operations" rel="Section" href="#2_Arithmetricoperations">
 <link title="Iterators" rel="Section" href="#2_Iterators">
-<link title="Conversion between sizes and integers" rel="Section" href="#2_Conversionbetweensizesandintegers">
+<link title="Conversion between a size and an integer" rel="Section" href="#2_Conversionbetweenasizeandaninteger">
 <title>Slap.Size</title>
 </head>
 <body>
-<div class="navbar"><a class="pre" href="Slap.Common.html" title="Slap.Common">Previous</a>
-&nbsp;<a class="up" href="Slap.html" title="Slap">Up</a>
+<div class="navbar">&nbsp;<a class="up" href="Slap.html" title="Slap">Up</a>
 &nbsp;<a class="post" href="Slap.Vec.html" title="Slap.Vec">Next</a>
 </div>
 <h1>Module <a href="type_Slap.Size.html">Slap.Size</a></h1>
 
-<pre><span class="keyword">module</span> Size: <code class="type"><a href="Slap_size.S.html">Slap_size.S</a></code><code class="type">  with module Common = Common</code></pre><div class="info module top">
-Operations on sizes.<br>
+<pre><span class="keyword">module</span> Size: <code class="code">sig</code> <a href="Slap.Size.html">..</a> <code class="code">end</code></pre><div class="info module top">
+Sizes (dimensions of vectors and matrices).<br>
 </div>
 <hr width="100%">
 
-<pre><span class="keyword">module</span> <a href="Slap_size.S.Common.html">Common</a>: <code class="type"><a href="Slap_common.S.html">Slap_common.S</a></code><code class="type"> </code></pre><div class="info">
-= <a href="Slap.Common.html"><code class="code">Slap.Common</code></a>
+<pre><span id="TYPEt"><span class="keyword">type</span> <code class="type">'n</code> t</span> = private <code class="type">int</code> </pre>
+<div class="info ">
+A singleton type on sizes (i.e., vectors' and matrices' dimensions).
+<p>
+
+    Evaluation of a term with singleton type <code class="code">'n Size.t</code> <i>always</i> results in
+    the natural number corresponding to <code class="code">'n</code>.<br>
 </div>
+
 <br>
 <h2 id="2_Constants">Constants</h2><br>
 
-<pre><span id="VALzero"><span class="keyword">val</span> zero</span> : <code class="type">Common.z Common.size</code></pre>
-<pre><span id="VALone"><span class="keyword">val</span> one</span> : <code class="type">Common.z Common.s Common.size</code></pre>
-<pre><span id="VALtwo"><span class="keyword">val</span> two</span> : <code class="type">Common.z Common.s Common.s Common.size</code></pre>
-<pre><span id="VALthree"><span class="keyword">val</span> three</span> : <code class="type">Common.z Common.s Common.s Common.s Common.size</code></pre>
-<pre><span id="VALfour"><span class="keyword">val</span> four</span> : <code class="type">Common.z Common.s Common.s Common.s Common.s Common.size</code></pre>
-<pre><span id="VALfive"><span class="keyword">val</span> five</span> : <code class="type">Common.z Common.s Common.s Common.s Common.s Common.s Common.size</code></pre>
-<pre><span id="TYPEten"><span class="keyword">type</span> <code class="type"></code>ten</span> = <code class="type">Common.z Common.s Common.s Common.s Common.s Common.s Common.s Common.s<br>       Common.s Common.s Common.s</code> </pre>
+<pre><span id="TYPEz"><span class="keyword">type</span> <code class="type"></code>z</span> </pre>
 
 
-<pre><span id="VALten"><span class="keyword">val</span> ten</span> : <code class="type"><a href="Slap_size.S.html#TYPEten">ten</a> Common.size</code></pre><br>
+<pre><span id="TYPEs"><span class="keyword">type</span> <code class="type">'n</code> s</span> </pre>
+
+
+<pre><span id="VALzero"><span class="keyword">val</span> zero</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="VALone"><span class="keyword">val</span> one</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="VALtwo"><span class="keyword">val</span> two</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="VALthree"><span class="keyword">val</span> three</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="VALfour"><span class="keyword">val</span> four</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="VALfive"><span class="keyword">val</span> five</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a><br>       <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="TYPEten"><span class="keyword">type</span> <code class="type"></code>ten</span> = <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a><br>       <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a></code> </pre>
+
+
+<pre><span id="VALten"><span class="keyword">val</span> ten</span> : <code class="type"><a href="Slap.Size.html#TYPEten">ten</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><br>
 <h2 id="2_Arithmetricoperations">Arithmetric operations</h2><br>
 
-<pre><span id="VALsucc"><span class="keyword">val</span> succ</span> : <code class="type">'n Common.size -> 'n Common.s Common.size</code></pre>
-<pre><span id="VALadd"><span class="keyword">val</span> add</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.add Common.size</code></pre>
-<pre><span id="VALsub_dyn"><span class="keyword">val</span> sub_dyn</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.sub Common.size</code></pre>
-<pre><span id="VALmul"><span class="keyword">val</span> mul</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.mul Common.size</code></pre>
-<pre><span id="VALdiv_dyn"><span class="keyword">val</span> div_dyn</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.div Common.size</code></pre>
-<pre><span id="VALmin"><span class="keyword">val</span> min</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.min Common.size</code></pre>
-<pre><span id="VALmax"><span class="keyword">val</span> max</span> : <code class="type">'m Common.size -> 'n Common.size -> ('m, 'n) Common.max Common.size</code></pre><br>
+<pre><span id="VALsucc"><span class="keyword">val</span> succ</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">succ n</code><br>
+<b>Returns</b> <code class="code">n</code> + <code class="code">1</code><br>
+</div>
+
+<pre><span id="TYPEadd"><span class="keyword">type</span> <code class="type">('m, 'n)</code> add</span> </pre>
+
+
+<pre><span id="VALadd"><span class="keyword">val</span> add</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEadd">add</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">add m n</code><br>
+<b>Returns</b> <code class="code">m</code> + <code class="code">n</code><br>
+</div>
+
+<pre><span id="TYPEsub"><span class="keyword">type</span> <code class="type">('m, 'n)</code> sub</span> </pre>
+
+
+<pre><span id="VALsub_dyn"><span class="keyword">val</span> sub_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEsub">sub</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">sub_dyn m n</code><br>
+<b>Raises</b> <code>Invalid_argument</code> <code class="code">m</code> &lt; <code class="code">n</code><br>
+<b>Returns</b> <code class="code">m</code> - <code class="code">n</code><br>
+</div>
+
+<pre><span id="TYPEmul"><span class="keyword">type</span> <code class="type">('m, 'n)</code> mul</span> </pre>
+
+
+<pre><span id="VALmul"><span class="keyword">val</span> mul</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEmul">mul</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">mul m n</code><br>
+<b>Returns</b> the product of <code class="code">m</code> and <code class="code">n</code><br>
+</div>
+
+<pre><span id="TYPEdiv"><span class="keyword">type</span> <code class="type">('m, 'n)</code> div</span> </pre>
+
+
+<pre><span id="VALdiv_dyn"><span class="keyword">val</span> div_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEdiv">div</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">div_dyn m n</code><br>
+<b>Raises</b> <code>Invalid_argument</code> <code class="code">n</code> is zero<br>
+<b>Returns</b> <code class="code">m</code> / <code class="code">n</code><br>
+</div>
+
+<pre><span id="TYPEmin"><span class="keyword">type</span> <code class="type">('m, 'n)</code> min</span> </pre>
+
+
+<pre><span id="VALmin"><span class="keyword">val</span> min</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEmin">min</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">min m n</code><br>
+<b>Returns</b> the minimum of <code class="code">m</code> and <code class="code">n</code><br>
+</div>
+
+<pre><span id="TYPEmax"><span class="keyword">type</span> <code class="type">('m, 'n)</code> max</span> </pre>
+
+
+<pre><span id="VALmax"><span class="keyword">val</span> max</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEmax">max</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">max m n</code><br>
+<b>Returns</b> the maximum of <code class="code">m</code> and <code class="code">n</code><br>
+</div>
+<br>
 <h2 id="2_Iterators">Iterators</h2>
 <p>
 
-      The following functions are iterators over <code class="code">[1; 2; ...; n]</code> where <code class="code">n</code> is
-      a size.<br>
+    The following functions are iterators over <code class="code">[1; 2; ...; n]</code> where <code class="code">n</code> is a
+    size.<br>
 
-<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">f:('a -> int -> 'a) -> init:'a -> 'n Common.size -> 'a</code></pre><div class="info ">
-<code class="code">fold_left ~f ~init n</code> is
-      <code class="code">f (... (f (f init 1) 2) ...) (to_int n)</code>.<br>
+<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">('accum -> int -> 'accum) -> 'accum -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_left f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) (to_int n)</code>.<br>
 </div>
 
-<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">f:(int -> 'a -> 'a) -> 'n Common.size -> init:'a -> 'a</code></pre><div class="info ">
-<code class="code">fold_right ~f n ~init</code> is
-      <code class="code">f 1 (f 2 (... (f (to_int n) init) ...))</code>.<br>
+<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">(int -> 'accum -> 'accum) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_right f n init</code> is <code class="code">f 1 (f 2 (... (f (to_int n) init) ...))</code>.<br>
 </div>
 
-<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">f:(int -> unit) -> 'n Common.size -> unit</code></pre><div class="info ">
-<code class="code">iter ~f n</code> is <code class="code">f 1; f 2; ...; f (to_int n)</code>.<br>
+<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">(int -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+<code class="code">iter f n</code> is <code class="code">f 1; f 2; ...; f (to_int n)</code>.<br>
 </div>
 
-<pre><span id="VALriter"><span class="keyword">val</span> riter</span> : <code class="type">f:(int -> unit) -> 'n Common.size -> unit</code></pre><div class="info ">
-<code class="code">riter ~f n</code> is <code class="code">f (to_int n); ...; f 2; f 1</code>.<br>
+<pre><span id="VALriter"><span class="keyword">val</span> riter</span> : <code class="type">(int -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+<code class="code">riter f n</code> is <code class="code">f (to_int n); ...; f 2; f 1</code>.<br>
 </div>
 <br>
-<h2 id="2_Conversionbetweensizesandintegers">Conversion between sizes and integers</h2><br>
+<h2 id="2_Conversionbetweenasizeandaninteger">Conversion between a size and an integer</h2><br>
 
-<pre><span id="VALto_int"><span class="keyword">val</span> to_int</span> : <code class="type">'n Common.size -> int</code></pre><div class="info ">
+<pre><span class="keyword">module type</span> <a href="Slap.Size.SIZE.html">SIZE</a> = <code class="code">sig</code> <a href="Slap.Size.SIZE.html">..</a> <code class="code">end</code></pre><div class="info">
+The signature of modules as packages of types like <code class="code">exists n. n Size.t</code>.
+</div>
+
+<pre><span id="VALto_int"><span class="keyword">val</span> to_int</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">t</a> -> int</code></pre><div class="info ">
 Return the integer correponding to the given size.<br>
 </div>
 
-<pre><span class="keyword">module type</span> <a href="Slap_size.S.SIZE.html">SIZE</a> = <code class="code">sig</code> <a href="Slap_size.S.SIZE.html">..</a> <code class="code">end</code></pre>
-<pre><span class="keyword">module</span> <a href="Slap_size.S.Of_int_dyn.html">Of_int_dyn</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">N</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block">
-<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type">int</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap_size.S.SIZE.html">SIZE</a></code><code class="type"> </code></div></pre></body></html>
+<pre><span id="VALof_int_dyn"><span class="keyword">val</span> of_int_dyn</span> : <code class="type">int -> (module Slap.Size.SIZE)</code></pre><div class="info ">
+<code class="code">module N = (val of_int_dyn n : SIZE)</code><br>
+<b>Raises</b> <code>Invalid_argument</code> the given size is negative.<br>
+<b>Returns</b> module <code class="code">N</code> containing the size <code class="code">N.value</code> (= <code class="code">n</code>) that has the type
+    <code class="code">N.n Size.t</code> with a generative phantom type <code class="code">N.n</code> as a package of an
+    existential quantified sized type like <code class="code">exists n. n Size.t</code>.<br>
+</div>
+
+<pre><span id="VALunsafe_of_int"><span class="keyword">val</span> unsafe_of_int</span> : <code class="type">int -> (module Slap.Size.SIZE)</code></pre><div class="info ">
+Like <code class="code">of_int_dyn</code>, but dynamic size checking is not performed.<br>
+</div>
+
+<pre><span class="keyword">module</span> <a href="Slap.Size.Of_int_dyn.html">Of_int_dyn</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">N</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block">
+<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type">int</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap.Size.SIZE.html">SIZE</a></code><code class="type"> </code></div></pre><div class="info">
+A functor version of <code class="code">of_int_dyn</code>.
+</div>
+</body></html>

@@ -11,29 +11,12 @@
 <link title="Index of values" rel=Appendix href="index_values.html">
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
-<link title="Slap" rel="Chapter" href="Slap.html">
-<link title="Slap_common" rel="Chapter" href="Slap_common.html">
-<link title="Slap_size" rel="Chapter" href="Slap_size.html">
-<link title="Slap_vec" rel="Chapter" href="Slap_vec.html">
-<link title="Slap_mat" rel="Chapter" href="Slap_mat.html">
-<link title="Slap_utils" rel="Chapter" href="Slap_utils.html">
-<link title="Slap_io" rel="Chapter" href="Slap_io.html">
-<link title="Slap_SD" rel="Chapter" href="Slap_SD.html">
-<link title="Slap_CZ" rel="Chapter" href="Slap_CZ.html">
-<link title="Slap_SDCZ_types" rel="Chapter" href="Slap_SDCZ_types.html">
-<link title="Slap_SDCZ_vec" rel="Chapter" href="Slap_SDCZ_vec.html">
-<link title="Slap_SDCZ_mat" rel="Chapter" href="Slap_SDCZ_mat.html">
-<link title="Slap_SDCZ_la" rel="Chapter" href="Slap_SDCZ_la.html">
-<link title="Slap_SD_vec" rel="Chapter" href="Slap_SD_vec.html">
-<link title="Slap_SD_mat" rel="Chapter" href="Slap_SD_mat.html">
-<link title="Slap_SD_la" rel="Chapter" href="Slap_SD_la.html">
-<link title="Slap_CZ_vec" rel="Chapter" href="Slap_CZ_vec.html">
-<link title="Slap_CZ_mat" rel="Chapter" href="Slap_CZ_mat.html">
-<link title="Slap_CZ_la" rel="Chapter" href="Slap_CZ_la.html"><link title="Creation of vectors" rel="Section" href="#2_Creationofvectors">
+<link title="Slap" rel="Chapter" href="Slap.html"><link title="Creation of vectors" rel="Section" href="#2_Creationofvectors">
 <link title="Accessors" rel="Section" href="#2_Accessors">
+<link title="Iterators" rel="Section" href="#2_Iterators">
 <link title="Basic operations" rel="Section" href="#2_Basicoperations">
 <link title="Type conversion" rel="Section" href="#2_Typeconversion">
-<link title="Iterators" rel="Section" href="#2_Iterators">
+<link title="Subvectors" rel="Section" href="#2_Subvectors">
 <title>Slap.Vec</title>
 </head>
 <body>
@@ -43,161 +26,188 @@
 </div>
 <h1>Module <a href="type_Slap.Vec.html">Slap.Vec</a></h1>
 
-<pre><span class="keyword">module</span> Vec: <code class="type"><a href="Slap_vec.S.html">Slap_vec.S</a></code><code class="type">  with module Common = Common</code></pre><div class="info module top">
-Operations on vectors.<br>
+<pre><span class="keyword">module</span> Vec: <code class="code">sig</code> <a href="Slap.Vec.html">..</a> <code class="code">end</code></pre><div class="info module top">
+Sized vectors.<br>
 </div>
 <hr width="100%">
 
-<pre><span class="keyword">module</span> <a href="Slap_vec.S.Common.html">Common</a>: <code class="type"><a href="Slap_common.S.html">Slap_common.S</a></code><code class="type"> </code></pre><div class="info">
-= <a href="Slap.Common.html"><code class="code">Slap.Common</code></a>
+<pre><span id="TYPEt"><span class="keyword">type</span> <code class="type">('n, 'num, 'prec, 'cnt_or_dsc)</code> t</span> </pre>
+<div class="info ">
+<code class="code">('n, 'num, 'prec, 'cnt_or_dsc) t</code> is the type of <code class="code">'n</code>-dimensional vector
+    whose elements have OCaml type <code class="code">'num</code>, representation kind <code class="code">'prec</code> and
+    memory contiguity flag <code class="code">'cnt_or_dsc</code>.
+    The internal implementation is fortran-style one-dimensional big array.<br>
+</div>
+
+
+<pre><span id="VALcnt"><span class="keyword">val</span> cnt</span> : <code class="type">('n, 'num, 'prec, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Vec.html#TYPEt">t</a> -> ('n, 'num, 'prec, 'cnt) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
+Recover polymorphism of the fourth type parameter. (type coercion)<br>
 </div>
 <br>
 <h2 id="2_Creationofvectors">Creation of vectors</h2><br>
 
-<pre><span id="VALcreate"><span class="keyword">val</span> create</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'n Common.size -> ('n, 'num, 'prec, 'cnt) Common.vec</code></pre><div class="info ">
+<pre><span id="VALcreate"><span class="keyword">val</span> create</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('n, 'num, 'prec, 'cnt) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">create kind n</code><br>
 <b>Returns</b> a fresh <code class="code">n</code>-dimensional vector (not initialized).<br>
 </div>
 
-<pre><span id="VALmake"><span class="keyword">val</span> make</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'n Common.size -> 'num -> ('n, 'num, 'prec, 'cnt) Common.vec</code></pre><div class="info ">
+<pre><span id="VALmake"><span class="keyword">val</span> make</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'num -> ('n, 'num, 'prec, 'cnt) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">make kind n a</code><br>
 <b>Returns</b> a fresh <code class="code">n</code>-dimensional vector initialized with <code class="code">a</code>.<br>
 </div>
 
-<pre><span id="VALinit"><span class="keyword">val</span> init</span> : <code class="type">('a, 'b) Bigarray.kind -><br>       'n Common.size -> f:(int -> 'a) -> ('n, 'a, 'b, 'cnt) Common.vec</code></pre><div class="info ">
-<code class="code">init kind n ~f</code><br>
+<pre><span id="VALinit"><span class="keyword">val</span> init</span> : <code class="type">('a, 'b) Bigarray.kind -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> (int -> 'a) -> ('n, 'a, 'b, 'cnt) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">init kind n f</code><br>
 <b>Returns</b> a fresh vector <code class="code">(f 1, ..., f n)</code> with <code class="code">n</code> elements.<br>
 </div>
 <br>
 <h2 id="2_Accessors">Accessors</h2><br>
 
-<pre><span id="VALkind"><span class="keyword">val</span> kind</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> ('num, 'prec) Bigarray.kind</code></pre><div class="info ">
+<pre><span id="VALkind"><span class="keyword">val</span> kind</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> ('num, 'prec) Bigarray.kind</code></pre><div class="info ">
 <b>Returns</b> the kind of the given big array.<br>
 </div>
 
-<pre><span id="VALdim"><span class="keyword">val</span> dim</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> 'n Common.size</code></pre><div class="info ">
+<pre><span id="VALdim"><span class="keyword">val</span> dim</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre><div class="info ">
 <code class="code">dim x</code><br>
 <b>Returns</b> the dimension of the vector <code class="code">x</code>.<br>
 </div>
 
-<pre><span id="VALget_dyn"><span class="keyword">val</span> get_dyn</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> int -> 'num</code></pre><div class="info ">
+<pre><span id="VALget_dyn"><span class="keyword">val</span> get_dyn</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> int -> 'num</code></pre><div class="info ">
 <code class="code">get_dyn x i</code><br>
 <b>Returns</b> the <code class="code">i</code>-th element of the vector <code class="code">x</code>.<br>
 </div>
 
-<pre><span id="VALset_dyn"><span class="keyword">val</span> set_dyn</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> int -> 'num -> unit</code></pre><div class="info ">
+<pre><span id="VALset_dyn"><span class="keyword">val</span> set_dyn</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> int -> 'num -> unit</code></pre><div class="info ">
 <code class="code">set_dyn x i a</code> assigns <code class="code">a</code> to the <code class="code">i</code>-th element of the vector <code class="code">x</code>.<br>
 </div>
 
-<pre><span id="VALunsafe_get"><span class="keyword">val</span> unsafe_get</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> int -> 'num</code></pre><div class="info ">
-Like <code class="code">Slap.Vec.get_dyn</code>, but size checking is not always performed.<br>
+<pre><span id="VALunsafe_get"><span class="keyword">val</span> unsafe_get</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> int -> 'num</code></pre><div class="info ">
+Like <a href="Slap.Vec.html#VALget_dyn"><code class="code">Slap.Vec.get_dyn</code></a>, but size checking is not always performed.<br>
 </div>
 
-<pre><span id="VALunsafe_set"><span class="keyword">val</span> unsafe_set</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> int -> 'num -> unit</code></pre><div class="info ">
-Like <code class="code">Slap.Vec.set_dyn</code>, but size checking is not always performed.<br>
+<pre><span id="VALunsafe_set"><span class="keyword">val</span> unsafe_set</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> int -> 'num -> unit</code></pre><div class="info ">
+Like <a href="Slap.Vec.html#VALset_dyn"><code class="code">Slap.Vec.set_dyn</code></a>, but size checking is not always performed.<br>
 </div>
 
-<pre><span id="VALreplace_dyn"><span class="keyword">val</span> replace_dyn</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> int -> f:('num -> 'num) -> unit</code></pre><div class="info ">
-<code class="code">replace_dyn v i ~f</code> is <code class="code">set_dyn v i (f (get_dyn v i))</code>.<br>
+<pre><span id="VALreplace_dyn"><span class="keyword">val</span> replace_dyn</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> int -> ('num -> 'num) -> unit</code></pre><div class="info ">
+<code class="code">replace_dyn v i f</code> is <code class="code">set_dyn v i (f (get_dyn v i))</code>.<br>
+</div>
+<br>
+<h2 id="2_Iterators">Iterators</h2><br>
+
+<pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">('y_num, 'y_prec) Bigarray.kind -><br>       ('x_num -> 'y_num) -><br>       ?y:('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">map kind f ?y (x1, ..., xn)</code> is <code class="code">(f x1, ..., f xn)</code>.<br>
+<b>Returns</b> the vector <code class="code">y</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">y</code> : default = a fresh vector.</div>
+
+<pre><span id="VALmapi"><span class="keyword">val</span> mapi</span> : <code class="type">('y_num, 'y_prec) Bigarray.kind -><br>       (int -> 'x_num -> 'y_num) -><br>       ?y:('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">mapi kind f ?y (x1, ..., xn)</code> is <code class="code">(f 1 x1, ..., f n xn)</code> with
+    the vector's dimension <code class="code">n</code>.<br>
+<b>Returns</b> the vector <code class="code">y</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">y</code> : default = a fresh vector.</div>
+
+<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">('accum -> 'x_num -> 'accum) -><br>       'accum -> ('n, 'x_num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_left f init (x1, x2, ..., xn)</code> is
+    <code class="code">f (... (f (f init x1) x2) ...) xn</code>.<br>
+</div>
+
+<pre><span id="VALfold_lefti"><span class="keyword">val</span> fold_lefti</span> : <code class="type">(int -> 'accum -> 'num -> 'accum) -><br>       'accum -> ('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_lefti f init (x1, x2, ..., xn)</code> is
+    <code class="code">f n (... (f 2 (f 1 init x1) x2) ...) xn</code> with the vector's dimension <code class="code">n</code>.<br>
+</div>
+
+<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">('num -> 'accum -> 'accum) -><br>       ('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_right f (x1, x2, ..., xn) init</code> is
+    <code class="code">f x1 (f x2 (... (f xn init) ...))</code>.<br>
+</div>
+
+<pre><span id="VALfold_righti"><span class="keyword">val</span> fold_righti</span> : <code class="type">(int -> 'num -> 'accum -> 'accum) -><br>       ('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_righti f (x1, x2, ..., xn) init</code> is
+    <code class="code">f 1 x1 (f 2 x2 (... (f n xn init) ...))</code> with the vector's dimension <code class="code">n</code>.<br>
+</div>
+
+<pre><span id="VALreplace_all"><span class="keyword">val</span> replace_all</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> ('num -> 'num) -> unit</code></pre><div class="info ">
+<code class="code">replace_all x f</code> modifies the vector <code class="code">x</code> in place
+    -- the <code class="code">i</code>-th element <code class="code">xi</code> of <code class="code">x</code> will be set to <code class="code">f xi</code>.<br>
+</div>
+
+<pre><span id="VALreplace_alli"><span class="keyword">val</span> replace_alli</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> (int -> 'num -> 'num) -> unit</code></pre><div class="info ">
+<code class="code">replace_alli x f</code> modifies the vector <code class="code">x</code> in place
+    -- the <code class="code">i</code>-th element <code class="code">xi</code> of <code class="code">x</code> will be set to <code class="code">f i xi</code>.<br>
+</div>
+
+<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">('num -> unit) -> ('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+<code class="code">iter f (x1, x2, ..., xn)</code> is <code class="code">f x1; f x2; ...; f xn</code>.<br>
+</div>
+
+<pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">(int -> 'num -> unit) -> ('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+<code class="code">iteri f (x1, x2, ..., xn)</code> is <code class="code">f 1 x1; f 2 x2; ...; f n xn</code>.<br>
 </div>
 <br>
 <h2 id="2_Basicoperations">Basic operations</h2><br>
 
-<pre><span id="VALcopy"><span class="keyword">val</span> copy</span> : <code class="type">?y:('n, 'num, 'prec, 'y_cd) Common.vec -><br>       ('n, 'num, 'prec, 'x_cd) Common.vec -> ('n, 'num, 'prec, 'y_cd) Common.vec</code></pre><div class="info ">
+<pre><span id="VALcopy"><span class="keyword">val</span> copy</span> : <code class="type">?y:('n, 'num, 'prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'num, 'prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -> ('n, 'num, 'prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">copy ?y x</code> copies the vector <code class="code">x</code> to the vector <code class="code">y</code>.<br>
 <b>Returns</b> the vector <code class="code">y</code>, which is overwritten.<br>
 </div>
 <div class="param_info"><code class="code">y</code> : default = a fresh vector.</div>
 
-<pre><span id="VALfill"><span class="keyword">val</span> fill</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> 'num -> unit</code></pre><div class="info ">
+<pre><span id="VALfill"><span class="keyword">val</span> fill</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'num -> unit</code></pre><div class="info ">
 Fill the given vector with the given value.<br>
+</div>
+
+<pre><span id="VALappend"><span class="keyword">val</span> append</span> : <code class="type">('m, 'num, 'prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'num, 'prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       (('m, 'n) <a href="Slap.Size.html#TYPEadd">Slap.Size.add</a>, 'num, 'prec, 'cnt) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
+Concatenate two vectors.<br>
 </div>
 <br>
 <h2 id="2_Typeconversion">Type conversion</h2><br>
 
-<pre><span id="VALto_array"><span class="keyword">val</span> to_array</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> 'num array</code></pre><div class="info ">
+<pre><span id="VALto_array"><span class="keyword">val</span> to_array</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'num array</code></pre><div class="info ">
 <code class="code">to_array x</code><br>
 <b>Returns</b> the array of all the elements of the vector <code class="code">x</code>.<br>
 </div>
 
-<pre><span id="VALof_array_dyn"><span class="keyword">val</span> of_array_dyn</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'n Common.size -> 'num array -> ('n, 'num, 'prec, 'cnt) Common.vec</code></pre><div class="info ">
+<pre><span id="VALof_array_dyn"><span class="keyword">val</span> of_array_dyn</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'num array -> ('n, 'num, 'prec, 'cnt) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">of_array_dyn kind n [|a1; ...; an|]</code><br>
 <b>Raises</b> <code>Invalid_argument</code> the length of the given array is not equal to <code class="code">n</code>.<br>
 <b>Returns</b> a fresh vector <code class="code">(a1, ..., an)</code>.<br>
 </div>
 
-<pre><span id="VALto_list"><span class="keyword">val</span> to_list</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> 'num list</code></pre><div class="info ">
+<pre><span id="VALto_list"><span class="keyword">val</span> to_list</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'num list</code></pre><div class="info ">
 <code class="code">to_list x</code><br>
 <b>Returns</b> the list of all the elements of the vector <code class="code">x</code>.<br>
 </div>
 
-<pre><span id="VALof_list_dyn"><span class="keyword">val</span> of_list_dyn</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'n Common.size -> 'num list -> ('n, 'num, 'prec, 'cnt) Common.vec</code></pre><div class="info ">
+<pre><span id="VALof_list_dyn"><span class="keyword">val</span> of_list_dyn</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'num list -> ('n, 'num, 'prec, 'cnt) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">of_list_dyn kind n [a1; ...; an]</code><br>
 <b>Raises</b> <code>Invalid_argument</code> the length of the given list is not equal to <code class="code">n</code>.<br>
 <b>Returns</b> a fresh vector <code class="code">(a1, ..., an)</code>.<br>
 </div>
 <br>
-<h2 id="2_Iterators">Iterators</h2><br>
+<h2 id="2_Subvectors">Subvectors</h2><br>
 
-<pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">('y_num, 'y_prec) Bigarray.kind -><br>       ?y:('n, 'y_num, 'y_prec, 'y_cd) Common.vec -><br>       f:('x_num -> 'y_num) -><br>       ('n, 'x_num, 'x_prec, 'x_cd) Common.vec -><br>       ('n, 'y_num, 'y_prec, 'y_cd) Common.vec</code></pre><div class="info ">
-<code class="code">map kind ?y ~f (x1, ..., xn)</code> is <code class="code">(f x1, ..., f xn)</code>.<br>
-<b>Returns</b> the vector <code class="code">y</code>, which is overwritten.<br>
+<pre><span id="VALsubcntvec_dyn"><span class="keyword">val</span> subcntvec_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       ?ofsx:int -><br>       ('n, 'num, 'prec, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Vec.html#TYPEt">t</a> -> ('m, 'num, 'prec, 'cnt) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">subcntvec_dyn m ?ofsx x</code><br>
+<b>Raises</b> <code>Invalid_argument</code> <code class="code">m</code> and <code class="code">ofsx</code> do not designate a valid subvector of
+    <code class="code">x</code>.<br>
+<b>Returns</b> a subvector of the contiguous vector <code class="code">x</code>.
+    The <code class="code">i</code>-th element of it refers <code class="code">(ofsx+i-1)</code>-th element of <code class="code">x</code>.
+    The data are shared.<br>
 </div>
-<div class="param_info"><code class="code">y</code> : default = a fresh vector.</div>
+<div class="param_info"><code class="code">ofsx</code> : default = 1</div>
 
-<pre><span id="VALmapi"><span class="keyword">val</span> mapi</span> : <code class="type">('y_num, 'y_prec) Bigarray.kind -><br>       ?y:('n, 'y_num, 'y_prec, 'y_cd) Common.vec -><br>       f:(int -> 'x_num -> 'y_num) -><br>       ('n, 'x_num, 'x_prec, 'x_cd) Common.vec -><br>       ('n, 'y_num, 'y_prec, 'y_cd) Common.vec</code></pre><div class="info ">
-<code class="code">mapi kind ?y ~f (x1, ..., xn)</code> is <code class="code">(f 1 x1, ..., f n xn)</code> with
-   the vector's dimension <code class="code">n</code>.<br>
-<b>Returns</b> the vector <code class="code">y</code>, which is overwritten.<br>
-</div>
-<div class="param_info"><code class="code">y</code> : default = a fresh vector.</div>
-
-<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">f:('accum -> 'x_num -> 'accum) -><br>       init:'accum -> ('n, 'x_num, 'prec, 'cd) Common.vec -> 'accum</code></pre><div class="info ">
-<code class="code">fold_left ~f ~init (x1, x2, ..., xn)</code> is
-   <code class="code">f (... (f (f init x1) x2) ...) xn</code>.<br>
-</div>
-
-<pre><span id="VALfold_lefti"><span class="keyword">val</span> fold_lefti</span> : <code class="type">f:(int -> 'accum -> 'num -> 'accum) -><br>       init:'accum -> ('n, 'num, 'prec, 'cd) Common.vec -> 'accum</code></pre><div class="info ">
-<code class="code">fold_lefti ~f ~init (x1, x2, ..., xn)</code> is
-   <code class="code">f n (... (f 2 (f 1 init x1) x2) ...) xn</code> with the vector's dimension <code class="code">n</code>.<br>
-</div>
-
-<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">f:('num -> 'accum -> 'accum) -><br>       ('n, 'num, 'prec, 'cd) Common.vec -> init:'accum -> 'accum</code></pre><div class="info ">
-<code class="code">fold_right ~f (x1, x2, ..., xn) ~init</code> is
-   <code class="code">f x1 (f x2 (... (f xn init) ...))</code>.<br>
-</div>
-
-<pre><span id="VALfold_righti"><span class="keyword">val</span> fold_righti</span> : <code class="type">f:(int -> 'num -> 'accum -> 'accum) -><br>       ('n, 'num, 'prec, 'cd) Common.vec -> init:'accum -> 'accum</code></pre><div class="info ">
-<code class="code">fold_righti ~f (x1, x2, ..., xn) ~init</code> is
-   <code class="code">f 1 x1 (f 2 x2 (... (f n xn init) ...))</code> with the vector's dimension <code class="code">n</code>.<br>
-</div>
-
-<pre><span id="VALreplace_all"><span class="keyword">val</span> replace_all</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> f:('num -> 'num) -> unit</code></pre><div class="info ">
-<code class="code">replace_all x ~f</code> modifies the vector <code class="code">x</code> in place
-   -- the <code class="code">i</code>-th element <code class="code">xi</code> of <code class="code">x</code> will be set to <code class="code">f xi</code>.<br>
-</div>
-
-<pre><span id="VALreplace_alli"><span class="keyword">val</span> replace_alli</span> : <code class="type">('n, 'num, 'prec, 'cd) Common.vec -> f:(int -> 'num -> 'num) -> unit</code></pre><div class="info ">
-<code class="code">replace_alli x ~f</code> modifies the vector <code class="code">x</code> in place
-   -- the <code class="code">i</code>-th element <code class="code">xi</code> of <code class="code">x</code> will be set to <code class="code">f i xi</code>.<br>
-</div>
-
-<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">f:('num -> unit) -> ('n, 'num, 'prec, 'cd) Common.vec -> unit</code></pre><div class="info ">
-<code class="code">iter ~f (x1, x2, ..., xn)</code> is <code class="code">f x1; f x2; ...; f xn</code>.<br>
-</div>
-
-<pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">f:(int -> 'num -> unit) -> ('n, 'num, 'prec, 'cd) Common.vec -> unit</code></pre><div class="info ">
-<code class="code">iteri ~f (x1, x2, ..., xn)</code> is <code class="code">f 1 x1; f 2 x2; ...; f n xn</code>.<br>
-</div>
-
-<pre><span id="VALsubvec_dyn"><span class="keyword">val</span> subvec_dyn</span> : <code class="type">'m Common.size -><br>       ?ofsx:int -><br>       ?incx:int -><br>       ('n, 'num, 'prec, 'cd) Common.vec -> ('m, 'num, 'prec, Common.dsc) Common.vec</code></pre><div class="info ">
-<h2 id="2_Subvectors">Subvectors</h2>
-<p>
-<code class="code">subvec_dyn m ?ofsx ?incx x</code><br>
+<pre><span id="VALsubdscvec_dyn"><span class="keyword">val</span> subdscvec_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       ?ofsx:int -><br>       ?incx:int -><br>       ('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> ('m, 'num, 'prec, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">subdscvec_dyn m ?ofsx ?incx x</code><br>
 <b>Raises</b> <code>Invalid_argument</code> <code class="code">m</code>, <code class="code">ofsx</code> and <code class="code">incx</code> do not designate
-   a valid subvector of <code class="code">x</code>.<br>
+    a valid subvector of <code class="code">x</code>.<br>
 <b>Returns</b> a subvector of the vector <code class="code">x</code>.
-   The <code class="code">i</code>-th element of it refers <code class="code">(ofsx+(i-1)*incx)</code>-th element of <code class="code">x</code>.
-   The data are shared.<br>
+    The <code class="code">i</code>-th element of it refers <code class="code">(ofsx+(i-1)*incx)</code>-th element of <code class="code">x</code>.
+    The data are shared.<br>
+</div>
+
+<pre><span id="VALsubvec_dyn"><span class="keyword">val</span> subvec_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       ?ofsx:int -><br>       ?incx:int -><br>       ('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> ('m, 'num, 'prec, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
+An alias of <code class="code">subdscvec_dyn</code>.<br>
 </div>
 </body></html>

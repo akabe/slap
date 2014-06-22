@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Slap.S.Vec.html">
+<link rel="Up" href="Slap.S.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Slap" rel="Chapter" href="Slap.html"><link title="Creation of matrices" rel="Section" href="#2_Creationofmatrices">
+<link title="Accessors" rel="Section" href="#2_Accessors">
+<link title="Basic operations" rel="Section" href="#2_Basicoperations">
+<link title="Type conversion" rel="Section" href="#2_Typeconversion">
+<link title="Iterators" rel="Section" href="#2_Iterators">
+<link title="Arithmetic operations" rel="Section" href="#2_Arithmeticoperations">
+<link title="Creation of matrices" rel="Section" href="#2_Creationofmatrices">
+<title>Slap.S.Mat</title>
+</head>
+<body>
+<div class="navbar"><a class="pre" href="Slap.S.Vec.html" title="Slap.S.Vec">Previous</a>
+&nbsp;<a class="up" href="Slap.S.html" title="Slap.S">Up</a>
+&nbsp;</div>
+<h1>Module <a href="type_Slap.S.Mat.html">Slap.S.Mat</a></h1>
+
+<pre><span class="keyword">module</span> Mat: <code class="code">sig</code> <a href="Slap.S.Mat.html">..</a> <code class="code">end</code></pre><hr width="100%">
+
+<pre><span class="keyword">module type</span> <a href="Slap.S.Mat.CNTMAT.html">CNTMAT</a> = <code class="code">sig</code> <a href="Slap.S.Mat.CNTMAT.html">..</a> <code class="code">end</code></pre><div class="info">
+The signature of modules containing dynamically-sized contiguous matrices.
+</div>
+
+<pre><span class="keyword">module type</span> <a href="Slap.S.Mat.DSCMAT.html">DSCMAT</a> = <code class="code">sig</code> <a href="Slap.S.Mat.DSCMAT.html">..</a> <code class="code">end</code></pre><div class="info">
+The signature of modules containing dynamically-sized discrete matrices.
+</div>
+<br>
+<h2 id="2_Creationofmatrices">Creation of matrices</h2><br>
+
+<pre><span id="VALempty"><span class="keyword">val</span> empty</span> : <code class="type">(<a href="Slap.Size.html#TYPEz">Slap.Size.z</a>, <a href="Slap.Size.html#TYPEz">Slap.Size.z</a>, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><div class="info ">
+An empty matrix.<br>
+</div>
+
+<pre><span id="VALcreate"><span class="keyword">val</span> create</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('m, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><div class="info ">
+<code class="code">create m n</code><br>
+<b>Returns</b> a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix (not initialized).<br>
+</div>
+
+<pre><span id="VALmake"><span class="keyword">val</span> make</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> -> ('m, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><div class="info ">
+<code class="code">make m n x</code><br>
+<b>Returns</b> a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix initialized with <code class="code">x</code>.<br>
+</div>
+
+<pre><span id="VALmake0"><span class="keyword">val</span> make0</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('m, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><div class="info ">
+<code class="code">make0 m n</code><br>
+<b>Returns</b> a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix initialized with <code class="code">0</code>.<br>
+</div>
+
+<pre><span id="VALmake1"><span class="keyword">val</span> make1</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('m, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><div class="info ">
+<code class="code">make1 m n</code><br>
+<b>Returns</b> a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix initialized with <code class="code">1</code>.<br>
+</div>
+
+<pre><span id="VALidentity"><span class="keyword">val</span> identity</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('n, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><div class="info ">
+<code class="code">identity n</code><br>
+<b>Returns</b> a fresh <code class="code">n</code>-by-<code class="code">n</code> identity matrix.<br>
+</div>
+
+<pre><span id="VALinit_cols"><span class="keyword">val</span> init_cols</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       (int -> int -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a>) -> ('m, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><div class="info ">
+<code class="code">init_cols m n f</code> returns a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix whose
+    the <code class="code">(i,j)</code> element is initialized by the result of calling <code class="code">f i j</code>.
+    The elements are passed column-wise.<br>
+</div>
+
+<pre><span id="VALinit_rows"><span class="keyword">val</span> init_rows</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       (int -> int -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a>) -> ('m, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><div class="info ">
+<code class="code">init_rows m n f</code> returns a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix whose
+    the <code class="code">(i,j)</code> element is initialized by the result of calling <code class="code">f i j</code>.
+    The elements are passed row-wise.<br>
+</div>
+<br>
+<h2 id="2_Accessors">Accessors</h2><br>
+
+<pre><span id="VALdim"><span class="keyword">val</span> dim</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> 'm <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> * 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre><div class="info ">
+<code class="code">dim a</code> is <code class="code">(dim1 a, dim2 a)</code>.<br>
+</div>
+
+<pre><span id="VALdim1"><span class="keyword">val</span> dim1</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> 'm <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre><div class="info ">
+<code class="code">dim1 a</code><br>
+<b>Returns</b> the number of rows in <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALdim2"><span class="keyword">val</span> dim2</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a></code></pre><div class="info ">
+<code class="code">dim1 a</code><br>
+<b>Returns</b> the number of columns in <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALget_dyn"><span class="keyword">val</span> get_dyn</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> int -> int -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a></code></pre><div class="info ">
+<code class="code">get_dyn a i j</code><br>
+<b>Returns</b> the <code class="code">(i,j)</code> element of the matrix <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALset_dyn"><span class="keyword">val</span> set_dyn</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> int -> int -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> -> unit</code></pre><div class="info ">
+<code class="code">set_dyn a i j x</code> assigns <code class="code">x</code> to the <code class="code">(i,j)</code> element of the matrix <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALunsafe_get"><span class="keyword">val</span> unsafe_get</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> int -> int -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a></code></pre><div class="info ">
+Like <a href="Slap.Mat.html#VALget_dyn"><code class="code">Slap.Mat.get_dyn</code></a>, but size checking is not always performed.<br>
+</div>
+
+<pre><span id="VALunsafe_set"><span class="keyword">val</span> unsafe_set</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> int -> int -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> -> unit</code></pre><div class="info ">
+Like <a href="Slap.Mat.html#VALset_dyn"><code class="code">Slap.Mat.set_dyn</code></a>, but size checking is not always performed.<br>
+</div>
+
+<pre><span id="VALcol_dyn"><span class="keyword">val</span> col_dyn</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> int -> ('m, 'cnt) <a href="Slap.S.html#TYPEvec">Slap.S.vec</a></code></pre><div class="info ">
+<code class="code">col_dyn a i</code><br>
+<b>Returns</b> the <code class="code">i</code>-th column of the matrix <code class="code">a</code>. The data are shared.<br>
+</div>
+
+<pre><span id="VALrow_dyn"><span class="keyword">val</span> row_dyn</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> int -> ('n, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.S.html#TYPEvec">Slap.S.vec</a></code></pre><div class="info ">
+<code class="code">row_dyn a i</code><br>
+<b>Returns</b> the <code class="code">i</code>-th row of the matrix <code class="code">a</code>. The data are shared.<br>
+</div>
+
+<pre><span id="VALcopy_row_dyn"><span class="keyword">val</span> copy_row_dyn</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> int -> ('n, 'cnt) <a href="Slap.S.html#TYPEvec">Slap.S.vec</a></code></pre><div class="info ">
+<code class="code">copy_row_dyn a i</code> is <code class="code">Vec.copy (Mat.row_dyn a i)</code>.<br>
+</div>
+
+<pre><span id="VALdiag"><span class="keyword">val</span> diag</span> : <code class="type">('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> ('n, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.S.html#TYPEvec">Slap.S.vec</a></code></pre><div class="info ">
+<code class="code">diag a</code><br>
+<b>Returns</b> the diagonal elements of the matrix <code class="code">a</code>. The data are shared.<br>
+</div>
+
+<pre><span id="VALcopy_diag"><span class="keyword">val</span> copy_diag</span> : <code class="type">('n, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> ('n, 'cnt) <a href="Slap.S.html#TYPEvec">Slap.S.vec</a></code></pre><div class="info ">
+<code class="code">copy_diag a</code> is <code class="code">Vec.copy (Mat.diag a)</code>.<br>
+</div>
+
+<pre><span id="VALas_vec"><span class="keyword">val</span> as_vec</span> : <code class="type">('m, 'n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> (('m, 'n) <a href="Slap.Size.html#TYPEmul">Slap.Size.mul</a>, 'cnt) <a href="Slap.S.html#TYPEvec">Slap.S.vec</a></code></pre><div class="info ">
+<code class="code">as_vec a</code><br>
+<b>Returns</b> the vector containing all elements of the matrix in column-major
+    order. The data are shared.<br>
+</div>
+<br>
+<h2 id="2_Basicoperations">Basic operations</h2><br>
+
+<pre><span id="VALcopy"><span class="keyword">val</span> copy</span> : <code class="type">?uplo:[ `L | `U ] -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> ('m, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><div class="info ">
+<code class="code">copy ?uplo ?b a</code> copies the matrix <code class="code">a</code> into the matrix <code class="code">b</code> with
+    the LAPACK function <code class="code">lacpy</code>.<ul>
+<li>If <code class="code">uplo</code> is omitted, all elements in <code class="code">a</code> is copied.</li>
+<li>If <code class="code">uplo</code> is <code class="code">`U</code>, the upper trapezoidal part of <code class="code">a</code> is copied.</li>
+<li>If <code class="code">uplo</code> is <code class="code">`L</code>, the lower trapezoidal part of <code class="code">a</code> is copied.</li>
+</ul>
+<br>
+<b>Returns</b> <code class="code">b</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">uplo</code> : default = all elements in <code class="code">a</code> is copied.</div>
+<div class="param_info"><code class="code">b</code> : default = a fresh matrix.</div>
+
+<pre><span id="VALof_col_vecs_dyn"><span class="keyword">val</span> of_col_vecs_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       ('m, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">Slap.S.vec</a> array -> ('m, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><br>
+<h2 id="2_Typeconversion">Type conversion</h2><br>
+
+<pre><span id="VALto_array"><span class="keyword">val</span> to_array</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> array array</code></pre><div class="info ">
+<code class="code">to_array a</code><br>
+<b>Returns</b> the array of arrays of all the elements of <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALof_array_dyn"><span class="keyword">val</span> of_array_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> array array -> ('m, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><div class="info ">
+Build a matrix initialized from the given array of arrays.<br>
+<b>Raises</b> <code>Invalid_argument</code> the given array of arrays is not rectangular or
+    its size is not <code class="code">m</code>-by-<code class="code">n</code>.<br>
+</div>
+
+<pre><span id="VALof_array"><span class="keyword">val</span> of_array</span> : <code class="type"><a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> array array -> (module Slap.S.Mat.CNTMAT)</code></pre><div class="info ">
+<code class="code">module M = (val of_array aa : CNTMAT)</code><br>
+<b>Raises</b> <code>Invalid_argument</code> the given array of arrays is not rectangular.<br>
+<b>Returns</b> module <code class="code">M</code> containing the matrix <code class="code">M.value</code> that
+    has the type <code class="code">(M.m, M.n, 'cnt) mat</code> with a generative phantom types <code class="code">M.m</code>
+    and <code class="code">M.n</code> as a package of an existential quantified sized type like
+    <code class="code">exists m, n. (m, n, 'cnt) mat</code>.<br>
+</div>
+
+<pre><span class="keyword">module</span> <a href="Slap.S.Mat.Of_array.html">Of_array</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">X</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block">
+<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type"><a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> array array</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap.S.Mat.CNTMAT.html">CNTMAT</a></code><code class="type"> </code></div></pre><div class="info">
+A functor vesion of <code class="code">of_array</code>.
+</div>
+
+<pre><span id="VALto_list"><span class="keyword">val</span> to_list</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> list list</code></pre><div class="info ">
+<code class="code">to_list a</code><br>
+<b>Returns</b> the list of lists of all the elements of <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALof_list_dyn"><span class="keyword">val</span> of_list_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> list list -> ('m, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre><div class="info ">
+Build a matrix initialized from the given list of lists.<br>
+<b>Raises</b> <code>Invalid_argument</code> the given list of lists is not rectangular or
+    its size is not <code class="code">m</code>-by-<code class="code">n</code>.<br>
+</div>
+
+<pre><span id="VALof_list"><span class="keyword">val</span> of_list</span> : <code class="type"><a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> list list -> (module Slap.S.Mat.CNTMAT)</code></pre><div class="info ">
+<code class="code">module M = (val of_list ll : CNTMAT)</code><br>
+<b>Raises</b> <code>Invalid_argument</code> the given list of lists is not rectangular.<br>
+<b>Returns</b> module <code class="code">M</code> containing the matrix <code class="code">M.value</code> that
+    has the type <code class="code">(M.m, M.n, 'cnt) mat</code> with a generative phantom types <code class="code">M.m</code>
+    and <code class="code">M.n</code> as a package of an existential quantified sized type like
+    <code class="code">exists m, n. (m, n, 'cnt) mat</code>.<br>
+</div>
+
+<pre><span class="keyword">module</span> <a href="Slap.S.Mat.Of_list.html">Of_list</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">X</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block">
+<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type"><a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> list list</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap.S.Mat.CNTMAT.html">CNTMAT</a></code><code class="type"> </code></div></pre><div class="info">
+A functor vesion of <code class="code">of_list</code>.
+</div>
+<br>
+<h2 id="2_Iterators">Iterators</h2><br>
+
+<pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">(<a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a>) -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> ('m, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre>
+<pre><span id="VALreplace_all"><span class="keyword">val</span> replace_all</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> (<a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a>) -> unit</code></pre><div class="info ">
+<code class="code">replace_all a f</code> modifies the matrix <code class="code">a</code> in place
+    -- the <code class="code">(i,j)</code>-element <code class="code">aij</code> of <code class="code">a</code> will be set to <code class="code">f aij</code>.<br>
+</div>
+
+<pre><span id="VALreplace_alli"><span class="keyword">val</span> replace_alli</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -><br>       (int -> int -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a>) -> unit</code></pre><div class="info ">
+<code class="code">replace_all a f</code> modifies the matrix <code class="code">a</code> in place
+    -- the <code class="code">(i,j)</code>-element <code class="code">aij</code> of <code class="code">a</code> will be set to <code class="code">f i j aij</code>.<br>
+</div>
+<br>
+<h2 id="2_Arithmeticoperations">Arithmetic operations</h2><br>
+
+<pre><span id="VALtrace"><span class="keyword">val</span> trace</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a></code></pre><div class="info ">
+<code class="code">trace a</code><br>
+<b>Returns</b> the sum of diagonal elements of the matrix <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALscal"><span class="keyword">val</span> scal</span> : <code class="type"><a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> -> ('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> unit</code></pre><div class="info ">
+<code class="code">scal alpha a</code> computes <code class="code">a := alpha * a</code> with the scalar value <code class="code">alpha</code> and
+    the matrix <code class="code">a</code>.<br>
+</div>
+
+<pre><span id="VALscal_cols"><span class="keyword">val</span> scal_cols</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> ('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">Slap.S.vec</a> -> unit</code></pre><div class="info ">
+A column-wise <code class="code">scal</code> function for matrices.<br>
+</div>
+
+<pre><span id="VALscal_rows"><span class="keyword">val</span> scal_rows</span> : <code class="type">('m, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">Slap.S.vec</a> -> ('m, 'n, 'cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> unit</code></pre><div class="info ">
+A row-wise <code class="code">scal</code> function for matrices.<br>
+</div>
+
+<pre><span id="VALaxpy"><span class="keyword">val</span> axpy</span> : <code class="type">?alpha:<a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> -><br>       x:('m, 'n, 'x_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> ('m, 'n, 'y_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> unit</code></pre><div class="info ">
+<code class="code">axpy ?alpha ~x y</code> computes <code class="code">y := alpha * x + y</code>.<br>
+</div>
+
+<pre><span id="VALsyrk_diag"><span class="keyword">val</span> syrk_diag</span> : <code class="type">?beta:<a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> -><br>       ?y:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.S.html#TYPEvec">Slap.S.vec</a> -><br>       trans:(('a_n, 'a_k, 'a_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> ('n, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a>)<br>             <a href="Slap.Common.html#TYPEtrans2">Slap.Common.trans2</a> -><br>       ?alpha:<a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> ('n, 'cnt) <a href="Slap.S.html#TYPEvec">Slap.S.vec</a></code></pre>
+<pre><span id="VALgemm_trace"><span class="keyword">val</span> gemm_trace</span> : <code class="type">transa:(('a_n, 'a_k, 'a_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> ('n, 'k, 'a_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a>)<br>              <a href="Slap.S.html#TYPEtrans3">Slap.S.trans3</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -><br>       transb:(('b_k, 'b_n, 'b_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> ('k, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a>)<br>              <a href="Slap.S.html#TYPEtrans3">Slap.S.trans3</a> -><br>       ('b_k, 'b_n, 'b_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a></code></pre>
+<pre><span id="VALsymm2_trace"><span class="keyword">val</span> symm2_trace</span> : <code class="type">?upa:bool -><br>       ('n, 'n, 'a_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -><br>       ?upb:bool -> ('n, 'n, 'b_cd) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a> -> <a href="Slap.S.html#TYPEnum_type">Slap.S.num_type</a></code></pre><br>
+<h2 id="2_Creationofmatrices">Creation of matrices</h2><br>
+
+<pre><span id="VALrandom"><span class="keyword">val</span> random</span> : <code class="type">?rnd_state:Random.State.t -><br>       ?from:float -><br>       ?range:float -> 'm <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('m, 'n, 'cnt) <a href="Slap.S.html#TYPEmat">Slap.S.mat</a></code></pre></body></html>
