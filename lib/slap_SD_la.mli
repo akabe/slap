@@ -253,13 +253,13 @@ type ('m, 'n) gesvd_min_lwork
 val gesvd_min_lwork : m:'m Size.t -> n:'n Size.t ->
                       ('m, 'n) gesvd_min_lwork Size.t
 
-val gesvd_opt_lwork : jobu:('u_rows, 'm, ('m, 'n) Size.min,
+val gesvd_opt_lwork : jobu:('u_cols, 'm, ('m, 'n) Size.min,
                             Size.z, Size.z) Common.svd_job ->
-                      jobvt:('vt_cols, 'n, ('m, 'n) Size.min,
+                      jobvt:('vt_rows, 'n, ('m, 'n) Size.min,
                              Size.z, Size.z) Common.svd_job ->
                       ?s:(('m, 'n) Size.min, cnt) vec ->
-                      ?u:('m, 'u_rows, 'u_cd) mat ->
-                      ?vt:('vt_cols, 'n, 'vt_cd) mat ->
+                      ?u:('m, 'u_cols, 'u_cd) mat ->
+                      ?vt:('vt_rows, 'n, 'vt_cd) mat ->
                       ('m, 'n, 'a_cd) mat -> (module Size.SIZE)
 
 val gesvd : jobu:('u_cols, 'm, ('m, 'n) Size.min,
@@ -272,8 +272,8 @@ val gesvd : jobu:('u_cols, 'm, ('m, 'n) Size.min,
             ?work:('lwork, cnt) vec ->
             ('m, 'n, 'a_cd) mat ->
             (('m, 'n) Size.min, 'cnt) vec *
-              ('m, 'u_rows, 'cnt) mat *
-                ('vt_cols, 'n, 'cnt) mat
+              ('m, 'u_cols, 'cnt) mat *
+                ('vt_rows, 'n, 'cnt) mat
 
 (** {4 gesdd} *)
 
