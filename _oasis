@@ -32,6 +32,21 @@ Document slap
   XOCamlbuildPath:      lib
   XOCamlbuildLibraries: slap
 
+# Tests
+
+Executable test
+  Path:                 test
+  MainIs:               test.ml
+  Build$:               flag(tests)
+  Install:              false
+  BuildDepends:         slap,oUnit
+  CompiledObject:       best
+
+Test test
+  Run$:                 flag(tests)
+  Command:              $test
+  WorkingDirectory:     test
+
 ##
 ## Examples
 ##
