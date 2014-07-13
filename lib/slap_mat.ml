@@ -19,7 +19,7 @@
 
 open Bigarray
 
-type ('m, 'n, 'num, 'prec, 'cnt_or_dsc) t =
+type (+'m, +'n, 'num, 'prec, +'cnt_or_dsc) t =
     int   (* the number of rows in a matrix    (>= 0) *)
     * int (* the number of columns in a matrix (>= 0) *)
     * int (* an offset of rows    (>= 1) *)

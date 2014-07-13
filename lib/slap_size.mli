@@ -17,7 +17,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-type 'n t = private int
+type +'n t = private int
 (** A singleton type on sizes (i.e., vectors' and matrices' dimensions).
 
     Evaluation of a term with singleton type ['n Size.t] {i always} results in

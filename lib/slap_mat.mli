@@ -19,7 +19,7 @@
 
 open Bigarray
 
-type ('m, 'n, 'num, 'prec, 'cnt_or_dsc) t
+type (+'m, +'n, 'num, 'prec, +'cnt_or_dsc) t
 (** [('m, 'n, 'num, 'prec) mat] is the type of ['m]-by-['n] matrix whose
     elements have OCaml type ['num], representation kind ['prec] and memory
     contiguity ['cnt_or_dsc].

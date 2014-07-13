@@ -22,13 +22,13 @@ open Bigarray
 module PVec = Vec
 module PMat = Mat
 
-type ('n, 'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) Vec.t
+type (+'n, +'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) Vec.t
 
-type ('m, 'n, 'cnt_or_dsc) mat = ('m, 'n, num_type, prec, 'cnt_or_dsc) Mat.t
+type (+'m, +'n, +'cnt_or_dsc) mat = ('m, 'n, num_type, prec, 'cnt_or_dsc) Mat.t
 
 type rprec = CONCAT(CONCAT(float, SLAP_SDCZ_BITS), _elt)
 
-type ('n, 'cnt_or_dsc) rvec = ('n, float, rprec, 'cnt_or_dsc) Vec.t
+type (+'n, +'cnt_or_dsc) rvec = ('n, float, rprec, 'cnt_or_dsc) Vec.t
 
 let rprec = CONCAT(float, SLAP_SDCZ_BITS)
 

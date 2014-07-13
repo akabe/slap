@@ -25,15 +25,15 @@ type diag = [ `N | `U ]
 
 (** {3 Transpose flags} *)
 
-type ('a, 'tag) trans = [ `N | `T | `C ]
+type (+'a, +'tag) trans = [ `N | `T | `C ]
 
 type transNT
 
-type 'a trans2 = ('a, transNT) trans
+type +'a trans2 = ('a, transNT) trans
 
 type transNTC
 
-type 'a trans3 = ('a, transNTC) trans
+type +'a trans3 = ('a, transNTC) trans
 
 let normal = `N
 
@@ -52,7 +52,7 @@ let lacaml_trans2 = function
 
 (** {3 Direction of multiplication of matrices} *)
 
-type ('k, 'm, 'n) side = [ `L | `R ]
+type (+'k, +'m, +'n) side = [ `L | `R ]
 
 let left = `L
 
@@ -60,11 +60,11 @@ let right = `R
 
 (** {3 Matrix norms} *)
 
-type ('a, 'tag) norm = [ `O | `I | `M | `F ]
+type (+'a, +'tag) norm = [ `O | `I | `M | `F ]
 
 type norm2_tag
 
-type 'a norm2 = ('a, norm2_tag) norm
+type +'a norm2 = ('a, norm2_tag) norm
 
 let lacaml_norm2 v : Lacaml.Common.norm2 =
   match v with
@@ -78,7 +78,7 @@ let lacaml_norm2_opt = function
 
 type norm4_tag
 
-type 'a norm4 = ('a, norm4_tag) norm
+type +'a norm4 = ('a, norm4_tag) norm
 
 type norm_1
 
@@ -98,7 +98,7 @@ let norm_frob = `F
 
 (** {3 SVD computation flags} *)
 
-type ('a, 'b, 'c, 'd, 'e) svd_job = [ `A | `S | `O | `N ]
+type (+'a, +'b, +'c, +'d, +'e) svd_job = [ `A | `S | `O | `N ]
 
 let svd_all = `A
 
@@ -110,12 +110,12 @@ let svd_no = `N
 
 (** {2 Integer vectors} *)
 
-type ('n, 'cnt_or_dsc) int_vec =
+type (+'n, +'cnt_or_dsc) int_vec =
     ('n, int, int_elt, 'cnt_or_dsc) Vec.t
 
 let create_int_vec n = Vec.create int n
 
-type ('n, 'cnt_or_dsc) int32_vec =
+type (+'n, +'cnt_or_dsc) int32_vec =
     ('n, int32, int32_elt, 'cnt_or_dsc) Vec.t
 
 let create_int32_vec n = Vec.create int32 n

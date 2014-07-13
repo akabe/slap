@@ -23,11 +23,11 @@ type diag = [ `N | `U ]
 
 (** {3 Transpose flags} *)
 
-type ('a, 'tag) trans
+type (+'a, +'tag) trans
 
 type transNT
 
-type 'a trans2 = ('a, transNT) trans
+type +'a trans2 = ('a, transNT) trans
 (** Types of transpose flags for real vectors or matrices.
  Values of this type are
  - {!Slap.Common.normal} and
@@ -36,7 +36,7 @@ type 'a trans2 = ('a, transNT) trans
 
 type transNTC
 
-type 'a trans3 = ('a, transNTC) trans
+type +'a trans3 = ('a, transNTC) trans
 (** Types of transpose flags for complex vectors or matrices.
  Values of this type are
  - {!Slap.Common.normal},
@@ -58,7 +58,7 @@ val conjtr : (('m, 'n, 'num, 'prec, 'cd) Mat.t ->
 
 (** {3 Direction of matrix multiplication} *)
 
-type ('k, 'm, 'n) side
+type (+'k, +'m, +'n) side
 (** [('k, 'm, 'n) side] is the type of left- and right-multiplication flags.
  The type parameters ['k], ['m] and ['n] correspond to dimensions of two
  multiplied matrices: Let [A] be a ['k]-by-['k] square matrix and [B] be
@@ -76,17 +76,17 @@ val right : ('n, 'm, 'n) side
 
 (** {3 Matrix norms} *)
 
-type ('a, 'tag) norm
+type (+'a, +'tag) norm
 
 type norm2_tag
 
-type 'a norm2 = ('a, norm2_tag) norm
+type +'a norm2 = ('a, norm2_tag) norm
 (** Values of this type are {!Slap.Common.norm_1} and {!Slap.Common.norm_inf}.
  *)
 
 type norm4_tag
 
-type 'a norm4 = ('a, norm4_tag) norm
+type +'a norm4 = ('a, norm4_tag) norm
 (** Values of this type are
   - {!Slap.Common.norm_1},
   - {!Slap.Common.norm_inf},
@@ -116,7 +116,7 @@ val norm_frob : (norm_frob, norm4_tag) norm
 
 (** {3 SVD computation flags} *)
 
-type ('a, 'b, 'c, 'd, 'e) svd_job
+type (+'a, +'b, +'c, +'d, +'e) svd_job
 
 val svd_all : ('a, 'a, 'b, 'c, 'd) svd_job
 
@@ -128,12 +128,12 @@ val svd_no : ('d, 'a, 'b, 'c, 'd) svd_job
 
 (** {2 Integer vectors} *)
 
-type ('n, 'cnt_or_dsc) int_vec =
+type (+'n, +'cnt_or_dsc) int_vec =
     ('n, int, Bigarray.int_elt, 'cnt_or_dsc) Vec.t
 
 val create_int_vec : 'n Size.t -> ('n, 'cnt) int_vec
 
-type ('n, 'cnt_or_dsc) int32_vec =
+type (+'n, +'cnt_or_dsc) int32_vec =
     ('n, int32, Bigarray.int32_elt, 'cnt_or_dsc) Vec.t
 
 val create_int32_vec : 'n Size.t -> ('n, 'cnt) int32_vec

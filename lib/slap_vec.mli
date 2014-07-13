@@ -19,7 +19,7 @@
 
 open Bigarray
 
-type ('n, 'num, 'prec, 'cnt_or_dsc) t
+type (+'n, 'num, 'prec, +'cnt_or_dsc) t
 (** [('n, 'num, 'prec, 'cnt_or_dsc) t] is the type of ['n]-dimensional vector
     whose elements have OCaml type ['num], representation kind ['prec] and
     memory contiguity flag ['cnt_or_dsc].

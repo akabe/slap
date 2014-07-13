@@ -19,7 +19,7 @@
 
 open Bigarray
 
-type ('n, 'num, 'prec, 'cnt_or_dsc) t =
+type (+'n, 'num, 'prec, +'cnt_or_dsc) t =
     int   (* the number of elements in a vector (>= 0) *)
     * int (* an offset (>= 1) *)
     * int (* an incrementation *)

@@ -17,15 +17,15 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-type ('n, 'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) Vec.t
+type (+'n, +'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) Vec.t
 (** Vectors. *)
 
-type ('m, 'n, 'cnt_or_dsc) mat = ('m, 'n, num_type, prec, 'cnt_or_dsc) Mat.t
+type (+'m, +'n, +'cnt_or_dsc) mat = ('m, 'n, num_type, prec, 'cnt_or_dsc) Mat.t
 (** Matrices. *)
 
 type rprec = CONCAT(CONCAT(float, SLAP_SDCZ_BITS), _elt)
 
-type ('n, 'cnt_or_dsc) rvec = ('n, float, rprec, 'cnt_or_dsc) Vec.t
+type (+'n, +'cnt_or_dsc) rvec = ('n, float, rprec, 'cnt_or_dsc) Vec.t
 (** Real vectors. (In {!Slap.S} and {!Slap.D}, [rvec] is equal to [vec].) *)
 
 val prec : (num_type, prec) kind
