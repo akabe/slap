@@ -38,7 +38,7 @@ Types, flags and functions common to all precision dependent modules.<br>
 <br>
 <h3 id="3_Transposeflags">Transpose flags</h3><br>
 
-<pre><span id="TYPEtrans"><span class="keyword">type</span> <code class="type">('a, 'tag)</code> trans</span> </pre>
+<pre><span id="TYPEtrans"><span class="keyword">type</span> <code class="type">(+'a, +'tag)</code> trans</span> </pre>
 
 
 <pre><span id="TYPEtransNT"><span class="keyword">type</span> <code class="type"></code>transNT</span> </pre>
@@ -84,7 +84,7 @@ Conjugate transpose of a matrix.<br>
 <br>
 <h3 id="3_Directionofmatrixmultiplication">Direction of matrix multiplication</h3><br>
 
-<pre><span id="TYPEside"><span class="keyword">type</span> <code class="type">('k, 'm, 'n)</code> side</span> </pre>
+<pre><span id="TYPEside"><span class="keyword">type</span> <code class="type">(+'k, +'m, +'n)</code> side</span> </pre>
 <div class="info ">
 <code class="code">('k, 'm, 'n) side</code> is the type of left- and right-multiplication flags.
  The type parameters <code class="code">'k</code>, <code class="code">'m</code> and <code class="code">'n</code> correspond to dimensions of two
@@ -104,7 +104,7 @@ Conjugate transpose of a matrix.<br>
 <pre><span id="VALright"><span class="keyword">val</span> right</span> : <code class="type">('n, 'm, 'n) <a href="Slap.Common.html#TYPEside">side</a></code></pre><br>
 <h3 id="3_Matrixnorms">Matrix norms</h3><br>
 
-<pre><span id="TYPEnorm"><span class="keyword">type</span> <code class="type">('a, 'tag)</code> norm</span> </pre>
+<pre><span id="TYPEnorm"><span class="keyword">type</span> <code class="type">(+'a, +'tag)</code> norm</span> </pre>
 
 
 <pre><span id="TYPEnorm2_tag"><span class="keyword">type</span> <code class="type"></code>norm2_tag</span> </pre>
@@ -161,7 +161,7 @@ Frobenius norm of a matrix.<br>
 <br>
 <h3 id="3_SVDcomputationflags">SVD computation flags</h3><br>
 
-<pre><span id="TYPEsvd_job"><span class="keyword">type</span> <code class="type">('a, 'b, 'c, 'd, 'e)</code> svd_job</span> </pre>
+<pre><span id="TYPEsvd_job"><span class="keyword">type</span> <code class="type">(+'a, +'b, +'c, +'d, +'e)</code> svd_job</span> </pre>
 
 
 <pre><span id="VALsvd_all"><span class="keyword">val</span> svd_all</span> : <code class="type">('a, 'a, 'b, 'c, 'd) <a href="Slap.Common.html#TYPEsvd_job">svd_job</a></code></pre>

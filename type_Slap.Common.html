@@ -11,7 +11,7 @@
 <body>
 <code class="code"><span class="keyword">sig</span><br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;diag&nbsp;=&nbsp;[&nbsp;<span class="keywordsign">`</span><span class="constructor">N</span>&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="keywordsign">`</span><span class="constructor">U</span>&nbsp;]<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>a,&nbsp;<span class="keywordsign">'</span>tag)&nbsp;trans<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>a,&nbsp;+<span class="keywordsign">'</span>tag)&nbsp;trans<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;transNT<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;trans2&nbsp;=&nbsp;(<span class="keywordsign">'</span>a,&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.transNT)&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.trans<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;transNTC<br>
@@ -28,10 +28,10 @@
 &nbsp;&nbsp;&nbsp;&nbsp;((<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cd)&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Mat</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cd)&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Mat</span>.t)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.trans3<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>k,&nbsp;<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n)&nbsp;side<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>k,&nbsp;+<span class="keywordsign">'</span>m,&nbsp;+<span class="keywordsign">'</span>n)&nbsp;side<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;left&nbsp;:&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n)&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.side<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;right&nbsp;:&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n)&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.side<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>a,&nbsp;<span class="keywordsign">'</span>tag)&nbsp;norm<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>a,&nbsp;+<span class="keywordsign">'</span>tag)&nbsp;norm<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;norm2_tag<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;norm2&nbsp;=&nbsp;(<span class="keywordsign">'</span>a,&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.norm2_tag)&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.norm<br>
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;norm4_tag<br>
@@ -46,7 +46,7 @@
 &nbsp;&nbsp;<span class="keyword">type</span>&nbsp;norm_frob<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;norm_frob&nbsp;:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">Slap</span>.<span class="constructor">Common</span>.norm_frob,&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.norm4_tag)&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.norm<br>
-&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>a,&nbsp;<span class="keywordsign">'</span>b,&nbsp;<span class="keywordsign">'</span>c,&nbsp;<span class="keywordsign">'</span>d,&nbsp;<span class="keywordsign">'</span>e)&nbsp;svd_job<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(+<span class="keywordsign">'</span>a,&nbsp;+<span class="keywordsign">'</span>b,&nbsp;+<span class="keywordsign">'</span>c,&nbsp;+<span class="keywordsign">'</span>d,&nbsp;+<span class="keywordsign">'</span>e)&nbsp;svd_job<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;svd_all&nbsp;:&nbsp;(<span class="keywordsign">'</span>a,&nbsp;<span class="keywordsign">'</span>a,&nbsp;<span class="keywordsign">'</span>b,&nbsp;<span class="keywordsign">'</span>c,&nbsp;<span class="keywordsign">'</span>d)&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.svd_job<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;svd_top&nbsp;:&nbsp;(<span class="keywordsign">'</span>b,&nbsp;<span class="keywordsign">'</span>a,&nbsp;<span class="keywordsign">'</span>b,&nbsp;<span class="keywordsign">'</span>c,&nbsp;<span class="keywordsign">'</span>d)&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.svd_job<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;svd_overwrite&nbsp;:&nbsp;(<span class="keywordsign">'</span>c,&nbsp;<span class="keywordsign">'</span>a,&nbsp;<span class="keywordsign">'</span>b,&nbsp;<span class="keywordsign">'</span>c,&nbsp;<span class="keywordsign">'</span>d)&nbsp;<span class="constructor">Slap</span>.<span class="constructor">Common</span>.svd_job<br>
