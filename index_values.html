@@ -595,6 +595,36 @@ Fill the given vector with the given value.
 <code class="code">fold_left f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) (to_int n)</code>.
 </div>
 </td></tr>
+<tr><td><a href="Slap.C.Vec.html#VALfold_left2">fold_left2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_left2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f (... (f (f init x1 y1) x2 y2) ...) xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALfold_left2">fold_left2</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_left2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f (... (f (f init x1 y1) x2 y2) ...) xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALfold_left2">fold_left2</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_left2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f (... (f (f init x1 y1) x2 y2) ...) xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALfold_left2">fold_left2</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_left2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f (... (f (f init x1 y1) x2 y2) ...) xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Vec.html#VALfold_left2">fold_left2</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_left2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f (... (f (f init x1 y1) x2 y2) ...) xn yn</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALfold_lefti">fold_lefti</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
 <td><div class="info">
 <code class="code">fold_lefti f init (x1, x2, ..., xn)</code> is
@@ -623,6 +653,41 @@ Fill the given vector with the given value.
 <td><div class="info">
 <code class="code">fold_lefti f init (x1, x2, ..., xn)</code> is
     <code class="code">f n (... (f 2 (f 1 init x1) x2) ...) xn</code> with the vector's dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.C.Vec.html#VALfold_lefti2">fold_lefti2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_lefti2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f n (... (f 2 (f 1 init x1 y1) x2 y2) ...) xn yn</code> with the vectors'
+    dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALfold_lefti2">fold_lefti2</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_lefti2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f n (... (f 2 (f 1 init x1 y1) x2 y2) ...) xn yn</code> with the vectors'
+    dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALfold_lefti2">fold_lefti2</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_lefti2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f n (... (f 2 (f 1 init x1 y1) x2 y2) ...) xn yn</code> with the vectors'
+    dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALfold_lefti2">fold_lefti2</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_lefti2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f n (... (f 2 (f 1 init x1 y1) x2 y2) ...) xn yn</code> with the vectors'
+    dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Vec.html#VALfold_lefti2">fold_lefti2</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_lefti2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f n (... (f 2 (f 1 init x1 y1) x2 y2) ...) xn yn</code> with the vectors'
+    dimension <code class="code">n</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALfold_right">fold_right</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
@@ -660,6 +725,36 @@ Fill the given vector with the given value.
 <code class="code">fold_right f n init</code> is <code class="code">f 1 (f 2 (... (f (to_int n) init) ...))</code>.
 </div>
 </td></tr>
+<tr><td><a href="Slap.C.Vec.html#VALfold_right2">fold_right2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f x1 y1 (f x2 y2 (... (f xn yn init) ...))</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALfold_right2">fold_right2</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f x1 y1 (f x2 y2 (... (f xn yn init) ...))</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALfold_right2">fold_right2</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f x1 y1 (f x2 y2 (... (f xn yn init) ...))</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALfold_right2">fold_right2</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f x1 y1 (f x2 y2 (... (f xn yn init) ...))</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Vec.html#VALfold_right2">fold_right2</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f x1 y1 (f x2 y2 (... (f xn yn init) ...))</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALfold_righti">fold_righti</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
 <td><div class="info">
 <code class="code">fold_righti f (x1, x2, ..., xn) init</code> is
@@ -688,6 +783,41 @@ Fill the given vector with the given value.
 <td><div class="info">
 <code class="code">fold_righti f (x1, x2, ..., xn) init</code> is
     <code class="code">f 1 x1 (f 2 x2 (... (f n xn init) ...))</code> with the vector's dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.C.Vec.html#VALfold_righti2">fold_righti2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f 1 x1 y1 (f 2 x2 y2 (... (f n xn yn init) ...))</code> with the vectors'
+    dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALfold_righti2">fold_righti2</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f 1 x1 y1 (f 2 x2 y2 (... (f n xn yn init) ...))</code> with the vectors'
+    dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALfold_righti2">fold_righti2</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f 1 x1 y1 (f 2 x2 y2 (... (f n xn yn init) ...))</code> with the vectors'
+    dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALfold_righti2">fold_righti2</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f 1 x1 y1 (f 2 x2 y2 (... (f n xn yn init) ...))</code> with the vectors'
+    dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Vec.html#VALfold_righti2">fold_righti2</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
+<td><div class="info">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f 1 x1 y1 (f 2 x2 y2 (... (f n xn yn init) ...))</code> with the vectors'
+    dimension <code class="code">n</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.Size.html#VALfour">four</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
@@ -1159,6 +1289,36 @@ Fill the given vector with the given value.
 <code class="code">iter f n</code> is <code class="code">f 1; f 2; ...; f (to_int n)</code>.
 </div>
 </td></tr>
+<tr><td><a href="Slap.C.Vec.html#VALiter2">iter2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">iter2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f x1 y1; f x2 y2; ...; f xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALiter2">iter2</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">iter2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f x1 y1; f x2 y2; ...; f xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALiter2">iter2</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">iter2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f x1 y1; f x2 y2; ...; f xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALiter2">iter2</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">iter2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f x1 y1; f x2 y2; ...; f xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Vec.html#VALiter2">iter2</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
+<td><div class="info">
+<code class="code">iter2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f x1 y1; f x2 y2; ...; f xn yn</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALiteri">iteri</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
 <td><div class="info">
 <code class="code">iteri f (x1, x2, ..., xn)</code> is <code class="code">f 1 x1; f 2 x2; ...; f n xn</code>.
@@ -1182,6 +1342,36 @@ Fill the given vector with the given value.
 <tr><td><a href="Slap.Vec.html#VALiteri">iteri</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
 <td><div class="info">
 <code class="code">iteri f (x1, x2, ..., xn)</code> is <code class="code">f 1 x1; f 2 x2; ...; f n xn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.C.Vec.html#VALiteri2">iteri2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f 1 x1 y1; f 2 x2 y2; ...; f n xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALiteri2">iteri2</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f 1 x1 y1; f 2 x2 y2; ...; f n xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALiteri2">iteri2</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f 1 x1 y1; f 2 x2 y2; ...; f n xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALiteri2">iteri2</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f 1 x1 y1; f 2 x2 y2; ...; f n xn yn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Vec.html#VALiteri2">iteri2</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
+<td><div class="info">
+<code class="code">iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f 1 x1 y1; f 2 x2 y2; ...; f n xn yn</code>.
 </div>
 </td></tr>
 <tr><td align="left"><br>K</td></tr>
@@ -1480,6 +1670,36 @@ Fill the given vector with the given value.
 <code class="code">map kind f ?y (x1, ..., xn)</code> is <code class="code">(f x1, ..., f xn)</code>.
 </div>
 </td></tr>
+<tr><td><a href="Slap.C.Vec.html#VALmap2">map2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">map2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f x1 y1, f x2 y2, ..., f xn yn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALmap2">map2</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">map2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f x1 y1, f x2 y2, ..., f xn yn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALmap2">map2</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">map2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f x1 y1, f x2 y2, ..., f xn yn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALmap2">map2</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">map2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f x1 y1, f x2 y2, ..., f xn yn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Vec.html#VALmap2">map2</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
+<td><div class="info">
+<code class="code">map2 kind f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f x1 y1, f x2 y2, ..., f xn yn)</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALmapi">mapi</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
 <td><div class="info">
 <code class="code">mapi f ?y (x1, ..., xn)</code> is <code class="code">(f 1 x1, ..., f n xn)</code> with
@@ -1508,6 +1728,36 @@ Fill the given vector with the given value.
 <td><div class="info">
 <code class="code">mapi kind f ?y (x1, ..., xn)</code> is <code class="code">(f 1 x1, ..., f n xn)</code> with
     the vector's dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.C.Vec.html#VALmapi2">mapi2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">mapi2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f 1 x1 y1, f 2 x2 y2, ..., f n xn yn)</code> with the vectors' dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALmapi2">mapi2</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">mapi2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f 1 x1 y1, f 2 x2 y2, ..., f n xn yn)</code> with the vectors' dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALmapi2">mapi2</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">mapi2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f 1 x1 y1, f 2 x2 y2, ..., f n xn yn)</code> with the vectors' dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALmapi2">mapi2</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">mapi2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f 1 x1 y1, f 2 x2 y2, ..., f n xn yn)</code> with the vectors' dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Vec.html#VALmapi2">mapi2</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
+<td><div class="info">
+<code class="code">mapi2 kind f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f 1 x1 y1, f 2 x2 y2, ..., f n xn yn)</code> with the vectors' dimension <code class="code">n</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALmax">max</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>

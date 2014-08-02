@@ -14,6 +14,7 @@
 <link title="Slap" rel="Chapter" href="Slap.html"><link title="Creation of vectors" rel="Section" href="#2_Creationofvectors">
 <link title="Accessors" rel="Section" href="#2_Accessors">
 <link title="Iterators" rel="Section" href="#2_Iterators">
+<link title="Iterators on two vectors" rel="Section" href="#2_Iteratorsontwovectors">
 <link title="Basic operations" rel="Section" href="#2_Basicoperations">
 <link title="Type conversion" rel="Section" href="#2_Typeconversion">
 <link title="Subvectors" rel="Section" href="#2_Subvectors">
@@ -144,6 +145,54 @@ Like <a href="Slap.Vec.html#VALset_dyn"><code class="code">Slap.Vec.set_dyn</cod
 
 <pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">(int -> 'num -> unit) -> ('n, 'num, 'prec, 'cd) <a href="Slap.Vec.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
 <code class="code">iteri f (x1, x2, ..., xn)</code> is <code class="code">f 1 x1; f 2 x2; ...; f n xn</code>.<br>
+</div>
+<br>
+<h2 id="2_Iteratorsontwovectors">Iterators on two vectors</h2><br>
+
+<pre><span id="VALmap2"><span class="keyword">val</span> map2</span> : <code class="type">('z_num, 'z_prec) Bigarray.kind -><br>       ('x_num -> 'y_num -> 'z_num) -><br>       ?z:('n, 'z_num, 'z_prec, 'z_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'z_num, 'z_prec, 'z_cd) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">map2 kind f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f x1 y1, f x2 y2, ..., f xn yn)</code>.<br>
+<b>Returns</b> the vector <code class="code">z</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">z</code> : default = a fresh vector.</div>
+
+<pre><span id="VALmapi2"><span class="keyword">val</span> mapi2</span> : <code class="type">('z_num, 'z_prec) Bigarray.kind -><br>       (int -> 'x_num -> 'y_num -> 'z_num) -><br>       ?z:('n, 'z_num, 'z_prec, 'z_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'z_num, 'z_prec, 'z_cd) <a href="Slap.Vec.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">mapi2 kind f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">(f 1 x1 y1, f 2 x2 y2, ..., f n xn yn)</code> with the vectors' dimension <code class="code">n</code>.<br>
+<b>Returns</b> the vector <code class="code">z</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">z</code> : default = a fresh vector.</div>
+
+<pre><span id="VALfold_left2"><span class="keyword">val</span> fold_left2</span> : <code class="type">('accum -> 'x_num -> 'y_num -> 'accum) -><br>       'accum -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_left2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f (... (f (f init x1 y1) x2 y2) ...) xn yn</code>.<br>
+</div>
+
+<pre><span id="VALfold_lefti2"><span class="keyword">val</span> fold_lefti2</span> : <code class="type">(int -> 'accum -> 'x_num -> 'y_num -> 'accum) -><br>       'accum -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_lefti2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f n (... (f 2 (f 1 init x1 y1) x2 y2) ...) xn yn</code> with the vectors'
+    dimension <code class="code">n</code>.<br>
+</div>
+
+<pre><span id="VALfold_right2"><span class="keyword">val</span> fold_right2</span> : <code class="type">('x_num -> 'y_num -> 'accum -> 'accum) -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f x1 y1 (f x2 y2 (... (f xn yn init) ...))</code>.<br>
+</div>
+
+<pre><span id="VALfold_righti2"><span class="keyword">val</span> fold_righti2</span> : <code class="type">(int -> 'x_num -> 'y_num -> 'accum -> 'accum) -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init</code> is
+    <code class="code">f 1 x1 y1 (f 2 x2 y2 (... (f n xn yn init) ...))</code> with the vectors'
+    dimension <code class="code">n</code>.<br>
+</div>
+
+<pre><span id="VALiter2"><span class="keyword">val</span> iter2</span> : <code class="type">('x_num -> 'y_num -> unit) -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+<code class="code">iter2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f x1 y1; f x2 y2; ...; f xn yn</code>.<br>
+</div>
+
+<pre><span id="VALiteri2"><span class="keyword">val</span> iteri2</span> : <code class="type">(int -> 'x_num -> 'y_num -> unit) -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap.Vec.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+<code class="code">iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
+    <code class="code">f 1 x1 y1; f 2 x2 y2; ...; f n xn yn</code>.<br>
 </div>
 <br>
 <h2 id="2_Basicoperations">Basic operations</h2><br>
