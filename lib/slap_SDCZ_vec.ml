@@ -100,9 +100,9 @@ let of_list l =
 
 (** {2 Iterators} *)
 
-let map f ?y x = PVec.map prec f ?y x
+let map = PVec.map prec
 
-let mapi f ?y x = PVec.mapi prec f ?y x
+let mapi = PVec.mapi prec
 
 let fold_left = PVec.fold_left
 
@@ -119,6 +119,24 @@ let replace_alli = PVec.replace_alli
 let iter = PVec.iter
 
 let iteri = PVec.iteri
+
+(** {2 Iterators on two vectors} *)
+
+let map2 = PVec.map2 prec
+
+let mapi2 = PVec.mapi2 prec
+
+let fold_left2 = PVec.fold_left2
+
+let fold_lefti2 = PVec.fold_lefti2
+
+let fold_right2 = PVec.fold_right2
+
+let fold_righti2 = PVec.fold_righti2
+
+let iter2 = PVec.iter2
+
+let iteri2 = PVec.iteri2
 
 (** {2 Arithmetic operations} *)
 

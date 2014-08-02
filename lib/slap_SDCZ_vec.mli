@@ -231,6 +231,78 @@ val iteri : (int -> num_type -> unit) ->
 (** [iteri f (x1, x2, ..., xn)] is [f 1 x1; f 2 x2; ...; f n xn].
  *)
 
+(** {2 Iterators on two vectors} *)
+
+val map2 : (num_type -> num_type -> num_type) ->
+           ?z:('n, 'z_cd) vec ->
+           ('n, 'x_cd) vec ->
+           ('n, 'y_cd) vec ->
+           ('n, 'z_cd) vec
+(** [map2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [(f x1 y1, f x2 y2, ..., f xn yn)].
+    @return the vector [z], which is overwritten.
+    @param z default = a fresh vector.
+ *)
+
+val mapi2 : (int -> num_type -> num_type -> num_type) ->
+            ?z:('n, 'z_cd) vec ->
+            ('n, 'x_cd) vec ->
+            ('n, 'y_cd) vec ->
+            ('n, 'z_cd) vec
+(** [mapi2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [(f 1 x1 y1, f 2 x2 y2, ..., f n xn yn)] with the vectors' dimension [n].
+    @return the vector [z], which is overwritten.
+    @param z default = a fresh vector.
+ *)
+
+val fold_left2 : ('accum -> num_type -> num_type -> 'accum) ->
+                 'accum ->
+                 ('n, 'x_cd) vec ->
+                 ('n, 'y_cd) vec -> 'accum
+(** [fold_left2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [f (... (f (f init x1 y1) x2 y2) ...) xn yn].
+ *)
+
+val fold_lefti2 : (int -> 'accum -> num_type -> num_type -> 'accum) ->
+                  'accum ->
+                  ('n, 'x_cd) vec ->
+                  ('n, 'y_cd) vec -> 'accum
+(** [fold_lefti2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [f n (... (f 2 (f 1 init x1 y1) x2 y2) ...) xn yn] with the vectors'
+    dimension [n].
+ *)
+
+val fold_right2 : (num_type -> num_type -> 'accum -> 'accum) ->
+                  ('n, 'x_cd) vec ->
+                  ('n, 'y_cd) vec ->
+                  'accum -> 'accum
+(** [fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init] is
+    [f x1 y1 (f x2 y2 (... (f xn yn init) ...))].
+ *)
+
+val fold_righti2 : (int -> num_type -> num_type -> 'accum -> 'accum) ->
+                   ('n, 'x_cd) vec ->
+                   ('n, 'y_cd) vec ->
+                   'accum -> 'accum
+(** [fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init] is
+    [f 1 x1 y1 (f 2 x2 y2 (... (f n xn yn init) ...))] with the vectors'
+    dimension [n].
+ *)
+
+val iter2 : (num_type -> num_type -> unit) ->
+            ('n, 'x_cd) vec ->
+            ('n, 'y_cd) vec -> unit
+(** [iter2 f (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [f x1 y1; f x2 y2; ...; f xn yn].
+ *)
+
+val iteri2 : (int -> num_type -> num_type -> unit) ->
+            ('n, 'x_cd) vec ->
+            ('n, 'y_cd) vec -> unit
+(** [iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [f 1 x1 y1; f 2 x2 y2; ...; f n xn yn].
+ *)
+
 (** {2 Arithmetic operations} *)
 
 val max : ('n, 'cd) vec -> num_type

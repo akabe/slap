@@ -168,6 +168,61 @@ let test_mapi () =
   "sv_dng <- sv_dle" @? (mp make0_sv_dng sv_dle [24;0;0;19;0;0;14;0;0;9]);
   "sv_dng <- sv_dng" @? (mp make0_sv_dng sv_dng [6;0;0;11;0;0;16;0;0;21])
 
+(* test of Slap.Vec.fold_lefti2 *)
+let test_fold_lefti2 () =
+  let fold_lefti2 = fold_lefti2 (fun i l x y -> (i, x, y) :: l) [] in
+  "sv_dfe & sv_dle" @?(fold_lefti2 sv_dfe sv_dle = [4,7,10;3,5,8;2,3,6;1,1,4]);
+  "sv_dfe & sv_dng" @?(fold_lefti2 sv_dfe sv_dng = [4,7,1;3,5,4;2,3,7;1,1,10]);
+  "sv_dle & sv_dfe" @?(fold_lefti2 sv_dle sv_dfe = [4,10,7;3,8,5;2,6,3;1,4,1]);
+  "sv_dle & sv_dng" @?(fold_lefti2 sv_dle sv_dng = [4,10,1;3,8,4;2,6,7;1,4,10]);
+  "sv_dng & sv_dfe" @?(fold_lefti2 sv_dng sv_dfe = [4,1,7;3,4,5;2,7,3;1,10,1]);
+  "sv_dng & sv_dle" @?(fold_lefti2 sv_dng sv_dle = [4,1,10;3,4,8;2,7,6;1,10,4])
+
+(* test of Slap.Vec.fold_righti2 *)
+let test_fold_righti2 () =
+  let fold_righti2 x y = fold_righti2 (fun i x y l -> (i, x, y) :: l) x y [] in
+  "sv_dfe & sv_dle"@?(fold_righti2 sv_dfe sv_dle = [1,1,4;2,3,6;3,5,8;4,7,10]);
+  "sv_dfe & sv_dng"@?(fold_righti2 sv_dfe sv_dng = [1,1,10;2,3,7;3,5,4;4,7,1]);
+  "sv_dle & sv_dfe"@?(fold_righti2 sv_dle sv_dfe = [1,4,1;2,6,3;3,8,5;4,10,7]);
+  "sv_dle & sv_dng"@?(fold_righti2 sv_dle sv_dng = [1,4,10;2,6,7;3,8,4;4,10,1]);
+  "sv_dng & sv_dfe"@?(fold_righti2 sv_dng sv_dfe = [1,10,1;2,7,3;3,4,5;4,1,7]);
+  "sv_dng & sv_dle"@?(fold_righti2 sv_dng sv_dle = [1,10,4;2,7,6;3,4,8;4,1,10])
+
+(* test of Slap.Vec.iteri2 *)
+let test_iteri2 () =
+  let iteri2_fl2 x y = (* `fold_lefti2' implemented by using `iteri2' *)
+    let ll = ref [] in
+    iteri2 (fun i x y -> ll := (i, x, y) :: !ll) x y;
+    !ll
+  in
+  "sv_dfe & sv_dle" @? (iteri2_fl2 sv_dfe sv_dle = [4,7,10;3,5,8;2,3,6;1,1,4]);
+  "sv_dfe & sv_dng" @? (iteri2_fl2 sv_dfe sv_dng = [4,7,1;3,5,4;2,3,7;1,1,10]);
+  "sv_dle & sv_dfe" @? (iteri2_fl2 sv_dle sv_dfe = [4,10,7;3,8,5;2,6,3;1,4,1]);
+  "sv_dle & sv_dng" @? (iteri2_fl2 sv_dle sv_dng = [4,10,1;3,8,4;2,6,7;1,4,10]);
+  "sv_dng & sv_dfe" @? (iteri2_fl2 sv_dng sv_dfe = [4,1,7;3,4,5;2,7,3;1,10,1]);
+  "sv_dng & sv_dle" @? (iteri2_fl2 sv_dng sv_dle = [4,1,10;3,4,8;2,7,6;1,10,4])
+
+(* test of Slap.Vec.mapi2 *)
+let test_mapi2 () =
+  let mp2 mk0 x y l =
+    let org_z, z = mk0 () in
+    let z' = mapi2 int (fun i x y -> x - y + i) ~z x y in
+    (to_list z = to_list z') && (to_list org_z = l)
+  in
+  "sv_dle <- sv_dfe & sv_dle"
+  @? (mp2 make0_sv_dle sv_dfe sv_dle [0;0;0;-2;0;-1;0;0;0;1]);
+  "sv_dle <- sv_dfe & sv_dng"
+  @? (mp2 make0_sv_dle sv_dfe sv_dng [0;0;0;-8;0;-2;0;4;0;10]);
+  "sv_dle <- sv_dle & sv_dfe"
+  @? (mp2 make0_sv_dle sv_dle sv_dfe [0;0;0;4;0;5;0;6;0;7]);
+  "sv_dle <- sv_dle & sv_dng"
+  @? (mp2 make0_sv_dle sv_dle sv_dng [0;0;0;-5;0;1;0;7;0;13]);
+  "sv_dle <- sv_dng & sv_dfe"
+  @? (mp2 make0_sv_dle sv_dng sv_dfe [0;0;0;10;0;6;0;2;0;-2]);
+  "sv_dle <- sv_dng & sv_dle"
+  @? (mp2 make0_sv_dle sv_dng sv_dle [0;0;0;7;0;3;0;-1;0;-5]);
+  "sv_dng <- sv_dfe & sv_dle"
+  @? (mp2 make0_sv_dng sv_dfe sv_dle [1;0;0;0;0;0;-1;0;0;-2])
 
 let suite =
   "Slap.Vec" >:::
@@ -179,4 +234,8 @@ let suite =
      "fold_lefti"   >:: test_fold_lefti;
      "fold_righti"  >:: test_fold_righti;
      "iteri"        >:: test_iteri;
-     "mapi"         >:: test_mapi]
+     "mapi"         >:: test_mapi;
+     "fold_lefti2"  >:: test_fold_lefti2;
+     "fold_righti2" >:: test_fold_righti2;
+     "iteri2"       >:: test_iteri2;
+     "mapi2"        >:: test_mapi2]

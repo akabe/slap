@@ -152,6 +152,80 @@ val iteri : (int -> 'num -> unit) ->
             ('n, 'num, 'prec, 'cd) t -> unit
 (** [iteri f (x1, x2, ..., xn)] is [f 1 x1; f 2 x2; ...; f n xn]. *)
 
+(** {2 Iterators on two vectors} *)
+
+val map2 : ('z_num, 'z_prec) kind ->
+           ('x_num -> 'y_num -> 'z_num) ->
+           ?z:('n, 'z_num, 'z_prec, 'z_cd) t ->
+           ('n, 'x_num, 'x_prec, 'x_cd) t ->
+           ('n, 'y_num, 'y_prec, 'y_cd) t ->
+           ('n, 'z_num, 'z_prec, 'z_cd) t
+(** [map2 kind f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [(f x1 y1, f x2 y2, ..., f xn yn)].
+    @return the vector [z], which is overwritten.
+    @param z default = a fresh vector.
+ *)
+
+val mapi2 : ('z_num, 'z_prec) kind ->
+            (int -> 'x_num -> 'y_num -> 'z_num) ->
+            ?z:('n, 'z_num, 'z_prec, 'z_cd) t ->
+            ('n, 'x_num, 'x_prec, 'x_cd) t ->
+            ('n, 'y_num, 'y_prec, 'y_cd) t ->
+            ('n, 'z_num, 'z_prec, 'z_cd) t
+(** [mapi2 kind f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [(f 1 x1 y1, f 2 x2 y2, ..., f n xn yn)] with the vectors' dimension [n].
+    @return the vector [z], which is overwritten.
+    @param z default = a fresh vector.
+ *)
+
+val fold_left2 : ('accum -> 'x_num -> 'y_num -> 'accum) ->
+                 'accum ->
+                 ('n, 'x_num, 'x_prec, 'x_cd) t ->
+                 ('n, 'y_num, 'y_prec, 'y_cd) t -> 'accum
+(** [fold_left2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [f (... (f (f init x1 y1) x2 y2) ...) xn yn].
+ *)
+
+val fold_lefti2 : (int -> 'accum -> 'x_num -> 'y_num -> 'accum) ->
+                  'accum ->
+                  ('n, 'x_num, 'x_prec, 'x_cd) t ->
+                  ('n, 'y_num, 'y_prec, 'y_cd) t -> 'accum
+(** [fold_lefti2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [f n (... (f 2 (f 1 init x1 y1) x2 y2) ...) xn yn] with the vectors'
+    dimension [n].
+ *)
+
+val fold_right2 : ('x_num -> 'y_num -> 'accum -> 'accum) ->
+                  ('n, 'x_num, 'x_prec, 'x_cd) t ->
+                  ('n, 'y_num, 'y_prec, 'y_cd) t ->
+                  'accum -> 'accum
+(** [fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init] is
+    [f x1 y1 (f x2 y2 (... (f xn yn init) ...))].
+ *)
+
+val fold_righti2 : (int -> 'x_num -> 'y_num -> 'accum -> 'accum) ->
+                   ('n, 'x_num, 'x_prec, 'x_cd) t ->
+                   ('n, 'y_num, 'y_prec, 'y_cd) t ->
+                   'accum -> 'accum
+(** [fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init] is
+    [f 1 x1 y1 (f 2 x2 y2 (... (f n xn yn init) ...))] with the vectors'
+    dimension [n].
+ *)
+
+val iter2 : ('x_num -> 'y_num -> unit) ->
+            ('n, 'x_num, 'x_prec, 'x_cd) t ->
+            ('n, 'y_num, 'y_prec, 'y_cd) t -> unit
+(** [iter2 f (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [f x1 y1; f x2 y2; ...; f xn yn].
+ *)
+
+val iteri2 : (int -> 'x_num -> 'y_num -> unit) ->
+            ('n, 'x_num, 'x_prec, 'x_cd) t ->
+            ('n, 'y_num, 'y_prec, 'y_cd) t -> unit
+(** [iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [f 1 x1 y1; f 2 x2 y2; ...; f n xn yn].
+ *)
+
 (** {2 Basic operations} *)
 
 val copy : ?y:('n, 'num, 'prec, 'y_cd) t ->

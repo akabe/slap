@@ -118,8 +118,7 @@ let mapi kind f ?y (n, ofsx, incx, x) =
   loop 1 ofsx ofsy;
   (n, ofsy, incy, y)
 
-let map kind f ?y vx =
-  mapi kind (fun _ x -> f x) ?y vx
+let map kind f = mapi kind (fun _ -> f)
 
 let fold_lefti f init (n, ofsx, incx, x) =
   let rec loop count i acc =
@@ -131,8 +130,7 @@ let fold_lefti f init (n, ofsx, incx, x) =
   in
   loop 1 ofsx init
 
-let fold_left f init vx =
-  fold_lefti (fun _ acc x -> f acc x) init vx
+let fold_left f = fold_lefti (fun _ -> f)
 
 let fold_righti f (n, ofsx, incx, x) init =
   let rec loop count i acc =
@@ -144,14 +142,12 @@ let fold_righti f (n, ofsx, incx, x) init =
   in
   loop n ((n - 1) * incx + ofsx) init
 
-let fold_right f vx init =
-  fold_righti (fun _ xi acc -> f xi acc) vx init
+let fold_right f = fold_righti (fun _ -> f)
 
 let replace_alli px f =
   ignore (mapi (kind px) f ~y:px px)
 
-let replace_all v f =
-  replace_alli v (fun _ xi -> f xi)
+let replace_all v f = replace_alli v (fun _ -> f)
 
 let iteri f (n, ofsx, incx, x) =
   let rec loop count i =
@@ -162,8 +158,64 @@ let iteri f (n, ofsx, incx, x) =
   in
   loop 1 ofsx
 
-let iter f vx =
-  iteri (fun _ x -> f x) vx
+let iter f = iteri (fun _ -> f)
+
+let mapi2 kind f ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  let ofsz, incz, z = opt_vec_alloc kind n z in
+  let rec loop count ix iy iz =
+    if count <= n then
+      begin
+        let xi = Array1.unsafe_get x ix in
+        let yi = Array1.unsafe_get y iy in
+        Array1.unsafe_set z iz (f count xi yi);
+        loop (count + 1) (ix + incx) (iy + incy) (iz + incz)
+      end
+  in
+  loop 1 ofsx ofsy ofsz;
+  (n, ofsz, incz, z)
+
+let map2 kind f = mapi2 kind (fun _ -> f)
+
+let fold_lefti2 f init (n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  let rec loop count ix iy acc =
+    if count > n then acc else
+      begin
+        let xi = Array1.unsafe_get x ix in
+        let yi = Array1.unsafe_get y iy in
+        loop (count + 1) (ix + incx) (iy + incy) (f count acc xi yi)
+      end
+  in
+  loop 1 ofsx ofsy init
+
+let fold_left2 f = fold_lefti2 (fun _ -> f)
+
+let fold_righti2 f (n, ofsx, incx, x) (n', ofsy, incy, y) init =
+  assert(n = n');
+  let rec loop count ix iy acc =
+    if count = 0 then acc else
+      begin
+        let xi = Array1.unsafe_get x ix in
+        let yi = Array1.unsafe_get y iy in
+        loop (count - 1) (ix - incx) (iy - incy) (f count xi yi acc)
+      end
+  in
+  loop n ((n - 1) * incx + ofsx) ((n - 1) * incy + ofsy) init
+
+let fold_right2 f = fold_righti2 (fun _ -> f)
+
+let iteri2 f (n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  let rec loop count ix iy =
+    if count <= n then begin
+      f count (Array1.unsafe_get x ix) (Array1.unsafe_get y iy);
+      loop (count + 1) (ix + incx) (iy + incy)
+    end
+  in
+  loop 1 ofsx ofsy
+
+let iter2 f = iteri2 (fun _ -> f)
 
 (** {2 Basic operations} *)
 
