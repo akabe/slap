@@ -27,6 +27,8 @@ type (+'n, 'num, 'prec, +'cnt_or_dsc) t =
 
 let cnt v = v
 
+let shared_rev (n, ofsx, incx, x) = (n, (n - 1) * incx + ofsx, -incx, x)
+
 let create_array1 kind n = Array1.create kind fortran_layout n
 
 let check_cnt n ofsx incx x =
@@ -132,15 +134,9 @@ let fold_lefti f init (n, ofsx, incx, x) =
 
 let fold_left f = fold_lefti (fun _ -> f)
 
-let fold_righti f (n, ofsx, incx, x) init =
-  let rec loop count i acc =
-    if count = 0 then acc else
-      begin
-        let xi = Array1.unsafe_get x i in
-        loop (count - 1) (i - incx) (f count xi acc)
-      end
-  in
-  loop n ((n - 1) * incx + ofsx) init
+let fold_righti f vx init =
+  let n = dim vx + 1 in
+  fold_lefti (fun i acc xi -> f (n - i) xi acc) init (shared_rev vx)
 
 let fold_right f = fold_righti (fun _ -> f)
 
@@ -149,16 +145,11 @@ let replace_alli px f =
 
 let replace_all v f = replace_alli v (fun _ -> f)
 
-let iteri f (n, ofsx, incx, x) =
-  let rec loop count i =
-    if count <= n then begin
-      f count (Array1.unsafe_get x i);
-      loop (count + 1) (i + incx)
-    end
-  in
-  loop 1 ofsx
+let iteri f = fold_lefti (fun i () -> f i) ()
 
 let iter f = iteri (fun _ -> f)
+
+(** {2 Iterators on two vectors} *)
 
 let mapi2 kind f ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
   assert(n = n');
@@ -191,31 +182,91 @@ let fold_lefti2 f init (n, ofsx, incx, x) (n', ofsy, incy, y) =
 
 let fold_left2 f = fold_lefti2 (fun _ -> f)
 
-let fold_righti2 f (n, ofsx, incx, x) (n', ofsy, incy, y) init =
-  assert(n = n');
-  let rec loop count ix iy acc =
-    if count = 0 then acc else
-      begin
-        let xi = Array1.unsafe_get x ix in
-        let yi = Array1.unsafe_get y iy in
-        loop (count - 1) (ix - incx) (iy - incy) (f count xi yi acc)
-      end
-  in
-  loop n ((n - 1) * incx + ofsx) ((n - 1) * incy + ofsy) init
+let fold_righti2 f vx vy init =
+  let n = dim vx + 1 in
+  fold_lefti2 (fun i acc xi yi -> f (n - i) xi yi acc)
+              init (shared_rev vx) (shared_rev vy)
 
 let fold_right2 f = fold_righti2 (fun _ -> f)
 
-let iteri2 f (n, ofsx, incx, x) (n', ofsy, incy, y) =
+let iteri2 f = fold_lefti2 (fun i () -> f i) ()
+
+let iter2 f = iteri2 (fun _ -> f)
+
+(** {2 Iterators on three vectors} *)
+
+let mapi3 kind f ?w (n, ofsx, incx, x) (n', ofsy, incy, y) (n'', ofsz, incz, z) =
+  assert(n = n' && n = n'');
+  let ofsw, incw, w = opt_vec_alloc kind n w in
+  let rec loop count ix iy iz iw =
+    if count <= n then
+      begin
+        let xi = Array1.unsafe_get x ix in
+        let yi = Array1.unsafe_get y iy in
+        let zi = Array1.unsafe_get z iz in
+        Array1.unsafe_set w iw (f count xi yi zi);
+        loop (count + 1) (ix + incx) (iy + incy) (iz + incz) (iw + incw)
+      end
+  in
+  loop 1 ofsx ofsy ofsz ofsw;
+  (n, ofsw, incw, w)
+
+let map3 kind f = mapi3 kind (fun _ -> f)
+
+let fold_lefti3 f init (n, ofsx, incx, x) (n', ofsy, incy, y)
+                (n'', ofsz, incz, z) =
+  assert(n = n' && n = n'');
+  let rec loop count ix iy iz acc =
+    if count > n then acc else
+      begin
+        let xi = Array1.unsafe_get x ix in
+        let yi = Array1.unsafe_get y iy in
+        let zi = Array1.unsafe_get z iz in
+        loop (count + 1) (ix + incx) (iy + incy) (iz + incz)
+             (f count acc xi yi zi)
+      end
+  in
+  loop 1 ofsx ofsy ofsz init
+
+let fold_left3 f = fold_lefti3 (fun _ -> f)
+
+let fold_righti3 f vx vy vz init =
+  let n = dim vx + 1 in
+  fold_lefti3 (fun i acc xi yi zi -> f (n - i) xi yi zi acc)
+              init (shared_rev vx) (shared_rev vy) (shared_rev vz)
+
+let fold_right3 f = fold_righti3 (fun _ -> f)
+
+let iteri3 f = fold_lefti3 (fun i () -> f i) ()
+
+let iter3 f = iteri3 (fun _ -> f)
+
+(** {2 Scanning} *)
+
+let for_all p (n, ofsx, incx, x) =
+  let rec loop count i =
+    if count > n then true else
+      if p (Array1.unsafe_get x i)
+      then loop (count + 1) (i + incx)
+      else false
+  in
+  loop 1 ofsx
+
+let exists p vx = not (for_all (fun xi -> not (p xi)) vx)
+
+let for_all2 p (n, ofsx, incx, x) (n', ofsy, incy, y) =
   assert(n = n');
   let rec loop count ix iy =
-    if count <= n then begin
-      f count (Array1.unsafe_get x ix) (Array1.unsafe_get y iy);
-      loop (count + 1) (ix + incx) (iy + incy)
-    end
+    if count > n then true else
+      if p (Array1.unsafe_get x ix) (Array1.unsafe_get y iy)
+      then loop (count + 1) (ix + incx) (iy + incy)
+      else false
   in
   loop 1 ofsx ofsy
 
-let iter2 f = iteri2 (fun _ -> f)
+let exists2 p vx vy = not (for_all2 (fun xi yi -> not (p xi yi)) vx vy)
+
+let mem ?(equal=(=)) a = exists (equal a)
 
 (** {2 Basic operations} *)
 
@@ -249,6 +300,8 @@ let append (m, ofsx, incx, x) (n, ofsy, incy, y) =
   copy_aux n ofsy incy y (m + 1) 1 z;
   (k, 1, 1, z)
 
+let rev vx = copy (shared_rev vx)
+
 (** {2 Type conversion} *)
 
 let to_array (n, ofsx, incx, x) =
@@ -276,6 +329,23 @@ let unsafe_of_list kind n lst =
 let of_list_dyn kind n lst =
   if n <> List.length lst then invalid_arg "Slap.Vec.of_list_dyn";
   unsafe_of_list kind n lst
+
+let to_bigarray x =
+  let ba = create_array1 (kind x) (dim x) in
+  iteri (fun i a -> Array1.unsafe_set ba i a) x;
+  ba
+
+let unsafe_of_bigarray ~share n ba =
+  if share then (n, 1, 1, ba) else
+    begin
+      let ba' = create_array1 (Array1.kind ba) n in
+      Array1.blit ba ba';
+      (n, 1, 1, ba')
+    end
+
+let of_bigarray_dyn ?(share=false) n ba =
+  if n <> Array1.dim ba then invalid_arg "Slap.Vec.of_bigarray_dyn";
+  unsafe_of_bigarray ~share n ba
 
 (** {2 Subvectors} *)
 

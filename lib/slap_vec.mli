@@ -226,6 +226,130 @@ val iteri2 : (int -> 'x_num -> 'y_num -> unit) ->
     [f 1 x1 y1; f 2 x2 y2; ...; f n xn yn].
  *)
 
+(** {2 Iterators on three vectors} *)
+
+val map3 : ('w_num, 'w_prec) kind ->
+           ('x_num -> 'y_num -> 'z_num -> 'w_num) ->
+           ?w:('n, 'w_num, 'w_prec, 'w_cd) t ->
+           ('n, 'x_num, 'x_prec, 'x_cd) t ->
+           ('n, 'y_num, 'y_prec, 'y_cd) t ->
+           ('n, 'z_num, 'z_prec, 'z_cd) t ->
+           ('n, 'w_num, 'w_prec, 'w_cd) t
+(** [map3 kind f ?w (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
+    [(f x1 y1 z1, f x2 y2 z2, ..., f xn yn zn)].
+    @return the vector [w], which is overwritten.
+    @param w default = a fresh vector.
+ *)
+
+val mapi3 : ('w_num, 'w_prec) kind ->
+            (int -> 'x_num -> 'y_num -> 'z_num -> 'w_num) ->
+            ?w:('n, 'w_num, 'w_prec, 'w_cd) t ->
+            ('n, 'x_num, 'x_prec, 'x_cd) t ->
+            ('n, 'y_num, 'y_prec, 'y_cd) t ->
+            ('n, 'z_num, 'z_prec, 'z_cd) t ->
+            ('n, 'w_num, 'w_prec, 'w_cd) t
+(** [mapi3 kind f ?w (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
+    [(f 1 x1 y1 z1, f 2 x2 y2 z2, ..., f n xn yn zn)] with the vectors'
+    dimension [n].
+    @return the vector [w], which is overwritten.
+    @param w default = a fresh vector.
+ *)
+
+val fold_left3 : ('accum -> 'x_num -> 'y_num -> 'z_num -> 'accum) ->
+                 'accum ->
+                 ('n, 'x_num, 'x_prec, 'x_cd) t ->
+                 ('n, 'y_num, 'y_prec, 'y_cd) t ->
+                 ('n, 'z_num, 'z_prec, 'z_cd) t -> 'accum
+(** [fold_left3 f init (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)]
+    is [f (... (f (f init x1 y1 z1) x2 y2 z2) ...) xn yn zn].
+ *)
+
+val fold_lefti3 : (int -> 'accum -> 'x_num -> 'y_num -> 'z_num -> 'accum) ->
+                  'accum ->
+                  ('n, 'x_num, 'x_prec, 'x_cd) t ->
+                  ('n, 'y_num, 'y_prec, 'y_cd) t ->
+                  ('n, 'z_num, 'z_prec, 'z_cd) t -> 'accum
+(** [fold_lefti3 f init (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)]
+    is [f n (... (f 2 (f 1 init x1 y1 z1) x2 y2 z2) ...) xn yn zn] with the
+    vectors' dimension [n].
+ *)
+
+val fold_right3 : ('x_num -> 'y_num -> 'z_num -> 'accum -> 'accum) ->
+                  ('n, 'x_num, 'x_prec, 'x_cd) t ->
+                  ('n, 'y_num, 'y_prec, 'y_cd) t ->
+                  ('n, 'z_num, 'z_prec, 'z_cd) t ->
+                  'accum -> 'accum
+(** [fold_right3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn) init]
+    is [f x1 y1 z1 (f x2 y2 z2 (... (f xn yn zn init) ...))].
+ *)
+
+val fold_righti3 : (int -> 'x_num -> 'y_num -> 'z_num -> 'accum -> 'accum) ->
+                   ('n, 'x_num, 'x_prec, 'x_cd) t ->
+                   ('n, 'y_num, 'y_prec, 'y_cd) t ->
+                   ('n, 'z_num, 'z_prec, 'z_cd) t ->
+                   'accum -> 'accum
+(** [fold_righti3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn) init]
+    is [f 1 x1 y1 z1 (f 2 x2 y2 z2 (... (f n xn yn zn init) ...))]
+    with the vectors' dimension [n].
+ *)
+
+val iter3 : ('x_num -> 'y_num -> 'z_num -> unit) ->
+            ('n, 'x_num, 'x_prec, 'x_cd) t ->
+            ('n, 'y_num, 'y_prec, 'y_cd) t ->
+            ('n, 'z_num, 'z_prec, 'z_cd) t -> unit
+(** [iter3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
+    [f x1 y1 z1; f x2 y2 z2; ...; f xn yn zn].
+ *)
+
+val iteri3 : (int -> 'x_num -> 'y_num -> 'z_num -> unit) ->
+             ('n, 'x_num, 'x_prec, 'x_cd) t ->
+             ('n, 'y_num, 'y_prec, 'y_cd) t ->
+             ('n, 'z_num, 'z_prec, 'z_cd) t -> unit
+(** [iteri3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
+    [f 1 x1 y1 z1; f 2 x2 y2 z2; ...; f n xn yn zn].
+ *)
+
+(** {2 Scanning} *)
+
+val for_all : ('num -> bool) ->
+             ('n, 'num, 'prec, 'cd) t -> bool
+(** [for_all p (x1, x2, ..., xn)] is [(p x1) && (p x2) && ... && (p xn)].
+    @return [true] if and only if all elements of the given vector satisfy
+    the predicate [p].
+ *)
+
+val exists : ('num -> bool) ->
+             ('n, 'num, 'prec, 'cd) t -> bool
+(** [exists p (x1, x2, ..., xn)] is [(p x1) || (p x2) || ... || (p xn)].
+    @return [true] if and only if at least one element of the given vector
+    satisfies the predicate [p].
+ *)
+
+val for_all2 : ('x_num -> 'y_num -> bool) ->
+               ('n, 'x_num, 'x_prec, 'x_cd) t ->
+               ('n, 'y_num, 'y_prec, 'y_cd) t -> bool
+(** [for_all2 p (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [(p x1 y1) && (p x2 y2) && ... && (p xn yn)].
+    @return [true] if and only if all elements of the given two vectors
+    satisfy the predicate [p].
+ *)
+
+val exists2 : ('x_num -> 'y_num -> bool) ->
+              ('n, 'x_num, 'x_prec, 'x_cd) t ->
+              ('n, 'y_num, 'y_prec, 'y_cd) t -> bool
+(** [exists2 p (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [(p x1 y1) || (p x2 y2) || ... || (p xn yn)].
+    @return [true] if and only if at least one pair of elements of the given two
+    vectors satisfies the predicate [p].
+ *)
+
+val mem : ?equal:('num -> 'num -> bool) ->
+          'num -> ('n, 'num, 'prec, 'cd) t -> bool
+(** [mem ?equal a v]
+    @return [true] if and only if [a] is equal to an element of [v].
+    @param equal default = [(=)] (polymorphic compare)
+ *)
+
 (** {2 Basic operations} *)
 
 val copy : ?y:('n, 'num, 'prec, 'y_cd) t ->
@@ -242,6 +366,16 @@ val append : ('m, 'num, 'prec, 'x_cd) t ->
              ('n, 'num, 'prec, 'y_cd) t ->
              (('m, 'n) Size.add, 'num, 'prec, 'cnt) t
 (** Concatenate two vectors. *)
+
+val shared_rev : ('n, 'num, 'prec, 'cd) t -> ('n, 'num, 'prec, 'cd) t
+(** [shared_rev (x1, x2, ..., xn)]
+    @return reversed vector [(xn, ..., x2, x1)]. The data are shared.
+ *)
+
+val rev : ('n, 'num, 'prec, 'cd) t -> ('n, 'num, 'prec, 'cd) t
+(** [rev (x1, x2, ..., xn)]
+    @return reversed vector [(xn, ..., x2, x1)]. The data are NOT shared.
+ *)
 
 (** {2 Type conversion} *)
 
@@ -269,6 +403,23 @@ val of_list_dyn : ('num, 'prec) kind ->
 (** [of_list_dyn kind n [a1; ...; an]]
     @raise Invalid_argument the length of the given list is not equal to [n].
     @return a fresh vector [(a1, ..., an)].
+ *)
+
+val to_bigarray : ('n, 'num, 'prec, 'cd) t ->
+                  ('num, 'prec, fortran_layout) Array1.t
+(** [to_bigarray x]
+    @return the big array of all the elements of the vector [x].
+ *)
+
+val of_bigarray_dyn : ?share:bool ->
+                      'n Size.t ->
+                      ('num, 'prec, fortran_layout) Array1.t ->
+                      ('n, 'num, 'prec, 'cnt) t
+(** [of_bigarray_dyn ?share n ba]
+    @raise Invalid_argument the length of the given big array is not equal to
+          [n].
+    @return a fresh vector of all the elements of big array [ba].
+    @param share [true] if data are shared. (default = [false])
  *)
 
 (** {2 Subvectors} *)

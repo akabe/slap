@@ -113,6 +113,16 @@ val append : ('m, 'x_cd) vec -> ('n, 'y_cd) vec ->
              (('m, 'n) Size.add, 'cnt) vec
 (** Concatenate two vectors. *)
 
+val shared_rev : ('n, 'cd) vec -> ('n, 'cd) vec
+(** [shared_rev (x1, x2, ..., xn)]
+    @return reversed vector [(xn, ..., x2, x1)]. The data are shared.
+ *)
+
+val rev : ('n, 'cd) vec -> ('n, 'cd) vec
+(** [rev (x1, x2, ..., xn)]
+    @return reversed vector [(xn, ..., x2, x1)]. The data are NOT shared.
+ *)
+
 (** {2 Type conversion} *)
 
 val to_array : ('n, 'cd) vec -> num_type array
@@ -160,6 +170,40 @@ val of_list : num_type list -> (module CNTVEC)
 
 module Of_list (X : sig val value : num_type list end) : CNTVEC
 (** A functor version of [of_list]. *)
+
+val to_bigarray : ('n, 'cd) vec ->
+                  (num_type, prec, fortran_layout) Array1.t
+(** [to_bigarray x]
+    @return the big array of all the elements of the vector [x].
+ *)
+
+val of_bigarray_dyn : ?share:bool ->
+                      'n Size.t ->
+                      (num_type, prec, fortran_layout) Array1.t ->
+                      ('n, 'cnt) vec
+(** [of_bigarray_dyn ?share n ba]
+    @raise Invalid_argument the length of the given big array is not equal to
+          [n].
+    @return a fresh vector of all the elements of big array [ba].
+    @param share [true] if data are shared. (default = [false])
+ *)
+
+val of_bigarray : ?share:bool ->
+                  (num_type, prec, fortran_layout) Array1.t ->
+                  (module CNTVEC)
+(** [module V = (val of_bigarray ?share n ba : CNTVEC)]
+    @return module [V] containing the vector [V.value] (of all elements of big
+    array [ba]) that has the type [(V.n, 'cnt) vec] with a generative phantom
+    type [V.n] as a package of an existential quantified sized type like
+    [exists n. (n, 'cnt) vec].
+    @param share [true] if data are shared. (default = [false])
+ *)
+
+module Of_bigarray (X : sig
+                          val share : bool
+                          val value : (num_type, prec, fortran_layout) Array1.t
+                        end) : CNTVEC
+(** A functor version of [of_bigarray]. *)
 
 (** {2 Iterators} *)
 
@@ -301,6 +345,119 @@ val iteri2 : (int -> num_type -> num_type -> unit) ->
             ('n, 'y_cd) vec -> unit
 (** [iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)] is
     [f 1 x1 y1; f 2 x2 y2; ...; f n xn yn].
+ *)
+
+(** {2 Iterators on three vectors} *)
+
+val map3 : (num_type -> num_type -> num_type -> num_type) ->
+           ?w:('n, 'w_cd) vec ->
+           ('n, 'x_cd) vec ->
+           ('n, 'y_cd) vec ->
+           ('n, 'z_cd) vec ->
+           ('n, 'w_cd) vec
+(** [map3 f ?w (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
+    [(f x1 y1 z1, f x2 y2 z2, ..., f xn yn zn)].
+    @return the vector [w], which is overwritten.
+    @param w default = a fresh vector.
+ *)
+
+val mapi3 : (int -> num_type -> num_type -> num_type -> num_type) ->
+           ?w:('n, 'w_cd) vec ->
+           ('n, 'x_cd) vec ->
+           ('n, 'y_cd) vec ->
+           ('n, 'z_cd) vec ->
+           ('n, 'w_cd) vec
+(** [mapi3 f ?w (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
+    [(f 1 x1 y1 z1, f 2 x2 y2 z2, ..., f n xn yn zn)] with the vectors'
+    dimension [n].
+    @return the vector [w], which is overwritten.
+    @param w default = a fresh vector.
+ *)
+
+val fold_left3 : ('accum -> num_type -> num_type -> num_type -> 'accum) ->
+                 'accum ->
+                 ('n, 'x_cd) vec ->
+                 ('n, 'y_cd) vec ->
+                 ('n, 'z_cd) vec -> 'accum
+(** [fold_left3 f init (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)]
+    is [f (... (f (f init x1 y1 z1) x2 y2 z2) ...) xn yn zn].
+ *)
+
+val fold_lefti3 : (int -> 'accum -> num_type -> num_type -> num_type->'accum) ->
+                 'accum ->
+                 ('n, 'x_cd) vec ->
+                 ('n, 'y_cd) vec ->
+                 ('n, 'z_cd) vec -> 'accum
+(** [fold_lefti3 f init (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)]
+    is [f n (... (f 2 (f 1 init x1 y1 z1) x2 y2 z2) ...) xn yn zn] with the
+    vectors' dimension [n].
+ *)
+
+val fold_right3 : (num_type -> num_type -> num_type -> 'accum -> 'accum) ->
+                  ('n, 'x_cd) vec ->
+                  ('n, 'y_cd) vec ->
+                  ('n, 'z_cd) vec ->
+                  'accum -> 'accum
+(** [fold_right3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn) init]
+    is [f x1 y1 z1 (f x2 y2 z2 (... (f xn yn zn init) ...))].
+ *)
+
+val fold_righti3 : (int -> num_type -> num_type -> num_type -> 'accum->'accum)->
+                  ('n, 'x_cd) vec ->
+                  ('n, 'y_cd) vec ->
+                  ('n, 'z_cd) vec ->
+                  'accum -> 'accum
+(** [fold_righti3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn) init]
+    is [f 1 x1 y1 z1 (f 2 x2 y2 z2 (... (f n xn yn zn init) ...))]
+    with the vectors' dimension [n].
+ *)
+
+val iter3 : (num_type -> num_type -> num_type -> unit) ->
+            ('n, 'x_cd) vec ->
+            ('n, 'y_cd) vec ->
+            ('n, 'z_cd) vec -> unit
+(** [iter3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
+    [f x1 y1 z1; f x2 y2 z2; ...; f xn yn zn].
+ *)
+
+val iteri3 : (int -> num_type -> num_type -> num_type -> unit) ->
+             ('n, 'x_cd) vec ->
+             ('n, 'y_cd) vec ->
+             ('n, 'z_cd) vec -> unit
+(** [iteri3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
+    [f 1 x1 y1 z1; f 2 x2 y2 z2; ...; f n xn yn zn].
+ *)
+
+(** {2 Scanning} *)
+
+val for_all : (num_type -> bool) -> ('n, 'cd) vec -> bool
+(** [for_all p (x1, x2, ..., xn)] is [(p x1) && (p x2) && ... && (p xn)].
+    @return [true] if and only if all elements of the given vector satisfy
+    the predicate [p].
+ *)
+
+val exists : (num_type -> bool) -> ('n, 'cd) vec -> bool
+(** [exists p (x1, x2, ..., xn)] is [(p x1) || (p x2) || ... || (p xn)].
+    @return [true] if and only if at least one element of the given vector
+    satisfies the predicate [p].
+ *)
+
+val for_all2 : (num_type -> num_type -> bool) ->
+               ('n, 'x_cd) vec ->
+               ('n, 'y_cd) vec -> bool
+(** [for_all2 p (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [(p x1 y1) && (p x2 y2) && ... && (p xn yn)].
+    @return [true] if and only if all elements of the given two vectors
+    satisfy the predicate [p].
+ *)
+
+val exists2 : (num_type -> num_type -> bool) ->
+               ('n, 'x_cd) vec ->
+               ('n, 'y_cd) vec -> bool
+(** [exists2 p (x1, x2, ..., xn) (y1, y2, ..., yn)] is
+    [(p x1 y1) || (p x2 y2) || ... || (p xn yn)].
+    @return [true] if and only if at least one pair of elements of the given two
+    vectors satisfies the predicate [p].
  *)
 
 (** {2 Arithmetic operations} *)

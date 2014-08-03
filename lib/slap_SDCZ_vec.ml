@@ -68,6 +68,10 @@ let fill = PVec.fill
 
 let append = PVec.append
 
+let shared_rev = PVec.shared_rev
+
+let rev = PVec.rev
+
 (** {2 Type conversion} *)
 
 let to_array = PVec.to_array
@@ -96,6 +100,25 @@ module Of_list (X : sig val value : num_type list end) : CNTVEC =
 
 let of_list l =
   let module V = Of_list(struct let value = l end) in
+  (module V : CNTVEC)
+
+let to_bigarray = PVec.to_bigarray
+
+let of_bigarray_dyn = PVec.of_bigarray_dyn
+
+module Of_bigarray (X : sig
+                          val share : bool
+                          val value : (num_type, prec, fortran_layout) Array1.t
+                        end) : CNTVEC =
+  struct
+    type n
+    let value = PVec.unsafe_of_bigarray ~share:X.share
+                                        (Array1.dim X.value) X.value
+  end
+
+let of_bigarray ?(share=false) ba =
+  let module V = Of_bigarray(struct let share = share
+                                    let value = ba end) in
   (module V : CNTVEC)
 
 (** {2 Iterators} *)
@@ -137,6 +160,34 @@ let fold_righti2 = PVec.fold_righti2
 let iter2 = PVec.iter2
 
 let iteri2 = PVec.iteri2
+
+(** {2 Iterators on three vectors} *)
+
+let map3 = PVec.map3 prec
+
+let mapi3 = PVec.mapi3 prec
+
+let fold_left3 = PVec.fold_left3
+
+let fold_lefti3 = PVec.fold_lefti3
+
+let fold_right3 = PVec.fold_right3
+
+let fold_righti3 = PVec.fold_righti3
+
+let iter3 = PVec.iter3
+
+let iteri3 = PVec.iteri3
+
+(** {2 Scanning} *)
+
+let for_all = PVec.for_all
+
+let exists = PVec.exists
+
+let for_all2 = PVec.for_all2
+
+let exists2 = PVec.exists2
 
 (** {2 Arithmetic operations} *)
 
