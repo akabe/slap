@@ -51,6 +51,57 @@ val pp_table :
   int -> int ->
   (int -> int -> 'el) -> unit
 
+val pp_vec_gen :
+  ?pp_open:(formatter -> unit) ->
+  ?pp_close:(formatter -> unit) ->
+  ?pp_head:(formatter -> int -> unit) ->
+  ?pp_foot:(formatter -> int -> unit) ->
+  ?pp_end_row:(formatter -> line_type -> unit) ->
+  ?pp_end_col:(formatter -> row:line_type -> col:line_type -> unit) ->
+  ?pp_left:(formatter -> int -> unit) ->
+  ?pp_right:(formatter -> int -> unit) ->
+  ?pad:char ->
+  ?ellipsis:string ->
+  ?max_rows:int option ->
+  ?max_cols:int option ->
+  formatter ->
+  (formatter -> 'num -> unit) ->
+  ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
+
+val pp_rvec_gen :
+  ?pp_open:(formatter -> unit) ->
+  ?pp_close:(formatter -> unit) ->
+  ?pp_head:(formatter -> int -> unit) ->
+  ?pp_foot:(formatter -> int -> unit) ->
+  ?pp_end_row:(formatter -> line_type -> unit) ->
+  ?pp_end_col:(formatter -> row:line_type -> col:line_type -> unit) ->
+  ?pp_left:(formatter -> int -> unit) ->
+  ?pp_right:(formatter -> int -> unit) ->
+  ?pad:char ->
+  ?ellipsis:string ->
+  ?max_rows:int option ->
+  ?max_cols:int option ->
+  formatter ->
+  (formatter -> 'num -> unit) ->
+  ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
+
+val pp_mat_gen :
+  ?pp_open:(formatter -> unit) ->
+  ?pp_close:(formatter -> unit) ->
+  ?pp_head:(formatter -> int -> unit) ->
+  ?pp_foot:(formatter -> int -> unit) ->
+  ?pp_end_row:(formatter -> line_type -> unit) ->
+  ?pp_end_col:(formatter -> row:line_type -> col:line_type -> unit) ->
+  ?pp_left:(formatter -> int -> unit) ->
+  ?pp_right:(formatter -> int -> unit) ->
+  ?pad:char ->
+  ?ellipsis:string ->
+  ?max_rows:int option ->
+  ?max_cols:int option ->
+  formatter ->
+  (formatter -> 'num -> unit) ->
+  ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Mat.t -> unit
+
 (** {2 Default pretty-printers for elements of vectors or matrices} *)
 
 type 'el pp_el_default = (formatter -> 'el -> unit) ref

@@ -138,6 +138,28 @@ let pp_table ?(pp_open = default_pp_open)
       pp_close ppf
     end
 
+let pp_vec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
+               ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols
+               ppf pp_el x =
+  pp_table ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
+           ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols ppf pp_el
+           (Vec.dim x) 1 (fun i _ -> Vec.get_dyn x i)
+
+let pp_rvec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
+                ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols
+                ppf pp_el x =
+  pp_table ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
+           ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols ppf pp_el
+           1 (Vec.dim x) (fun _ j -> Vec.get_dyn x j)
+
+let pp_mat_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
+               ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols
+               ppf pp_el a =
+  let m, n = Mat.dim a in
+  pp_table ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
+           ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols ppf pp_el
+           m n (Mat.get_dyn a)
+
 (** {2 Default pretty-printers for elements of vectors or matrices} *)
 
 type 'el pp_el_default = (formatter -> 'el -> unit) ref
@@ -154,66 +176,39 @@ let pp_int32_el_default = ref (fun ppf -> fprintf ppf "%ld")
 type ('n, 'num, 'prec, 'cnt_or_dsc) pp_vec =
     formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
 
-let pp_fvec ppf x =
-  pp_table ppf (!pp_float_el_default)
-           (Vec.dim x) 1 (fun i _ -> Vec.get_dyn x i)
+let pp_fvec ppf x = pp_vec_gen ppf (!pp_float_el_default) x
+let pp_cvec ppf x = pp_vec_gen ppf (!pp_complex_el_default) x
+let pp_ivec ppf x = pp_vec_gen ppf (!pp_int32_el_default) x
 
-let pp_cvec ppf x =
-  pp_table ppf (!pp_complex_el_default)
-           (Vec.dim x) 1 (fun i _ -> Vec.get_dyn x i)
-
-let pp_ivec ppf x =
-  pp_table ppf (!pp_int32_el_default)
-           (Vec.dim x) 1 (fun i _ -> Vec.get_dyn x i)
-
-let pp_rfvec ppf x =
-  pp_table ppf (!pp_float_el_default)
-           1 (Vec.dim x) (fun _ j -> Vec.get_dyn x j)
-
-let pp_rcvec ppf x =
-  pp_table ppf (!pp_complex_el_default)
-           1 (Vec.dim x) (fun _ j -> Vec.get_dyn x j)
-
-let pp_rivec ppf x =
-  pp_table ppf (!pp_int32_el_default)
-           1 (Vec.dim x) (fun _ j -> Vec.get_dyn x j)
+let pp_rfvec ppf x = pp_rvec_gen ppf (!pp_float_el_default) x
+let pp_rcvec ppf x = pp_rvec_gen ppf (!pp_complex_el_default) x
+let pp_rivec ppf x = pp_rvec_gen ppf (!pp_int32_el_default) x
 
 type ('m, 'n, 'num, 'prec, 'cnt_or_dsc) pp_mat =
     formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Mat.t -> unit
 
-let pp_fmat ppf a =
-  let m, n = Mat.dim a in
-  pp_table ppf (!pp_float_el_default) m n (Mat.get_dyn a)
-
-let pp_cmat ppf a =
-  let m, n = Mat.dim a in
-  pp_table ppf (!pp_complex_el_default) m n (Mat.get_dyn a)
-
-let pp_imat ppf a =
-  let m, n = Mat.dim a in
-  pp_table ppf (!pp_int32_el_default) m n (Mat.get_dyn a)
+let pp_fmat ppf a = pp_mat_gen ppf (!pp_float_el_default) a
+let pp_cmat ppf a = pp_mat_gen ppf (!pp_complex_el_default) a
+let pp_imat ppf a = pp_mat_gen ppf (!pp_int32_el_default) a
 
 (** {2 Toplevel pretty-printers} *)
 
 module Toplevel =
   struct
     let pp_labeled_row ppf i = fprintf ppf "R%d" i
-
     let pp_labeled_col ppf j = fprintf ppf "C%d" j
 
     (* Vectors *)
 
     let gen_pp_vec ppf pp_el x =
-      pp_table ~pp_left:pp_labeled_row ppf pp_el
-               (Vec.dim x) 1 (fun i _ -> Vec.get_dyn x i)
+      pp_vec_gen ~pp_left:pp_labeled_row ppf pp_el x
 
     let pp_fvec ppf x = gen_pp_vec ppf (!pp_float_el_default) x
     let pp_cvec ppf x = gen_pp_vec ppf (!pp_complex_el_default) x
     let pp_ivec ppf x = gen_pp_vec ppf (!pp_int32_el_default) x
 
     let gen_pp_rvec ppf pp_el x =
-      pp_table ~pp_head:pp_labeled_row ppf pp_el
-               1 (Vec.dim x) (fun _ j -> Vec.get_dyn x j)
+      pp_rvec_gen ~pp_head:pp_labeled_row ppf pp_el x
 
     let pp_rfvec ppf x = gen_pp_rvec ppf (!pp_float_el_default) x
     let pp_rcvec ppf x = gen_pp_rvec ppf (!pp_complex_el_default) x
@@ -222,9 +217,7 @@ module Toplevel =
     (* Matrices *)
 
     let gen_pp_mat ppf pp_el a =
-      let m, n = Mat.dim a in
-      pp_table ~pp_head:pp_labeled_col ~pp_left:pp_labeled_row ppf pp_el
-               m n (Mat.get_dyn a)
+      pp_mat_gen ~pp_head:pp_labeled_col ~pp_left:pp_labeled_row ppf pp_el a
 
     let pp_fmat ppf a = gen_pp_mat ppf (!pp_float_el_default) a
     let pp_cmat ppf a = gen_pp_mat ppf (!pp_complex_el_default) a
