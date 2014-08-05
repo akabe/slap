@@ -17,34 +17,74 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
+open Format
 open Bigarray
+
+type line_type =
+  | Head of (formatter -> int -> unit)
+  | Foot of (formatter -> int -> unit)
+  | Ellipsis
+  | Cell of int
+
+val default_ellipsis : string ref
+val default_max_rows : int option ref
+val default_max_cols : int option ref
+
+val pp_table :
+  ?pp_open:(formatter -> unit) ->
+  ?pp_close:(formatter -> unit) ->
+  ?pp_head:(formatter -> int -> unit) ->
+  ?pp_foot:(formatter -> int -> unit) ->
+  ?pp_end_row:(formatter -> line_type -> unit) ->
+  ?pp_end_col:(formatter -> row:line_type -> col:line_type -> unit) ->
+  ?pp_left:(formatter -> int -> unit) ->
+  ?pp_right:(formatter -> int -> unit) ->
+  ?pad:char ->
+  ?ellipsis:string ->
+  ?max_rows:int option ->
+  ?max_cols:int option ->
+  formatter ->
+  (formatter -> 'el -> unit) ->
+  int -> int ->
+  (int -> int -> 'el) -> unit
+
+(** {2 Default pretty-printers for elements of vectors or matrices} *)
+
+type 'el pp_el_default = (formatter -> 'el -> unit) ref
+
+val pp_float_el_default : float pp_el_default
+(** [fprintf ppf "%G" el] *)
+
+val pp_complex_el_default : Complex.t pp_el_default
+(** [fprintf ppf "(%G, %Gi)" x.re x.im] *)
+
+val pp_int32_el_default : int32 pp_el_default
+(** [fprintf ppf "%ld" x] *)
 
 (** {2 Pretty-printing in standard style} *)
 
 type ('n, 'num, 'prec, 'cnt_or_dsc) pp_vec =
-    Format.formatter ->
-    ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
+    formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
 (** A type of standard pretty printers for vectors. *)
 
-val pp_fvec : ('n, float, 'prec, cnt) pp_vec
+val pp_fvec : ('n, float, 'prec, 'cnt_or_dsc) pp_vec
 
-val pp_cvec : ('n, Complex.t, 'prec, cnt) pp_vec
+val pp_cvec : ('n, Complex.t, 'prec, 'cnt_or_dsc) pp_vec
 
 val pp_ivec : ('n, int32, 'prec, cnt) pp_vec
 
-val pp_rfvec : ('n, float, 'prec, cnt) pp_vec
+val pp_rfvec : ('n, float, 'prec, 'cnt_or_dsc) pp_vec
 
-val pp_rcvec : ('n, Complex.t, 'prec, cnt) pp_vec
+val pp_rcvec : ('n, Complex.t, 'prec, 'cnt_or_dsc) pp_vec
 
-val pp_rivec : ('n, int32, 'prec, cnt) pp_vec
+val pp_rivec : ('n, int32, 'prec, 'cnt_or_dsc) pp_vec
 
 type ('m, 'n, 'num, 'prec, 'cnt_or_dsc) pp_mat =
-    Format.formatter ->
-    ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Mat.t -> unit
+    formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Mat.t -> unit
 (** A type of standard pretty printers for matrices. *)
 
-val pp_fmat : ('m, 'n, float, 'prec, cnt) pp_mat
+val pp_fmat : ('m, 'n, float, 'prec, 'cnt_or_dsc) pp_mat
 
-val pp_cmat : ('m, 'n, Complex.t, 'prec, cnt) pp_mat
+val pp_cmat : ('m, 'n, Complex.t, 'prec, 'cnt_or_dsc) pp_mat
 
-val pp_imat : ('m, 'n, int32, 'prec, cnt) pp_mat
+val pp_imat : ('m, 'n, int32, 'prec, 'cnt_or_dsc) pp_mat
