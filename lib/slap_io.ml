@@ -28,8 +28,13 @@ type line_type =
 let default_ellipsis = ref "..."
 
 let default_max_rows, default_max_cols =
-  let v = if !Sys.interactive then Some 3 else None in
+  let v = if !Sys.interactive then Some 6 else None in
   ref v, ref v
+
+let set_max n =
+  if n < 3 then invalid_arg "Slap.Io.set_max: too small max size";
+  default_max_rows := Some n;
+  default_max_cols := Some n
 
 let default_pp_open ppf = pp_open_box ppf 0
 let default_pp_close ppf = pp_close_box ppf ()
@@ -39,7 +44,7 @@ let default_pad = ' '
 
 let make_index_array ?pp_head ?pp_foot max_n n =
   let idx = match max_n with
-    | Some max_n when n > max_n -> (* omit columns or rows *)
+    | Some max_n when n > max_n && max_n > 1 -> (* omit columns or rows *)
        let side_n = max_n / 2 in
        let offset = n - 2 * side_n in
        Array.init (2 * side_n + 1)
@@ -187,3 +192,41 @@ let pp_cmat ppf a =
 let pp_imat ppf a =
   let m, n = Mat.dim a in
   pp_table ppf (!pp_int32_el_default) m n (Mat.get_dyn a)
+
+(** {2 Toplevel pretty-printers} *)
+
+module Toplevel =
+  struct
+    let pp_labeled_row ppf i = fprintf ppf "R%d" i
+
+    let pp_labeled_col ppf j = fprintf ppf "C%d" j
+
+    (* Vectors *)
+
+    let gen_pp_vec ppf pp_el x =
+      pp_table ~pp_left:pp_labeled_row ppf pp_el
+               (Vec.dim x) 1 (fun i _ -> Vec.get_dyn x i)
+
+    let pp_fvec ppf x = gen_pp_vec ppf (!pp_float_el_default) x
+    let pp_cvec ppf x = gen_pp_vec ppf (!pp_complex_el_default) x
+    let pp_ivec ppf x = gen_pp_vec ppf (!pp_int32_el_default) x
+
+    let gen_pp_rvec ppf pp_el x =
+      pp_table ~pp_head:pp_labeled_row ppf pp_el
+               1 (Vec.dim x) (fun _ j -> Vec.get_dyn x j)
+
+    let pp_rfvec ppf x = gen_pp_rvec ppf (!pp_float_el_default) x
+    let pp_rcvec ppf x = gen_pp_rvec ppf (!pp_complex_el_default) x
+    let pp_rivec ppf x = gen_pp_rvec ppf (!pp_int32_el_default) x
+
+    (* Matrices *)
+
+    let gen_pp_mat ppf pp_el a =
+      let m, n = Mat.dim a in
+      pp_table ~pp_head:pp_labeled_col ~pp_left:pp_labeled_row ppf pp_el
+               m n (Mat.get_dyn a)
+
+    let pp_fmat ppf a = gen_pp_mat ppf (!pp_float_el_default) a
+    let pp_cmat ppf a = gen_pp_mat ppf (!pp_complex_el_default) a
+    let pp_imat ppf a = gen_pp_mat ppf (!pp_int32_el_default) a
+  end

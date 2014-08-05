@@ -30,6 +30,9 @@ val default_ellipsis : string ref
 val default_max_rows : int option ref
 val default_max_cols : int option ref
 
+val set_max : int -> unit
+(** Set both {!Slap.Io.default_max_rows} and {!Slap.Io.default_max_rows}. *)
+
 val pp_table :
   ?pp_open:(formatter -> unit) ->
   ?pp_close:(formatter -> unit) ->
@@ -88,3 +91,26 @@ val pp_fmat : ('m, 'n, float, 'prec, 'cnt_or_dsc) pp_mat
 val pp_cmat : ('m, 'n, Complex.t, 'prec, 'cnt_or_dsc) pp_mat
 
 val pp_imat : ('m, 'n, int32, 'prec, 'cnt_or_dsc) pp_mat
+
+(** {2 Toplevel pretty-printers} *)
+
+module Toplevel :
+sig
+  val pp_fvec : ('n, float, 'prec, 'cnt_or_dsc) pp_vec
+
+  val pp_cvec : ('n, Complex.t, 'prec, 'cnt_or_dsc) pp_vec
+
+  val pp_ivec : ('n, int32, 'prec, 'cnt_or_dsc) pp_vec
+
+  val pp_rfvec : ('n, float, 'prec, 'cnt_or_dsc) pp_vec
+
+  val pp_rcvec : ('n, Complex.t, 'prec, 'cnt_or_dsc) pp_vec
+
+  val pp_rivec : ('n, int32, 'prec, 'cnt_or_dsc) pp_vec
+
+  val pp_fmat : ('m, 'n, float, 'prec, 'cnt_or_dsc) pp_mat
+
+  val pp_cmat : ('m, 'n, Complex.t, 'prec, 'cnt_or_dsc) pp_mat
+
+  val pp_imat : ('m, 'n, int32, 'prec, 'cnt_or_dsc) pp_mat
+end
