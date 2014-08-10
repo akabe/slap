@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: bd5bf60f9139606b458e940da520258e)
+# DO NOT EDIT (digest: a2a46d63d3b825cee712a32327d02acb)
 version = "0.0.0"
 description = "Sized Linear Algebra Package"
 requires = "bigarray lacaml"
@@ -8,5 +8,15 @@ archive(byte, plugin) = "slap.cma"
 archive(native) = "slap.cmxa"
 archive(native, plugin) = "slap.cmxs"
 exists_if = "slap.cma"
+package "top" (
+ version = "0.0.0"
+ description = "Toplevel module for SLAP."
+ requires = "slap"
+ archive(byte) = "slap_top.cma"
+ archive(byte, plugin) = "slap_top.cma"
+ archive(native) = "slap_top.cmxa"
+ archive(native, plugin) = "slap_top.cmxs"
+ exists_if = "slap_top.cma"
+)
 # OASIS_STOP
 

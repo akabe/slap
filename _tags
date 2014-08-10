@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 409fef9d65ba058728ed2af01aa9fb47)
+# DO NOT EDIT (digest: c5dcd4698548796d33677c03ce9710b8)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -15,7 +15,11 @@
 "_darcs": not_hygienic
 # Library slap
 "lib/slap.cmxs": use_slap
+# Library slap_top
+"lib/slap_top.cmxs": use_slap_top
+<lib/*.ml{,i}>: use_slap
 <lib/*.ml{,i}>: pkg_lacaml
+<lib/*.ml{,i}>: pkg_compiler-libs.toplevel
 <lib/*.ml{,i}>: pkg_bigarray
 # Executable test
 <test/test.{native,byte}>: use_slap
