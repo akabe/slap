@@ -19,12 +19,6 @@
 
 open Format
 
-type line_type =
-  | Head of (formatter -> int -> unit)
-  | Foot of (formatter -> int -> unit)
-  | Ellipsis
-  | Cell of int
-
 let default_ellipsis = ref "..."
 
 let default_max_rows, default_max_cols =
@@ -35,6 +29,14 @@ let set_max n =
   if n < 3 then invalid_arg "Slap.Io.set_max: too small max size";
   default_max_rows := Some n;
   default_max_cols := Some n
+
+(** {2 Pretty printers} *)
+
+type index =
+  | Head
+  | Foot
+  | Ellipsis
+  | Cell of int
 
 let default_pp_open ppf = pp_open_box ppf 0
 let default_pp_close ppf = pp_close_box ppf ()
@@ -56,36 +58,42 @@ let make_index_array ?pp_head ?pp_foot max_n n =
   let add_if_some pp_print f idx =
     match pp_print with Some pp_print -> f pp_print idx | None -> idx in
   idx
-  |> add_if_some pp_head (fun pp_head idx -> Array.append [|Head pp_head|] idx)
-  |> add_if_some pp_foot (fun pp_foot idx -> Array.append idx [|Foot pp_foot|])
+  |> add_if_some pp_head (fun pp_head idx -> Array.append [|Head|] idx)
+  |> add_if_some pp_foot (fun pp_foot idx -> Array.append idx [|Foot|])
 
-let stringize_table ?pp_head ?pp_foot ?pp_left ?pp_right ~ellipsis
-                    ~idx_m ~idx_n m n pp_el =
-  let el_buf = Buffer.create 32 in
-  let ppf_el_buf = formatter_of_buffer el_buf in
-  let pp_print_buf pp_print =
-    Buffer.clear el_buf;
-    pp_print ppf_el_buf;
-    pp_print_flush ppf_el_buf ();
-    Buffer.contents el_buf
+let pp_dummy ppf = assert(false)
+(* This is a dummy pretty printer. This is never called. *)
+
+let stringize_table ?(pp_head = pp_dummy)
+                    ?(pp_foot = pp_dummy)
+                    ?(pp_left = pp_dummy)
+                    ?(pp_right = pp_dummy)
+                    ~ellipsis ~idx_m ~idx_n m n pp_el =
+  let buf = Buffer.create 32 in
+  let ppf_buf = formatter_of_buffer buf in
+  let stringize_pp pp =
+    Buffer.clear buf;
+    pp ppf_buf;
+    pp_print_flush ppf_buf ();
+    Buffer.contents buf
   in
   let stringize_cell i = function
-    | Head pp_left  -> pp_print_buf (fun ppf -> pp_left ppf i)
-    | Foot pp_right -> pp_print_buf (fun ppf -> pp_right ppf i)
-    | Cell j        -> pp_print_buf (fun ppf -> pp_el ppf i j)
-    | Ellipsis      -> ellipsis
+    | Head     -> stringize_pp (fun ppf -> pp_left ppf i)
+    | Foot     -> stringize_pp (fun ppf -> pp_right ppf i)
+    | Cell j   -> stringize_pp (fun ppf -> pp_el ppf i j)
+    | Ellipsis -> ellipsis
   in
-  let stringize_hdft pp_print = function
-    | Head _   -> ""
-    | Foot _   -> ""
-    | Cell j   -> pp_print_buf (fun ppf -> pp_print ppf j)
+  let stringize_head_foot pp = function
+    | Head     -> ""
+    | Foot     -> ""
+    | Cell j   -> stringize_pp (fun ppf -> pp ppf j)
     | Ellipsis -> ellipsis
   in
   let stringize_row = function
-    | Head pp_head -> Array.map (stringize_hdft pp_head) idx_n
-    | Foot pp_foot -> Array.map (stringize_hdft pp_foot) idx_n
-    | Cell i       -> Array.map (stringize_cell i) idx_n
-    | Ellipsis     -> Array.make (Array.length idx_n) ellipsis
+    | Head     -> Array.map (stringize_head_foot pp_head) idx_n
+    | Foot     -> Array.map (stringize_head_foot pp_foot) idx_n
+    | Cell i   -> Array.map (stringize_cell i) idx_n
+    | Ellipsis -> Array.make (Array.length idx_n) ellipsis
   in
   Array.map stringize_row idx_m
 
