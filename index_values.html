@@ -326,6 +326,21 @@ Conjugate transpose of a matrix.
 <tr><td><a href="Slap.Common.html#VALcreate_int_vec">create_int_vec</a> [<a href="Slap.Common.html">Slap.Common</a>]</td>
 <td></td></tr>
 <tr><td align="left"><br>D</td></tr>
+<tr><td><a href="Slap.Io.html#VALdefault_ellipsis">default_ellipsis</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td><div class="info">
+default = <code class="code">"..."</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap.Io.html#VALdefault_max_cols">default_max_cols</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td><div class="info">
+The maximum number of columns to be printed.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Io.html#VALdefault_max_rows">default_max_rows</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td><div class="info">
+The maximum number of rows to be printed.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Mat.html#VALdiag">diag</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
 <td><div class="info">
 <code class="code">diag a</code>
@@ -1414,9 +1429,19 @@ Fill the given vector with the given value.
 <code class="code">identity n</code>
 </div>
 </td></tr>
+<tr><td><a href="Slap.C.Mat.html#VALinit">init</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
+<td><div class="info">
+An alias of <code class="code">init_cols</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALinit">init</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
 <td><div class="info">
 <code class="code">init n f</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Mat.html#VALinit">init</a> [<a href="Slap.Z.Mat.html">Slap.Z.Mat</a>]</td>
+<td><div class="info">
+An alias of <code class="code">init_cols</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.Z.Vec.html#VALinit">init</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
@@ -1424,14 +1449,29 @@ Fill the given vector with the given value.
 <code class="code">init n f</code>
 </div>
 </td></tr>
+<tr><td><a href="Slap.S.Mat.html#VALinit">init</a> [<a href="Slap.S.Mat.html">Slap.S.Mat</a>]</td>
+<td><div class="info">
+An alias of <code class="code">init_cols</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.S.Vec.html#VALinit">init</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
 <td><div class="info">
 <code class="code">init n f</code>
 </div>
 </td></tr>
+<tr><td><a href="Slap.D.Mat.html#VALinit">init</a> [<a href="Slap.D.Mat.html">Slap.D.Mat</a>]</td>
+<td><div class="info">
+An alias of <code class="code">init_cols</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.D.Vec.html#VALinit">init</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
 <td><div class="info">
 <code class="code">init n f</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap.Mat.html#VALinit">init</a> [<a href="Slap.Mat.html">Slap.Mat</a>]</td>
+<td><div class="info">
+An alias of <code class="code">init_cols</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.Vec.html#VALinit">init</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
@@ -2537,15 +2577,42 @@ Build a matrix initialized from the given list of lists.
 <td></td></tr>
 <tr><td><a href="Slap.D.html#VALpotrs">potrs</a> [<a href="Slap.D.html">Slap.D</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.Io.Toplevel.html#VALpp_cmat">pp_cmat</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap.Io.html#VALpp_cmat">pp_cmat</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap.Io.html#VALpp_complex_el_default">pp_complex_el_default</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td><div class="info">
+<code class="code">fprintf ppf "(%G, %Gi)" x.re x.im</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap.Io.Toplevel.html#VALpp_cvec">pp_cvec</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.Io.html#VALpp_cvec">pp_cvec</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.Io.html#VALpp_float_el_default">pp_float_el_default</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td><div class="info">
+<code class="code">fprintf ppf "%G" el</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap.Io.Toplevel.html#VALpp_fmat">pp_fmat</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap.Io.html#VALpp_fmat">pp_fmat</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap.Io.Toplevel.html#VALpp_fvec">pp_fvec</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.Io.html#VALpp_fvec">pp_fvec</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.Io.Toplevel.html#VALpp_imat">pp_imat</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap.Io.html#VALpp_imat">pp_imat</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap.Io.html#VALpp_int32_el_default">pp_int32_el_default</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td><div class="info">
+<code class="code">fprintf ppf "%ld" x</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap.Io.Toplevel.html#VALpp_ivec">pp_ivec</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.Io.html#VALpp_ivec">pp_ivec</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
 <td></td></tr>
@@ -2569,6 +2636,11 @@ A pretty-printer for matrices.
 A pretty-printer for matrices.
 </div>
 </td></tr>
+<tr><td><a href="Slap.Io.html#VALpp_mat_gen">pp_mat_gen</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td><div class="info">
+A generator of pretty printers for matrices.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.html#VALpp_num">pp_num</a> [<a href="Slap.C.html">Slap.C</a>]</td>
 <td><div class="info">
 A pretty-printer for elements in vectors and matrices.
@@ -2589,12 +2661,31 @@ A pretty-printer for elements in vectors and matrices.
 A pretty-printer for elements in vectors and matrices.
 </div>
 </td></tr>
+<tr><td><a href="Slap.Io.Toplevel.html#VALpp_rcvec">pp_rcvec</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap.Io.html#VALpp_rcvec">pp_rcvec</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap.Io.Toplevel.html#VALpp_rfvec">pp_rfvec</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.Io.html#VALpp_rfvec">pp_rfvec</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.Io.Toplevel.html#VALpp_rivec">pp_rivec</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap.Io.html#VALpp_rivec">pp_rivec</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.Io.html#VALpp_rvec_gen">pp_rvec_gen</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td><div class="info">
+A generator of pretty printers for row vectors.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Io.html#VALpp_table">pp_table</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td><div class="info">
+<code class="code">pp_table
+       ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
+       ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols
+       ppf pp_el n_rows n_cols get_el</code>
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.html#VALpp_vec">pp_vec</a> [<a href="Slap.C.html">Slap.C</a>]</td>
 <td><div class="info">
 A pretty-printer for column vectors.
@@ -2613,6 +2704,11 @@ A pretty-printer for column vectors.
 <tr><td><a href="Slap.D.html#VALpp_vec">pp_vec</a> [<a href="Slap.D.html">Slap.D</a>]</td>
 <td><div class="info">
 A pretty-printer for column vectors.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Io.html#VALpp_vec_gen">pp_vec_gen</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td><div class="info">
+A generator of pretty printers for (column) vectors.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.html#VALprec">prec</a> [<a href="Slap.C.html">Slap.C</a>]</td>
@@ -2980,6 +3076,11 @@ A row-wise <code class="code">scal</code> function for matrices.
 <tr><td><a href="Slap.Vec.html#VALset_dyn">set_dyn</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
 <td><div class="info">
 <code class="code">set_dyn x i a</code> assigns <code class="code">a</code> to the <code class="code">i</code>-th element of the vector <code class="code">x</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Io.html#VALset_max">set_max</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
+<td><div class="info">
+Set both <a href="Slap.Io.html#VALdefault_max_rows"><code class="code">Slap.Io.default_max_rows</code></a> and <a href="Slap.Io.html#VALdefault_max_rows"><code class="code">Slap.Io.default_max_rows</code></a>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALshared_rev">shared_rev</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>

@@ -57,6 +57,10 @@ Recover polymorphism of the fifth type parameter. (type coercion)<br>
 <b>Returns</b> a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix initialized with <code class="code">x</code>.<br>
 </div>
 
+<pre><span id="VALinit"><span class="keyword">val</span> init</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'm <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       (int -> int -> 'num) -> ('m, 'n, 'num, 'prec, 'cnt) <a href="Slap.Mat.html#TYPEt">t</a></code></pre><div class="info ">
+An alias of <code class="code">init_cols</code>.<br>
+</div>
+
 <pre><span id="VALinit_cols"><span class="keyword">val</span> init_cols</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'm <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       (int -> int -> 'num) -> ('m, 'n, 'num, 'prec, 'cnt) <a href="Slap.Mat.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">init_cols kind m n f</code> returns a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix whose
     the <code class="code">(i,j)</code> element is initialized by the result of calling <code class="code">f i j</code>.
