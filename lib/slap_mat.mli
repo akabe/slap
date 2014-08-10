@@ -48,6 +48,13 @@ val make : ('num, 'prec) kind ->
     @return a fresh [m]-by-[n] matrix initialized with [x].
  *)
 
+val init : ('num, 'prec) kind ->
+           'm Size.t ->
+           'n Size.t ->
+           (int -> int -> 'num) ->
+           ('m, 'n, 'num, 'prec, 'cnt) t
+(** An alias of [init_cols]. *)
+
 val init_cols : ('num, 'prec) kind ->
                 'm Size.t ->
                 'n Size.t ->

@@ -68,6 +68,8 @@ let init_cols m n f = PMat.init_cols prec m n f
 
 let init_rows m n f = PMat.init_rows prec m n f
 
+let init = init_cols
+
 (** {2 Accessors} *)
 
 let dim = PMat.dim

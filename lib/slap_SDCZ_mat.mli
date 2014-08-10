@@ -70,6 +70,10 @@ val identity : 'n Size.t -> ('n, 'n, 'cnt) mat
     @return a fresh [n]-by-[n] identity matrix.
  *)
 
+val init : 'm Size.t -> 'n Size.t ->
+                (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
+(** An alias of [init_cols]. *)
+
 val init_cols : 'm Size.t -> 'n Size.t ->
                 (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
 (** [init_cols m n f] returns a fresh [m]-by-[n] matrix whose

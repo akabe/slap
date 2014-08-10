@@ -89,6 +89,8 @@ let init_rows kind m n f =
   done;
   (m, n, 1, 1, a)
 
+let init = init_cols
+
 (** {2 Accessors} *)
 
 let kind (_, _, _, _, a) = Array2.kind a
