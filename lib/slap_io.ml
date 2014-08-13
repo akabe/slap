@@ -105,6 +105,7 @@ let calc_column_width str_tbl =
 
 let pp_print_table ppf ~pp_end_row ~pp_end_col ~pad
                    ~idx_m ~idx_n width str_tbl =
+  let last_row = idx_m.(Array.length idx_m - 1) in
   let pp_print_row i row =
     Array.iteri (fun j col ->
                  let s = str_tbl.(i).(j) in
@@ -113,7 +114,7 @@ let pp_print_table ppf ~pp_end_row ~pp_end_col ~pad
                  pp_print_string ppf s;
                  pp_end_col ppf ~row ~col)
                 idx_n;
-    pp_end_row ppf row
+    if last_row <> row then pp_end_row ppf row
   in
   Array.iteri pp_print_row idx_m
 
