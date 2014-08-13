@@ -20,10 +20,10 @@
 val pp_num : Format.formatter -> num_type -> unit
 (** A pretty-printer for elements in vectors and matrices. *)
 
-val pp_vec : Format.formatter -> ('n, cnt) vec -> unit
+val pp_vec : Format.formatter -> ('n, 'cnt_or_dsc) vec -> unit
 (** A pretty-printer for column vectors. *)
 
-val pp_mat : Format.formatter -> ('m, 'n, cnt) mat -> unit
+val pp_mat : Format.formatter -> ('m, 'n, 'cnt_or_dsc) mat -> unit
 (** A pretty-printer for matrices. *)
 
 (** {2 BLAS interface} *)

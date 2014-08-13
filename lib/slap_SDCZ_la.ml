@@ -19,13 +19,9 @@
 
 let pp_num = I.pp_num
 
-let pp_vec fmt (n, ofsx, incx, x) =
-  assert(PVec.check_cnt n ofsx incx x);
-  I.pp_vec fmt x
+let pp_vec ppf x = Io.pp_vec_gen ppf pp_num x
 
-let pp_mat fmt (m, n, ar, ac, a) =
-  assert(PMat.check_cnt m n ar ac a);
-  I.pp_mat fmt a
+let pp_mat ppf a = Io.pp_mat_gen ppf pp_num a
 
 (** {2 BLAS interface} *)
 
