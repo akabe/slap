@@ -97,29 +97,6 @@ val max : 'm t -> 'n t -> ('m, 'n) max t
     @return the maximum of [m] and [n]
  *)
 
-
-(** {2 Iterators}
-
-    The following functions are iterators over [[1; 2; ...; n]] where [n] is a
-    size.
- *)
-
-val fold_left : ('accum -> int -> 'accum) ->
-                'accum ->
-                'n t -> 'accum
-(** [fold_left f init n] is [f (... (f (f init 1) 2) ...) (to_int n)]. *)
-
-val fold_right : (int -> 'accum -> 'accum) ->
-                 'n t ->
-                 'accum -> 'accum
-(** [fold_right f n init] is [f 1 (f 2 (... (f (to_int n) init) ...))]. *)
-
-val iter : (int -> unit) -> 'n t -> unit
-(** [iter f n] is [f 1; f 2; ...; f (to_int n)]. *)
-
-val riter : (int -> unit) -> 'n t -> unit
-(** [riter f n] is [f (to_int n); ...; f 2; f 1]. *)
-
 (** {2 Conversion between a size and an integer} *)
 
 (** The signature of modules as packages of types like [exists n. n Size.t]. *)
@@ -150,3 +127,47 @@ val unsafe_of_int : int -> (module SIZE)
 module Of_int_dyn :
 functor (N : sig val value : int end) -> SIZE
 (** A functor version of [of_int_dyn]. *)
+
+(** {2 Iterators on sizes}
+
+    The following functions are iterators over [[1; 2; ...; n]] where [n] is a
+    size.
+ *)
+
+val fold_left : ('accum -> (module SIZE) -> 'accum) ->
+                'accum ->
+                'n t -> 'accum
+(** [fold_left f init n] is [f (... (f (f init 1) 2) ...) n]. *)
+
+val fold_right : ((module SIZE) -> 'accum -> 'accum) ->
+                 'n t ->
+                 'accum -> 'accum
+(** [fold_right f n init] is [f 1 (f 2 (... (f n init) ...))]. *)
+
+val iter : ((module SIZE) -> unit) -> 'n t -> unit
+(** [iter f n] is [f 1; f 2; ...; f n]. *)
+
+val riter : ((module SIZE) -> unit) -> 'n t -> unit
+(** [riter f n] is [f n; ...; f 2; f 1]. *)
+
+(** {2 Iterators on integers}
+
+    The following functions are iterators over [[1; 2; ...; to_int n]] where
+    [n] is a size.
+ *)
+
+val fold_lefti : ('accum -> int -> 'accum) ->
+                 'accum ->
+                 'n t -> 'accum
+(** [fold_lefti f init n] is [f (... (f (f init 1) 2) ...) (to_int n)]. *)
+
+val fold_righti : (int -> 'accum -> 'accum) ->
+                  'n t ->
+                  'accum -> 'accum
+(** [fold_righti f n init] is [f 1 (f 2 (... (f (to_int n) init) ...))]. *)
+
+val iteri : (int -> unit) -> 'n t -> unit
+(** [iteri f n] is [f 1; f 2; ...; f (to_int n)]. *)
+
+val riteri : (int -> unit) -> 'n t -> unit
+(** [riteri f n] is [f (to_int n); ...; f 2; f 1]. *)

@@ -77,7 +77,7 @@ let make kind n a =
 
 let init kind n f =
   let x = create_array1 kind n in
-  Size.iter (fun i -> Array1.unsafe_set x i (f i)) n;
+  Size.iteri (fun i -> Array1.unsafe_set x i (f i)) n;
   (n, 1, 1, x)
 
 (** {2 Accessors} *)

@@ -206,9 +206,9 @@ let to_list (m, n, ar, ac, a) =
   let ar = ar - 1 in
   let ac = ac - 1 in
   let col_to_list i =
-    Size.fold_right (fun j l -> a.{i+ar, j+ac} :: l) n []
+    Size.fold_righti (fun j l -> a.{i+ar, j+ac} :: l) n []
   in
-  Size.fold_right (fun i ll -> (col_to_list i) :: ll) m []
+  Size.fold_righti (fun i ll -> (col_to_list i) :: ll) m []
 
 let unsafe_of_list kind m n ll =
   assert(dim_list_list ll <> None);

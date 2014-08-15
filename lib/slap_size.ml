@@ -71,24 +71,6 @@ type ('m, 'n) max
 
 let max = Pervasives.max
 
-(** {2 Iterators} *)
-
-let fold_left f init n =
-  let rec loop i e =
-    if i > n then e else loop (i + 1) (f e i)
-  in
-  loop 1 init
-
-let fold_right f n init =
-  let rec loop i e =
-    if i = 0 then e else loop (i - 1) (f i e)
-  in
-  loop n init
-
-let iter f n = for i = 1 to n do f i done
-
-let riter f n = for i = n downto 1 do f i done
-
 (** {2 Conversion between sizes and integers} *)
 
 module type SIZE =
@@ -118,3 +100,31 @@ struct
     if N.value < 0 then invalid_arg "Slap.Size.Of_int_dyn";
     N.value
 end
+
+(** {2 Iterators on integers} *)
+
+let fold_lefti f init n =
+  let rec loop i e =
+    if i > n then e else loop (i + 1) (f e i)
+  in
+  loop 1 init
+
+let fold_righti f n init =
+  let rec loop i e =
+    if i = 0 then e else loop (i - 1) (f i e)
+  in
+  loop n init
+
+let iteri f n = for i = 1 to n do f i done
+
+let riteri f n = for i = n downto 1 do f i done
+
+(** {2 Iterators on sizes} *)
+
+let fold_left f = fold_lefti (fun acc i -> f acc (unsafe_of_int i))
+
+let fold_right f = fold_righti (fun i -> f (unsafe_of_int i))
+
+let iter f = iteri (fun i -> f (unsafe_of_int i))
+
+let riter f = riteri (fun i -> f (unsafe_of_int i))
