@@ -18,17 +18,22 @@
 *)
 
 type +'n t = private int
-(** A singleton type on sizes (i.e., vectors' and matrices' dimensions).
+(** A singleton type on sizes (i.e., dimensions of vectors and matrices).
 
-    Evaluation of a term with singleton type ['n Size.t] {i always} results in
-    the natural number corresponding to ['n].
+    Evaluation of a term with {i singleton type} ['n Size.t] {b always} results
+    in the natural number corresponding to phantom type parameter ['n].
+    ['n] is instantiated to a generative phantom type or a (phantom) type that
+    represents an arithmetic operation defined in this module. In either case,
+    {b only} the equality of sizes is verified statically.
  *)
 
 (** {2 Constants} *)
 
 type z
+(** zero *)
 
 type 'n s
+(** successor, i.e., ['n s] corresponds to ['n + 1]. *)
 
 val zero : z t
 
@@ -46,7 +51,7 @@ type ten = z s s s s s s s s s s
 
 val ten : ten t
 
-(** {2 Arithmetric operations} *)
+(** {2 Arithmetic operations} *)
 
 val succ : 'n t -> 'n s t
 (** [succ n]
@@ -107,7 +112,7 @@ module type SIZE =
 
     val value : n t
     (** A dynamically-decided size with type like
-      [exists n. n Size.t]. *)
+        [exists n. n Size.t]. *)
   end
 
 val to_int : 'n t -> int

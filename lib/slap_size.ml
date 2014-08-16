@@ -41,7 +41,7 @@ type ten = z s s s s s s s s s s
 
 let ten = 10
 
-(** {2 Arithmetric operations} *)
+(** {2 Arithmetic operations} *)
 
 let succ = Pervasives.succ
 
