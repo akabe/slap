@@ -3,8 +3,9 @@ OCamlVersion:           >= 3.12
 Name:                   SLAP
 Version:                0.0.0
 Synopsis:               Sized Linear Algebra Package
-Authors:                Akinori ABE <abe@kb.ecei.tohoku.ac.jp>
-Copyrights:             (C) 2013-2014 Akinori ABE <abe@kb.ecei.tohoku.ac.jp>
+Description:            BLAS and LAPACK binding in OCaml with static size checking for matrix operations
+Authors:                Akinori ABE <abe@sf.ecei.tohoku.ac.jp>
+Copyrights:             (C) 2013-2014 Akinori ABE <abe@sf.ecei.tohoku.ac.jp>
 License:                LGPL-2.1 with OCaml linking exception
 Homepage:               https://github.com/akabe/slap
 Plugins:                META (0.4), StdFiles (0.4), DevFiles (0.4)
@@ -143,3 +144,8 @@ Executable pca_slap
   BuildDepends:   slap
   Install:        false
   CompiledObject: best
+
+SourceRepository head
+  Type:           git
+  Location:       https://github.com/akabe/slap.git
+  Browser:        https://github.com/akabe/slap
