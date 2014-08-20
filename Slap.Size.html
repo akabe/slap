@@ -11,9 +11,10 @@
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
 <link title="Slap" rel="Chapter" href="Slap.html"><link title="Constants" rel="Section" href="#2_Constants">
-<link title="Arithmetric operations" rel="Section" href="#2_Arithmetricoperations">
-<link title="Iterators" rel="Section" href="#2_Iterators">
+<link title="Arithmetic operations" rel="Section" href="#2_Arithmeticoperations">
 <link title="Conversion between a size and an integer" rel="Section" href="#2_Conversionbetweenasizeandaninteger">
+<link title="Iterators on sizes" rel="Section" href="#2_Iteratorsonsizes">
+<link title="Iterators on integers" rel="Section" href="#2_Iteratorsonintegers">
 <title>Slap.Size</title>
 </head>
 <body>
@@ -29,20 +30,29 @@ Sizes (dimensions of vectors and matrices).<br>
 
 <pre><span id="TYPEt"><span class="keyword">type</span> <code class="type">'n</code> t</span> = private <code class="type">int</code> </pre>
 <div class="info ">
-A singleton type on sizes (i.e., vectors' and matrices' dimensions).
+A singleton type on sizes (i.e., dimensions of vectors and matrices).
 <p>
 
-    Evaluation of a term with singleton type <code class="code">'n Size.t</code> <i>always</i> results in
-    the natural number corresponding to <code class="code">'n</code>.<br>
+    Evaluation of a term with <i>singleton type</i> <code class="code">'n Size.t</code> <b>always</b> results
+    in the natural number corresponding to phantom type parameter <code class="code">'n</code>.
+    <code class="code">'n</code> is instantiated to a generative phantom type or a (phantom) type that
+    represents an arithmetic operation defined in this module. In either case,
+    <b>only</b> the equality of sizes is verified statically.<br>
 </div>
 
 <br>
 <h2 id="2_Constants">Constants</h2><br>
 
 <pre><span id="TYPEz"><span class="keyword">type</span> <code class="type"></code>z</span> </pre>
+<div class="info ">
+zero<br>
+</div>
 
 
 <pre><span id="TYPEs"><span class="keyword">type</span> <code class="type">'n</code> s</span> </pre>
+<div class="info ">
+successor, i.e., <code class="code">'n s</code> corresponds to <code class="code">'n + 1</code>.<br>
+</div>
 
 
 <pre><span id="VALzero"><span class="keyword">val</span> zero</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre>
@@ -55,7 +65,7 @@ A singleton type on sizes (i.e., vectors' and matrices' dimensions).
 
 
 <pre><span id="VALten"><span class="keyword">val</span> ten</span> : <code class="type"><a href="Slap.Size.html#TYPEten">ten</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><br>
-<h2 id="2_Arithmetricoperations">Arithmetric operations</h2><br>
+<h2 id="2_Arithmeticoperations">Arithmetic operations</h2><br>
 
 <pre><span id="VALsucc"><span class="keyword">val</span> succ</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">succ n</code><br>
@@ -112,28 +122,6 @@ A singleton type on sizes (i.e., vectors' and matrices' dimensions).
 <b>Returns</b> the maximum of <code class="code">m</code> and <code class="code">n</code><br>
 </div>
 <br>
-<h2 id="2_Iterators">Iterators</h2>
-<p>
-
-    The following functions are iterators over <code class="code">[1; 2; ...; n]</code> where <code class="code">n</code> is a
-    size.<br>
-
-<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">('accum -> int -> 'accum) -> 'accum -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
-<code class="code">fold_left f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) (to_int n)</code>.<br>
-</div>
-
-<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">(int -> 'accum -> 'accum) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
-<code class="code">fold_right f n init</code> is <code class="code">f 1 (f 2 (... (f (to_int n) init) ...))</code>.<br>
-</div>
-
-<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">(int -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
-<code class="code">iter f n</code> is <code class="code">f 1; f 2; ...; f (to_int n)</code>.<br>
-</div>
-
-<pre><span id="VALriter"><span class="keyword">val</span> riter</span> : <code class="type">(int -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
-<code class="code">riter f n</code> is <code class="code">f (to_int n); ...; f 2; f 1</code>.<br>
-</div>
-<br>
 <h2 id="2_Conversionbetweenasizeandaninteger">Conversion between a size and an integer</h2><br>
 
 <pre><span class="keyword">module type</span> <a href="Slap.Size.SIZE.html">SIZE</a> = <code class="code">sig</code> <a href="Slap.Size.SIZE.html">..</a> <code class="code">end</code></pre><div class="info">
@@ -159,5 +147,49 @@ Like <code class="code">of_int_dyn</code>, but dynamic size checking is not perf
 <pre><span class="keyword">module</span> <a href="Slap.Size.Of_int_dyn.html">Of_int_dyn</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">N</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block">
 <pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type">int</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap.Size.SIZE.html">SIZE</a></code><code class="type"> </code></div></pre><div class="info">
 A functor version of <code class="code">of_int_dyn</code>.
+</div>
+<br>
+<h2 id="2_Iteratorsonsizes">Iterators on sizes</h2>
+<p>
+
+    The following functions are iterators over <code class="code">[1; 2; ...; n]</code> where <code class="code">n</code> is a
+    size.<br>
+
+<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">('accum -> (module Slap.Size.SIZE) -> 'accum) -><br>       'accum -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_left f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) n</code>.<br>
+</div>
+
+<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">((module Slap.Size.SIZE) -> 'accum -> 'accum) -><br>       'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_right f n init</code> is <code class="code">f 1 (f 2 (... (f n init) ...))</code>.<br>
+</div>
+
+<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">((module Slap.Size.SIZE) -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+<code class="code">iter f n</code> is <code class="code">f 1; f 2; ...; f n</code>.<br>
+</div>
+
+<pre><span id="VALriter"><span class="keyword">val</span> riter</span> : <code class="type">((module Slap.Size.SIZE) -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+<code class="code">riter f n</code> is <code class="code">f n; ...; f 2; f 1</code>.<br>
+</div>
+<br>
+<h2 id="2_Iteratorsonintegers">Iterators on integers</h2>
+<p>
+
+    The following functions are iterators over <code class="code">[1; 2; ...; to_int n]</code> where
+    <code class="code">n</code> is a size.<br>
+
+<pre><span id="VALfold_lefti"><span class="keyword">val</span> fold_lefti</span> : <code class="type">('accum -> int -> 'accum) -> 'accum -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_lefti f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) (to_int n)</code>.<br>
+</div>
+
+<pre><span id="VALfold_righti"><span class="keyword">val</span> fold_righti</span> : <code class="type">(int -> 'accum -> 'accum) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_righti f n init</code> is <code class="code">f 1 (f 2 (... (f (to_int n) init) ...))</code>.<br>
+</div>
+
+<pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">(int -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+<code class="code">iteri f n</code> is <code class="code">f 1; f 2; ...; f (to_int n)</code>.<br>
+</div>
+
+<pre><span id="VALriteri"><span class="keyword">val</span> riteri</span> : <code class="type">(int -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+<code class="code">riteri f n</code> is <code class="code">f (to_int n); ...; f 2; f 1</code>.<br>
 </div>
 </body></html>

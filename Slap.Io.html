@@ -29,24 +29,7 @@ Pretty-printers of vector and matrices.<br>
 </div>
 <hr width="100%">
 
-<pre><span id="VALdefault_ellipsis"><span class="keyword">val</span> default_ellipsis</span> : <code class="type">string Pervasives.ref</code></pre><div class="info ">
-default = <code class="code">"..."</code><br>
-</div>
-
-<pre><span id="VALdefault_max_rows"><span class="keyword">val</span> default_max_rows</span> : <code class="type">int option Pervasives.ref</code></pre><div class="info ">
-The maximum number of rows to be printed.
-    If <code class="code">None</code>, all rows of a table are output.<br>
-</div>
-
-<pre><span id="VALdefault_max_cols"><span class="keyword">val</span> default_max_cols</span> : <code class="type">int option Pervasives.ref</code></pre><div class="info ">
-The maximum number of columns to be printed.
-    If <code class="code">None</code>, all columns of a table are output.<br>
-</div>
-
-<pre><span id="VALset_max"><span class="keyword">val</span> set_max</span> : <code class="type">int -> unit</code></pre><div class="info ">
-Set both <a href="Slap.Io.html#VALdefault_max_rows"><code class="code">Slap.Io.default_max_rows</code></a> and <a href="Slap.Io.html#VALdefault_max_rows"><code class="code">Slap.Io.default_max_rows</code></a>.<br>
-</div>
-<br>
+<pre><span class="keyword">module</span> <a href="Slap.Io.Context.html">Context</a>: <code class="code">sig</code> <a href="Slap.Io.Context.html">..</a> <code class="code">end</code></pre><br>
 <h2 id="2_Generalprettyprinters">General pretty printers</h2><br>
 
 <pre><code><span id="TYPEindex"><span class="keyword">type</span> <code class="type"></code>index</span> = </code></pre><table class="typetable">
@@ -81,10 +64,10 @@ Set both <a href="Slap.Io.html#VALdefault_max_rows"><code class="code">Slap.Io.d
 
 
 
-<pre><span id="VALpp_table"><span class="keyword">val</span> pp_table</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?max_rows:int option -><br>       ?max_cols:int option -><br>       Format.formatter -><br>       (Format.formatter -> 'el -> unit) -><br>       int -> int -> (int -> int -> 'el) -> unit</code></pre><div class="info ">
+<pre><span id="VALpp_table"><span class="keyword">val</span> pp_table</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?vertical_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       ?horizontal_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       Format.formatter -><br>       (Format.formatter -> 'el -> unit) -><br>       int -> int -> (int -> int -> 'el) -> unit</code></pre><div class="info ">
 <code class="code">pp_table
        ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
-       ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols
+       ?pp_left ?pp_right ?pad ?ellipsis ?vertical_context ?horizontal_context
        ppf pp_el n_rows n_cols get_el</code>
 <p>
 
@@ -114,12 +97,16 @@ Set both <a href="Slap.Io.html#VALdefault_max_rows"><code class="code">Slap.Io.d
 <li><code class="code">pad</code> is a padding character for each column. (default = <code class="code">' '</code>)</li>
 <li><code class="code">ellipsis</code> is used as a filler when elements need to be skipped.
       (default = <code class="code">!default_ellipsis</code>)</li>
-<li><code class="code">max_rows</code> is the maximum number of rows to be printed.
-      If <code class="code">None</code> is passed, all rows of a table are output.
-      (default = <code class="code">!default_max_rows</code>)</li>
-<li><code class="code">max_cols</code> is the maximum number of columns to be printed.
-      If <code class="code">None</code> is passed, all colmns of a table are output.
-      (default = <code class="code">!default_max_cols</code>)</li>
+<li>If <code class="code">vertical_context</code> is <code class="code">Some n</code>, the first <code class="code">n</code> rows and the last
+      <code class="code">n</code> rows of a table are printed. When the number of rows is smaller
+      than <code class="code">2 * n</code>, all rows are shown. If <code class="code">None</code>, all rows of a table are
+      output.
+      (default = <code class="code">!Context.vertical_default</code>)</li>
+<li>If <code class="code">horizontal_context</code> is <code class="code">Some n</code>, the first <code class="code">n</code> columns and the last
+      <code class="code">n</code> columns of a table are printed. When the number of columns is smaller
+      than <code class="code">2 * n</code>, all columns are shown. If <code class="code">None</code>, all columns of a table are
+      output.
+      (default = <code class="code">!Context.horizontal_default</code>)</li>
 <li><code class="code">pp_el</code> is a pretty printer to used to output elements.</li>
 <li><code class="code">ppf</code> is the formatter to which all output is finally printed.</li>
 <li><code class="code">n_rows</code> is the number of all rows of a table.</li>
@@ -130,15 +117,15 @@ Set both <a href="Slap.Io.html#VALdefault_max_rows"><code class="code">Slap.Io.d
 <br>
 </div>
 
-<pre><span id="VALpp_vec_gen"><span class="keyword">val</span> pp_vec_gen</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?max_rows:int option -><br>       ?max_cols:int option -><br>       Format.formatter -><br>       (Format.formatter -> 'num -> unit) -><br>       ('n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALpp_vec_gen"><span class="keyword">val</span> pp_vec_gen</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?vertical_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       ?horizontal_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       Format.formatter -><br>       (Format.formatter -> 'num -> unit) -><br>       ('n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> unit</code></pre><div class="info ">
 A generator of pretty printers for (column) vectors.<br>
 </div>
 
-<pre><span id="VALpp_rvec_gen"><span class="keyword">val</span> pp_rvec_gen</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?max_rows:int option -><br>       ?max_cols:int option -><br>       Format.formatter -><br>       (Format.formatter -> 'num -> unit) -><br>       ('n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALpp_rvec_gen"><span class="keyword">val</span> pp_rvec_gen</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?vertical_context:int option -><br>       ?horizontal_context:int option -><br>       Format.formatter -><br>       (Format.formatter -> 'num -> unit) -><br>       ('n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> unit</code></pre><div class="info ">
 A generator of pretty printers for row vectors.<br>
 </div>
 
-<pre><span id="VALpp_mat_gen"><span class="keyword">val</span> pp_mat_gen</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?max_rows:int option -><br>       ?max_cols:int option -><br>       Format.formatter -><br>       (Format.formatter -> 'num -> unit) -><br>       ('m, 'n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap.Mat.html#TYPEt">Slap.Mat.t</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALpp_mat_gen"><span class="keyword">val</span> pp_mat_gen</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?vertical_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       ?horizontal_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       Format.formatter -><br>       (Format.formatter -> 'num -> unit) -><br>       ('m, 'n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap.Mat.html#TYPEt">Slap.Mat.t</a> -> unit</code></pre><div class="info ">
 A generator of pretty printers for matrices.<br>
 </div>
 <br>

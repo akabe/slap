@@ -311,6 +311,8 @@ Conjugate transpose of a matrix.
 <code class="code">create n</code>
 </div>
 </td></tr>
+<tr><td><a href="Slap.Io.Context.html#VALcreate">create</a> [<a href="Slap.Io.Context.html">Slap.Io.Context</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap.Mat.html#VALcreate">create</a> [<a href="Slap.Mat.html">Slap.Mat</a>]</td>
 <td><div class="info">
 <code class="code">create kind m n</code>
@@ -326,21 +328,6 @@ Conjugate transpose of a matrix.
 <tr><td><a href="Slap.Common.html#VALcreate_int_vec">create_int_vec</a> [<a href="Slap.Common.html">Slap.Common</a>]</td>
 <td></td></tr>
 <tr><td align="left"><br>D</td></tr>
-<tr><td><a href="Slap.Io.html#VALdefault_ellipsis">default_ellipsis</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
-<td><div class="info">
-default = <code class="code">"..."</code>
-</div>
-</td></tr>
-<tr><td><a href="Slap.Io.html#VALdefault_max_cols">default_max_cols</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
-<td><div class="info">
-The maximum number of columns to be printed.
-</div>
-</td></tr>
-<tr><td><a href="Slap.Io.html#VALdefault_max_rows">default_max_rows</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
-<td><div class="info">
-The maximum number of rows to be printed.
-</div>
-</td></tr>
 <tr><td><a href="Slap.C.Mat.html#VALdiag">diag</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
 <td><div class="info">
 <code class="code">diag a</code>
@@ -502,6 +489,11 @@ The maximum number of rows to be printed.
 </div>
 </td></tr>
 <tr><td align="left"><br>E</td></tr>
+<tr><td><a href="Slap.Io.Context.html#VALellipsis_default">ellipsis_default</a> [<a href="Slap.Io.Context.html">Slap.Io.Context</a>]</td>
+<td><div class="info">
+default = <code class="code">"..."</code>
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Mat.html#VALempty">empty</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
 <td><div class="info">
 An empty matrix.
@@ -662,7 +654,7 @@ Fill the given vector with the given value.
 </td></tr>
 <tr><td><a href="Slap.Size.html#VALfold_left">fold_left</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
 <td><div class="info">
-<code class="code">fold_left f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) (to_int n)</code>.
+<code class="code">fold_left f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) n</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALfold_left2">fold_left2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
@@ -753,6 +745,11 @@ Fill the given vector with the given value.
 <td><div class="info">
 <code class="code">fold_lefti f init (x1, x2, ..., xn)</code> is
     <code class="code">f n (... (f 2 (f 1 init x1) x2) ...) xn</code> with the vector's dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Size.html#VALfold_lefti">fold_lefti</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
+<td><div class="info">
+<code class="code">fold_lefti f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) (to_int n)</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALfold_lefti2">fold_lefti2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
@@ -857,7 +854,7 @@ Fill the given vector with the given value.
 </td></tr>
 <tr><td><a href="Slap.Size.html#VALfold_right">fold_right</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
 <td><div class="info">
-<code class="code">fold_right f n init</code> is <code class="code">f 1 (f 2 (... (f (to_int n) init) ...))</code>.
+<code class="code">fold_right f n init</code> is <code class="code">f 1 (f 2 (... (f n init) ...))</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALfold_right2">fold_right2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
@@ -948,6 +945,11 @@ Fill the given vector with the given value.
 <td><div class="info">
 <code class="code">fold_righti f (x1, x2, ..., xn) init</code> is
     <code class="code">f 1 x1 (f 2 x2 (... (f n xn init) ...))</code> with the vector's dimension <code class="code">n</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Size.html#VALfold_righti">fold_righti</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
+<td><div class="info">
+<code class="code">fold_righti f n init</code> is <code class="code">f 1 (f 2 (... (f (to_int n) init) ...))</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALfold_righti2">fold_righti2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
@@ -1400,6 +1402,13 @@ Fill the given vector with the given value.
 <td></td></tr>
 <tr><td><a href="Slap.D.html#VALgetrs">getrs</a> [<a href="Slap.D.html">Slap.D</a>]</td>
 <td></td></tr>
+<tr><td align="left"><br>H</td></tr>
+<tr><td><a href="Slap.Io.Context.html#VALhorizontal_default">horizontal_default</a> [<a href="Slap.Io.Context.html">Slap.Io.Context</a>]</td>
+<td><div class="info">
+- If <code class="code">Some n</code>, the first <code class="code">n</code> columns and the last <code class="code">n</code> columns of a table
+        are printed.
+</div>
+</td></tr>
 <tr><td align="left"><br>I</td></tr>
 <tr><td><a href="Slap.C.html#VALiamax">iamax</a> [<a href="Slap.C.html">Slap.C</a>]</td>
 <td></td></tr>
@@ -1566,7 +1575,7 @@ An alias of <code class="code">init_cols</code>.
 </td></tr>
 <tr><td><a href="Slap.Size.html#VALiter">iter</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
 <td><div class="info">
-<code class="code">iter f n</code> is <code class="code">f 1; f 2; ...; f (to_int n)</code>.
+<code class="code">iter f n</code> is <code class="code">f 1; f 2; ...; f n</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALiter2">iter2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
@@ -1652,6 +1661,11 @@ An alias of <code class="code">init_cols</code>.
 <tr><td><a href="Slap.Vec.html#VALiteri">iteri</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
 <td><div class="info">
 <code class="code">iteri f (x1, x2, ..., xn)</code> is <code class="code">f 1 x1; f 2 x2; ...; f n xn</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Size.html#VALiteri">iteri</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
+<td><div class="info">
+<code class="code">iteri f n</code> is <code class="code">f 1; f 2; ...; f (to_int n)</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALiteri2">iteri2</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
@@ -1846,6 +1860,11 @@ An alias of <code class="code">init_cols</code>.
 </td></tr>
 <tr><td><a href="Slap.Common.html#VALleft">left</a> [<a href="Slap.Common.html">Slap.Common</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.Io.Toplevel.html#VALlsc">lsc</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
+<td><div class="info">
+An alias of <code class="code">ssc</code> for compatibility with Lacaml.
+</div>
+</td></tr>
 <tr><td align="left"><br>M</td></tr>
 <tr><td><a href="Slap.C.Mat.html#VALmake">make</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
 <td><div class="info">
@@ -2682,7 +2701,7 @@ A generator of pretty printers for row vectors.
 <td><div class="info">
 <code class="code">pp_table
        ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
-       ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols
+       ?pp_left ?pp_right ?pad ?ellipsis ?vertical_context ?horizontal_context
        ppf pp_el n_rows n_cols get_el</code>
 </div>
 </td></tr>
@@ -2919,7 +2938,12 @@ A generator of pretty printers for (column) vectors.
 <td></td></tr>
 <tr><td><a href="Slap.Size.html#VALriter">riter</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
 <td><div class="info">
-<code class="code">riter f n</code> is <code class="code">f (to_int n); ...; f 2; f 1</code>.
+<code class="code">riter f n</code> is <code class="code">f n; ...; f 2; f 1</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Size.html#VALriteri">riteri</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
+<td><div class="info">
+<code class="code">riteri f n</code> is <code class="code">f (to_int n); ...; f 2; f 1</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Mat.html#VALrow_dyn">row_dyn</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
@@ -3028,6 +3052,12 @@ A row-wise <code class="code">scal</code> function for matrices.
 A row-wise <code class="code">scal</code> function for matrices.
 </div>
 </td></tr>
+<tr><td><a href="Slap.Io.Context.html#VALset_dim_defaults">set_dim_defaults</a> [<a href="Slap.Io.Context.html">Slap.Io.Context</a>]</td>
+<td><div class="info">
+<code class="code">set_dim_defaults opt_n</code> sets both <a href="Slap.Io.Context.html#VALvertical_default"><code class="code">Slap.Io.Context.vertical_default</code></a> and
+      <a href="Slap.Io.Context.html#VALhorizontal_default"><code class="code">Slap.Io.Context.horizontal_default</code></a> to <code class="code">opt_n</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Mat.html#VALset_dyn">set_dyn</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
 <td><div class="info">
 <code class="code">set_dyn a i j x</code> assigns <code class="code">x</code> to the <code class="code">(i,j)</code> element of the matrix <code class="code">a</code>.
@@ -3076,11 +3106,6 @@ A row-wise <code class="code">scal</code> function for matrices.
 <tr><td><a href="Slap.Vec.html#VALset_dyn">set_dyn</a> [<a href="Slap.Vec.html">Slap.Vec</a>]</td>
 <td><div class="info">
 <code class="code">set_dyn x i a</code> assigns <code class="code">a</code> to the <code class="code">i</code>-th element of the vector <code class="code">x</code>.
-</div>
-</td></tr>
-<tr><td><a href="Slap.Io.html#VALset_max">set_max</a> [<a href="Slap.Io.html">Slap.Io</a>]</td>
-<td><div class="info">
-Set both <a href="Slap.Io.html#VALdefault_max_rows"><code class="code">Slap.Io.default_max_rows</code></a> and <a href="Slap.Io.html#VALdefault_max_rows"><code class="code">Slap.Io.default_max_rows</code></a>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALshared_rev">shared_rev</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
@@ -3142,6 +3167,13 @@ Set both <a href="Slap.Io.html#VALdefault_max_rows"><code class="code">Slap.Io.d
 <tr><td><a href="Slap.D.Vec.html#VALsqrt">sqrt</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
 <td><div class="info">
 <code class="code">sqr ?y x</code> computes the square root of elements of the vector <code class="code">x</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Io.Toplevel.html#VALssc">ssc</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
+<td><div class="info">
+<i>SLAP Set Context</i>: <code class="code">ssc n</code> sets sets both
+      <a href="Slap.Io.Context.html#VALvertical_default"><code class="code">Slap.Io.Context.vertical_default</code></a> and
+      <a href="Slap.Io.Context.html#VALhorizontal_default"><code class="code">Slap.Io.Context.horizontal_default</code></a> to <code class="code">Some n</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALssqr">ssqr</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
@@ -3870,7 +3902,13 @@ A dynamically-sized contiguous vector with type like
 <tr><td><a href="Slap.Size.SIZE.html#VALvalue">value</a> [<a href="Slap.Size.SIZE.html">Slap.Size.SIZE</a>]</td>
 <td><div class="info">
 A dynamically-decided size with type like
-      <code class="code">exists n. n Size.t</code>.
+        <code class="code">exists n. n Size.t</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Io.Context.html#VALvertical_default">vertical_default</a> [<a href="Slap.Io.Context.html">Slap.Io.Context</a>]</td>
+<td><div class="info">
+- If <code class="code">Some n</code>, the first <code class="code">n</code> rows and the last <code class="code">n</code> rows of a table are
+        printed.
 </div>
 </td></tr>
 <tr><td align="left"><br>Z</td></tr>
