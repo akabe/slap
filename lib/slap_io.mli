@@ -20,21 +20,34 @@
 open Format
 open Bigarray
 
-val default_ellipsis : string ref
-(** default = ["..."] *)
+module Context :
+sig
+  type t
 
-val default_max_rows : int option ref
-(** The maximum number of rows to be printed.
-    If [None], all rows of a table are output.
- *)
+  val create : int -> t
 
-val default_max_cols : int option ref
-(** The maximum number of columns to be printed.
-    If [None], all columns of a table are output.
- *)
+  val ellipsis_default : string ref
+  (** default = ["..."] *)
 
-val set_max : int -> unit
-(** Set both {!Slap.Io.default_max_rows} and {!Slap.Io.default_max_rows}. *)
+  val vertical_default : t option ref
+  (** - If [Some n], the first [n] rows and the last [n] rows of a table are
+        printed. When the number of rows is smaller than [2 * n], all rows are
+        shown.
+      - If [None], all rows of a table are output.
+   *)
+
+  val horizontal_default : t option ref
+  (** - If [Some n], the first [n] columns and the last [n] columns of a table
+        are printed. When the number of columns is smaller than [2 * n], all
+        columns are shown.
+      - If [None], all columns of a table are output.
+   *)
+
+  val set_dim_defaults : t option -> unit
+  (** [set_dim_defaults opt_n] sets both {!Slap.Io.Context.vertical_default} and
+      {!Slap.Io.Context.horizontal_default} to [opt_n].
+   *)
+end
 
 (** {2 General pretty printers} *)
 
@@ -55,15 +68,15 @@ val pp_table :
   ?pp_right:(formatter -> int -> unit) ->
   ?pad:char ->
   ?ellipsis:string ->
-  ?max_rows:int option ->
-  ?max_cols:int option ->
+  ?vertical_context:Context.t option ->
+  ?horizontal_context:Context.t option ->
   formatter ->
   (formatter -> 'el -> unit) ->
   int -> int ->
   (int -> int -> 'el) -> unit
 (** [pp_table
        ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
-       ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols
+       ?pp_left ?pp_right ?pad ?ellipsis ?vertical_context ?horizontal_context
        ppf pp_el n_rows n_cols get_el]
 
     Generic printing of tables.
@@ -91,12 +104,16 @@ val pp_table :
     - [pad] is a padding character for each column. (default = [' '])
     - [ellipsis] is used as a filler when elements need to be skipped.
       (default = [!default_ellipsis])
-    - [max_rows] is the maximum number of rows to be printed.
-      If [None] is passed, all rows of a table are output.
-      (default = [!default_max_rows])
-    - [max_cols] is the maximum number of columns to be printed.
-      If [None] is passed, all colmns of a table are output.
-      (default = [!default_max_cols])
+    - If [vertical_context] is [Some n], the first [n] rows and the last
+      [n] rows of a table are printed. When the number of rows is smaller
+      than [2 * n], all rows are shown. If [None], all rows of a table are
+      output.
+      (default = [!Context.vertical_default])
+    - If [horizontal_context] is [Some n], the first [n] columns and the last
+      [n] columns of a table are printed. When the number of columns is smaller
+      than [2 * n], all columns are shown. If [None], all columns of a table are
+      output.
+      (default = [!Context.horizontal_default])
     - [pp_el] is a pretty printer to used to output elements.
     - [ppf] is the formatter to which all output is finally printed.
     - [n_rows] is the number of all rows of a table.
@@ -116,8 +133,8 @@ val pp_vec_gen :
   ?pp_right:(formatter -> int -> unit) ->
   ?pad:char ->
   ?ellipsis:string ->
-  ?max_rows:int option ->
-  ?max_cols:int option ->
+  ?vertical_context:Context.t option ->
+  ?horizontal_context:Context.t option ->
   formatter ->
   (formatter -> 'num -> unit) ->
   ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
@@ -134,8 +151,8 @@ val pp_rvec_gen :
   ?pp_right:(formatter -> int -> unit) ->
   ?pad:char ->
   ?ellipsis:string ->
-  ?max_rows:int option ->
-  ?max_cols:int option ->
+  ?vertical_context:int option ->
+  ?horizontal_context:int option ->
   formatter ->
   (formatter -> 'num -> unit) ->
   ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
@@ -152,8 +169,8 @@ val pp_mat_gen :
   ?pp_right:(formatter -> int -> unit) ->
   ?pad:char ->
   ?ellipsis:string ->
-  ?max_rows:int option ->
-  ?max_cols:int option ->
+  ?vertical_context:Context.t option ->
+  ?horizontal_context:Context.t option ->
   formatter ->
   (formatter -> 'num -> unit) ->
   ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Mat.t -> unit

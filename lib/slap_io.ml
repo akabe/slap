@@ -19,16 +19,24 @@
 
 open Format
 
-let default_ellipsis = ref "..."
+module Context =
+  struct
+    type t = int
 
-let default_max_rows, default_max_cols =
-  let v = if !Sys.interactive then Some 6 else None in
-  ref v, ref v
+    let create n =
+      if n < 1 then failwith "Slap.Io.Context.create: n < 1"
+      else n
 
-let set_max n =
-  if n < 3 then invalid_arg "Slap.Io.set_max: too small max size";
-  default_max_rows := Some n;
-  default_max_cols := Some n
+    let ellipsis_default = ref "..."
+
+    let horizontal_default, vertical_default =
+      let opt_n = if !Sys.interactive then Some 3 else None in
+      ref opt_n, ref opt_n
+
+    let set_dim_defaults opt_n =
+      horizontal_default := opt_n;
+      vertical_default   := opt_n
+  end
 
 (** {2 Pretty printers} *)
 
@@ -44,14 +52,13 @@ let default_pp_end_row ppf _ = pp_force_newline ppf ()
 let default_pp_end_col ppf ~row:_ ~col:_ = pp_print_string ppf " "
 let default_pad = ' '
 
-let make_index_array ?pp_head ?pp_foot max_n n =
-  let idx = match max_n with
-    | Some max_n when n > max_n && max_n > 1 -> (* omit columns or rows *)
-       let side_n = max_n / 2 in
-       let offset = n - 2 * side_n in
-       Array.init (2 * side_n + 1)
-                  (fun i -> if i < side_n then Cell (i + 1)
-                            else if i = side_n then Ellipsis
+let make_index_array ?pp_head ?pp_foot context n =
+  let idx = match context with
+    | Some k when n > 2 * k -> (* omit columns or rows *)
+       let offset = n - 2 * k in
+       Array.init (2 * k + 1)
+                  (fun i -> if i < k then Cell (i + 1)
+                            else if i = k then Ellipsis
                             else Cell (i + offset))
     | _ -> Array.init n (fun i -> Cell (i + 1)) (* show all columns or rows *)
   in
@@ -127,17 +134,17 @@ let pp_table ?(pp_open = default_pp_open)
              ?pp_left
              ?pp_right
              ?(pad = default_pad)
-             ?(ellipsis = !default_ellipsis)
-             ?(max_rows = !default_max_rows)
-             ?(max_cols = !default_max_cols)
+             ?(ellipsis = !Context.ellipsis_default)
+             ?(vertical_context = !Context.vertical_default)
+             ?(horizontal_context = !Context.horizontal_default)
              ppf pp_el m n get_el =
   if m > 0 && n > 0 then
     begin
       let pp_el ppf i j = pp_el ppf (get_el i j) in
       let idx_m = make_index_array ?pp_head:pp_head ?pp_foot:pp_foot
-                                   max_rows m in
+                                   vertical_context m in
       let idx_n = make_index_array ?pp_head:pp_left ?pp_foot:pp_right
-                                   max_cols n in
+                                   horizontal_context n in
       let str_tbl = stringize_table ?pp_head ?pp_foot ?pp_left ?pp_right
                                     ~ellipsis ~idx_m ~idx_n m n pp_el in
       let width = calc_column_width str_tbl in
@@ -148,25 +155,34 @@ let pp_table ?(pp_open = default_pp_open)
     end
 
 let pp_vec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
-               ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols
+               ?pp_left ?pp_right ?pad ?ellipsis
+               ?vertical_context ?horizontal_context
                ppf pp_el x =
   pp_table ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
-           ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols ppf pp_el
+           ?pp_left ?pp_right ?pad ?ellipsis
+           ?vertical_context ?horizontal_context
+           ppf pp_el
            (Vec.dim x) 1 (fun i _ -> Vec.get_dyn x i)
 
 let pp_rvec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
-                ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols
+                ?pp_left ?pp_right ?pad ?ellipsis
+                ?vertical_context ?horizontal_context
                 ppf pp_el x =
   pp_table ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
-           ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols ppf pp_el
+           ?pp_left ?pp_right ?pad ?ellipsis
+           ?vertical_context ?horizontal_context
+           ppf pp_el
            1 (Vec.dim x) (fun _ j -> Vec.get_dyn x j)
 
 let pp_mat_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
-               ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols
+               ?pp_left ?pp_right ?pad ?ellipsis
+               ?vertical_context ?horizontal_context
                ppf pp_el a =
   let m, n = Mat.dim a in
   pp_table ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
-           ?pp_left ?pp_right ?pad ?ellipsis ?max_rows ?max_cols ppf pp_el
+           ?pp_left ?pp_right ?pad ?ellipsis
+           ?vertical_context ?horizontal_context
+           ppf pp_el
            m n (Mat.get_dyn a)
 
 (** {2 Default pretty-printers for elements of vectors or matrices} *)
