@@ -221,6 +221,18 @@ val pp_imat : ('m, 'n, int32, 'prec, 'cnt_or_dsc) pp_mat
 
 module Toplevel :
 sig
+  val ssc : int -> unit
+  (** {i SLAP Set Context}: [ssc n] sets sets both
+      {!Slap.Io.Context.vertical_default} and
+      {!Slap.Io.Context.horizontal_default} to [Some n].
+      This is the shortcut version of {Slap.Io.Context.set_dim_defaults}.
+   *)
+
+  val lsc : int -> unit
+  (** An alias of [ssc] for compatibility with Lacaml.
+      ({i Lacaml Set Context})
+   *)
+
   val pp_fvec : ('n, float, 'prec, 'cnt_or_dsc) pp_vec
 
   val pp_cvec : ('n, Complex.t, 'prec, 'cnt_or_dsc) pp_vec

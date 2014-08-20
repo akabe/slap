@@ -220,6 +220,9 @@ let pp_imat ppf a = pp_mat_gen ppf (!pp_int32_el_default) a
 
 module Toplevel =
   struct
+    let ssc n = Context.set_dim_defaults (Some (Context.create n))
+    let lsc = ssc
+
     let pp_labeled_row ppf i = fprintf ppf "R%d" i
     let pp_labeled_col ppf j = fprintf ppf "C%d" j
 

@@ -26,7 +26,7 @@ Library slap_top
   Path:                 lib
   FindlibName:          top
   FindlibParent:        slap
-  Modules:              Install_printers
+  Modules:              Install_top
   XMETARequires:        slap
   XMETADescription:     Toplevel module for SLAP.
   BuildDepends:         slap,compiler-libs.toplevel

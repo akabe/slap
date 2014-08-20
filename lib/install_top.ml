@@ -14,12 +14,17 @@ let eval_string
   let phrase = !Toploop.parse_toplevel_phrase lexbuf in
   Toploop.execute_phrase print_outcome err_formatter phrase
 
-let rec install_printers = function
-  | [] -> true
-  | printer :: printers ->
-      let cmd = Printf.sprintf "#install_printer %s;;" printer in
-      eval_string cmd && install_printers printers
+let install_printers printers =
+  List.for_all
+    (fun printer ->
+     let cmd = Printf.sprintf "#install_printer %s;;" printer in
+     eval_string cmd)
+    printers
+
+let install_ssc () =
+  eval_string "let ssc = Slap.Io.Toplevel.ssc;;"
+  && eval_string "let lsc = Slap.Io.Toplevel.lsc;;"
 
 let () =
-  if not (install_printers printers) then
-    Format.eprintf "Problem installing SLAP-printers@."
+  if not (install_ssc () && install_printers printers) then
+    Format.eprintf "Problem installing SLAP-top@."
