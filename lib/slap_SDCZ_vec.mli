@@ -39,6 +39,9 @@ module type DSCVEC =
   end
 (** The signature of modules containing dynamically-sized discrete vectors. *)
 
+val cnt : ('n, cnt) vec -> ('n, 'cnt) vec
+(** Recover polymorphism of the fourth type parameter. *)
+
 (** {2 Creation of vectors} *)
 
 val empty : (Size.z, 'cnt) vec
@@ -494,3 +497,40 @@ val div : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
           ('n, 'y_cd) vec -> ('n, 'z_cd) vec
 
 val ssqr_diff : ('n, 'x_cd) vec -> ('n, 'y_cd) vec -> num_type
+
+(** {2 Subvectors} *)
+
+val subcntvec_dyn : 'm Size.t ->
+                 ?ofsx:int ->
+                 ('n, cnt) vec ->
+                 ('m, 'cnt) vec
+(** [subcntvec_dyn m ?ofsx x]
+    @return a subvector of the contiguous vector [x].
+    The [i]-th element of it refers [(ofsx+i-1)]-th element of [x].
+    The data are shared.
+    @param ofsx default = 1
+    @raise Invalid_argument [m] and [ofsx] do not designate a valid subvector of
+    [x].
+ *)
+
+val subdscvec_dyn : 'm Size.t ->
+                    ?ofsx:int ->
+                    ?incx:int ->
+                    ('n, 'cd) vec ->
+                    ('m, dsc) vec
+(** [subdscvec_dyn m ?ofsx ?incx x]
+    @return a subvector of the vector [x].
+    The [i]-th element of it refers [(ofsx+(i-1)*incx)]-th element of [x].
+    The data are shared.
+    @param ofs default = 1
+    @param inc default = 1
+    @raise Invalid_argument [m], [ofsx] and [incx] do not designate
+    a valid subvector of [x].
+ *)
+
+val subvec_dyn : 'm Size.t ->
+                 ?ofsx:int ->
+                 ?incx:int ->
+                 ('n, 'cd) vec ->
+                 ('m, dsc) vec
+(** An alias of [subdscvec_dyn]. *)

@@ -40,6 +40,9 @@ module type DSCMAT =
   end
 (** The signature of modules containing dynamically-sized discrete matrices. *)
 
+val cnt : ('m, 'n, cnt) mat -> ('m, 'n, 'cnt) mat
+(** Recover polymorphism of the fifth type parameter. *)
+
 (** {2 Creation of matrices} *)
 
 val empty : (Size.z, Size.z, 'cnt) mat
@@ -341,3 +344,19 @@ val symm2_trace : ?upa:bool ->
                   ('n, 'n, 'a_cd) mat ->
                   ?upb:bool ->
                   ('n, 'n, 'b_cd) mat -> num_type
+
+(** {2 Submatrices} *)
+
+val submat_dyn : 'm Size.t ->
+                 'n Size.t ->
+                 ?ar:int ->
+                 ?ac:int ->
+                 (_, _, 'cd) mat ->
+                 ('m, 'n, dsc) mat
+(** [submat_dyn m n ?ar ?ac a]
+    @return a [m]-by-[n] submatrix of the matrix [a].
+    The [(i,j)] element of the returned matrix refers the [(ar+i-1,ac+j-1)]
+    element of [a]. The data are shared.
+    @param ar default = 1
+    @param ac default = 1
+ *)

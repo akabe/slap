@@ -29,6 +29,8 @@ module type DSCVEC =
     val value : (n, dsc) vec
   end
 
+let cnt = PVec.cnt
+
 (** {2 Creation of vectors} *)
 
 let empty = PVec.create prec 0
@@ -245,3 +247,11 @@ let div ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
 let ssqr_diff (n, ofsx, incx, x) (n', ofsy, incy, y) =
   assert(n = n');
   I.Vec.ssqr_diff ~n ~ofsx ~incx x ~ofsy ~incy y
+
+(** {2 Subvectors} *)
+
+let subcntvec_dyn = PVec.subcntvec_dyn
+
+let subdscvec_dyn = PVec.subdscvec_dyn
+
+let subvec_dyn = PVec.subvec_dyn

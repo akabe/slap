@@ -50,6 +50,8 @@ module type DSCMAT =
     val value : (m, n, dsc) mat
   end
 
+let cnt = PMat.cnt
+
 (** {2 Creation of matrices} *)
 
 let empty = (0, 0, 1, 1, I.Mat.empty)
@@ -228,3 +230,7 @@ let gemm_trace ~transa (an, ak, ar, ac, a) ~transb (bk, bn, br, bc, b) =
 let symm2_trace ?upa (n, n', ar, ac, a) ?upb (n'', n''', br, bc, b) =
   assert(n = n' && n = n'' && n = n''');
   I.Mat.symm2_trace ~n ?upa ~ar ~ac a ?upb ~br ~bc b
+
+(** {2 Submatrices} *)
+
+let submat_dyn = PMat.submat_dyn
