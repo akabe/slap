@@ -16,6 +16,7 @@
 <link title="Type conversion" rel="Section" href="#2_Typeconversion">
 <link title="Iterators" rel="Section" href="#2_Iterators">
 <link title="Arithmetic operations" rel="Section" href="#2_Arithmeticoperations">
+<link title="Submatrices" rel="Section" href="#2_Submatrices">
 <title>Slap.Z.Mat</title>
 </head>
 <body>
@@ -32,6 +33,10 @@ The signature of modules containing dynamically-sized contiguous matrices.
 
 <pre><span class="keyword">module type</span> <a href="Slap.Z.Mat.DSCMAT.html">DSCMAT</a> = <code class="code">sig</code> <a href="Slap.Z.Mat.DSCMAT.html">..</a> <code class="code">end</code></pre><div class="info">
 The signature of modules containing dynamically-sized discrete matrices.
+</div>
+
+<pre><span id="VALcnt"><span class="keyword">val</span> cnt</span> : <code class="type">('m, 'n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> ('m, 'n, 'cnt) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a></code></pre><div class="info ">
+Recover polymorphism of the fifth type parameter.<br>
 </div>
 <br>
 <h2 id="2_Creationofmatrices">Creation of matrices</h2><br>
@@ -214,6 +219,47 @@ A functor vesion of <code class="code">of_list</code>.
 <h2 id="2_Iterators">Iterators</h2><br>
 
 <pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">(<a href="Slap.Z.html#TYPEnum_type">Slap.Z.num_type</a> -> <a href="Slap.Z.html#TYPEnum_type">Slap.Z.num_type</a>) -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> ('m, 'n, 'b_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a></code></pre>
+<pre><span id="VALmapi"><span class="keyword">val</span> mapi</span> : <code class="type">(int -> int -> <a href="Slap.Z.html#TYPEnum_type">Slap.Z.num_type</a> -> <a href="Slap.Z.html#TYPEnum_type">Slap.Z.num_type</a>) -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> ('m, 'n, 'b_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a></code></pre>
+<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">('accum -> ('m, 'x_cd) <a href="Slap.Z.html#TYPEvec">Slap.Z.vec</a> -> 'accum) -><br>       'accum -> ('m, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_left f init a</code> folds column vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the order
+    left to right.<br>
+</div>
+
+<pre><span id="VALfold_lefti"><span class="keyword">val</span> fold_lefti</span> : <code class="type">(int -> 'accum -> ('m, 'x_cd) <a href="Slap.Z.html#TYPEvec">Slap.Z.vec</a> -> 'accum) -><br>       'accum -> ('m, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_lefti f init a</code> folds column vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the order
+    left to right.<br>
+</div>
+
+<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">(('m, 'x_cd) <a href="Slap.Z.html#TYPEvec">Slap.Z.vec</a> -> 'accum -> 'accum) -><br>       ('m, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_right f a init</code> folds column vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the
+    order right to left.<br>
+</div>
+
+<pre><span id="VALfold_righti"><span class="keyword">val</span> fold_righti</span> : <code class="type">(int -> ('m, 'x_cd) <a href="Slap.Z.html#TYPEvec">Slap.Z.vec</a> -> 'accum -> 'accum) -><br>       ('m, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_righti f a init</code> folds column vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the
+    order right to left.<br>
+</div>
+
+<pre><span id="VALfold_top"><span class="keyword">val</span> fold_top</span> : <code class="type">('accum -> ('n, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Z.html#TYPEvec">Slap.Z.vec</a> -> 'accum) -><br>       'accum -> ('m, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_top f init a</code> folds row vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the order
+    top to bottom.<br>
+</div>
+
+<pre><span id="VALfold_topi"><span class="keyword">val</span> fold_topi</span> : <code class="type">(int -> 'accum -> ('n, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Z.html#TYPEvec">Slap.Z.vec</a> -> 'accum) -><br>       'accum -> ('m, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_topi f init a</code> folds row vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the order
+    top to bottom.<br>
+</div>
+
+<pre><span id="VALfold_bottom"><span class="keyword">val</span> fold_bottom</span> : <code class="type">(('m, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Z.html#TYPEvec">Slap.Z.vec</a> -> 'accum -> 'accum) -><br>       ('m, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_bottom f a init</code> folds row vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the
+    order bottom to top.<br>
+</div>
+
+<pre><span id="VALfold_bottomi"><span class="keyword">val</span> fold_bottomi</span> : <code class="type">(int -> ('m, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Z.html#TYPEvec">Slap.Z.vec</a> -> 'accum -> 'accum) -><br>       ('m, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_bottomi f a init</code> folds row vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the
+    order bottom to top.<br>
+</div>
+
 <pre><span id="VALreplace_all"><span class="keyword">val</span> replace_all</span> : <code class="type">('m, 'n, 'cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> (<a href="Slap.Z.html#TYPEnum_type">Slap.Z.num_type</a> -> <a href="Slap.Z.html#TYPEnum_type">Slap.Z.num_type</a>) -> unit</code></pre><div class="info ">
 <code class="code">replace_all a f</code> modifies the matrix <code class="code">a</code> in place
     -- the <code class="code">(i,j)</code>-element <code class="code">aij</code> of <code class="code">a</code> will be set to <code class="code">f aij</code>.<br>
@@ -250,4 +296,15 @@ A row-wise <code class="code">scal</code> function for matrices.<br>
 
 <pre><span id="VALsyrk_diag"><span class="keyword">val</span> syrk_diag</span> : <code class="type">?beta:<a href="Slap.Z.html#TYPEnum_type">Slap.Z.num_type</a> -><br>       ?y:('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Z.html#TYPEvec">Slap.Z.vec</a> -><br>       trans:(('a_n, 'a_k, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> ('n, 'k, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a>)<br>             <a href="Slap.Common.html#TYPEtrans2">Slap.Common.trans2</a> -><br>       ?alpha:<a href="Slap.Z.html#TYPEnum_type">Slap.Z.num_type</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> ('n, 'cnt) <a href="Slap.Z.html#TYPEvec">Slap.Z.vec</a></code></pre>
 <pre><span id="VALgemm_trace"><span class="keyword">val</span> gemm_trace</span> : <code class="type">transa:(('a_n, 'a_k, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> ('n, 'k, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a>)<br>              <a href="Slap.Z.html#TYPEtrans3">Slap.Z.trans3</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -><br>       transb:(('b_k, 'b_n, 'b_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> ('k, 'n, 'b_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a>)<br>              <a href="Slap.Z.html#TYPEtrans3">Slap.Z.trans3</a> -><br>       ('b_k, 'b_n, 'b_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> <a href="Slap.Z.html#TYPEnum_type">Slap.Z.num_type</a></code></pre>
-<pre><span id="VALsymm2_trace"><span class="keyword">val</span> symm2_trace</span> : <code class="type">?upa:bool -><br>       ('n, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -><br>       ?upb:bool -> ('n, 'n, 'b_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> <a href="Slap.Z.html#TYPEnum_type">Slap.Z.num_type</a></code></pre></body></html>
+<pre><span id="VALsymm2_trace"><span class="keyword">val</span> symm2_trace</span> : <code class="type">?upa:bool -><br>       ('n, 'n, 'a_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -><br>       ?upb:bool -> ('n, 'n, 'b_cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> <a href="Slap.Z.html#TYPEnum_type">Slap.Z.num_type</a></code></pre><br>
+<h2 id="2_Submatrices">Submatrices</h2><br>
+
+<pre><span id="VALsubmat_dyn"><span class="keyword">val</span> submat_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       ?ar:int -><br>       ?ac:int -> ('a, 'b, 'cd) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a> -> ('m, 'n, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a></code></pre><div class="info ">
+<code class="code">submat_dyn m n ?ar ?ac a</code><br>
+<b>Returns</b> a <code class="code">m</code>-by-<code class="code">n</code> submatrix of the matrix <code class="code">a</code>.
+    The <code class="code">(i,j)</code> element of the returned matrix refers the <code class="code">(ar+i-1,ac+j-1)</code>
+    element of <code class="code">a</code>. The data are shared.<br>
+</div>
+<div class="param_info"><code class="code">ar</code> : default = 1</div>
+<div class="param_info"><code class="code">ac</code> : default = 1</div>
+</body></html>

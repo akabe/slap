@@ -19,6 +19,7 @@
 <link title="Iterators on three vectors" rel="Section" href="#2_Iteratorsonthreevectors">
 <link title="Scanning" rel="Section" href="#2_Scanning">
 <link title="Arithmetic operations" rel="Section" href="#2_Arithmeticoperations">
+<link title="Subvectors" rel="Section" href="#2_Subvectors">
 <link title="Creation of vectors" rel="Section" href="#2_Creationofvectors">
 <link title="Arithmetic operations" rel="Section" href="#2_Arithmeticoperations">
 <title>Slap.D.Vec</title>
@@ -37,6 +38,10 @@ The signature of modules containing dynamically-sized contiguous vectors.
 
 <pre><span class="keyword">module type</span> <a href="Slap.D.Vec.DSCVEC.html">DSCVEC</a> = <code class="code">sig</code> <a href="Slap.D.Vec.DSCVEC.html">..</a> <code class="code">end</code></pre><div class="info">
 The signature of modules containing dynamically-sized discrete vectors.
+</div>
+
+<pre><span id="VALcnt"><span class="keyword">val</span> cnt</span> : <code class="type">('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -> ('n, 'cnt) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a></code></pre><div class="info ">
+Recover polymorphism of the fourth type parameter.<br>
 </div>
 <br>
 <h2 id="2_Creationofvectors">Creation of vectors</h2><br>
@@ -396,6 +401,31 @@ A functor version of <code class="code">of_bigarray</code>.
 <pre><span id="VALmul"><span class="keyword">val</span> mul</span> : <code class="type">?z:('n, 'z_cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -><br>       ('n, 'x_cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -> ('n, 'y_cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -> ('n, 'z_cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a></code></pre>
 <pre><span id="VALdiv"><span class="keyword">val</span> div</span> : <code class="type">?z:('n, 'z_cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -><br>       ('n, 'x_cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -> ('n, 'y_cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -> ('n, 'z_cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a></code></pre>
 <pre><span id="VALssqr_diff"><span class="keyword">val</span> ssqr_diff</span> : <code class="type">('n, 'x_cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -> ('n, 'y_cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -> <a href="Slap.D.html#TYPEnum_type">Slap.D.num_type</a></code></pre><br>
+<h2 id="2_Subvectors">Subvectors</h2><br>
+
+<pre><span id="VALsubcntvec_dyn"><span class="keyword">val</span> subcntvec_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       ?ofsx:int -> ('n, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -> ('m, 'cnt) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a></code></pre><div class="info ">
+<code class="code">subcntvec_dyn m ?ofsx x</code><br>
+<b>Raises</b> <code>Invalid_argument</code> <code class="code">m</code> and <code class="code">ofsx</code> do not designate a valid subvector of
+    <code class="code">x</code>.<br>
+<b>Returns</b> a subvector of the contiguous vector <code class="code">x</code>.
+    The <code class="code">i</code>-th element of it refers <code class="code">(ofsx+i-1)</code>-th element of <code class="code">x</code>.
+    The data are shared.<br>
+</div>
+<div class="param_info"><code class="code">ofsx</code> : default = 1</div>
+
+<pre><span id="VALsubdscvec_dyn"><span class="keyword">val</span> subdscvec_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       ?ofsx:int -> ?incx:int -> ('n, 'cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -> ('m, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a></code></pre><div class="info ">
+<code class="code">subdscvec_dyn m ?ofsx ?incx x</code><br>
+<b>Raises</b> <code>Invalid_argument</code> <code class="code">m</code>, <code class="code">ofsx</code> and <code class="code">incx</code> do not designate
+    a valid subvector of <code class="code">x</code>.<br>
+<b>Returns</b> a subvector of the vector <code class="code">x</code>.
+    The <code class="code">i</code>-th element of it refers <code class="code">(ofsx+(i-1)*incx)</code>-th element of <code class="code">x</code>.
+    The data are shared.<br>
+</div>
+
+<pre><span id="VALsubvec_dyn"><span class="keyword">val</span> subvec_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -><br>       ?ofsx:int -> ?incx:int -> ('n, 'cd) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a> -> ('m, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a></code></pre><div class="info ">
+An alias of <code class="code">subdscvec_dyn</code>.<br>
+</div>
+<br>
 <h2 id="2_Creationofvectors">Creation of vectors</h2><br>
 
 <pre><span id="VALrandom"><span class="keyword">val</span> random</span> : <code class="type">?rnd_state:Random.State.t -><br>       ?from:float -> ?range:float -> 'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('n, 'cnt) <a href="Slap.D.html#TYPEvec">Slap.D.vec</a></code></pre><br>

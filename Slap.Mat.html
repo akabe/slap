@@ -42,7 +42,7 @@ Sized matrices.<br>
 
 
 <pre><span id="VALcnt"><span class="keyword">val</span> cnt</span> : <code class="type">('m, 'n, 'num, 'prec, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Mat.html#TYPEt">t</a> -><br>       ('m, 'n, 'num, 'prec, 'cnt) <a href="Slap.Mat.html#TYPEt">t</a></code></pre><div class="info ">
-Recover polymorphism of the fifth type parameter. (type coercion)<br>
+Recover polymorphism of the fifth type parameter.<br>
 </div>
 <br>
 <h2 id="2_Creationofmatrices">Creation of matrices</h2><br>
@@ -148,6 +148,48 @@ Fill the given matrix with the given value.<br>
 <div class="param_info"><code class="code">b</code> : default = a fresh matrix.</div>
 <br>
 <h2 id="2_Iterators">Iterators</h2><br>
+
+<pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">('b_num, 'b_prec) Bigarray.kind -><br>       ('a_num -> 'b_num) -><br>       ?b:('m, 'n, 'b_num, 'b_prec, 'b_cd) <a href="Slap.Mat.html#TYPEt">t</a> -><br>       ('m, 'n, 'a_num, 'a_prec, 'a_cd) <a href="Slap.Mat.html#TYPEt">t</a> -><br>       ('m, 'n, 'b_num, 'b_prec, 'b_cd) <a href="Slap.Mat.html#TYPEt">t</a></code></pre>
+<pre><span id="VALmapi"><span class="keyword">val</span> mapi</span> : <code class="type">('b_num, 'b_prec) Bigarray.kind -><br>       (int -> int -> 'a_num -> 'b_num) -><br>       ?b:('m, 'n, 'b_num, 'b_prec, 'b_cd) <a href="Slap.Mat.html#TYPEt">t</a> -><br>       ('m, 'n, 'a_num, 'a_prec, 'a_cd) <a href="Slap.Mat.html#TYPEt">t</a> -><br>       ('m, 'n, 'b_num, 'b_prec, 'b_cd) <a href="Slap.Mat.html#TYPEt">t</a></code></pre>
+<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">('accum -> ('m, 'num, 'prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> 'accum) -><br>       'accum -> ('m, 'n, 'num, 'prec, 'a_cd) <a href="Slap.Mat.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_left f init a</code> folds column vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the order
+    left to right.<br>
+</div>
+
+<pre><span id="VALfold_lefti"><span class="keyword">val</span> fold_lefti</span> : <code class="type">(int -> 'accum -> ('m, 'num, 'prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> 'accum) -><br>       'accum -> ('m, 'n, 'num, 'prec, 'a_cd) <a href="Slap.Mat.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_lefti f init a</code> folds column vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the order
+    left to right.<br>
+</div>
+
+<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">(('m, 'num, 'prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> 'accum -> 'accum) -><br>       ('m, 'n, 'num, 'prec, 'a_cd) <a href="Slap.Mat.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_right f a init</code> folds column vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the
+    order right to left.<br>
+</div>
+
+<pre><span id="VALfold_righti"><span class="keyword">val</span> fold_righti</span> : <code class="type">(int -> ('m, 'num, 'prec, 'x_cd) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> 'accum -> 'accum) -><br>       ('m, 'n, 'num, 'prec, 'a_cd) <a href="Slap.Mat.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_righti f a init</code> folds column vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the
+    order right to left.<br>
+</div>
+
+<pre><span id="VALfold_top"><span class="keyword">val</span> fold_top</span> : <code class="type">('accum -> ('n, 'num, 'prec, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> 'accum) -><br>       'accum -> ('m, 'n, 'num, 'prec, 'a_cd) <a href="Slap.Mat.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_top f init a</code> folds row vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the order
+    top to bottom.<br>
+</div>
+
+<pre><span id="VALfold_topi"><span class="keyword">val</span> fold_topi</span> : <code class="type">(int -> 'accum -> ('n, 'num, 'prec, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> 'accum) -><br>       'accum -> ('m, 'n, 'num, 'prec, 'a_cd) <a href="Slap.Mat.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
+<code class="code">fold_topi f init a</code> folds row vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the order
+    top to bottom.<br>
+</div>
+
+<pre><span id="VALfold_bottom"><span class="keyword">val</span> fold_bottom</span> : <code class="type">(('m, 'num, 'prec, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> 'accum -> 'accum) -><br>       ('m, 'n, 'num, 'prec, 'a_cd) <a href="Slap.Mat.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_bottom f a init</code> folds row vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the
+    order bottom to top.<br>
+</div>
+
+<pre><span id="VALfold_bottomi"><span class="keyword">val</span> fold_bottomi</span> : <code class="type">(int -> ('m, 'num, 'prec, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> 'accum -> 'accum) -><br>       ('m, 'n, 'num, 'prec, 'a_cd) <a href="Slap.Mat.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
+<code class="code">fold_bottomi f a init</code> folds row vectors of matrix <code class="code">a</code> by <code class="code">f</code> in the
+    order bottom to top.<br>
+</div>
 
 <pre><span id="VALreplace_all"><span class="keyword">val</span> replace_all</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) <a href="Slap.Mat.html#TYPEt">t</a> -> ('num -> 'num) -> unit</code></pre><div class="info ">
 <code class="code">replace_all a f</code> modifies the matrix <code class="code">a</code> in place
