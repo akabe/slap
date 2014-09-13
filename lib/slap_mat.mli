@@ -153,6 +153,82 @@ val copy : ?b:('m, 'n, 'num, 'prec, 'b_cd) t ->
 
 (** {2 Iterators} *)
 
+val map : ('b_num, 'b_prec) kind ->
+          ('a_num -> 'b_num) ->
+          ?b:('m, 'n, 'b_num, 'b_prec, 'b_cd) t ->
+          ('m, 'n, 'a_num, 'a_prec, 'a_cd) t ->
+          ('m, 'n, 'b_num, 'b_prec, 'b_cd) t
+
+val mapi : ('b_num, 'b_prec) kind ->
+           (int -> int -> 'a_num -> 'b_num) ->
+           ?b:('m, 'n, 'b_num, 'b_prec, 'b_cd) t ->
+           ('m, 'n, 'a_num, 'a_prec, 'a_cd) t ->
+           ('m, 'n, 'b_num, 'b_prec, 'b_cd) t
+
+val fold_left : ('accum -> ('m, 'num, 'prec, 'x_cd) Vec.t -> 'accum) ->
+                'accum ->
+                ('m, 'n, 'num, 'prec, 'a_cd) t ->
+                'accum
+(** [fold_left f init a] folds column vectors of matrix [a] by [f] in the order
+    left to right.
+ *)
+
+val fold_lefti : (int -> 'accum -> ('m, 'num, 'prec, 'x_cd) Vec.t -> 'accum) ->
+                 'accum ->
+                 ('m, 'n, 'num, 'prec, 'a_cd) t ->
+                 'accum
+(** [fold_lefti f init a] folds column vectors of matrix [a] by [f] in the order
+    left to right.
+ *)
+
+val fold_right : (('m, 'num, 'prec, 'x_cd) Vec.t -> 'accum -> 'accum) ->
+                 ('m, 'n, 'num, 'prec, 'a_cd) t ->
+                 'accum ->
+                 'accum
+(** [fold_right f a init] folds column vectors of matrix [a] by [f] in the
+    order right to left.
+ *)
+
+val fold_righti : (int -> ('m, 'num, 'prec, 'x_cd) Vec.t -> 'accum -> 'accum) ->
+                ('m, 'n, 'num, 'prec, 'a_cd) t ->
+                'accum ->
+                'accum
+(** [fold_righti f a init] folds column vectors of matrix [a] by [f] in the
+    order right to left.
+ *)
+
+val fold_top : ('accum -> ('n, 'num, 'prec, dsc) Vec.t -> 'accum) ->
+               'accum ->
+               ('m, 'n, 'num, 'prec, 'a_cd) t ->
+               'accum
+(** [fold_top f init a] folds row vectors of matrix [a] by [f] in the order
+    top to bottom.
+ *)
+
+val fold_topi : (int -> 'accum -> ('n, 'num, 'prec, dsc) Vec.t -> 'accum) ->
+                 'accum ->
+                 ('m, 'n, 'num, 'prec, 'a_cd) t ->
+                 'accum
+(** [fold_topi f init a] folds row vectors of matrix [a] by [f] in the order
+    top to bottom.
+ *)
+
+val fold_bottom : (('m, 'num, 'prec, dsc) Vec.t -> 'accum -> 'accum) ->
+                  ('m, 'n, 'num, 'prec, 'a_cd) t ->
+                  'accum ->
+                  'accum
+(** [fold_bottom f a init] folds row vectors of matrix [a] by [f] in the
+    order bottom to top.
+ *)
+
+val fold_bottomi : (int -> ('m, 'num, 'prec, dsc) Vec.t -> 'accum -> 'accum) ->
+                   ('m, 'n, 'num, 'prec, 'a_cd) t ->
+                   'accum ->
+                   'accum
+(** [fold_bottomi f a init] folds row vectors of matrix [a] by [f] in the
+    order bottom to top.
+ *)
+
 val replace_all : ('m, 'n, 'num, 'prec, 'cd) t -> ('num -> 'num) -> unit
 (** [replace_all a f] modifies the matrix [a] in place
     -- the [(i,j)]-element [aij] of [a] will be set to [f aij].

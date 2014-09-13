@@ -169,6 +169,78 @@ let copy ?b (m, n, ar, ac, a) =
 
 (** {2 Iterators} *)
 
+let mapi kind f ?b (m, n, ar, ac, a) =
+  let br, bc, b = opt_mat_alloc kind m n b in
+  for j = 0 to n - 1 do
+    for i = 0 to m - 1 do
+      let e = Array2.unsafe_get a (i + ar) (j + ac) in
+      Array2.unsafe_set b (i + br) (j + bc) (f (i + 1) (j + 1) e)
+    done
+  done;
+  (m, n, br, bc, b)
+
+let map kind f = mapi kind (fun _ _ -> f)
+
+let fold_lefti f init (m, n, ar, ac, a) =
+  let v = reshape a in
+  let lda = Array2.dim1 a in
+  let ofs = (ac - 2) * lda + ar in
+  let rec loop j acc =
+    if j > n then acc else
+      begin
+        let colvec = (m, ofs + j * lda, 1, v) in
+        loop (j + 1) (f j acc colvec)
+      end
+  in
+  loop 1 init
+
+let fold_left f = fold_lefti (fun _ -> f)
+
+let fold_righti f (m, n, ar, ac, a) init =
+  let v = reshape a in
+  let lda = Array2.dim1 a in
+  let ofs = (ac - 2) * lda + ar in
+  let rec loop j acc =
+    if j = 0 then acc else
+      begin
+        let colvec = (m, ofs + j * lda, 1, v) in
+        loop (j - 1) (f j colvec acc)
+      end
+  in
+  loop n init
+
+let fold_right f = fold_righti (fun _ -> f)
+
+let fold_topi f init (m, n, ar, ac, a) =
+  let v = reshape a in
+  let lda = Array2.dim1 a in
+  let ofs = (ac - 1) * lda + ar - 1 in
+  let rec loop i acc =
+    if i > m then acc else
+      begin
+        let rowvec = (n, ofs + i, lda, v) in
+        loop (i + 1) (f i acc rowvec)
+      end
+  in
+  loop 1 init
+
+let fold_top f = fold_topi (fun _ -> f)
+
+let fold_bottomi f (m, n, ar, ac, a) init =
+  let v = reshape a in
+  let lda = Array2.dim1 a in
+  let ofs = (ac - 1) * lda + ar - 1 in
+  let rec loop i acc =
+    if i = 0 then acc else
+      begin
+        let rowvec = (n, ofs + i, lda, v) in
+        loop (i - 1) (f i rowvec acc)
+      end
+  in
+  loop m init
+
+let fold_bottom f = fold_bottomi (fun _ -> f)
+
 let replace_all (m, n, ar, ac, a) f =
   for j = ac to n + ac - 1 do
     for i = ar to m + ar - 1 do

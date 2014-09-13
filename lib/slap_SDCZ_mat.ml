@@ -166,6 +166,24 @@ let map f ?b (m, n, ar, ac, a) =
   let _ = I.Mat.map f ~m ~n ~br ~bc ~b ~ar ~ac a in
   (m, n, br, bc, b)
 
+let mapi = PMat.mapi prec
+
+let fold_left = PMat.fold_left
+
+let fold_lefti = PMat.fold_lefti
+
+let fold_right = PMat.fold_right
+
+let fold_righti = PMat.fold_righti
+
+let fold_top = PMat.fold_top
+
+let fold_topi = PMat.fold_topi
+
+let fold_bottom = PMat.fold_bottom
+
+let fold_bottomi = PMat.fold_bottomi
+
 let replace_all = PMat.replace_all
 
 let replace_alli = PMat.replace_alli

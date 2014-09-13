@@ -222,6 +222,73 @@ module Of_list (X : sig val value : num_type list list end) : CNTMAT
 val map : (num_type -> num_type) -> ?b:('m, 'n, 'b_cd) mat ->
           ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
 
+val mapi : (int -> int -> num_type -> num_type) -> ?b:('m, 'n, 'b_cd) mat ->
+           ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
+
+val fold_left : ('accum -> ('m, 'x_cd) vec -> 'accum) ->
+                'accum ->
+                ('m, 'n, 'a_cd) mat ->
+                'accum
+(** [fold_left f init a] folds column vectors of matrix [a] by [f] in the order
+    left to right.
+ *)
+
+val fold_lefti : (int -> 'accum -> ('m, 'x_cd) vec -> 'accum) ->
+                 'accum ->
+                 ('m, 'n, 'a_cd) mat ->
+                 'accum
+(** [fold_lefti f init a] folds column vectors of matrix [a] by [f] in the order
+    left to right.
+ *)
+
+val fold_right : (('m, 'x_cd) vec -> 'accum -> 'accum) ->
+                 ('m, 'n, 'a_cd) mat ->
+                 'accum ->
+                 'accum
+(** [fold_right f a init] folds column vectors of matrix [a] by [f] in the
+    order right to left.
+ *)
+
+val fold_righti : (int -> ('m, 'x_cd) vec -> 'accum -> 'accum) ->
+                  ('m, 'n, 'a_cd) mat ->
+                  'accum ->
+                  'accum
+(** [fold_righti f a init] folds column vectors of matrix [a] by [f] in the
+    order right to left.
+ *)
+
+val fold_top : ('accum -> ('n, dsc) vec -> 'accum) ->
+               'accum ->
+               ('m, 'n, 'a_cd) mat ->
+               'accum
+(** [fold_top f init a] folds row vectors of matrix [a] by [f] in the order
+    top to bottom.
+ *)
+
+val fold_topi : (int -> 'accum -> ('n, dsc) vec -> 'accum) ->
+                'accum ->
+                ('m, 'n, 'a_cd) mat ->
+                'accum
+(** [fold_topi f init a] folds row vectors of matrix [a] by [f] in the order
+    top to bottom.
+ *)
+
+val fold_bottom : (('m, dsc) vec -> 'accum -> 'accum) ->
+                  ('m, 'n, 'a_cd) mat ->
+                  'accum ->
+                  'accum
+(** [fold_bottom f a init] folds row vectors of matrix [a] by [f] in the
+    order bottom to top.
+ *)
+
+val fold_bottomi : (int -> ('m, dsc) vec -> 'accum -> 'accum) ->
+                   ('m, 'n, 'a_cd) mat ->
+                   'accum ->
+                   'accum
+(** [fold_bottomi f a init] folds row vectors of matrix [a] by [f] in the
+    order bottom to top.
+ *)
+
 val replace_all : ('m, 'n, 'cd) mat -> (num_type -> num_type) -> unit
 (** [replace_all a f] modifies the matrix [a] in place
     -- the [(i,j)]-element [aij] of [a] will be set to [f aij].

@@ -76,10 +76,89 @@ let test_of_list_dyn () =
   "exn/rect" @! (fun () -> of_list_dyn two three [[11;12;13];
                                                   [21;22]])
 
+(* test of Mat.fold_lefti *)
+let test_fold_lefti () =
+  let fli a =
+    fold_lefti (fun i acc cv -> (i, Slap.Vec.to_list cv) :: acc) [] a
+  in
+  "m_00"  @? (fli m_00  = []);
+  "m_0n"  @? (fli m_0n  = [(4, []);
+                           (3, []);
+                           (2, []);
+                           (1, [])]);
+  "m_n0"  @? (fli m_n0  = []);
+  "m_ord" @? (fli m_ord = [(5, [15;25;35;45]);
+                           (4, [14;24;34;44]);
+                           (3, [13;23;33;43]);
+                           (2, [12;22;32;42]);
+                           (1, [11;21;31;41])]);
+  "m_sub" @? (fli m_sub = [(3, [24; 34]);
+                           (2, [23; 33]);
+                           (1, [22; 32])])
+
+(* test of Mat.fold_righti *)
+let test_fold_righti () =
+  let fri a =
+    fold_righti (fun i cv acc -> (i, Slap.Vec.to_list cv) :: acc) a []
+  in
+  "m_00"  @? (fri m_00  = []);
+  "m_0n"  @? (fri m_0n  = [(1, []);
+                           (2, []);
+                           (3, []);
+                           (4, [])]);
+  "m_n0"  @? (fri m_n0  = []);
+  "m_ord" @? (fri m_ord = [(1, [11;21;31;41]);
+                           (2, [12;22;32;42]);
+                           (3, [13;23;33;43]);
+                           (4, [14;24;34;44]);
+                           (5, [15;25;35;45])]);
+  "m_sub" @? (fri m_sub = [(1, [22; 32]);
+                           (2, [23; 33]);
+                           (3, [24; 34])])
+
+(* test of Mat.fold_topi *)
+let test_fold_topi () =
+  let fti a =
+    fold_topi (fun i acc rv -> (i, Slap.Vec.to_list rv) :: acc) [] a
+  in
+  "m_00"  @? (fti m_00  = []);
+  "m_0n"  @? (fti m_0n  = []);
+  "m_n0"  @? (fti m_n0  = [(4, []);
+                           (3, []);
+                           (2, []);
+                           (1, [])]);
+  "m_ord" @? (fti m_ord = [(4, [41;42;43;44;45]);
+                           (3, [31;32;33;34;35]);
+                           (2, [21;22;23;24;25]);
+                           (1, [11;12;13;14;15])]);
+  "m_sub" @? (fti m_sub = [(2, [32;33;34]);
+                           (1, [22;23;24])])
+
+(* test of Mat.fold_bottomi *)
+let test_fold_bottomi () =
+  let fbi a =
+    fold_bottomi (fun i rv acc -> (i, Slap.Vec.to_list rv) :: acc) a []
+  in
+  "m_00"  @? (fbi m_00  = []);
+  "m_0n"  @? (fbi m_0n  = []);
+  "m_n0"  @? (fbi m_n0  = [(1, []);
+                           (2, []);
+                           (3, []);
+                           (4, [])]);
+  "m_ord" @? (fbi m_ord = [(1, [11;12;13;14;15]);
+                           (2, [21;22;23;24;25]);
+                           (3, [31;32;33;34;35]);
+                           (4, [41;42;43;44;45])]);
+  "m_sub" @? (fbi m_sub = [(1, [22;23;24]);
+                           (2, [32;33;34])])
 
 let suite =
   "Slap.Mat" >:::
     ["to_array"     >:: test_to_array;
      "to_list"      >:: test_to_list;
      "of_array_dyn" >:: test_of_array_dyn;
-     "of_list_dyn"  >:: test_of_list_dyn]
+     "of_list_dyn"  >:: test_of_list_dyn;
+     "fold_lefti"   >:: test_fold_lefti;
+     "fold_righti"  >:: test_fold_righti;
+     "fold_topi"    >:: test_fold_topi;
+     "fold_bottomi" >:: test_fold_bottomi]
