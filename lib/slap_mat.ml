@@ -199,7 +199,8 @@ let unsafe_of_array kind m n aa =
 
 let of_array_dyn kind m n aa =
   match dim_array_array aa with
-  | Some (m', n') when m = m' && n = n' -> unsafe_of_array kind m n aa
+  | Some (m', n') when m = 0 || (m = m' && n = n') ->
+     unsafe_of_array kind m n aa
   | _ -> invalid_arg "Slap.Mat.of_array_dyn"
 
 let to_list (m, n, ar, ac, a) =
@@ -219,7 +220,8 @@ let unsafe_of_list kind m n ll =
 
 let of_list_dyn kind m n ll =
   match dim_list_list ll with
-  | Some (m', n') when m = m' && n = n' -> unsafe_of_list kind m n ll
+  | Some (m', n') when m = 0 || (m = m' && n = n') ->
+     unsafe_of_list kind m n ll
   | _ -> invalid_arg "Slap.Mat.of_list_dyn"
 
 (** {2 Submatrices} *)
