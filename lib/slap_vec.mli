@@ -27,7 +27,7 @@ type (+'n, 'num, 'prec, +'cnt_or_dsc) t
  *)
 
 val cnt : ('n, 'num, 'prec, cnt) t -> ('n, 'num, 'prec, 'cnt) t
-(** Recover polymorphism of the fourth type parameter. (type coercion) *)
+(** Recover polymorphism of the fourth type parameter. *)
 
 (** {2 Creation of vectors} *)
 

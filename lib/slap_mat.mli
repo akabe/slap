@@ -27,7 +27,7 @@ type (+'m, +'n, 'num, 'prec, +'cnt_or_dsc) t
  *)
 
 val cnt : ('m, 'n, 'num, 'prec, cnt) t -> ('m, 'n, 'num, 'prec, 'cnt) t
-(** Recover polymorphism of the fifth type parameter. (type coercion) *)
+(** Recover polymorphism of the fifth type parameter. *)
 
 (** {2 Creation of matrices} *)
 
