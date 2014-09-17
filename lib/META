@@ -1,7 +1,8 @@
 # OASIS_START
-# DO NOT EDIT (digest: a2a46d63d3b825cee712a32327d02acb)
+# DO NOT EDIT (digest: d9d4d82b663befc76c2d4006d5e39406)
 version = "0.0.0"
-description = "Sized Linear Algebra Package"
+description =
+"Linear algebra library with static size checking for matrix operations"
 requires = "bigarray lacaml"
 archive(byte) = "slap.cma"
 archive(byte, plugin) = "slap.cma"

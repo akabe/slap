@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: c5dcd4698548796d33677c03ce9710b8)
+# DO NOT EDIT (digest: 263b5bef1164b406b2e96286301bec36)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -17,62 +17,62 @@
 "lib/slap.cmxs": use_slap
 # Library slap_top
 "lib/slap_top.cmxs": use_slap_top
-<lib/*.ml{,i}>: use_slap
-<lib/*.ml{,i}>: pkg_lacaml
-<lib/*.ml{,i}>: pkg_compiler-libs.toplevel
 <lib/*.ml{,i}>: pkg_bigarray
+<lib/*.ml{,i}>: pkg_compiler-libs.toplevel
+<lib/*.ml{,i}>: pkg_lacaml
+<lib/*.ml{,i}>: use_slap
 # Executable test
-<test/test.{native,byte}>: use_slap
+<test/test.{native,byte}>: pkg_bigarray
 <test/test.{native,byte}>: pkg_lacaml
 <test/test.{native,byte}>: pkg_oUnit
-<test/test.{native,byte}>: pkg_bigarray
-<test/*.ml{,i}>: use_slap
+<test/test.{native,byte}>: use_slap
+<test/*.ml{,i}>: pkg_bigarray
 <test/*.ml{,i}>: pkg_lacaml
 <test/*.ml{,i}>: pkg_oUnit
-<test/*.ml{,i}>: pkg_bigarray
+<test/*.ml{,i}>: use_slap
 # Executable qr_lacaml
 <examples/porting/qr_factorize/qr_lacaml.{native,byte}>: pkg_lacaml
 # Executable qr_slap
-<examples/porting/qr_factorize/qr_slap.{native,byte}>: use_slap
-<examples/porting/qr_factorize/qr_slap.{native,byte}>: pkg_lacaml
 <examples/porting/qr_factorize/qr_slap.{native,byte}>: pkg_bigarray
-<examples/porting/qr_factorize/*.ml{,i}>: use_slap
-<examples/porting/qr_factorize/*.ml{,i}>: pkg_lacaml
+<examples/porting/qr_factorize/qr_slap.{native,byte}>: pkg_lacaml
+<examples/porting/qr_factorize/qr_slap.{native,byte}>: use_slap
 <examples/porting/qr_factorize/*.ml{,i}>: pkg_bigarray
+<examples/porting/qr_factorize/*.ml{,i}>: pkg_lacaml
+<examples/porting/qr_factorize/*.ml{,i}>: use_slap
 # Executable lu_lacaml
 <examples/porting/lu_factorize/lu_lacaml.{native,byte}>: pkg_lacaml
 # Executable lu_slap
-<examples/porting/lu_factorize/lu_slap.{native,byte}>: use_slap
-<examples/porting/lu_factorize/lu_slap.{native,byte}>: pkg_lacaml
 <examples/porting/lu_factorize/lu_slap.{native,byte}>: pkg_bigarray
-<examples/porting/lu_factorize/*.ml{,i}>: use_slap
-<examples/porting/lu_factorize/*.ml{,i}>: pkg_lacaml
+<examples/porting/lu_factorize/lu_slap.{native,byte}>: pkg_lacaml
+<examples/porting/lu_factorize/lu_slap.{native,byte}>: use_slap
 <examples/porting/lu_factorize/*.ml{,i}>: pkg_bigarray
+<examples/porting/lu_factorize/*.ml{,i}>: pkg_lacaml
+<examples/porting/lu_factorize/*.ml{,i}>: use_slap
 # Executable perceptron_lacaml
 <examples/porting/perceptron/perceptron_lacaml.{native,byte}>: pkg_lacaml
 # Executable perceptron_slap
-<examples/porting/perceptron/perceptron_slap.{native,byte}>: use_slap
-<examples/porting/perceptron/perceptron_slap.{native,byte}>: pkg_lacaml
 <examples/porting/perceptron/perceptron_slap.{native,byte}>: pkg_bigarray
-<examples/porting/perceptron/*.ml{,i}>: use_slap
-<examples/porting/perceptron/*.ml{,i}>: pkg_lacaml
+<examples/porting/perceptron/perceptron_slap.{native,byte}>: pkg_lacaml
+<examples/porting/perceptron/perceptron_slap.{native,byte}>: use_slap
 <examples/porting/perceptron/*.ml{,i}>: pkg_bigarray
+<examples/porting/perceptron/*.ml{,i}>: pkg_lacaml
+<examples/porting/perceptron/*.ml{,i}>: use_slap
 # Executable kmeans_lacaml
 <examples/porting/k-means/kmeans_lacaml.{native,byte}>: pkg_lacaml
 # Executable kmeans_slap
-<examples/porting/k-means/kmeans_slap.{native,byte}>: use_slap
-<examples/porting/k-means/kmeans_slap.{native,byte}>: pkg_lacaml
 <examples/porting/k-means/kmeans_slap.{native,byte}>: pkg_bigarray
-<examples/porting/k-means/*.ml{,i}>: use_slap
-<examples/porting/k-means/*.ml{,i}>: pkg_lacaml
+<examples/porting/k-means/kmeans_slap.{native,byte}>: pkg_lacaml
+<examples/porting/k-means/kmeans_slap.{native,byte}>: use_slap
 <examples/porting/k-means/*.ml{,i}>: pkg_bigarray
+<examples/porting/k-means/*.ml{,i}>: pkg_lacaml
+<examples/porting/k-means/*.ml{,i}>: use_slap
 # Executable pca_lacaml
 <examples/porting/pca/pca_lacaml.{native,byte}>: pkg_lacaml
 # Executable pca_slap
-<examples/porting/pca/pca_slap.{native,byte}>: use_slap
-<examples/porting/pca/pca_slap.{native,byte}>: pkg_lacaml
 <examples/porting/pca/pca_slap.{native,byte}>: pkg_bigarray
-<examples/porting/pca/*.ml{,i}>: use_slap
-<examples/porting/pca/*.ml{,i}>: pkg_lacaml
+<examples/porting/pca/pca_slap.{native,byte}>: pkg_lacaml
+<examples/porting/pca/pca_slap.{native,byte}>: use_slap
 <examples/porting/pca/*.ml{,i}>: pkg_bigarray
+<examples/porting/pca/*.ml{,i}>: pkg_lacaml
+<examples/porting/pca/*.ml{,i}>: use_slap
 # OASIS_STOP
