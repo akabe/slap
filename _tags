@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 263b5bef1164b406b2e96286301bec36)
+# DO NOT EDIT (digest: 9430822b771790ce341d4d8f4672c767)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -30,6 +30,13 @@
 <test/*.ml{,i}>: pkg_lacaml
 <test/*.ml{,i}>: pkg_oUnit
 <test/*.ml{,i}>: use_slap
+# Executable jacobi
+<examples/linsys/jacobi.{native,byte}>: pkg_bigarray
+<examples/linsys/jacobi.{native,byte}>: pkg_lacaml
+<examples/linsys/jacobi.{native,byte}>: use_slap
+<examples/linsys/*.ml{,i}>: pkg_bigarray
+<examples/linsys/*.ml{,i}>: pkg_lacaml
+<examples/linsys/*.ml{,i}>: use_slap
 # Executable qr_lacaml
 <examples/porting/qr_factorize/qr_lacaml.{native,byte}>: pkg_lacaml
 # Executable qr_slap
