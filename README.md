@@ -93,7 +93,7 @@ let _ =
   Format.printf "x = @[%a@]@." Slap.Io.pp_rfvec x
 ```
 
-Function `jacobi a b` solves a linear system `a * x = b` where `a` is a n-by-n
+`jacobi a b` solves a linear system `a * x = b` where `a` is a n-by-n
 matrix, and `x` and `b` is a n-dimensional vectors. Try to modify any one of
 the dimensions of `a`, `b` and `x` in the above code, e.g.,
 
@@ -308,8 +308,8 @@ The dimension is decided at **runtime**, but we need to type it at
 Consider the following code for example:
 
 ```ocaml
-let (x : (?1, _) vec) = loadvec "file1.data" in
-let (y : (?2, _) vec) = loadvec "file2.data" in
+let (x : (?1, _) vec) = loadvec "file1" in
+let (y : (?2, _) vec) = loadvec "file2" in
 Vec.add x y
 ```
 
