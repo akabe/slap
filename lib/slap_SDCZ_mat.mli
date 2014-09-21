@@ -150,6 +150,11 @@ val as_vec : ('m, 'n, cnt) mat -> (('m, 'n) Size.mul, 'cnt) vec
 
 (** {2 Basic operations} *)
 
+val fill : ('m, 'n, 'cd) mat -> num_type -> unit
+(** Fill the given matrix with the given value.
+    @since 0.1.0
+ *)
+
 val copy : ?uplo:[ `L | `U ] ->
            ?b:('m, 'n, 'b_cd) mat ->
            ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
@@ -303,7 +308,39 @@ val replace_alli : ('m, 'n, 'cd) mat ->
     -- the [(i,j)]-element [aij] of [a] will be set to [f i j aij].
  *)
 
+(** {2 Matrix transformations} *)
+
+val transpose_copy : ('m, 'n, 'a_cd) mat -> ('n, 'm, 'b_cd) mat -> unit
+(** [transpose_copy a b] copies the transpose of [a] into [b].
+    @since 0.1.0
+ *)
+
+val transpose : ('m, 'n, 'cd) mat -> ('n, 'm, 'cnt) mat
+(** [transpose a] returns the transpose of [a].
+    @since 0.1.0
+ *)
+
+val detri : ?up:bool -> ('n, 'n, 'cd) mat -> unit
+(** [detri ?up a] converts triangular matrix [a] to a symmetric matrix, i.e.,
+    copies the upper or lower triangular part of [a] into another part.
+    @param up default = [true]
+    @since 0.1.0
+ *)
+
 (** {2 Arithmetic operations} *)
+
+val add_const : num_type ->
+                ?b:('m, 'n, 'b_cd) mat ->
+                ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
+(** [add_const c ?b a] adds constant value [c] to all elements in [a].
+    @return the matrix [b], which is overwritten.
+    @since 0.1.0
+ *)
+
+val sum : ('m, 'n, 'cd) mat -> num_type
+(** [sum a] returns the sum of all elements in [a].
+    @since 0.1.0
+ *)
 
 val trace : ('m, 'n, 'cd) mat -> num_type
 (** [trace a]
@@ -326,6 +363,36 @@ val axpy : ?alpha:num_type ->
            ('m, 'n, 'y_cd) mat -> unit
 (** [axpy ?alpha ~x y] computes [y := alpha * x + y]. *)
 
+val gemm_diag : ?beta:num_type ->
+                ?y:('n, cnt) vec ->
+                transa:(('a_n, 'a_k, 'a_cd) mat ->
+                        ('n, 'k, 'a_cd) mat) trans3 ->
+                ?alpha:num_type ->
+                ('a_n, 'a_k, 'a_cd) mat ->
+                transb:(('b_k, 'b_n, 'b_cd) mat ->
+                        ('k, 'n, 'b_cd) mat) trans3 ->
+                ('b_k, 'b_n, 'b_cd) mat -> ('n, 'cnt) vec
+(** [gemm_diag ?beta ?y ~transa ?alpha a ~transb b] executes
+    [y := DIAG(alpha * OP(a) * OP(b)) + beta * y] where
+    [DIAG(x)] is the vector of the diagonal elements in matrix [x], and
+    [OP(x)] is one of [OP(x)] = [x], [OP(x)] = [x^T], or [OP(x)] = [x^H]
+    (the conjugate transpose of [x]).
+
+    @return the vector [y], which is overwritten.
+    @param beta default = [0.0]
+    @param transa the transpose flag for [a]:
+       - if {!Slap.Common.normal}, then [OP(a)] = [a];
+       - if {!Slap.Common.trans}, then [OP(a)] = [a^T];
+       - if {!Slap.Common.conjtr}, then [OP(a)] = [a^H].
+    @param transb the transpose flag for [b]:
+       - if {!Slap.Common.normal}, then [OP(b)] = [b];
+       - if {!Slap.Common.trans}, then [OP(b)] = [b^T];
+       - if {!Slap.Common.conjtr}, then [OP(b)] = [b^H].
+    @param alpha default = [1.0]
+
+    @since 0.1.0
+ *)
+
 val syrk_diag : ?beta:num_type ->
                 ?y:('n, cnt) vec ->
                 trans:(('a_n, 'a_k, 'a_cd) mat ->
@@ -339,6 +406,11 @@ val gemm_trace : transa:(('a_n, 'a_k, 'a_cd) mat ->
                  transb:(('b_k, 'b_n, 'b_cd) mat ->
                          ('k, 'n, 'b_cd) mat) trans3 ->
                  ('b_k, 'b_n, 'b_cd) mat -> num_type
+
+val syrk_trace : ('n, 'k, 'cd) mat -> num_type
+(** [syrk_trace a] computes the trace of [a * a^T] or [a^T * a].
+    @since 0.1.0
+ *)
 
 val symm2_trace : ?upa:bool ->
                   ('n, 'n, 'a_cd) mat ->

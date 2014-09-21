@@ -89,6 +89,8 @@ let as_vec = PMat.as_vec
 
 (** {2 Basic operations} *)
 
+let fill = PMat.fill
+
 let copy ?uplo ?b (m, n, ar, ac, a) =
   let br, bc, b = PMat.opt_mat_alloc prec m n b in
   if m <> 0 && n <> 0
@@ -171,7 +173,29 @@ let replace_all = PMat.replace_all
 
 let replace_alli = PMat.replace_alli
 
+(** {2 Matrix transformations} *)
+
+let transpose_copy (m, n, ar, ac, a) (n', m', br, bc, b) =
+  assert(m = m' && n = n');
+  I.Mat.transpose_copy ~m ~n ~ar ~ac a ~br ~bc b
+
+let transpose (m, n, ar, ac, a) =
+  let b = I.Mat.transpose ~m ~n ~ar ~ac a in
+  (n, m, 1, 1, b)
+
+let detri ?up (n, n', ar, ac, a) =
+  assert(n = n');
+  I.Mat.detri ?up ~n ~ar ~ac a
+
 (** {2 Arithmetic operations} *)
+
+let add_const c ?b (m, n, ar, ac, a) =
+  let br, bc, b = PMat.opt_mat_alloc prec m n b in
+  ignore (I.Mat.add_const c ~m ~n ~br ~bc ~b ~ar ~ac a);
+  (m, n, br, bc, b)
+
+let sum (m, n, ar, ac, a) =
+  I.Mat.sum ~m ~n ~ar ~ac a
 
 let trace a =
   let n, ofsx, incx, x = diag a in
@@ -192,6 +216,17 @@ let axpy ?alpha ~x:(m, n, xr, xc, x) (m', n', yr, yc, y) =
   assert(m = m' && n = n');
   I.Mat.axpy ~m ~n ?alpha ~xr ~xc ~x ~yr ~yc y
 
+let gemm_diag ?beta ?y ~transa ?alpha (an, ak, ar, ac, a)
+              ~transb (bk, bn, br, bc, b) =
+  let n, k = Common.get_transposed_dim transa an ak in
+  assert((k, n) = Common.get_transposed_dim transb bk bn);
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  assert(PVec.check_cnt n ofsy incy y);
+  ignore (I.Mat.gemm_diag ~n ~k ?beta ~y
+                          ~transa:(lacaml_trans3 transa) ?alpha ~ar ~ac a
+                          ~transb:(lacaml_trans3 transb) ~br ~bc b);
+  (n, ofsy, incy, y)
+
 let syrk_diag ?beta ?y ~trans ?alpha (an, ak, ar, ac, a) =
   let n, k = Common.get_transposed_dim trans an ak in
   let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
@@ -207,6 +242,8 @@ let gemm_trace ~transa (an, ak, ar, ac, a) ~transb (bk, bn, br, bc, b) =
   I.Mat.gemm_trace ~n ~k
                    ~transa:(lacaml_trans3 transa) ~ar ~ac a
                    ~transb:(lacaml_trans3 transb) ~br ~bc b
+
+let syrk_trace (n, k, ar, ac, a) = I.Mat.syrk_trace ~n ~k ~ar ~ac a
 
 let symm2_trace ?upa (n, n', ar, ac, a) ?upb (n'', n''', br, bc, b) =
   assert(n = n' && n = n'' && n = n''');
