@@ -34,3 +34,23 @@ let sqrt ?y (n, ofsx, incx, x) =
   let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
   let _ = I.Vec.sqrt ~n ~ofsy ~incy ~y ~ofsx ~incx x in
   (n, ofsy, incy, y)
+
+let exp ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  let _ = I.Vec.exp ~n ~ofsy ~incy ~y ~ofsx ~incx x in
+  (n, ofsy, incy, y)
+
+let log ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  let _ = I.Vec.log ~n ~ofsy ~incy ~y ~ofsx ~incx x in
+  (n, ofsy, incy, y)
+
+let sin ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  let _ = I.Vec.sin ~n ~ofsy ~incy ~y ~ofsx ~incx x in
+  (n, ofsy, incy, y)
+
+let cos ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  let _ = I.Vec.cos ~n ~ofsy ~incy ~y ~ofsx ~incx x in
+  (n, ofsy, incy, y)

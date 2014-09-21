@@ -33,3 +33,27 @@ val sqrt : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
  (** [sqr ?y x] computes the square root of elements of the vector [x].
      @return the vector [y], which is overwritten.
   *)
+
+val exp : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+(** [exp ?y (x1, x2, ..., xn)] returns [(exp x1, exp x2, ..., exp xn)].
+    @return the vector [y], which is overwritten.
+    @since 0.1.0
+ *)
+
+val log : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+(** [log ?y (x1, x2, ..., xn)] returns [(log x1, log x2, ..., log xn)].
+    @return the vector [y], which is overwritten.
+    @since 0.1.0
+ *)
+
+val sin : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+(** [sin ?y (x1, x2, ..., xn)] returns [(sin x1, sin x2, ..., sin xn)].
+    @return the vector [y], which is overwritten.
+    @since 0.1.0
+ *)
+
+val cos : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+(** [cos ?y (x1, x2, ..., xn)] returns [(cos x1, cos x2, ..., cos xn)].
+    @return the vector [y], which is overwritten.
+    @since 0.1.0
+ *)
