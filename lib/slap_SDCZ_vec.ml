@@ -201,6 +201,11 @@ let sum (n, ofsx, incx, x) = I.Vec.sum ~n ~ofsx ~incx x
 
 let prod (n, ofsx, incx, x) = I.Vec.prod ~n ~ofsx ~incx x
 
+let add_const c ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  ignore (I.Vec.add_const c ~n ~ofsy ~incy ~y ~ofsx ~incx x);
+  (n, ofsy, incy, y)
+
 let sqr_nrm2 ?stable (n, ofsx, incx, x) =
   I.Vec.sqr_nrm2 ?stable ~n ~ofsx ~incx x
 
@@ -218,6 +223,11 @@ let sort ?cmp ?decr ?p (n, ofsx, incx, x) =
 let neg ?y (n, ofsx, incx, x) =
   let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
   let _ = I.Vec.neg ~n ~ofsy ~incy ~y ~ofsx ~incx x in
+  (n, ofsy, incy, y)
+
+let reci ?y (n, ofsx, incx, x) =
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  ignore (I.Vec.reci ~n ~ofsy ~incy ~y ~ofsx ~incx x);
   (n, ofsy, incy, y)
 
 let add ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
@@ -242,6 +252,18 @@ let div ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
   assert(n = n');
   let ofsz, incz, z = PVec.opt_vec_alloc prec n z in
   let _ = I.Vec.div ~n ~ofsz ~incz ~z ~ofsx ~incx x ~ofsy ~incy y in
+  (n, ofsz, incz, z)
+
+let zpxy ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  let ofsz, incz, z = PVec.opt_vec_alloc prec n z in
+  let _ = I.Vec.zpxy ~n ~ofsz ~incz ~z ~ofsx ~incx x ~ofsy ~incy y in
+  (n, ofsz, incz, z)
+
+let zmxy ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
+  assert(n = n');
+  let ofsz, incz, z = PVec.opt_vec_alloc prec n z in
+  let _ = I.Vec.zmxy ~n ~ofsz ~incz ~z ~ofsx ~incx x ~ofsy ~incy y in
   (n, ofsz, incz, z)
 
 let ssqr_diff (n, ofsx, incx, x) (n', ofsy, incy, y) =

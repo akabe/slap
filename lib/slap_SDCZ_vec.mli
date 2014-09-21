@@ -473,6 +473,14 @@ val sum : ('n, 'cd) vec -> num_type
 
 val prod : ('n, 'cd) vec -> num_type
 
+val add_const : num_type ->
+                ?y:('n, 'y_cd) vec ->
+                ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+(** [add_const c ?y x] adds constant value [c] to all elements in vector [x].
+    @return the vector [y], which is overwritten.
+    @since 0.1.0
+ *)
+
 val sqr_nrm2 : ?stable:bool -> ('n, 'cd) vec -> float
 
 val ssqr : ?c:num_type -> ('n, 'cd) vec -> num_type
@@ -483,6 +491,13 @@ val sort : ?cmp:(num_type -> num_type -> int) ->
            ('n, 'x_cd) vec -> unit
 
 val neg : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+
+val reci : ?y:('n, 'y_cd) vec ->
+           ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+(** [reci ?y (x1, x2, ..., xn)] returns [(1 / x1, 1 / x2, ..., 1 / xn)].
+    @return the vector [y], which is overwritten.
+    @since 0.1.0
+ *)
 
 val add : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
           ('n, 'y_cd) vec -> ('n, 'z_cd) vec
@@ -495,6 +510,30 @@ val mul : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
 
 val div : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
           ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+
+val zpxy : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
+          ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+(** [zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
+
+    - [(z1 + x1 * y1, z2 + x2 * y2, ..., zn + xn * yn)]
+      if [z] (= [(z1, z2, ..., zn)]) is given;
+    - otherwise [(x1 * y1, x2 * y2, ..., xn * yn)].
+
+    @return the vector [z], which is overwritten.
+    @since 0.1.0
+ *)
+
+val zmxy : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
+          ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+(** [zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
+
+    - [(z1 - x1 * y1, z2 - x2 * y2, ..., zn - xn * yn)]
+      if [z] (= [(z1, z2, ..., zn)]) is given;
+    - otherwise [(-x1 * y1, -x2 * y2, ..., -xn * yn)].
+
+    @return the vector [z], which is overwritten.
+    @since 0.1.0
+ *)
 
 val ssqr_diff : ('n, 'x_cd) vec -> ('n, 'y_cd) vec -> num_type
 
