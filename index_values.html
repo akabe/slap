@@ -10,9 +10,7 @@
 <link title="Slap" rel="Chapter" href="Slap.html"><title>Index of values</title>
 </head>
 <body>
-<div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
-&nbsp;</div>
-<h1>Index of values</h1>
+<center><h1>Index of values</h1></center>
 <table>
 <tr><td align="left"><br>A</td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALadd">add</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
@@ -26,6 +24,46 @@
 <tr><td><a href="Slap.Size.html#VALadd">add</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
 <td><div class="info">
 <code class="code">add m n</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap.C.Mat.html#VALadd_const">add_const</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
+<td><div class="info">
+<code class="code">add_const c ?b a</code> adds constant value <code class="code">c</code> to all elements in <code class="code">a</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.C.Vec.html#VALadd_const">add_const</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">add_const c ?y x</code> adds constant value <code class="code">c</code> to all elements in vector <code class="code">x</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Mat.html#VALadd_const">add_const</a> [<a href="Slap.Z.Mat.html">Slap.Z.Mat</a>]</td>
+<td><div class="info">
+<code class="code">add_const c ?b a</code> adds constant value <code class="code">c</code> to all elements in <code class="code">a</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALadd_const">add_const</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">add_const c ?y x</code> adds constant value <code class="code">c</code> to all elements in vector <code class="code">x</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Mat.html#VALadd_const">add_const</a> [<a href="Slap.S.Mat.html">Slap.S.Mat</a>]</td>
+<td><div class="info">
+<code class="code">add_const c ?b a</code> adds constant value <code class="code">c</code> to all elements in <code class="code">a</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALadd_const">add_const</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">add_const c ?y x</code> adds constant value <code class="code">c</code> to all elements in vector <code class="code">x</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Mat.html#VALadd_const">add_const</a> [<a href="Slap.D.Mat.html">Slap.D.Mat</a>]</td>
+<td><div class="info">
+<code class="code">add_const c ?b a</code> adds constant value <code class="code">c</code> to all elements in <code class="code">a</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALadd_const">add_const</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">add_const c ?y x</code> adds constant value <code class="code">c</code> to all elements in vector <code class="code">x</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.html#VALamax">amax</a> [<a href="Slap.C.html">Slap.C</a>]</td>
@@ -311,6 +349,16 @@ Conjugate transpose of a matrix.
 <code class="code">copy_row_dyn a i</code> is <code class="code">Vec.copy (Mat.row_dyn a i)</code>.
 </div>
 </td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALcos">cos</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">cos ?y (x1, x2, ..., xn)</code> returns <code class="code">(cos x1, cos x2, ..., cos xn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALcos">cos</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">cos ?y (x1, x2, ..., xn)</code> returns <code class="code">(cos x1, cos x2, ..., cos xn)</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Mat.html#VALcreate">create</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
 <td><div class="info">
 <code class="code">create m n</code>
@@ -368,6 +416,30 @@ Conjugate transpose of a matrix.
 <tr><td><a href="Slap.Common.html#VALcreate_int_vec">create_int_vec</a> [<a href="Slap.Common.html">Slap.Common</a>]</td>
 <td></td></tr>
 <tr><td align="left"><br>D</td></tr>
+<tr><td><a href="Slap.C.Mat.html#VALdetri">detri</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
+<td><div class="info">
+<code class="code">detri ?up a</code> converts triangular matrix <code class="code">a</code> to a symmetric matrix, i.e.,
+    copies the upper or lower triangular part of <code class="code">a</code> into another part.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Mat.html#VALdetri">detri</a> [<a href="Slap.Z.Mat.html">Slap.Z.Mat</a>]</td>
+<td><div class="info">
+<code class="code">detri ?up a</code> converts triangular matrix <code class="code">a</code> to a symmetric matrix, i.e.,
+    copies the upper or lower triangular part of <code class="code">a</code> into another part.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Mat.html#VALdetri">detri</a> [<a href="Slap.S.Mat.html">Slap.S.Mat</a>]</td>
+<td><div class="info">
+<code class="code">detri ?up a</code> converts triangular matrix <code class="code">a</code> to a symmetric matrix, i.e.,
+    copies the upper or lower triangular part of <code class="code">a</code> into another part.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Mat.html#VALdetri">detri</a> [<a href="Slap.D.Mat.html">Slap.D.Mat</a>]</td>
+<td><div class="info">
+<code class="code">detri ?up a</code> converts triangular matrix <code class="code">a</code> to a symmetric matrix, i.e.,
+    copies the upper or lower triangular part of <code class="code">a</code> into another part.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Mat.html#VALdiag">diag</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
 <td><div class="info">
 <code class="code">diag a</code>
@@ -629,10 +701,30 @@ An empty vector.
     <code class="code">(p x1 y1) || (p x2 y2) || ... || (p xn yn)</code>.
 </div>
 </td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALexp">exp</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">exp ?y (x1, x2, ..., xn)</code> returns <code class="code">(exp x1, exp x2, ..., exp xn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALexp">exp</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">exp ?y (x1, x2, ..., xn)</code> returns <code class="code">(exp x1, exp x2, ..., exp xn)</code>.
+</div>
+</td></tr>
 <tr><td align="left"><br>F</td></tr>
+<tr><td><a href="Slap.C.Mat.html#VALfill">fill</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
+<td><div class="info">
+Fill the given matrix with the given value.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALfill">fill</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
 <td><div class="info">
 Fill the given vector with the given value.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Mat.html#VALfill">fill</a> [<a href="Slap.Z.Mat.html">Slap.Z.Mat</a>]</td>
+<td><div class="info">
+Fill the given matrix with the given value.
 </div>
 </td></tr>
 <tr><td><a href="Slap.Z.Vec.html#VALfill">fill</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
@@ -640,9 +732,19 @@ Fill the given vector with the given value.
 Fill the given vector with the given value.
 </div>
 </td></tr>
+<tr><td><a href="Slap.S.Mat.html#VALfill">fill</a> [<a href="Slap.S.Mat.html">Slap.S.Mat</a>]</td>
+<td><div class="info">
+Fill the given matrix with the given value.
+</div>
+</td></tr>
 <tr><td><a href="Slap.S.Vec.html#VALfill">fill</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
 <td><div class="info">
 Fill the given vector with the given value.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Mat.html#VALfill">fill</a> [<a href="Slap.D.Mat.html">Slap.D.Mat</a>]</td>
+<td><div class="info">
+Fill the given matrix with the given value.
 </div>
 </td></tr>
 <tr><td><a href="Slap.D.Vec.html#VALfill">fill</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
@@ -1476,6 +1578,42 @@ Fill the given vector with the given value.
 <td></td></tr>
 <tr><td><a href="Slap.D.html#VALgemm">gemm</a> [<a href="Slap.D.html">Slap.D</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.C.Mat.html#VALgemm_diag">gemm_diag</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
+<td><div class="info">
+<code class="code">gemm_diag ?beta ?y ~transa ?alpha a ~transb b</code> executes
+    <code class="code">y := DIAG(alpha * OP(a) * OP(b)) + beta * y</code> where
+    <code class="code">DIAG(x)</code> is the vector of the diagonal elements in matrix <code class="code">x</code>, and
+    <code class="code">OP(x)</code> is one of <code class="code">OP(x)</code> = <code class="code">x</code>, <code class="code">OP(x)</code> = <code class="code">x^T</code>, or <code class="code">OP(x)</code> = <code class="code">x^H</code>
+    (the conjugate transpose of <code class="code">x</code>).
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Mat.html#VALgemm_diag">gemm_diag</a> [<a href="Slap.Z.Mat.html">Slap.Z.Mat</a>]</td>
+<td><div class="info">
+<code class="code">gemm_diag ?beta ?y ~transa ?alpha a ~transb b</code> executes
+    <code class="code">y := DIAG(alpha * OP(a) * OP(b)) + beta * y</code> where
+    <code class="code">DIAG(x)</code> is the vector of the diagonal elements in matrix <code class="code">x</code>, and
+    <code class="code">OP(x)</code> is one of <code class="code">OP(x)</code> = <code class="code">x</code>, <code class="code">OP(x)</code> = <code class="code">x^T</code>, or <code class="code">OP(x)</code> = <code class="code">x^H</code>
+    (the conjugate transpose of <code class="code">x</code>).
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Mat.html#VALgemm_diag">gemm_diag</a> [<a href="Slap.S.Mat.html">Slap.S.Mat</a>]</td>
+<td><div class="info">
+<code class="code">gemm_diag ?beta ?y ~transa ?alpha a ~transb b</code> executes
+    <code class="code">y := DIAG(alpha * OP(a) * OP(b)) + beta * y</code> where
+    <code class="code">DIAG(x)</code> is the vector of the diagonal elements in matrix <code class="code">x</code>, and
+    <code class="code">OP(x)</code> is one of <code class="code">OP(x)</code> = <code class="code">x</code>, <code class="code">OP(x)</code> = <code class="code">x^T</code>, or <code class="code">OP(x)</code> = <code class="code">x^H</code>
+    (the conjugate transpose of <code class="code">x</code>).
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Mat.html#VALgemm_diag">gemm_diag</a> [<a href="Slap.D.Mat.html">Slap.D.Mat</a>]</td>
+<td><div class="info">
+<code class="code">gemm_diag ?beta ?y ~transa ?alpha a ~transb b</code> executes
+    <code class="code">y := DIAG(alpha * OP(a) * OP(b)) + beta * y</code> where
+    <code class="code">DIAG(x)</code> is the vector of the diagonal elements in matrix <code class="code">x</code>, and
+    <code class="code">OP(x)</code> is one of <code class="code">OP(x)</code> = <code class="code">x</code>, <code class="code">OP(x)</code> = <code class="code">x^T</code>, or <code class="code">OP(x)</code> = <code class="code">x^H</code>
+    (the conjugate transpose of <code class="code">x</code>).
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Mat.html#VALgemm_trace">gemm_trace</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.Z.Mat.html#VALgemm_trace">gemm_trace</a> [<a href="Slap.Z.Mat.html">Slap.Z.Mat</a>]</td>
@@ -2140,6 +2278,16 @@ An alias of <code class="code">init_cols</code>.
 </td></tr>
 <tr><td><a href="Slap.Common.html#VALleft">left</a> [<a href="Slap.Common.html">Slap.Common</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALlog">log</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">log ?y (x1, x2, ..., xn)</code> returns <code class="code">(log x1, log x2, ..., log xn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALlog">log</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">log ?y (x1, x2, ..., xn)</code> returns <code class="code">(log x1, log x2, ..., log xn)</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.Io.Toplevel.html#VALlsc">lsc</a> [<a href="Slap.Io.Toplevel.html">Slap.Io.Toplevel</a>]</td>
 <td><div class="info">
 An alias of <code class="code">ssc</code> for compatibility with Lacaml.
@@ -3051,6 +3199,26 @@ A generator of pretty printers for (column) vectors.
 <td></td></tr>
 <tr><td><a href="Slap.D.Vec.html#VALrandom">random</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.C.Vec.html#VALreci">reci</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">reci ?y (x1, x2, ..., xn)</code> returns <code class="code">(1 / x1, 1 / x2, ..., 1 / xn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALreci">reci</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">reci ?y (x1, x2, ..., xn)</code> returns <code class="code">(1 / x1, 1 / x2, ..., 1 / xn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALreci">reci</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">reci ?y (x1, x2, ..., xn)</code> returns <code class="code">(1 / x1, 1 / x2, ..., 1 / xn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALreci">reci</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">reci ?y (x1, x2, ..., xn)</code> returns <code class="code">(1 / x1, 1 / x2, ..., 1 / xn)</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Mat.html#VALreplace_all">replace_all</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
 <td><div class="info">
 <code class="code">replace_all a f</code> modifies the matrix <code class="code">a</code> in place
@@ -3425,6 +3593,16 @@ A row-wise <code class="code">scal</code> function for matrices.
 <code class="code">shared_rev (x1, x2, ..., xn)</code>
 </div>
 </td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALsin">sin</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">sin ?y (x1, x2, ..., xn)</code> returns <code class="code">(sin x1, sin x2, ..., sin xn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALsin">sin</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">sin ?y (x1, x2, ..., xn)</code> returns <code class="code">(sin x1, sin x2, ..., sin xn)</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALsort">sort</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.Z.Vec.html#VALsort">sort</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
@@ -3602,12 +3780,32 @@ An alias of <code class="code">subdscvec_dyn</code>.
 <code class="code">succ n</code>
 </div>
 </td></tr>
+<tr><td><a href="Slap.C.Mat.html#VALsum">sum</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
+<td><div class="info">
+<code class="code">sum a</code> returns the sum of all elements in <code class="code">a</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.Vec.html#VALsum">sum</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.Z.Mat.html#VALsum">sum</a> [<a href="Slap.Z.Mat.html">Slap.Z.Mat</a>]</td>
+<td><div class="info">
+<code class="code">sum a</code> returns the sum of all elements in <code class="code">a</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.Z.Vec.html#VALsum">sum</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.S.Mat.html#VALsum">sum</a> [<a href="Slap.S.Mat.html">Slap.S.Mat</a>]</td>
+<td><div class="info">
+<code class="code">sum a</code> returns the sum of all elements in <code class="code">a</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.S.Vec.html#VALsum">sum</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.D.Mat.html#VALsum">sum</a> [<a href="Slap.D.Mat.html">Slap.D.Mat</a>]</td>
+<td><div class="info">
+<code class="code">sum a</code> returns the sum of all elements in <code class="code">a</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.D.Vec.html#VALsum">sum</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.Common.html#VALsvd_all">svd_all</a> [<a href="Slap.Common.html">Slap.Common</a>]</td>
@@ -3790,6 +3988,26 @@ An alias of <code class="code">subdscvec_dyn</code>.
 <td></td></tr>
 <tr><td><a href="Slap.D.Mat.html#VALsyrk_diag">syrk_diag</a> [<a href="Slap.D.Mat.html">Slap.D.Mat</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.C.Mat.html#VALsyrk_trace">syrk_trace</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
+<td><div class="info">
+<code class="code">syrk_trace a</code> computes the trace of <code class="code">a * a^T</code> or <code class="code">a^T * a</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Mat.html#VALsyrk_trace">syrk_trace</a> [<a href="Slap.Z.Mat.html">Slap.Z.Mat</a>]</td>
+<td><div class="info">
+<code class="code">syrk_trace a</code> computes the trace of <code class="code">a * a^T</code> or <code class="code">a^T * a</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Mat.html#VALsyrk_trace">syrk_trace</a> [<a href="Slap.S.Mat.html">Slap.S.Mat</a>]</td>
+<td><div class="info">
+<code class="code">syrk_trace a</code> computes the trace of <code class="code">a * a^T</code> or <code class="code">a^T * a</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Mat.html#VALsyrk_trace">syrk_trace</a> [<a href="Slap.D.Mat.html">Slap.D.Mat</a>]</td>
+<td><div class="info">
+<code class="code">syrk_trace a</code> computes the trace of <code class="code">a * a^T</code> or <code class="code">a^T * a</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.C.html#VALsysv">sysv</a> [<a href="Slap.C.html">Slap.C</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.Z.html#VALsysv">sysv</a> [<a href="Slap.Z.html">Slap.Z</a>]</td>
@@ -4012,6 +4230,46 @@ Return the integer correponding to the given size.
 <tr><td><a href="Slap.Common.html#VALtrans">trans</a> [<a href="Slap.Common.html">Slap.Common</a>]</td>
 <td><div class="info">
 Transpose of a matrix.
+</div>
+</td></tr>
+<tr><td><a href="Slap.C.Mat.html#VALtranspose">transpose</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
+<td><div class="info">
+<code class="code">transpose a</code> returns the transpose of <code class="code">a</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Mat.html#VALtranspose">transpose</a> [<a href="Slap.Z.Mat.html">Slap.Z.Mat</a>]</td>
+<td><div class="info">
+<code class="code">transpose a</code> returns the transpose of <code class="code">a</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Mat.html#VALtranspose">transpose</a> [<a href="Slap.S.Mat.html">Slap.S.Mat</a>]</td>
+<td><div class="info">
+<code class="code">transpose a</code> returns the transpose of <code class="code">a</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Mat.html#VALtranspose">transpose</a> [<a href="Slap.D.Mat.html">Slap.D.Mat</a>]</td>
+<td><div class="info">
+<code class="code">transpose a</code> returns the transpose of <code class="code">a</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.C.Mat.html#VALtranspose_copy">transpose_copy</a> [<a href="Slap.C.Mat.html">Slap.C.Mat</a>]</td>
+<td><div class="info">
+<code class="code">transpose_copy a b</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Mat.html#VALtranspose_copy">transpose_copy</a> [<a href="Slap.Z.Mat.html">Slap.Z.Mat</a>]</td>
+<td><div class="info">
+<code class="code">transpose_copy a b</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Mat.html#VALtranspose_copy">transpose_copy</a> [<a href="Slap.S.Mat.html">Slap.S.Mat</a>]</td>
+<td><div class="info">
+<code class="code">transpose_copy a b</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Mat.html#VALtranspose_copy">transpose_copy</a> [<a href="Slap.D.Mat.html">Slap.D.Mat</a>]</td>
+<td><div class="info">
+<code class="code">transpose_copy a b</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap.C.html#VALtrmm">trmm</a> [<a href="Slap.C.html">Slap.C</a>]</td>
@@ -4286,6 +4544,46 @@ A dynamically-decided size with type like
 <tr><td align="left"><br>Z</td></tr>
 <tr><td><a href="Slap.Size.html#VALzero">zero</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
 <td></td></tr>
-</table>
+<tr><td><a href="Slap.C.Vec.html#VALzmxy">zmxy</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALzmxy">zmxy</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALzmxy">zmxy</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALzmxy">zmxy</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+</div>
+</td></tr>
+<tr><td><a href="Slap.C.Vec.html#VALzpxy">zpxy</a> [<a href="Slap.C.Vec.html">Slap.C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+</div>
+</td></tr>
+<tr><td><a href="Slap.Z.Vec.html#VALzpxy">zpxy</a> [<a href="Slap.Z.Vec.html">Slap.Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+</div>
+</td></tr>
+<tr><td><a href="Slap.S.Vec.html#VALzpxy">zpxy</a> [<a href="Slap.S.Vec.html">Slap.S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+</div>
+</td></tr>
+<tr><td><a href="Slap.D.Vec.html#VALzpxy">zpxy</a> [<a href="Slap.D.Vec.html">Slap.D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+</div>
+</td></tr>
+</table><br>
 </body>
 </html>

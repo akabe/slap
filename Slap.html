@@ -14,63 +14,50 @@
 <title>Slap</title>
 </head>
 <body>
-<div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+<div class="navbar">&nbsp;<a href="index.html">Up</a>
 &nbsp;</div>
-<h1>Module <a href="type_Slap.html">Slap</a></h1>
-
-<pre><span class="keyword">module</span> Slap: <code class="code">sig</code> <a href="Slap.html">..</a> <code class="code">end</code></pre><div class="info module top">
-SLAP (Sized Linear Algebra Package)<br>
-</div>
+<center><h1>Module <a href="type_Slap.html">Slap</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Slap: <code class="code">sig</code> <a href="Slap.html">..</a> <code class="code">end</code></pre>SLAP (Sized Linear Algebra Package)<br>
 <hr width="100%">
-
 <pre><span id="TYPEcnt"><span class="keyword">type</span> <code class="type"></code>cnt</span> </pre>
-<div class="info ">
+<div class="info">
 The tag for contiguous vectors and matrices.<br>
 </div>
 
-
 <pre><span id="TYPEdsc"><span class="keyword">type</span> <code class="type"></code>dsc</span> </pre>
-<div class="info ">
+<div class="info">
 The tag for discrete vectors and matrices.<br>
 </div>
-
 
 <pre><span class="keyword">module</span> <a href="Slap.Size.html">Size</a>: <code class="code">sig</code> <a href="Slap.Size.html">..</a> <code class="code">end</code></pre><div class="info">
 Sizes (dimensions of vectors and matrices).
 </div>
-
 <pre><span class="keyword">module</span> <a href="Slap.Vec.html">Vec</a>: <code class="code">sig</code> <a href="Slap.Vec.html">..</a> <code class="code">end</code></pre><div class="info">
 Sized vectors.
 </div>
-
 <pre><span class="keyword">module</span> <a href="Slap.Mat.html">Mat</a>: <code class="code">sig</code> <a href="Slap.Mat.html">..</a> <code class="code">end</code></pre><div class="info">
 Sized matrices.
 </div>
 <br>
-<h2 id="2_Prettyprinting">Pretty printing</h2><br>
-
+<span id="2_Prettyprinting"><h2>Pretty printing</h2></span><br>
 <pre><span class="keyword">module</span> <a href="Slap.Io.html">Io</a>: <code class="code">sig</code> <a href="Slap.Io.html">..</a> <code class="code">end</code></pre><div class="info">
 Pretty-printers of vector and matrices.
 </div>
 <br>
-<h2 id="2_Precisiondependentmodules">Precision dependent modules</h2><br>
-
+<span id="2_Precisiondependentmodules"><h2>Precision dependent modules</h2></span><br>
 <pre><span class="keyword">module</span> <a href="Slap.Common.html">Common</a>: <code class="code">sig</code> <a href="Slap.Common.html">..</a> <code class="code">end</code></pre><div class="info">
 Types, flags and functions common to all precision dependent modules.
 </div>
-
 <pre><span class="keyword">module</span> <a href="Slap.D.html">D</a>: <code class="code">sig</code> <a href="Slap.D.html">..</a> <code class="code">end</code></pre><div class="info">
 64-bit real BLAS and LAPACK functions.
 </div>
-
 <pre><span class="keyword">module</span> <a href="Slap.S.html">S</a>: <code class="code">sig</code> <a href="Slap.S.html">..</a> <code class="code">end</code></pre><div class="info">
 32-bit real BLAS and LAPACK functions.
 </div>
-
 <pre><span class="keyword">module</span> <a href="Slap.Z.html">Z</a>: <code class="code">sig</code> <a href="Slap.Z.html">..</a> <code class="code">end</code></pre><div class="info">
 64-bit complex BLAS and LAPACK functions.
 </div>
-
 <pre><span class="keyword">module</span> <a href="Slap.C.html">C</a>: <code class="code">sig</code> <a href="Slap.C.html">..</a> <code class="code">end</code></pre><div class="info">
 32-bit complex BLAS and LAPACK functions.
 </div>

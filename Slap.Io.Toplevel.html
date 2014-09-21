@@ -13,31 +13,20 @@
 <link title="Slap" rel="Chapter" href="Slap.html"><title>Slap.Io.Toplevel</title>
 </head>
 <body>
-<div class="navbar"><a class="pre" href="Slap.Io.Context.html" title="Slap.Io.Context">Previous</a>
-&nbsp;<a class="up" href="Slap.Io.html" title="Slap.Io">Up</a>
+<div class="navbar"><a href="Slap.Io.Context.html">Previous</a>
+&nbsp;<a href="Slap.Io.html">Up</a>
 &nbsp;</div>
-<h1>Module <a href="type_Slap.Io.Toplevel.html">Slap.Io.Toplevel</a></h1>
-
+<center><h1>Module <a href="type_Slap.Io.Toplevel.html">Slap.Io.Toplevel</a></h1></center>
+<br>
 <pre><span class="keyword">module</span> Toplevel: <code class="code">sig</code> <a href="Slap.Io.Toplevel.html">..</a> <code class="code">end</code></pre><hr width="100%">
-
-<pre><span id="VALssc"><span class="keyword">val</span> ssc</span> : <code class="type">int -> unit</code></pre><div class="info ">
+<pre><span id="VALssc"><span class="keyword">val</span> ssc</span> : <code class="type">int -> unit</code></pre><div class="info">
 <i>SLAP Set Context</i>: <code class="code">ssc n</code> sets sets both
       <a href="Slap.Io.Context.html#VALvertical_default"><code class="code">Slap.Io.Context.vertical_default</code></a> and
       <a href="Slap.Io.Context.html#VALhorizontal_default"><code class="code">Slap.Io.Context.horizontal_default</code></a> to <code class="code">Some n</code>.
       This is the shortcut version of .<br>
 </div>
-
-<pre><span id="VALlsc"><span class="keyword">val</span> lsc</span> : <code class="type">int -> unit</code></pre><div class="info ">
+<pre><span id="VALlsc"><span class="keyword">val</span> lsc</span> : <code class="type">int -> unit</code></pre><div class="info">
 An alias of <code class="code">ssc</code> for compatibility with Lacaml.
       (<i>Lacaml Set Context</i>)<br>
 </div>
-
-<pre><span id="VALpp_fvec"><span class="keyword">val</span> pp_fvec</span> : <code class="type">('n, float, 'prec, 'cnt_or_dsc) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre>
-<pre><span id="VALpp_cvec"><span class="keyword">val</span> pp_cvec</span> : <code class="type">('n, Complex.t, 'prec, 'cnt_or_dsc) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre>
-<pre><span id="VALpp_ivec"><span class="keyword">val</span> pp_ivec</span> : <code class="type">('n, int32, 'prec, 'cnt_or_dsc) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre>
-<pre><span id="VALpp_rfvec"><span class="keyword">val</span> pp_rfvec</span> : <code class="type">('n, float, 'prec, 'cnt_or_dsc) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre>
-<pre><span id="VALpp_rcvec"><span class="keyword">val</span> pp_rcvec</span> : <code class="type">('n, Complex.t, 'prec, 'cnt_or_dsc) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre>
-<pre><span id="VALpp_rivec"><span class="keyword">val</span> pp_rivec</span> : <code class="type">('n, int32, 'prec, 'cnt_or_dsc) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre>
-<pre><span id="VALpp_fmat"><span class="keyword">val</span> pp_fmat</span> : <code class="type">('m, 'n, float, 'prec, 'cnt_or_dsc) <a href="Slap.Io.html#TYPEpp_mat">Slap.Io.pp_mat</a></code></pre>
-<pre><span id="VALpp_cmat"><span class="keyword">val</span> pp_cmat</span> : <code class="type">('m, 'n, Complex.t, 'prec, 'cnt_or_dsc) <a href="Slap.Io.html#TYPEpp_mat">Slap.Io.pp_mat</a></code></pre>
-<pre><span id="VALpp_imat"><span class="keyword">val</span> pp_imat</span> : <code class="type">('m, 'n, int32, 'prec, 'cnt_or_dsc) <a href="Slap.Io.html#TYPEpp_mat">Slap.Io.pp_mat</a></code></pre></body></html>
+<pre><span id="VALpp_fvec"><span class="keyword">val</span> pp_fvec</span> : <code class="type">('a, float, 'b, 'c) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre><pre><span id="VALpp_cvec"><span class="keyword">val</span> pp_cvec</span> : <code class="type">('a, Complex.t, 'b, 'c) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre><pre><span id="VALpp_ivec"><span class="keyword">val</span> pp_ivec</span> : <code class="type">('a, int32, 'b, 'c) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre><pre><span id="VALpp_rfvec"><span class="keyword">val</span> pp_rfvec</span> : <code class="type">('a, float, 'b, 'c) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre><pre><span id="VALpp_rcvec"><span class="keyword">val</span> pp_rcvec</span> : <code class="type">('a, Complex.t, 'b, 'c) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre><pre><span id="VALpp_rivec"><span class="keyword">val</span> pp_rivec</span> : <code class="type">('a, int32, 'b, 'c) <a href="Slap.Io.html#TYPEpp_vec">Slap.Io.pp_vec</a></code></pre><pre><span id="VALpp_fmat"><span class="keyword">val</span> pp_fmat</span> : <code class="type">('a, 'b, float, 'c, 'd) <a href="Slap.Io.html#TYPEpp_mat">Slap.Io.pp_mat</a></code></pre><pre><span id="VALpp_cmat"><span class="keyword">val</span> pp_cmat</span> : <code class="type">('a, 'b, Complex.t, 'c, 'd) <a href="Slap.Io.html#TYPEpp_mat">Slap.Io.pp_mat</a></code></pre><pre><span id="VALpp_imat"><span class="keyword">val</span> pp_imat</span> : <code class="type">('a, 'b, int32, 'c, 'd) <a href="Slap.Io.html#TYPEpp_mat">Slap.Io.pp_mat</a></code></pre></body></html>
