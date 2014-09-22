@@ -31,18 +31,32 @@ val pp_mat : Format.formatter -> ('m, 'n, 'cnt_or_dsc) mat -> unit
 (** {3 Level 1} *)
 
 val swap : x:('n, 'x_cd) vec -> ('n, 'y_cd) vec -> unit
+(** [swap ~x y] swaps elements in [x] and [y]. *)
 
 val scal : num_type -> ('n, 'cd) vec -> unit
+(** [scal c x] multiplies all elements in [x] by scalar value [c],
+    and destructively assigns the result to [x].
+ *)
 
 val copy : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+(** [copy ?y x] copies [x] into [y].
+    @return vector [y], which is overwritten.
+ *)
 
 val nrm2 : ('n, 'cd) vec -> float
+(** [nrm2 x] retruns [||x||]. *)
 
 val axpy : ?alpha:num_type -> x:('n, 'x_cd) vec -> ('n, 'y_cd) vec -> unit
+(** [axpy ?alpha ~x y] executes [y := alpha * x + y] with scalar value [alpha],
+    and vectors [x] and [y].
+    @param alpha default = [1.0]
+ *)
 
 val iamax : ('n, 'cd) vec -> int
+(** [iamax x] returns the index of the maximum value of all elements in [x]. *)
 
 val amax : ('n, 'cd) vec -> num_type
+(** [amax x] finds the maximum value of all elements in [x]. *)
 
 (** {3 Level 2} *)
 
@@ -52,6 +66,17 @@ val gemv : ?beta:num_type ->
            ?alpha:num_type ->
            ('a_m, 'a_n, 'a_cd) mat ->
            ('n, 'x_cd) vec -> ('m, 'y_cd) vec
+(** [gemv ?beta ?y ~trans ?alpha a x] executes
+    [y := alpha * OP(a) * x + beta * y].
+
+    @param beta default = [0.0]
+    @param trans the transpose flag for [a]:
+      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      (the conjugate transpose of [a]).
+    @param alpha default = [1.0]
+ *)
 
 val symv : ?beta:num_type ->
            ?y:('n, 'y_cd) vec ->
@@ -59,18 +84,56 @@ val symv : ?beta:num_type ->
            ?alpha:num_type ->
            ('n, 'n, 'a_cd) mat ->
            ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+(** [symv ?beta ?y ?up ?alpha a x] executes
+    [y := alpha * a * x + beta * y].
+
+    @param beta default = [0.0]
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param alpha default = [1.0]
+ *)
 
 val trmv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
            ?diag:Common.diag ->
            ?up:bool ->
            ('n, 'n, 'a_cd) mat ->
            ('n, 'x_cd) vec -> unit
+(** [trmv ~trans ?diag ?up a x] executes [x := OP(a) * x].
+
+    @param trans the transpose flag for [a]:
+      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      (the conjugate transpose of [a]).
+    @param diag default = [`N]
+      - If [diag] = [`U], then [a] is unit triangular;
+      - If [diag] = [`N], then [a] is not unit triangular.
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+ *)
 
 val trsv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
            ?diag:Common.diag ->
            ?up:bool ->
            ('n, 'n, 'a_cd) mat ->
-           ('n, 'x_cd) vec -> unit
+           ('n, 'b_cd) vec -> unit
+(** [trmv ~trans ?diag ?up a b] solves linear system [OP(a) * x = b]
+    and destructively assigns [x] to [b].
+
+    @param trans the transpose flag for [a]:
+      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      (the conjugate transpose of [a]).
+    @param diag default = [`N]
+      - If [diag] = [`U], then [a] is unit triangular;
+      - If [diag] = [`N], then [a] is not unit triangular.
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+ *)
 
 (** {3 Level 3} *)
 
@@ -81,6 +144,22 @@ val gemm : ?beta:num_type ->
            ('a_m, 'a_k, 'a_cd) mat ->
            transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans3 ->
            ('b_k, 'b_n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat
+(** [gemm ?beta ?c ~transa ?alpha a ~transb b] executes
+    [c := alpha * OP(a) * OP(b) + beta * c].
+
+    @param beta default = [0.0]
+    @param transa the transpose flag for [a]:
+      - If [transa] = {!Slap.Common.normal}, then [OP(a)] = [a];
+      - If [transa] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
+      - If [transa] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      (the conjugate transpose of [a]).
+    @param alpha default = [1.0]
+    @param transb the transpose flag for [b]:
+      - If [transb] = {!Slap.Common.normal}, then [OP(b)] = [b];
+      - If [transb] = {!Slap.Common.trans}, then [OP(b)] = [b^T];
+      - If [transb] = {!Slap.Common.conjtr}, then [OP(b)] = [b^H]
+      (the conjugate transpose of [b]).
+ *)
 
 val symm : side:('k, 'm, 'n) Common.side ->
            ?up:bool ->
@@ -89,6 +168,19 @@ val symm : side:('k, 'm, 'n) Common.side ->
            ?alpha:num_type ->
            ('k, 'k, 'a_cd) mat ->
            ('m, 'n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat
+(** [symm ~side ?up ?beta ?c ?alpha a b] executes
+    [c := alpha * a * b + beta * c] (if [side] = {!Slap.Common.left}) or
+    [c := alpha * b * a + beta * c] (if [side] = {!Slap.Common.right})
+    where [a] is a symmterix matrix, and [b] and [c] are general matrices.
+
+    @param side the side flag to specify direction of multiplication of [a] and
+                [b].
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param beta default = [0.0]
+    @param alpha default = [1.0]
+ *)
 
 val trmm : side:('k, 'm, 'n) Common.side ->
            ?up:bool ->
@@ -97,6 +189,26 @@ val trmm : side:('k, 'm, 'n) Common.side ->
            ?alpha:num_type ->
            a:('k, 'k, 'a_cd) mat ->
            ('m, 'n, 'b_cd) mat -> unit
+(** [trmm ~side ?up ~transa ?diag ?alpha ~a b] executes
+    [b := alpha * OP(a) * b] (if [side] = {!Slap.Common.left}) or
+    [b := alpha * b * OP(a)] (if [side] = {!Slap.Common.right})
+    where [a] is a triangular matrix, and [b] is a general matrix.
+
+    @param side the side flag to specify direction of multiplication of [a] and
+                [b].
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param transa the transpose flag for [a]:
+      - If [transa] = {!Slap.Common.normal}, then [OP(a)] = [a];
+      - If [transa] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
+      - If [transa] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+        (the conjugate transpose of [a]).
+    @param diag default = [`N]
+      - If [diag] = [`U], then [a] is unit triangular;
+      - If [diag] = [`N], then [a] is not unit triangular.
+    @param alpha default = [1.0]
+ *)
 
 val trsm : side:('k, 'm, 'n) Common.side ->
            ?up:bool ->
@@ -105,6 +217,27 @@ val trsm : side:('k, 'm, 'n) Common.side ->
            ?alpha:num_type ->
            a:('k, 'k, 'a_cd) mat ->
            ('m, 'n, 'b_cd) mat -> unit
+(** [trsm ~side ?up ~transa ?diag ?alpha ~a b] solves linear systems
+    [OP(a) * x = alpha * b] (if [side] = {!Slap.Common.left}) or
+    [x * OP(a) = alpha * b] (if [side] = {!Slap.Common.right})
+    where [a] is a triangular matrix, and [b] is a general matrix.
+    The solution [x] is destructively assigned to [b].
+
+    @param side the side flag to specify direction of multiplication of [a] and
+                [b].
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param transa the transpose flag for [a]:
+      - If [transa] = {!Slap.Common.normal}, then [OP(a)] = [a];
+      - If [transa] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
+      - If [transa] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+        (the conjugate transpose of [a]).
+    @param diag default = [`N]
+      - If [diag] = [`U], then [a] is unit triangular;
+      - If [diag] = [`N], then [a] is not unit triangular.
+    @param alpha default = [1.0]
+ *)
 
 val syrk : ?up:bool ->
            ?beta:num_type ->
@@ -113,6 +246,19 @@ val syrk : ?up:bool ->
                   ('n, 'k, 'a_cd) mat) Common.trans2 ->
            ?alpha:num_type ->
            ('a_n, 'a_k, 'a_cd) mat -> ('n, 'n, 'c_cd) mat
+(** [syrk ?up ?beta ?c ~trans ?alpha a] executes
+    [c := alpha * a * a^T + beta * c] (if [trans] = {!Slap.Common.normal}) or
+    [c := alpha * a^T * a + beta * c] (if [trans] = {!Slap.Common.trans})
+    where [a] is a general matrix and [c] is a symmetric matrix.
+
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param beta default = [0.0]
+    @param trans the transpose flag for [a]
+    @param alpha default = [1.0]
+ *)
+
 
 val syr2k : ?up:bool ->
             ?beta:num_type ->
@@ -124,13 +270,18 @@ val syr2k : ?up:bool ->
             ('p, 'q, 'b_cd) mat ->
             ('n, 'n, 'c_cd) mat
 (** [syr2k ?up ?beta ?c ~trans ?alpha a b] computes
+    [c := alpha * a * b^T + alpha * b * a^T + beta * c]
+    (if [trans] = {!Slap.Common.normal}) or
+    [c := alpha * a^T * b + alpha * b^T * a + beta * c]
+    (if [trans] = {!Slap.Common.trans})
+    with symmetric matrix [c], and general matrices [a] and [b].
 
-    - [c := alpha * a * b^T + alpha * b * a^T + beta * c] if [trans] is
-      {!Slap.Common.normal}, or
-    - [c := alpha * a^T * b + alpha * b^T * a + beta * c] if [trans] is
-      {!Slap.Common.trans}
-
-    with symmetric matrix [c], general matrices [a] and [b].
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param beta default = [0.0]
+    @param trans the transpose flag for [a]
+    @param alpha default = [1.0]
  *)
 
 (** {2 LAPACK interface} *)
