@@ -15,7 +15,7 @@ let jacobi a b =
   let y = Vec.create (Vec.dim b) in (* temporary memory *)
   let rec loop z x =
     ignore (copy ~y b); (* y := b *)
-    ignore (gemv ~y ~trans:normal ~alpha:(-1.0) ~beta:1.0 r x); (* y := y-a*x *)
+    ignore (gemv ~y ~trans:normal ~alpha:(-1.0) ~beta:1.0 r x); (* y := y-r*x *)
     ignore (Vec.mul ~z d_inv y); (* z := element-wise mult. of d_inv and y *)
     if Vec.ssqr_diff x z < 1e-10 then z else loop x z (* Check convergence *)
   in
