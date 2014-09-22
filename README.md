@@ -64,9 +64,10 @@ Demo
 The following code ([examples/linsys/jacobi.ml](examples/linsys/jacobi.ml))
 is an implementation of
 [Jacobi method](http://en.wikipedia.org/wiki/Jacobi_method) (to solve
-linear systems).
+system of linear equations).
 
 ```ocaml
+open Slap.Io
 open Slap.D
 open Slap.Size
 open Slap.Common
@@ -90,11 +91,27 @@ let _ =
                                          exp (~-. p *. p)) in
   let b = Vec.init four (fun i -> float_of_int i) in
   let x = jacobi a b in
-  Format.printf "x = @[%a@]@." Slap.Io.pp_rfvec x
+  Format.printf "a = @[%a@]@.b = @[%a@]@." pp_fmat a pp_rfvec b;
+  Format.printf "x = @[%a@]@." pp_rfvec x;
+  Format.printf "a*x = @[%a@]@." pp_rfvec (gemv ~trans:normal a x)
 ```
 
-`jacobi a b` solves a linear system `a * x = b` where `a` is a n-by-n
-matrix, and `x` and `b` is a n-dimensional vectors. Try to modify any one of
+`jacobi a b` solves a system of linear equations `a * x = b` where `a` is
+a n-by-n matrix, and `x` and `b` is a n-dimensional vectors. This code can
+be compiled by `ocamlfind ocamlc -linkpkg -package slap jacobi.ml`, and
+`a.out` outputs:
+
+```ocaml
+a =          1  0.367879 0.0183156 0.00012341
+      0.367879         1  0.367879  0.0183156
+     0.0183156  0.367879         1   0.367879
+    0.00012341 0.0183156  0.367879          1
+b = 1 2 3 4
+x = 0.496539 1.30705 1.21131 3.53038
+a*x = 0.999998 2 3 4
+```
+
+OK. Vector `x` is computed. Try to modify any one of
 the dimensions of `a`, `b` and `x` in the above code, e.g.,
 
 ```ocaml
