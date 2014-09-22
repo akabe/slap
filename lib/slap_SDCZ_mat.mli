@@ -327,6 +327,37 @@ val detri : ?up:bool -> ('n, 'n, 'cd) mat -> unit
     @since 0.1.0
  *)
 
+val packed : ?up:bool ->
+             ?x:('n Size.packed, cnt) vec ->
+             ('n, 'n, 'cd) mat ->
+             ('n Size.packed, 'cnt) vec
+(** [packed ?up ?x a] transforms matrix [a] into packed storage format.
+    @return vector [x], which is overwritten.
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is packed;
+      - If [up] = [false], then the lower triangular part of [a] is packed.
+    @since 0.2.0
+ *)
+
+val unpacked : ?up:bool ->
+               ?fill_num:num_type option ->
+               ?a:('n, 'n, 'cd) mat ->
+               ('n Size.packed, cnt) vec ->
+               ('n, 'n, 'cd) mat
+(** [unpacked ?up ?fill_num ?a x] generates an upper or lower triangular matrix
+    from packed-storage-format vector [x].
+    @return matrix [a], which is overwritten.
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular matrix is generated;
+      - If [up] = [false], then the lower triangular matrix is generated.
+    @param fill_num default = [Some 0]
+      - If [fill_num] is [None], the elements in the generated matrix are not
+        initialized;
+      - If [fill_num] is [Some c], the elements in the generated matrix are
+        initialized by [c].
+    @since 0.2.0
+ *)
+
 (** {2 Arithmetic operations} *)
 
 val add_const : num_type ->

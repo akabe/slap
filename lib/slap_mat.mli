@@ -151,6 +151,40 @@ val copy : ?b:('m, 'n, 'num, 'prec, 'b_cd) t ->
     @param b default = a fresh matrix.
  *)
 
+(** {2 Matrix transformations} *)
+
+val packed : ?up:bool ->
+             ?x:('n Size.packed, 'num, 'prec, cnt) Vec.t ->
+             ('n, 'n, 'num, 'prec, 'cd) t ->
+             ('n Size.packed, 'num, 'prec, 'cnt) Vec.t
+(** [packed ?up ?x a] transforms matrix [a] into packed storage format.
+    @return vector [x], which is overwritten.
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is packed;
+      - If [up] = [false], then the lower triangular part of [a] is packed.
+    @since 0.2.0
+ *)
+
+val unpacked : ?up:bool ->
+               ?fill_num:'num option ->
+               ?a:('n, 'n, 'num, 'prec, 'cd) t ->
+               ('n Size.packed, 'num, 'prec, cnt) Vec.t ->
+               ('n, 'n, 'num, 'prec, 'cd) t
+(** [unpacked ?up ?fill_num ?a x] generates an upper or lower triangular matrix
+    from packed-storage-format vector [x].
+    @return matrix [a], which is overwritten.
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular matrix is generated;
+      - If [up] = [false], then the lower triangular matrix is generated.
+    @param fill_num default = [None] ({b Note}: The default value in
+      [Slap.[SDCZ].Mat.unpacked] is [Some 0], not [None].)
+      - If [fill_num] = [None], the elements in the generated matrix are not
+        initialized;
+      - If [fill_num] = [Some c], the elements in the generated matrix are
+        initialized by [c].
+    @since 0.2.0
+ *)
+
 (** {2 Iterators} *)
 
 val map : ('b_num, 'b_prec) kind ->

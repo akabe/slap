@@ -76,6 +76,57 @@ let test_of_list_dyn () =
   "exn/rect" @! (fun () -> of_list_dyn two three [[11;12;13];
                                                   [21;22]])
 
+(* test of packed *)
+let test_packed () =
+  let m_sq_00  = m_00 in
+  let m_sq_ord = init int five five (fun i j -> 10 * i + j) in
+  let m_sq_sub = submat_dyn three three ~ar:2 ~ac:2 m_sq_ord in
+  let (=) x y = (Slap.Vec.to_list x = y) in
+  "m_sq_00, up=true"  @? (packed ~up:true  m_sq_00  = []);
+  "m_sq_ord,up=true"  @? (packed ~up:true  m_sq_ord = [11;
+                                                       12;22;
+                                                       13;23;33;
+                                                       14;24;34;44;
+                                                       15;25;35;45;55]);
+  "m_sq_sub,up=true"  @? (packed ~up:true  m_sq_sub = [22;
+                                                       23;33;
+                                                       24;34;44]);
+  "m_sq_00, up=false" @? (packed ~up:false m_sq_00  = []);
+  "m_sq_ord,up=false" @? (packed ~up:false m_sq_ord = [11;21;31;41;51;
+                                                       22;32;42;52;
+                                                       33;43;53;
+                                                       44;54;
+                                                       55]);
+  "m_sq_sub,up=false" @? (packed ~up:false m_sq_sub = [22;32;42;
+                                                       33;43;
+                                                       44])
+
+(* test of unpacked *)
+let test_unpacked () =
+  let pv_zero = Slap.Vec.init int (Slap.Size.packed zero) (fun i -> i) in
+  let pv_ord  = Slap.Vec.init int (Slap.Size.packed five) (fun i -> i) in
+  let pv_sub  = Slap.Vec.subcntvec_dyn (Slap.Size.packed three) ~ofsx:3 pv_ord in
+  let unpacked up v = unpacked ~up ~fill_num:(Some 0) v in
+  let (=) x y = (to_list x = y) in
+  "pv_zero,up=true"  @? (unpacked true  pv_zero = []);
+  "pv_ord, up=true"  @? (unpacked true  pv_ord  = [[1;2;4; 7;11];
+                                                   [0;3;5; 8;12];
+                                                   [0;0;6; 9;13];
+                                                   [0;0;0;10;14];
+                                                   [0;0;0; 0;15]]);
+  "pv_sub, up=true"  @? (unpacked true  pv_sub  = [[3;4;6];
+                                                   [0;5;7];
+                                                   [0;0;8]]);
+  "pv_ord, up=false" @? (unpacked false pv_ord  = [[1;0; 0; 0; 0];
+                                                   [2;6; 0; 0; 0];
+                                                   [3;7;10; 0; 0];
+                                                   [4;8;11;13; 0];
+                                                   [5;9;12;14;15]]);
+  "pv_sub, up=false" @? (unpacked false pv_sub  = [[3;0;0];
+                                                   [4;6;0];
+                                                   [5;7;8]])
+
+
 (* test of Mat.fold_lefti *)
 let test_fold_lefti () =
   let fli a =
@@ -158,6 +209,8 @@ let suite =
      "to_list"      >:: test_to_list;
      "of_array_dyn" >:: test_of_array_dyn;
      "of_list_dyn"  >:: test_of_list_dyn;
+     "packed"       >:: test_packed;
+     "unpacked"     >:: test_unpacked;
      "fold_lefti"   >:: test_fold_lefti;
      "fold_righti"  >:: test_fold_righti;
      "fold_topi"    >:: test_fold_topi;

@@ -71,6 +71,14 @@ type ('m, 'n) max
 
 let max = Pervasives.max
 
+type 'n packed
+
+let packed n = n * (n + 1) / 2
+
+let unpacked k =
+  let isqrt x = int_of_float (sqrt (float_of_int x) +. 0.5) in
+  (isqrt (1 + 8 * k) - 1) / 2
+
 (** {2 Conversion between sizes and integers} *)
 
 module type SIZE =
