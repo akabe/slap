@@ -79,6 +79,14 @@ Executable jacobi
   Install:        false
   CompiledObject: best
 
+Executable trsv_tpsv
+  Path:           examples/linsys
+  MainIs:         trsv_tpsv.ml
+  Build$:         flag(examples)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
 Executable qr_lacaml
   Path:           examples/porting/qr_factorize
   MainIs:         qr_lacaml.ml
