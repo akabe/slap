@@ -72,6 +72,53 @@ val trsv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
            ('n, 'n, 'a_cd) mat ->
            ('n, 'x_cd) vec -> unit
 
+val tpmv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+           ?diag:Common.diag ->
+           ?up:bool ->
+           ('n Size.packed, cnt) vec ->
+           ('n, 'x_cd) vec -> unit
+(** [tpmv ~trans ?diag ?up a x] executes [x := OP(a) * x]
+    where [a] is a packed triangular matrix.
+
+    @param trans the transpose flag for [a]:
+      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      (the conjugate transpose of [a]).
+    @param diag default = [`N]
+      - If [diag] = [`U], then [a] is unit triangular;
+      - If [diag] = [`N], then [a] is not unit triangular.
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+
+    @since 0.2.0
+ *)
+
+val tpsv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+           ?diag:Common.diag ->
+           ?up:bool ->
+           ('n Size.packed, cnt) vec ->
+           ('n, 'x_cd) vec -> unit
+(** [tpsv ~trans ?diag ?up a b] solves linear system [OP(a) * x = b]
+    and destructively assigns [x] to [b] where [a] is a packed triangular
+    matrix.
+
+    @param trans the transpose flag for [a]:
+      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      (the conjugate transpose of [a]).
+    @param diag default = [`N]
+      - If [diag] = [`U], then [a] is unit triangular;
+      - If [diag] = [`N], then [a] is not unit triangular.
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+
+    @since 0.2.0
+ *)
+
 (** {3 Level 3} *)
 
 val gemm : ?beta:num_type ->
