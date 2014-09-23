@@ -87,13 +87,13 @@ let trsv ~trans ?diag ?up (n, n', ar, ac, a) (n'', ofsx, incx, x) =
               ?diag ?up ~ar ~ac a ~ofsx ~incx x
 
 let tpmv ~trans ?diag ?up (k, ofsap, incap, ap) (n, ofsx, incx, x) =
-  assert(k = Size.packed n && PVec.check_cnt n ofsap incap ap);
+  assert(k = Size.packed n && PVec.check_cnt k ofsap incap ap);
   if n <> 0
   then I.tpmv ~n ~trans:(lacaml_trans3 trans)
               ?diag ?up ~ofsap ap ~ofsx ~incx x
 
 let tpsv ~trans ?diag ?up (k, ofsap, incap, ap) (n, ofsx, incx, x) =
-  assert(k = Size.packed n && PVec.check_cnt n ofsap incap ap);
+  assert(k = Size.packed n && PVec.check_cnt k ofsap incap ap);
   if n <> 0
   then I.tpsv ~n ~trans:(lacaml_trans3 trans)
               ?diag ?up ~ofsap ap ~ofsx ~incx x
