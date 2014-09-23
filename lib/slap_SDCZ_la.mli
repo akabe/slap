@@ -338,6 +338,27 @@ val posv : ?up:bool ->
            ('n, 'n, 'a_cd) mat ->
            ('n, 'nrhs, 'b_cd) mat -> unit
 
+val ppsv : ?up:bool ->
+           ('n Size.packed, cnt) vec ->
+           ('n, 'nrhs, 'b_cd) mat -> unit
+(** [ppsv ?up a b] solves systems of linear equations [a * x = b] where [a] is
+    a ['n]-by-['n] symmetric positive-definite matrix stored in packed format,
+    each column of matrix [b] is the r.h.s vector, and each column of matrix [x]
+    is the corresponding solution. Matrix [x] is destructively assigns to [b].
+
+    The Cholesky decomposition is used:
+    - If [up] = [true], then [a = U^T * U] (real) or [a = U^H * U] (complex)
+    - If [up] = [false], then [a = L^T * L] (real) or [a = L^H * L] (complex)
+    where [U] and [L] are the upper and lower triangular matrices, respectively.
+
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+
+    @raise Failure if the matrix is singular.
+    @since 0.2.0
+ *)
+
 val sysv_opt_lwork : ?up:bool ->
                      ('n, 'n, 'a_cd) mat ->
                      ('n, 'nrhs, 'b_cd) mat -> (module Size.SIZE)
@@ -347,6 +368,29 @@ val sysv : ?up:bool ->
            ?work:('lwork, cnt) vec ->
            ('n, 'n, 'a_cd) mat ->
            ('n, 'nrhs, 'b_cd) mat -> unit
+
+val spsv : ?up:bool ->
+           ?ipiv:('n, cnt) Common.int32_vec ->
+           ('n Size.packed, cnt) vec ->
+           ('n, 'nrhs, 'b_cd) mat -> unit
+(** [spsv ?up a b] solves systems of linear equations [a * x = b] where [a] is
+    a ['n]-by-['n] symmetric matrix stored in packed format,
+    each column of matrix [b] is the r.h.s vector, and each column of matrix [x]
+    is the corresponding solution. Matrix [x] is destructively assigns to [b].
+
+    The diagonal pivoting method is used:
+    - If [up] = [true], then [a = U * D * U^T]
+    - If [up] = [false], then [a = L * D * L^T]
+    where [U] and [L] are the upper and lower triangular matrices, respectively.
+
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param ipiv a ['n]-dimensional vector
+
+    @raise Failure if the matrix is singular.
+    @since 0.2.0
+ *)
 
 (** {3 Least squares (simple drivers)} *)
 

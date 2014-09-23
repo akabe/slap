@@ -303,6 +303,11 @@ let posv ?up (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
   if n <> 0 && nrhs <> 0
   then I.posv ~n ?up ~ar ~ac a ~nrhs ~br ~bc b
 
+let ppsv ?up (k, ofsap, incap, ap) (n, nrhs, br, bc, b) =
+  assert(k = Size.packed n && PVec.check_cnt k ofsap incap ap);
+  if n <> 0 && nrhs <> 0
+  then I.ppsv ~n ?up ~ofsap ap ~br ~bc b
+
 let sysv_opt_lwork ?up (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
   assert(n = n' && n = n'');
   I.sysv_opt_lwork ~n ?up ~ar ~ac a ~nrhs ~br ~bc b
@@ -313,6 +318,11 @@ let sysv ?up ?ipiv ?work (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
   I.sysv ~n ?up ?ipiv:(PVec.opt_cnt_vec n ipiv)
          ?work:(PVec.opt_work work)
          ~ar ~ac a ~nrhs ~br ~bc b
+
+let spsv ?up ?ipiv (k, ofsap, incap, ap) (n, nrhs, br, bc, b) =
+  assert(k = Size.packed n && PVec.check_cnt k ofsap incap ap);
+  I.spsv ~n ?up ?ipiv:(PVec.opt_cnt_vec n ipiv)
+         ~ofsap ap ~nrhs ~br ~bc b
 
 (** {3 Least squares (simple drivers)} *)
 
