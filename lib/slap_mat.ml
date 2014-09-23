@@ -167,6 +167,53 @@ let copy ?b (m, n, ar, ac, a) =
   done;
   (m, n, br, bc, b)
 
+(** {2 Matrix transformations} *)
+
+let packed ?(up = true) ?x (n, n', ar, ac, a) =
+  assert(n = n');
+  let k = Size.packed n in
+  let x = Vec.opt_cnt_vec_alloc (Array2.kind a) k x in
+  let pos_ref = ref 1 in
+  let r = ar - 1 in
+  let c = ac - 1 in
+  let store_column j i_start i_end =
+    for i = i_start to i_end do
+      let e = Array2.unsafe_get a (r + i) (c + j) in
+      let pos = !pos_ref in
+      Array1.unsafe_set x pos e;
+      pos_ref := pos + 1
+    done
+  in
+  if up
+  then for j = 1 to n do store_column j 1 j done
+  else for j = 1 to n do store_column j j n done;
+  (k, 1, 1, x)
+
+let unpacked ?(up = true) ?(fill_num = None) ?a (k, ofsx, incx, x) =
+  assert(Vec.check_cnt k ofsx incx x);
+  let n = Size.unpacked k in
+  let ar, ac, a = opt_mat_alloc (Array1.kind x) n n a in
+  let pos_ref = ref 1 in
+  let r = ar - 1 in
+  let c = ac - 1 in
+  let store_column j i_start i_end =
+    for i = i_start to i_end do
+      let pos = !pos_ref in
+      let e = Array1.unsafe_get x pos in
+      Array2.unsafe_set a (r + i) (c + j) e;
+      pos_ref := pos + 1
+    done
+  in
+  begin
+    match fill_num with
+    | None -> ()
+    | Some c -> fill (n, n, ar, ac, a) c
+  end;
+  if up
+  then for j = 1 to n do store_column j 1 j done
+  else for j = 1 to n do store_column j j n done;
+  (n, n, ar, ac, a)
+
 (** {2 Iterators} *)
 
 let mapi kind f ?b (m, n, ar, ac, a) =

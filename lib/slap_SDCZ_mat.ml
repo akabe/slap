@@ -187,6 +187,10 @@ let detri ?up (n, n', ar, ac, a) =
   assert(n = n');
   I.Mat.detri ?up ~n ~ar ~ac a
 
+let packed = PMat.packed
+
+let unpacked ?up ?(fill_num = Some zero) = PMat.unpacked ?up ~fill_num
+
 (** {2 Arithmetic operations} *)
 
 let add_const c ?b (m, n, ar, ac, a) =

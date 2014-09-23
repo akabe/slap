@@ -102,6 +102,25 @@ val max : 'm t -> 'n t -> ('m, 'n) max t
     @return the maximum of [m] and [n]
  *)
 
+type 'n packed
+(** Type ['n packed] corresponds to the {i packed storage} size of a [n]-by-[n]
+    matrix.
+    @see <http://www.netlib.org/lapack/lug/node123.html>
+         Packed Storage (BLAS & LAPACK)
+    @since 0.2.0
+ *)
+
+val packed : 'n t -> 'n packed t
+(** [packed n] computes the packed storage size of a [n]-by-[n] matrix.
+    @since 0.2.0
+ *)
+
+val unpacked : 'n packed t -> 'n t
+(** [unpacked n] computes the inverse of the packed storage size, i.e.,
+    [unpacked (packed n) = n] for all [n].
+    @since 0.2.0
+ *)
+
 (** {2 Conversion between a size and an integer} *)
 
 (** The signature of modules as packages of types like [exists n. n Size.t]. *)

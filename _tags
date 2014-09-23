@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 9430822b771790ce341d4d8f4672c767)
+# DO NOT EDIT (digest: a552514144d4c7ec34569ae12061a5a4)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -34,6 +34,10 @@
 <examples/linsys/jacobi.{native,byte}>: pkg_bigarray
 <examples/linsys/jacobi.{native,byte}>: pkg_lacaml
 <examples/linsys/jacobi.{native,byte}>: use_slap
+# Executable trsv_tpsv
+<examples/linsys/trsv_tpsv.{native,byte}>: pkg_bigarray
+<examples/linsys/trsv_tpsv.{native,byte}>: pkg_lacaml
+<examples/linsys/trsv_tpsv.{native,byte}>: use_slap
 <examples/linsys/*.ml{,i}>: pkg_bigarray
 <examples/linsys/*.ml{,i}>: pkg_lacaml
 <examples/linsys/*.ml{,i}>: use_slap
