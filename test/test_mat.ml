@@ -126,6 +126,80 @@ let test_unpacked () =
                                                    [4;6;0];
                                                    [5;7;8]])
 
+(* test of geband_dyn *)
+let test_geband_dyn () =
+  let module M = Of_int_dyn(struct let value = 7 end) in
+  let module N = Of_int_dyn(struct let value = 9 end) in
+  let six = succ five in
+  let eight = succ (succ six) in
+  let a = init int M.value N.value (fun i j -> 10 * i + j) in
+  let geband_dyn kl ku =
+    let b = make int (Slap.Size.geband_dyn (dim1 a) (dim2 a) kl ku)
+                 (dim2 a) 0 in
+    to_list (geband_dyn kl ku ~b a)
+  in
+  "ordinary" @? (geband_dyn two one = [[ 0;12;23;34;45;56;67;78; 0];
+                                       [11;22;33;44;55;66;77; 0; 0];
+                                       [21;32;43;54;65;76; 0; 0; 0];
+                                       [31;42;53;64;75; 0; 0; 0; 0]]);
+  "upper" @? (geband_dyn zero eight = [[ 0; 0; 0; 0; 0; 0; 0; 0;19];
+                                       [ 0; 0; 0; 0; 0; 0; 0;18;29];
+                                       [ 0; 0; 0; 0; 0; 0;17;28;39];
+                                       [ 0; 0; 0; 0; 0;16;27;38;49];
+                                       [ 0; 0; 0; 0;15;26;37;48;59];
+                                       [ 0; 0; 0;14;25;36;47;58;69];
+                                       [ 0; 0;13;24;35;46;57;68;79];
+                                       [ 0;12;23;34;45;56;67;78; 0];
+                                       [11;22;33;44;55;66;77; 0; 0]]);
+  "lower" @? (geband_dyn six zero = [[11;22;33;44;55;66;77; 0; 0];
+                                     [21;32;43;54;65;76; 0; 0; 0];
+                                     [31;42;53;64;75; 0; 0; 0; 0];
+                                     [41;52;63;74; 0; 0; 0; 0; 0];
+                                     [51;62;73; 0; 0; 0; 0; 0; 0];
+                                     [61;72; 0; 0; 0; 0; 0; 0; 0];
+                                     [71; 0; 0; 0; 0; 0; 0; 0; 0]]);
+  "diagonal" @? (geband_dyn zero zero = [[11;22;33;44;55;66;77; 0; 0]])
+
+(* test of ungeband *)
+let test_ungeband () =
+  let module M = Of_int_dyn(struct let value = 7 end) in
+  let module N = Of_int_dyn(struct let value = 9 end) in
+  let six = succ five in
+  let eight = succ (succ six) in
+  let a = init int M.value N.value (fun i j -> 10 * i + j) in
+  let band kl ku =
+    let b = geband_dyn kl ku a in
+    let a' = ungeband (dim1 a) kl ku ~fill_num:(Some 0) b in
+    to_list a'
+  in
+  "ordinary" @? (band two one = [[11;12; 0; 0; 0; 0; 0; 0; 0];
+                                 [21;22;23; 0; 0; 0; 0; 0; 0];
+                                 [31;32;33;34; 0; 0; 0; 0; 0];
+                                 [ 0;42;43;44;45; 0; 0; 0; 0];
+                                 [ 0; 0;53;54;55;56; 0; 0; 0];
+                                 [ 0; 0; 0;64;65;66;67; 0; 0];
+                                 [ 0; 0; 0; 0;75;76;77;78; 0]]);
+  "upper" @? (band zero eight = [[11;12;13;14;15;16;17;18;19];
+                                 [ 0;22;23;24;25;26;27;28;29];
+                                 [ 0; 0;33;34;35;36;37;38;39];
+                                 [ 0; 0; 0;44;45;46;47;48;49];
+                                 [ 0; 0; 0; 0;55;56;57;58;59];
+                                 [ 0; 0; 0; 0; 0;66;67;68;69];
+                                 [ 0; 0; 0; 0; 0; 0;77;78;79]]);
+  "lower" @? (band six zero = [[11; 0; 0; 0; 0; 0; 0; 0; 0];
+                               [21;22; 0; 0; 0; 0; 0; 0; 0];
+                               [31;32;33; 0; 0; 0; 0; 0; 0];
+                               [41;42;43;44; 0; 0; 0; 0; 0];
+                               [51;52;53;54;55; 0; 0; 0; 0];
+                               [61;62;63;64;65;66; 0; 0; 0];
+                               [71;72;73;74;75;76;77; 0; 0]]);
+  "diagonal" @? (band zero zero = [[11; 0; 0; 0; 0; 0; 0; 0; 0];
+                                   [ 0;22; 0; 0; 0; 0; 0; 0; 0];
+                                   [ 0; 0;33; 0; 0; 0; 0; 0; 0];
+                                   [ 0; 0; 0;44; 0; 0; 0; 0; 0];
+                                   [ 0; 0; 0; 0;55; 0; 0; 0; 0];
+                                   [ 0; 0; 0; 0; 0;66; 0; 0; 0];
+                                   [ 0; 0; 0; 0; 0; 0;77; 0; 0]])
 
 (* test of Mat.fold_lefti *)
 let test_fold_lefti () =
@@ -211,6 +285,8 @@ let suite =
      "of_list_dyn"  >:: test_of_list_dyn;
      "packed"       >:: test_packed;
      "unpacked"     >:: test_unpacked;
+     "geband_dyn"   >:: test_geband_dyn;
+     "ungeband"     >:: test_ungeband;
      "fold_lefti"   >:: test_fold_lefti;
      "fold_righti"  >:: test_fold_righti;
      "fold_topi"    >:: test_fold_topi;
