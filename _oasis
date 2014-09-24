@@ -71,6 +71,22 @@ Flag examples
   Description:    Build examples
   Default:        false
 
+Executable gemv_gbmv
+  Path:           examples/mult
+  MainIs:         gemv_gbmv.ml
+  Build$:         flag(examples)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
+Executable symv_sbmv
+  Path:           examples/mult
+  MainIs:         symv_sbmv.ml
+  Build$:         flag(examples)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
 Executable jacobi
   Path:           examples/linsys
   MainIs:         jacobi.ml

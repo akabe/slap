@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: b321d236edf97748edbb0650abd7a544) *)
+(* DO NOT EDIT (digest: 0604450e9ef30283e151e7135fb72ea9) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -607,6 +607,7 @@ let package_default =
           ("examples/porting/pca", ["lib"]);
           ("examples/porting/lu_factorize", ["lib"]);
           ("examples/porting/k-means", ["lib"]);
+          ("examples/mult", ["lib"]);
           ("examples/linsys", ["lib"])
        ]
   }
@@ -614,6 +615,6 @@ let package_default =
 
 let dispatch_default = MyOCamlbuildBase.dispatch_default package_default;;
 
-# 618 "myocamlbuild.ml"
+# 619 "myocamlbuild.ml"
 (* OASIS_STOP *)
 Ocamlbuild_plugin.dispatch dispatch_default;;
