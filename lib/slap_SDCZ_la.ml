@@ -65,6 +65,18 @@ let gemv ?beta ?y ~trans ?alpha (am, an, ar, ac, a) (n', ofsx, incx, x) =
   else PVec.fill (m, ofsy, incy, y) zero;
   (m, ofsy, incy, y)
 
+let gbmv ~m:am ?beta ?y ~trans ?alpha (gbs, an, ar, ac, a) kl ku
+         (n', ofsx, incx, x) =
+  let m, n = Common.get_transposed_dim trans am an in
+  assert(gbs = Size.geband_dyn m n kl ku && n = n');
+  let ofsy, incy, y = PVec.opt_vec_alloc prec m y in
+  if m <> 0 && n <> 0
+  then ignore (I.gbmv ~m:am ~n:an ?beta ~ofsy ~incy ~y
+                      ~trans:(lacaml_trans3 trans)
+                      ?alpha ~ar ~ac a kl ku ~ofsx ~incx x)
+  else PVec.fill (m, ofsy, incy, y) zero;
+  (m, ofsy, incy, y)
+
 let symv ?beta ?y ?up ?alpha (n, n', ar, ac, a) (n'', ofsx, incx, x) =
   assert(n = n' && n = n'');
   let ofsy, incy, y = PVec.opt_vec_alloc prec n y in

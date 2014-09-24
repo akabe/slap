@@ -78,6 +78,31 @@ val gemv : ?beta:num_type ->
     @param alpha default = [1.0]
  *)
 
+val gbmv : m:'a_m Size.t ->
+           ?beta:num_type ->
+           ?y:('m, 'y_cd) vec ->
+           trans:(('a_m, 'a_n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) trans3 ->
+           ?alpha:num_type ->
+           (('a_m, 'a_n, 'kl, 'ku) Size.geband, 'a_n, 'a_cd) mat ->
+           'kl Size.t ->
+           'ku Size.t ->
+           ('n, 'x_cd) vec -> ('m, 'y_cd) vec
+(** [gbmv ~m ?beta ?y ~trans ?alpha a kl ku x] computes
+    [y := alpha * OP(a) * x + beta * y] where [a] is a band matrix stored in
+    band storage.
+    @return vector [y], which is overwritten.
+    @param beta default = [0.0]
+    @param trans the transpose flag for [a]:
+      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      (the conjugate transpose of [a]).
+    @param alpha default = [1.0]
+    @param kl the number of subdiagonals of [a]
+    @param ku the number of superdiagonals of [a]
+    @since 0.2.0
+ *)
+
 val symv : ?beta:num_type ->
            ?y:('n, 'y_cd) vec ->
            ?up:bool ->
