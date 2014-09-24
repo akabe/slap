@@ -71,6 +71,8 @@ type ('m, 'n) max
 
 let max = Pervasives.max
 
+(** {2 Storage sizes for BLAS and LAPACK} *)
+
 type 'n packed
 
 let packed n = n * (n + 1) / 2
@@ -78,6 +80,19 @@ let packed n = n * (n + 1) / 2
 let unpacked k =
   let isqrt x = int_of_float (sqrt (float_of_int x) +. 0.5) in
   (isqrt (1 + 8 * k) - 1) / 2
+
+type ('m, 'n, 'kl, 'ku) geband
+
+let geband_dyn m n kl ku =
+  if kl >= m then invalid_arg "Slap.Size.geband_dyn: kl >= m";
+  if ku >= n then invalid_arg "Slap.Size.geband_dyn: ku >= n";
+  kl + ku + 1
+
+type ('n, 'kd) syband
+
+let syband_dyn n kd =
+  if kd >= n then invalid_arg "Slap.Size.syband_dyn: kd >= n";
+  kd + 1
 
 (** {2 Conversion between sizes and integers} *)
 

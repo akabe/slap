@@ -102,6 +102,8 @@ val max : 'm t -> 'n t -> ('m, 'n) max t
     @return the maximum of [m] and [n]
  *)
 
+(** {2 Storage sizes for BLAS and LAPACK} *)
+
 type 'n packed
 (** Type ['n packed] corresponds to the {i packed storage} size of a [n]-by-[n]
     matrix.
@@ -118,6 +120,54 @@ val packed : 'n t -> 'n packed t
 val unpacked : 'n packed t -> 'n t
 (** [unpacked n] computes the inverse of the packed storage size, i.e.,
     [unpacked (packed n) = n] for all [n].
+    @since 0.2.0
+ *)
+
+type ('m, 'n, 'kl, 'ku) geband
+(** [('m, 'n, 'kl, 'ku) geband] represents {i band storage} size:
+    A ['m]-by-['n] band matrix with ['kl] subdiagonals and ['ku] superdiagonals
+    is stored in a [('kl+'ku+1)]-by-['n] matrix where ['kl, 'ku << min('m, 'n)].
+    [('m, 'kl, 'ku) geband] corresponds to ['kl + 'ku + 1].
+
+    @see <http://www.netlib.org/lapack/lug/node124.html>
+         Band Storage (BLAS & LAPACK)
+    @since 0.2.0
+*)
+
+val geband_dyn : 'm t -> 'n t -> 'kl t -> 'ku t -> ('m, 'n, 'kl, 'ku) geband t
+(** [geband_dyn m n kl ku] computs the band storage size of [m]-by-[n] band
+    matrices with [kl] subdiagonals and [ku] superdiagonals.
+
+    @param m the number of rows
+    @param n the number of rows
+    @param kl the number of subdiagonals
+    @param ku the number of superdiagonals
+
+    @raise Invalid_argument if [m >= kl] and [n >= ku].
+
+    @since 0.2.0
+ *)
+
+type ('n, 'kd) syband
+(** [('n, 'kd) syband] represents {i symmetric or Hermitian band storage} size:
+    A [n]-by-[n] symmetric or Hermitian band matrix with [kd] superdiagonals or
+    subdiagonals is stored in a [(kd+1)]-by-[n] matrix where [kd << n].
+    [('n, 'kd) syband] corresponds to [kd + 1].
+
+    @see <http://www.netlib.org/lapack/lug/node124.html>
+         Band Storage (BLAS & LAPACK)
+    @since 0.2.0
+*)
+
+val syband_dyn : 'n t -> 'kd t -> ('n, 'kd) syband t
+(** [syband_dyn n kd] computs the band storage size of symmetric or Hermitian
+    band matrices with [kd] superdiagonals or subdiagonals.
+
+    @param n the number of rows or columns
+    @param kd the number of superdiagonals or subdiagonals
+
+    @raise Invalid_argument if [kd >= n].
+
     @since 0.2.0
  *)
 
