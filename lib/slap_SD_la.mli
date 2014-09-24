@@ -33,6 +33,26 @@ val asum : ('n, 'x_cd) vec -> float
 
 (** {3 Level 2} *)
 
+val sbmv : k:'k Size.t ->
+           ?y:('n, 'y_cd) vec ->
+           (('n, 'k) Size.syband, 'n, 'a_cd) mat ->
+           ?up:bool ->
+           ?alpha:float ->
+           ?beta:float ->
+           ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+(** [sbmv ~k ?y a ?up ?alpha ?beta x] computes [y := alpha * a * x + beta * y]
+    where [a] is a ['n]-by-['n] symmetric band matrix with [k]
+    super-(or sub-)diagonals, and [x] and [y] are ['n]-dimensional vectors.
+    @return vector [y], which is overwritten.
+    @param k the number of superdiangonals or subdiangonals
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param alpha default = [1.0]
+    @param beta default = [0.0]
+    @since 0.2.0
+ *)
+
 val ger : ?alpha:float -> ('m, 'x_cd) vec -> ('n, 'y_cd) vec ->
           ('m, 'n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat
 (** [ger ?alpha x y a] computes [a := alpha * x * y^T + a] with

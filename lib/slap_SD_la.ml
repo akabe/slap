@@ -30,6 +30,12 @@ let asum (n, ofsx, incx, x) =
 
 (** {3 Level 2} *)
 
+let sbmv ~k ?y (sbs, n, ar, ac, a) ?up ?alpha ?beta (n', ofsx, incx, x) =
+  assert(n = n' && sbs = Size.syband_dyn n k);
+  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
+  ignore (I.sbmv ~n ~k ~ofsy ~incy ~y ~ar ~ac a ?up ?alpha ?beta ~ofsx ~incx x);
+  (n, ofsy, incy, y)
+
 let ger ?(alpha = 1.0) (m, ofsx, incx, x) (n, ofsy, incy, y)
         (m', n', ar, ac, a) =
   assert(m = m' && n = n');
