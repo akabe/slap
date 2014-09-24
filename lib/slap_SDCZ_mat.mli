@@ -358,6 +358,81 @@ val unpacked : ?up:bool ->
     @since 0.2.0
  *)
 
+val geband_dyn : 'kl Size.t -> 'ku Size.t ->
+                 ?b:(('m, 'n, 'kl, 'ku) Size.geband, 'n, 'b_cd) mat ->
+                 ('m, 'n, 'a_cd) mat ->
+                 (('m, 'n, 'kl, 'ku) Size.geband, 'n, 'b_cd) mat
+(** [geband_dyn kl ku ?b a] converts matrix [a] into a matrix stored in band
+    storage.
+    @return matrix [b], which is overwritten.
+    @param kl the number of subdiagonals
+    @param ku the number of superdiagonals
+
+    @raise Invalid_arg if [kl >= dim1 a] or [ku >= dim2 a].
+    @since 0.2.0
+ *)
+
+val ungeband : 'm Size.t -> 'kl Size.t -> 'ku Size.t ->
+               ?fill_num:num_type option ->
+               ?a:('m, 'n, 'a_cd) mat ->
+               (('m, 'n, 'kl, 'ku) Size.geband, 'n, 'b_cd) mat ->
+               ('m, 'n, 'a_cd) mat
+(** [ungeband m kl ku ?a b] converts matrix [b] stored in band storage into
+    a matrix stored in the normal order.
+    @return matrix [a], which is overwritten.
+    @param m the number of rows in [a]
+    @param kl the number of subdiagonals
+    @param ku the number of superdiagonals
+    @param fill_num default = [Some 0]
+      - If [fill_num] = [None], the elements in the generated matrix are not
+        initialized;
+      - If [fill_num] = [Some c], the elements in the generated matrix are
+        initialized by [c].
+
+    @since 0.2.0
+ *)
+
+val syband_dyn : 'kd Size.t ->
+                 ?up:bool ->
+                 ?b:(('n, 'kd) Size.syband, 'n, 'b_cd) mat ->
+                 ('n, 'n, 'a_cd) mat ->
+                 (('n, 'kd) Size.syband, 'n, 'b_cd) mat
+(** [syband_dyn kd ?b a] converts matrix [a] into a matrix stored in
+    symmetric or Hermitian band storage.
+    @return matrix [b], which is overwritten.
+    @param kd the number of subdiagonals or superdiagonals
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+
+    @raise Invalid_arg if [kd >= dim1 a].
+    @since 0.2.0
+ *)
+
+val unsyband : 'kd Size.t ->
+               ?up:bool ->
+               ?fill_num:num_type option ->
+               ?a:('n, 'n, 'a_cd) mat ->
+               (('n, 'kd) Size.syband, 'n, 'b_cd) mat ->
+               ('n, 'n, 'a_cd) mat
+(** [unsyband kd ?a b] converts matrix [b] stored in symmetric or Hermitian
+    band storage into a matrix stored in the normal order.
+    @return matrix [a], which is overwritten.
+    @param kd the number of subdiagonals or superdiagonals
+    @param up default = [true]
+      - If [up] = [true], then [b] is treated as the upper triangular part of
+        symmetric or Hermitian matrix [a];
+      - If [up] = [false], then [b] is treated as the lower triangular part of
+        symmetric or Hermitian matrix [a];
+    @param fill_num default = [Some 0]
+      - If [fill_num] = [None], the elements in the generated matrix are not
+        initialized;
+      - If [fill_num] = [Some c], the elements in the generated matrix are
+        initialized by [c].
+
+    @since 0.2.0
+ *)
+
 (** {2 Arithmetic operations} *)
 
 val add_const : num_type ->

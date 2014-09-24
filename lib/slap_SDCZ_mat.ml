@@ -191,6 +191,16 @@ let packed = PMat.packed
 
 let unpacked ?up ?(fill_num = Some zero) = PMat.unpacked ?up ~fill_num
 
+let geband_dyn = PMat.geband_dyn
+
+let ungeband m kl ku ?(fill_num = Some zero) =
+  PMat.ungeband m kl ku ~fill_num
+
+let syband_dyn = PMat.syband_dyn
+
+let unsyband kd ?up ?(fill_num = Some zero) =
+  PMat.unsyband kd ?up ~fill_num
+
 (** {2 Arithmetic operations} *)
 
 let add_const c ?b (m, n, ar, ac, a) =

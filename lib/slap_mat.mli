@@ -157,7 +157,8 @@ val packed : ?up:bool ->
              ?x:('n Size.packed, 'num, 'prec, cnt) Vec.t ->
              ('n, 'n, 'num, 'prec, 'cd) t ->
              ('n Size.packed, 'num, 'prec, 'cnt) Vec.t
-(** [packed ?up ?x a] transforms matrix [a] into packed storage format.
+(** [packed ?up ?x a] transforms triangular matrix [a] into packed storage
+    format.
     @return vector [x], which is overwritten.
     @param up default = [true]
       - If [up] = [true], then the upper triangular part of [a] is packed;
@@ -171,7 +172,7 @@ val unpacked : ?up:bool ->
                ('n Size.packed, 'num, 'prec, cnt) Vec.t ->
                ('n, 'n, 'num, 'prec, 'cd) t
 (** [unpacked ?up ?fill_num ?a x] generates an upper or lower triangular matrix
-    from packed-storage-format vector [x].
+    from [x] stored in packed storage.
     @return matrix [a], which is overwritten.
     @param up default = [true]
       - If [up] = [true], then the upper triangular matrix is generated;
@@ -182,6 +183,83 @@ val unpacked : ?up:bool ->
         initialized;
       - If [fill_num] = [Some c], the elements in the generated matrix are
         initialized by [c].
+    @since 0.2.0
+ *)
+
+val geband_dyn : 'kl Size.t -> 'ku Size.t ->
+                 ?b:(('m, 'n, 'kl, 'ku) Size.geband, 'n, 'num, 'prec, 'b_cd) t ->
+                 ('m, 'n, 'num, 'prec, 'a_cd) t ->
+                 (('m, 'n, 'kl, 'ku) Size.geband, 'n, 'num, 'prec, 'b_cd) t
+(** [geband_dyn kl ku ?b a] converts matrix [a] into a matrix stored in band
+    storage.
+    @return matrix [b], which is overwritten.
+    @param kl the number of subdiagonals
+    @param ku the number of superdiagonals
+
+    @raise Invalid_arg if [kl >= dim1 a] or [ku >= dim2 a].
+    @since 0.2.0
+ *)
+
+val ungeband : 'm Size.t -> 'kl Size.t -> 'ku Size.t ->
+               ?fill_num:'num option ->
+               ?a:('m, 'n, 'num, 'prec, 'a_cd) t ->
+               (('m, 'n, 'kl, 'ku) Size.geband, 'n, 'num, 'prec, 'b_cd) t ->
+               ('m, 'n, 'num, 'prec, 'a_cd) t
+(** [ungeband m kl ku ?a b] converts matrix [b] stored in band storage into
+    a matrix stored in the normal order.
+    @return matrix [a], which is overwritten.
+    @param m the number of rows in [a]
+    @param kl the number of subdiagonals
+    @param ku the number of superdiagonals
+    @param fill_num default = [None] ({b Note}: The default value in
+      [Slap.[SDCZ].Mat.ungeband_dyn] is [Some 0], not [None].)
+      - If [fill_num] = [None], the elements in the generated matrix are not
+        initialized;
+      - If [fill_num] = [Some c], the elements in the generated matrix are
+        initialized by [c].
+
+    @since 0.2.0
+ *)
+
+val syband_dyn : 'kd Size.t ->
+                 ?up:bool ->
+                 ?b:(('n, 'kd) Size.syband, 'n, 'num, 'prec, 'b_cd) t ->
+                 ('n, 'n, 'num, 'prec, 'a_cd) t ->
+                 (('n, 'kd) Size.syband, 'n, 'num, 'prec, 'b_cd) t
+(** [syband_dyn kd ?b a] converts matrix [a] into a matrix stored in
+    symmetric or Hermitian band storage.
+    @return matrix [b], which is overwritten.
+    @param kd the number of subdiagonals or superdiagonals
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+
+    @raise Invalid_arg if [kd >= dim1 a].
+    @since 0.2.0
+ *)
+
+val unsyband : 'kd Size.t ->
+               ?up:bool ->
+               ?fill_num:'num option ->
+               ?a:('n, 'n, 'num, 'prec, 'a_cd) t ->
+               (('n, 'kd) Size.syband, 'n, 'num, 'prec, 'b_cd) t ->
+               ('n, 'n, 'num, 'prec, 'a_cd) t
+(** [unsyband kd ?a b] converts matrix [b] stored in symmetric or Hermitian
+    band storage into a matrix stored in the normal order.
+    @return matrix [a], which is overwritten.
+    @param kd the number of subdiagonals or superdiagonals
+    @param up default = [true]
+      - If [up] = [true], then [b] is treated as the upper triangular part of
+        symmetric or Hermitian matrix [a];
+      - If [up] = [false], then [b] is treated as the lower triangular part of
+        symmetric or Hermitian matrix [a];
+    @param fill_num default = [None] ({b Note}: The default value in
+      [Slap.[SDCZ].Mat.unsyband_dyn] is [Some 0], not [None].)
+      - If [fill_num] = [None], the elements in the generated matrix are not
+        initialized;
+      - If [fill_num] = [Some c], the elements in the generated matrix are
+        initialized by [c].
+
     @since 0.2.0
  *)
 
