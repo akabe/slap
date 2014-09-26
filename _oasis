@@ -95,6 +95,14 @@ Executable jacobi
   Install:        false
   CompiledObject: best
 
+Executable gesv_gbsv
+  Path:           examples/linsys
+  MainIs:         gesv_gbsv.ml
+  Build$:         flag(examples)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
 Executable trsv_tpsv
   Path:           examples/linsys
   MainIs:         trsv_tpsv.ml
