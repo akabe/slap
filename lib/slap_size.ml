@@ -94,6 +94,13 @@ let syband_dyn n kd =
   if kd >= n then invalid_arg "Slap.Size.syband_dyn: kd >= n";
   kd + 1
 
+type ('m, 'n, 'kl, 'ku) luband = ('m, 'n, 'kl, ('kl, 'ku) add) geband
+
+let luband_dyn m n kl ku =
+  if kl >= m then invalid_arg "Slap.Size.luband_dyn: kl >= m";
+  if ku >= n then invalid_arg "Slap.Size.luband_dyn: ku >= n";
+  kl + (kl + ku) + 1
+
 (** {2 Conversion between sizes and integers} *)
 
 module type SIZE =

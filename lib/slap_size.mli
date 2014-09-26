@@ -171,6 +171,31 @@ val syband_dyn : 'n t -> 'kd t -> ('n, 'kd) syband t
     @since 0.2.0
  *)
 
+type ('m, 'n, 'kl, 'ku) luband = ('m, 'n, 'kl, ('kl, 'ku) add) geband
+(** [('m, 'n, 'kl, 'ku) luband] represents {i band storage} size for LU
+    factorization: A ['m]-by-['n] band matrix with ['kl] subdiagonals and ['ku]
+    superdiagonals for LU factorization is stored in band storage format with
+    ['kl+'ku] superdiagonals.
+
+    @see <http://www.netlib.org/lapack/lug/node124.html>
+         Band Storage (BLAS & LAPACK)
+    @since 0.2.0
+*)
+
+val luband_dyn : 'm t -> 'n t -> 'kl t -> 'ku t -> ('m, 'n, 'kl, 'ku) luband t
+(** [luband_dyn m n kl ku] computs the band storage size for LU factorization of
+    [m]-by-[n] band matrices with [kl] subdiagonals and [ku] superdiagonals.
+
+    @param m the number of rows
+    @param n the number of columns
+    @param kl the number of subdiagonals
+    @param ku the number of superdiagonals
+
+    @raise Invalid_argument if [m >= kl] and [n >= ku].
+
+    @since 0.2.0
+ *)
+
 (** {2 Conversion between a size and an integer} *)
 
 (** The signature of modules as packages of types like [exists n. n Size.t]. *)
