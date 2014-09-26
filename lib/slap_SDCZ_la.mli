@@ -490,6 +490,35 @@ val trtrs : ?up:bool ->
             ('n, 'n, 'a_cd) mat ->
             ('n, 'nrhs, 'b_cd) mat -> unit
 
+val tbtrs : kd:'kd Size.t ->
+            ?up:bool ->
+            trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+            ?diag:Common.diag ->
+            (('n, 'kd) Size.syband, 'n, 'a_cd) mat ->
+            ('n, 'nrhs, 'b_cd) mat -> unit
+(** [tbtrs ~kd ?up ~trans ?diag ab b] solves systems of linear equations
+    [OP(A) * x = b] where [A] is a triangular band matrix with [kd] subdiagonals,
+    each column of matrix [b] is the r.h.s vector, and each column of matrix [x]
+    is the corresponding solution. Matrix [A] is stored into [ab] in band
+    storage format. The solution [x] is returned in [b].
+
+    @param kd the number of subdiagonals or superdiagonals in [A].
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [A] is used;
+      - If [up] = [false], then the lower triangular part of [A] is used.
+    @param trans the transpose flag for [A]:
+      - If [trans] = {!Slap.Common.normal}, then [OP(A)] = [A];
+      - If [trans] = {!Slap.Common.trans}, then [OP(A)] = [A^T];
+      - If [trans] = {!Slap.Common.conjtr}, then [OP(A)] = [A^H]
+        (the conjugate transpose of [A]).
+    @param diag default = [`N]
+      - If [diag] = [`U], then [A] is unit triangular;
+      - If [diag] = [`N], then [A] is not unit triangular.
+
+    @raise Failure if the matrix [A] is singular.
+    @since 0.2.0
+ *)
+
 val trtri : ?up:bool ->
             ?diag:Common.diag ->
             ('n, 'n, 'cd) mat -> unit

@@ -283,6 +283,12 @@ let trtrs ?up ~trans ?diag (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
   then I.trtrs ~n ?up ~trans:(lacaml_trans3 trans)
                ?diag ~ar ~ac a ~nrhs ~br ~bc b
 
+let tbtrs ~kd ?up ~trans ?diag (sbsize, n, abr, abc, ab) (n', nrhs, br, bc, b) =
+  assert(n = n' && sbsize = Size.syband_dyn n kd);
+  if n <> 0 && nrhs <> 0
+  then I.tbtrs ~n ~kd ?up ~trans:(lacaml_trans3 trans)
+               ?diag ~abr ~abc ab ~nrhs ~br ~bc b
+
 let trtri ?up ?diag (n, n', ar, ac, a) =
   assert(n = n');
   if n <> 0 then I.trtri ~n ?up ?diag ~ar ~ac a
