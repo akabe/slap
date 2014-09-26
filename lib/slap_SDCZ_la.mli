@@ -510,6 +510,28 @@ val gesv : ?ipiv:('n, cnt) Common.int32_vec ->
            ('n, 'n, 'a_cd) mat ->
            ('n, 'nrhs, 'b_cd) mat -> unit
 
+val gbsv : ?ipiv:('n, cnt) Common.int32_vec ->
+           (('n, 'n, 'kl, 'ku) Size.luband, 'n, 'a_cd) mat ->
+           'kl Size.t -> 'ku Size.t ->
+           ('n, 'nrhs, 'b_cd) mat -> unit
+(** [gbsv ?ipiv ab kl ku b] solves a system of linear equations [A * X = B]
+    where [A] is a ['n]-by-['n] band matrix, each column of matrix [B] is the
+    r.h.s. vector, and each column of matrix [X] is the corresponding solution.
+    The matrix [A] with [kl] subdiagonals and [ku] superdiagonals is stored into
+    [ab] in band storage format for LU factorizaion.
+
+    This routine uses LU factorization: [A = P * L * U] with  permutation matrix
+    [P], a lower triangular matrix [L] and an upper triangular matrix [U].
+    By this function, the upper triangular part of [A] is replaced by [U], the
+    lower triangular part by [L], and the solution [X] is returned in [B].
+
+    @param ipiv A ['n]-dimensional contiguous vector corresponding to [P].
+                This is internally computed if omitted.
+
+    @raise Failure if the matrix is singular.
+    @since 0.2.0
+ *)
+
 val posv : ?up:bool ->
            ('n, 'n, 'a_cd) mat ->
            ('n, 'nrhs, 'b_cd) mat -> unit

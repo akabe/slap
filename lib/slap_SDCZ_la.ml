@@ -310,6 +310,12 @@ let gesv ?ipiv (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
   if n <> 0 && nrhs <> 0
   then I.gesv ~n ?ipiv:(PVec.opt_cnt_vec n ipiv) ~ar ~ac a ~nrhs ~br ~bc b
 
+let gbsv ?ipiv (lusize, n, abr, abc, ab) kl ku (n', nrhs, br, bc, b) =
+  assert(lusize = Size.luband_dyn n n kl ku && n = n');
+  if n <> 0 && nrhs <> 0
+  then I.gbsv ~n ?ipiv:(PVec.opt_cnt_vec n ipiv)
+              ~abr ~abc ab kl ku ~nrhs ~br ~bc b
+
 let posv ?up (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
   assert(n = n' && n = n'');
   if n <> 0 && nrhs <> 0
