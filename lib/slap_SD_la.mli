@@ -435,7 +435,8 @@ val sbev : kd:'kd Size.t ->
 
     @return vector [w], which is overwritten.
     @param kd   the number of subdiagonals or superdiagonals.
-    @param z    eigenvectors are returned in [z] if it is given.
+    @param z    The eigenvectors are returned in [z] if it is given.
+                They are not computed if omitted.
     @param up   default = [true]
       - If [up] = [true], then the upper triangular part of [ab] is used;
       - If [up] = [false], then the lower triangular part of [ab] is used.
@@ -443,7 +444,7 @@ val sbev : kd:'kd Size.t ->
     @param w    [w] is replaced by eigenvalues if it is given, or newly
                 allocated if omitted.
 
-    @raise if the function fails to converge.
+    @raise Failure if the function fails to converge.
     @since 0.2.0
  *)
 
