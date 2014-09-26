@@ -331,6 +331,13 @@ let pbsv ?up ~kd (sbsize, n, abr, abc, ab) (n', nrhs, br, bc, b) =
   if n <> 0 && nrhs <> 0
   then I.pbsv ~n ?up ~kd ~abr ~abc ab ~nrhs ~br ~bc b
 
+let ptsv (n, ofsd, incd, d) (np, ofse, ince, e) (n', nrhs, br, bc, b) =
+  assert(n = n' && n - 1 = np
+         && PVec.check_cnt n ofsd incd d
+         && PVec.check_cnt np ofse ince e);
+  if n <> 0 && nrhs <> 0
+  then I.ptsv ~n ~ofsd d ~ofse e ~nrhs ~br ~bc b
+
 let sysv_opt_lwork ?up (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
   assert(n = n' && n = n'');
   I.sysv_opt_lwork ~n ?up ~ar ~ac a ~nrhs ~br ~bc b

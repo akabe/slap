@@ -580,6 +580,22 @@ val pbsv : ?up:bool -> kd:'kd Size.t ->
     @since 0.2.0
  *)
 
+val ptsv : ('n, cnt) vec ->
+           ('n Size.p, cnt) vec ->
+           ('n, 'nrhs, 'b_cd) mat -> unit
+(** [ptsv d e b] solves systems of linear equations [A * x = b] where [A] is a
+    ['n]-by-['n] symmetric positive-definite tridiagonal matrix with diagonal
+    elements [d] and subdiagonal elements [e], each column of matrix [b] is the
+    r.h.s vector, and each column of matrix [x] is the corresponding solution.
+    The solution [x] is returned in [b].
+
+    This routine uses the Cholesky decomposition: [A = L^T * L] (real) or
+    [A = L^H * L] (complex) where [L] is a lower triangular matrix.
+
+    @raise Failure if the matrix is singular.
+    @since 0.2.0
+ *)
+
 val sysv_opt_lwork : ?up:bool ->
                      ('n, 'n, 'a_cd) mat ->
                      ('n, 'nrhs, 'b_cd) mat -> (module Size.SIZE)
