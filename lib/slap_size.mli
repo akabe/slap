@@ -58,6 +58,15 @@ val succ : 'n t -> 'n s t
     @return [n] + [1]
  *)
 
+type 'n p
+
+val pred_dyn : 'n t -> 'n p t
+(** [pred_dyn n]
+    @return [n] - [1]
+    @raise Invalid_arg if [n <= 0].
+    @since 0.2.0
+ *)
+
 type ('m, 'n) add
 
 val add : 'm t -> 'n t -> ('m, 'n) add t

@@ -45,6 +45,12 @@ let ten = 10
 
 let succ = Pervasives.succ
 
+type 'n p
+
+let pred_dyn n =
+  if n <= 0 then invalid_arg "Slap.Size.pred_dyn";
+  n - 1
+
 type ('m, 'n) add
 
 let add = ( + )
