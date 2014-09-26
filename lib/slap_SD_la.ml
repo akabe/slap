@@ -414,6 +414,21 @@ let syevd ?vectors ?up ?work ?iwork ?w (n, n', ar, ac, a) =
                    ~ar ~ac a in
   (n, 1, 1, w)
 
+(** {4 sbev} *)
+
+type 'n sbev_min_lwork
+
+let sbev_min_lwork = I.sbev_min_lwork
+
+let sbev ~kd ?z ?up ?work ?w (sbsize, n, abr, abc, ab) =
+  assert(sbsize = Size.syband_dyn n kd);
+  let zr, zc, z = PMat.opt_mat_alloc prec n n z in
+  let w = I.sbev ~n ~kd ~zr ~zc ~z ?up
+                 ?work:(PVec.opt_work work)
+                 ?w:(PVec.opt_cnt_vec n w)
+                 ~abr ~abc ab in
+  (n, 1, 1, w)
+
 (** {3 Symmetric-matrix eigenvalue and singular value problems
        (expert & RRR drivers)} *)
 

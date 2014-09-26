@@ -417,6 +417,36 @@ val syevd : ?vectors:bool ->
             ?w:('n, cnt) vec ->
             ('n, 'n, 'a_cd) mat -> ('n, 'w_cd) vec
 
+(** {4 sbev} *)
+
+type 'n sbev_min_lwork
+
+val sbev_min_lwork : 'n Size.t -> 'n sbev_min_lwork Size.t
+
+val sbev : kd:'kd Size.t ->
+           ?z:('n, 'n, 'z_cd) mat ->
+           ?up:bool ->
+           ?work:('lwork, cnt) vec ->
+           ?w:('n, cnt) vec ->
+           (('n, 'kd) Size.syband, 'n, 'a_cd) mat -> ('n, 'cnt) vec
+(** [sbev ~kd ?z ?up ?work ?w ab] computes all eigenvalues and, optionally,
+    eigenvectors of real symmetric band matrix [ab] store in band storage
+    format.
+
+    @return vector [w], which is overwritten.
+    @param kd   the number of subdiagonals or superdiagonals.
+    @param z    eigenvectors are returned in [z] if it is given.
+    @param up   default = [true]
+      - If [up] = [true], then the upper triangular part of [ab] is used;
+      - If [up] = [false], then the lower triangular part of [ab] is used.
+    @param work workspace for [sbev]
+    @param w    [w] is replaced by eigenvalues if it is given, or newly
+                allocated if omitted.
+
+    @raise if the function fails to converge.
+    @since 0.2.0
+ *)
+
 (** {3 Symmetric-matrix eigenvalue and singular value problems
        (expert & RRR drivers)} *)
 
