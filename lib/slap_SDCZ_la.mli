@@ -557,6 +557,29 @@ val ppsv : ?up:bool ->
     @since 0.2.0
  *)
 
+val pbsv : ?up:bool -> kd:'kd Size.t ->
+           (('n, 'kd) Size.syband, 'n, 'ab_cd) mat ->
+           ('n, 'nrhs, 'b_cd) mat -> unit
+(** [pbsv ?up ~kd ab b] solves systems of linear equations [ab * x = b] where
+    [ab] is a ['n]-by-['n] symmetric positive-definite band matrix with [kd]
+    subdiangonals, stored in band storage format, each column of matrix [b] is
+    the r.h.s vector, and each column of matrix [x] is the corresponding
+    solution. The solution [x] is returned in [b].
+
+    This routine uses the Cholesky decomposition:
+    - If [up] = [true], then [ab = U^T * U] (real) or [ab = U^H * U] (complex)
+    - If [up] = [false], then [ab = L^T * L] (real) or [ab = L^H * L] (complex)
+    where [U] and [L] are the upper and lower triangular matrices, respectively.
+
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [ab] is used;
+      - If [up] = [false], then the lower triangular part of [ab] is used.
+    @param kd the number of subdiagonals or superdiagonals in [ab].
+
+    @raise Failure if the matrix is singular.
+    @since 0.2.0
+ *)
+
 val sysv_opt_lwork : ?up:bool ->
                      ('n, 'n, 'a_cd) mat ->
                      ('n, 'nrhs, 'b_cd) mat -> (module Size.SIZE)

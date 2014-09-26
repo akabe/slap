@@ -326,6 +326,11 @@ let ppsv ?up (k, ofsap, incap, ap) (n, nrhs, br, bc, b) =
   if n <> 0 && nrhs <> 0
   then I.ppsv ~n ?up ~ofsap ap ~br ~bc b
 
+let pbsv ?up ~kd (sbsize, n, abr, abc, ab) (n', nrhs, br, bc, b) =
+  assert(sbsize = Size.syband_dyn n kd && n = n');
+  if n <> 0 && nrhs <> 0
+  then I.pbsv ~n ?up ~kd ~abr ~abc ab ~nrhs ~br ~bc b
+
 let sysv_opt_lwork ?up (n, n', ar, ac, a) (n'', nrhs, br, bc, b) =
   assert(n = n' && n = n'');
   I.sysv_opt_lwork ~n ?up ~ar ~ac a ~nrhs ~br ~bc b
