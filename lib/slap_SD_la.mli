@@ -544,3 +544,34 @@ val sygv : ?vectors:bool ->
     @param a a ['n]-by-['n] symmetric matrix.
     @param b a ['n]-by-['n] summetric positive definite matrix.
     *)
+
+(** {4 sbgv} *)
+
+val sbgv : ka:'ka Size.t -> kb:'kb Size.t ->
+           ?z:('n, 'n, 'z_cd) mat ->
+           ?up:bool ->
+           ?work:('lwork, cnt) vec ->
+           ?w:('n, cnt) vec ->
+           (('n, 'ka) Size.syband, 'n, 'ab_cd) mat ->
+           (('n, 'kb) Size.syband, 'n, 'bb_cd) mat -> ('n, 'cnt) vec
+(** [sbgv ~ka ~kb ?z ?up ?work ?w ab bb] solves a general eigenvalue problem
+    [ab * z = (lambda) * bb * z] where [ab] is a ['n]-by-['n] symmetric band
+    matrix with [ka] subdiagonals, and [bb] is a ['n]-by-['n] symmetric
+    positive-definite band matrix with [kb] subdiagonals. Both [ab] and [bb]
+    are stored in band storage format.
+
+    @return vector [w], which is overwritten.
+    @param ka   the number of subdiagonals or superdiagonals of [ab].
+    @param kb   the number of subdiagonals or superdiagonals of [bb].
+    @param z    The eigenvectors are returned in [z] if it is given.
+                They are not computed if omitted.
+    @param up   default = [true]
+      - If [up] = [true], then the upper triangular part of [ab] is used;
+      - If [up] = [false], then the lower triangular part of [ab] is used.
+    @param work workspace for [sbgv]
+    @param w    [w] is replaced by eigenvalues if it is given, or newly
+                allocated if omitted.
+
+    @raise Failure if the function fails to converge.
+    @since 0.2.0
+ *)

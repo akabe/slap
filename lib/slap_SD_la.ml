@@ -508,3 +508,17 @@ let sygv ?vectors ?up ?work ?w ?itype (n, n', ar, ac, a)
   let w = I.sygv ~n ?vectors ?up ?work:(PVec.opt_work work)
                  ?w:(PVec.opt_cnt_vec n w) ?itype ~ar ~ac a ~br ~bc b in
   (n, 1, 1, w)
+
+(** {4 sbgv} *)
+
+let sbgv ~ka ~kb ?z ?up ?work ?w
+         (sbsize_a, n, abr, abc, ab) (sbsize_b, n', bbr, bbc, bb) =
+  assert(n = n');
+  assert(sbsize_a = Size.syband_dyn n ka);
+  assert(sbsize_b = Size.syband_dyn n kb);
+  let zr, zc, z = PMat.opt_mat_alloc prec n n z in
+  let w = I.sbgv ~n ~ka ~kb ~zr ~zc ~z ?up
+                 ?work:(PVec.opt_work work)
+                 ?w:(PVec.opt_cnt_vec n w)
+                 ~ar:abr ~ac:abc ab ~br:bbr ~bc:bbc bb in
+  (n, 1, 1, w)
