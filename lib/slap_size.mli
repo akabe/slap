@@ -136,7 +136,8 @@ type ('m, 'n, 'kl, 'ku) geband
 (** [('m, 'n, 'kl, 'ku) geband] represents {i band storage} size:
     A ['m]-by-['n] band matrix with ['kl] subdiagonals and ['ku] superdiagonals
     is stored in a [('kl+'ku+1)]-by-['n] matrix where ['kl, 'ku << min('m, 'n)].
-    [('m, 'kl, 'ku) geband] corresponds to ['kl + 'ku + 1].
+    [('m, 'n, 'kl, 'ku) geband] corresponds to the number of columns of a
+    band-storage-format matrix for such a band matrix.
 
     @see <http://www.netlib.org/lapack/lug/node124.html>
          Band Storage (BLAS & LAPACK)
@@ -148,7 +149,7 @@ val geband_dyn : 'm t -> 'n t -> 'kl t -> 'ku t -> ('m, 'n, 'kl, 'ku) geband t
     matrices with [kl] subdiagonals and [ku] superdiagonals.
 
     @param m the number of rows
-    @param n the number of rows
+    @param n the number of columns
     @param kl the number of subdiagonals
     @param ku the number of superdiagonals
 
@@ -161,7 +162,8 @@ type ('n, 'kd) syband
 (** [('n, 'kd) syband] represents {i symmetric or Hermitian band storage} size:
     A [n]-by-[n] symmetric or Hermitian band matrix with [kd] superdiagonals or
     subdiagonals is stored in a [(kd+1)]-by-[n] matrix where [kd << n].
-    [('n, 'kd) syband] corresponds to [kd + 1].
+    [('n, 'kd) syband] corresponds to the number of columns of a
+    band-storage-format matrix for such a symmetric band matrix.
 
     @see <http://www.netlib.org/lapack/lug/node124.html>
          Band Storage (BLAS & LAPACK)
