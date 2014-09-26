@@ -201,6 +201,11 @@ let syband_dyn = PMat.syband_dyn
 let unsyband kd ?up ?(fill_num = Some zero) =
   PMat.unsyband kd ?up ~fill_num
 
+let luband_dyn = PMat.luband_dyn
+
+let unluband m kl ku ?(fill_num = Some zero) =
+  PMat.unluband m kl ku ~fill_num
+
 (** {2 Arithmetic operations} *)
 
 let add_const c ?b (m, n, ar, ac, a) =

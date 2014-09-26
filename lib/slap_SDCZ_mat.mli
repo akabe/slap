@@ -433,6 +433,40 @@ val unsyband : 'kd Size.t ->
     @since 0.2.0
  *)
 
+val luband_dyn : 'kl Size.t -> 'ku Size.t ->
+                 ?ab:(('m, 'n, 'kl, 'ku) Size.luband, 'n, 'b_cd) mat ->
+                 ('m, 'n, 'a_cd) mat ->
+                 (('m, 'n, 'kl, 'ku) Size.luband, 'n, 'b_cd) mat
+(** [luband_dyn kl ku ?ab a] converts matrix [a] into a matrix stored in band
+    storage for LU factorization.
+    @return matrix [ab], which is overwritten.
+    @param kl the number of subdiagonals
+    @param ku the number of superdiagonals
+
+    @raise Invalid_arg if [kl >= dim1 a] or [ku >= dim2 a].
+    @since 0.2.0
+ *)
+
+val unluband : 'm Size.t -> 'kl Size.t -> 'ku Size.t ->
+               ?fill_num:num_type option ->
+               ?a:('m, 'n, 'a_cd) mat ->
+               (('m, 'n, 'kl, 'ku) Size.luband, 'n, 'b_cd) mat ->
+               ('m, 'n, 'a_cd) mat
+(** [unluband m kl ku ?a ab] converts matrix [ab] stored in band storage for LU
+    factorization into a matrix stored in the normal order.
+    @return matrix [a], which is overwritten.
+    @param m the number of rows in [a]
+    @param kl the number of subdiagonals
+    @param ku the number of superdiagonals
+    @param fill_num default = [Some 0]
+      - If [fill_num] = [None], the elements in the generated matrix are not
+        initialized;
+      - If [fill_num] = [Some c], the elements in the generated matrix are
+        initialized by [c].
+
+    @since 0.2.0
+ *)
+
 (** {2 Arithmetic operations} *)
 
 val add_const : num_type ->

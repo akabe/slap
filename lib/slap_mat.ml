@@ -258,6 +258,17 @@ let unsyband kd ?(up = true) ?fill_num ?a (sbs, n, br, bc, b) =
   then ungeband n 0 kd ?fill_num ?a (sbs, n, br, bc, b)
   else ungeband n kd 0 ?fill_num ?a (sbs, n, br, bc, b)
 
+let luband_dyn kl ku ?ab (m, n, ar, ac, a) =
+  let lusize = Size.luband_dyn m n kl ku in
+  let gbsize = Size.geband_dyn m n kl ku in
+  let abr, abc, ab = opt_mat_alloc (Array2.kind a) lusize n ab in
+  ignore (geband_dyn kl ku ~b:(gbsize, n, abr + kl, abc, ab) (m, n, ar, ac, a));
+  (lusize, n, abr, abc, ab)
+
+let unluband m kl ku ?fill_num ?a (lusize, n, abr, abc, ab) =
+  let gbsize = lusize - kl in
+  ungeband m kl ku ?fill_num ?a (gbsize, n, abr + kl, abc, ab)
+
 (** {2 Iterators} *)
 
 let mapi kind f ?b (m, n, ar, ac, a) =
