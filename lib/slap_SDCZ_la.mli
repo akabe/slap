@@ -44,7 +44,7 @@ val copy : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
  *)
 
 val nrm2 : ('n, 'cd) vec -> float
-(** [nrm2 x] retruns [||x||]. *)
+(** [nrm2 x] retruns the L2 norm of vector [x]: [||x||]. *)
 
 val axpy : ?alpha:num_type -> x:('n, 'x_cd) vec -> ('n, 'y_cd) vec -> unit
 (** [axpy ?alpha ~x y] executes [y := alpha * x + y] with scalar value [alpha],
@@ -241,8 +241,10 @@ val symm : side:('k, 'm, 'n) Common.side ->
            ('k, 'k, 'a_cd) mat ->
            ('m, 'n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat
 (** [symm ~side ?up ?beta ?c ?alpha a b] executes
-    [c := alpha * a * b + beta * c] (if [side] = {!Slap.Common.left}) or
-    [c := alpha * b * a + beta * c] (if [side] = {!Slap.Common.right})
+
+    - [c := alpha * a * b + beta * c] (if [side] = {!Slap.Common.left}) or
+    - [c := alpha * b * a + beta * c] (if [side] = {!Slap.Common.right})
+
     where [a] is a symmterix matrix, and [b] and [c] are general matrices.
 
     @param side the side flag to specify direction of multiplication of [a] and
@@ -262,8 +264,10 @@ val trmm : side:('k, 'm, 'n) Common.side ->
            a:('k, 'k, 'a_cd) mat ->
            ('m, 'n, 'b_cd) mat -> unit
 (** [trmm ~side ?up ~transa ?diag ?alpha ~a b] executes
-    [b := alpha * OP(a) * b] (if [side] = {!Slap.Common.left}) or
-    [b := alpha * b * OP(a)] (if [side] = {!Slap.Common.right})
+
+    - [b := alpha * OP(a) * b] (if [side] = {!Slap.Common.left}) or
+    - [b := alpha * b * OP(a)] (if [side] = {!Slap.Common.right})
+
     where [a] is a triangular matrix, and [b] is a general matrix.
 
     @param side the side flag to specify direction of multiplication of [a] and
@@ -289,11 +293,14 @@ val trsm : side:('k, 'm, 'n) Common.side ->
            ?alpha:num_type ->
            a:('k, 'k, 'a_cd) mat ->
            ('m, 'n, 'b_cd) mat -> unit
-(** [trsm ~side ?up ~transa ?diag ?alpha ~a b] solves linear systems
-    [OP(a) * x = alpha * b] (if [side] = {!Slap.Common.left}) or
-    [x * OP(a) = alpha * b] (if [side] = {!Slap.Common.right})
+(** [trsm ~side ?up ~transa ?diag ?alpha ~a b] solves a system of linear
+    equations
+
+    - [OP(a) * x = alpha * b] (if [side] = {!Slap.Common.left}) or
+    - [x * OP(a) = alpha * b] (if [side] = {!Slap.Common.right})
+
     where [a] is a triangular matrix, and [b] is a general matrix.
-    The solution [x] is destructively assigned to [b].
+    The solution [x] is returned by [b].
 
     @param side the side flag to specify direction of multiplication of [a] and
                 [b].
@@ -319,8 +326,10 @@ val syrk : ?up:bool ->
            ?alpha:num_type ->
            ('a_n, 'a_k, 'a_cd) mat -> ('n, 'n, 'c_cd) mat
 (** [syrk ?up ?beta ?c ~trans ?alpha a] executes
-    [c := alpha * a * a^T + beta * c] (if [trans] = {!Slap.Common.normal}) or
-    [c := alpha * a^T * a + beta * c] (if [trans] = {!Slap.Common.trans})
+
+    - [c := alpha * a * a^T + beta * c] (if [trans] = {!Slap.Common.normal}) or
+    - [c := alpha * a^T * a + beta * c] (if [trans] = {!Slap.Common.trans})
+
     where [a] is a general matrix and [c] is a symmetric matrix.
 
     @param up default = [true]
@@ -342,10 +351,12 @@ val syr2k : ?up:bool ->
             ('p, 'q, 'b_cd) mat ->
             ('n, 'n, 'c_cd) mat
 (** [syr2k ?up ?beta ?c ~trans ?alpha a b] computes
-    [c := alpha * a * b^T + alpha * b * a^T + beta * c]
-    (if [trans] = {!Slap.Common.normal}) or
-    [c := alpha * a^T * b + alpha * b^T * a + beta * c]
-    (if [trans] = {!Slap.Common.trans})
+
+    - [c := alpha * a * b^T + alpha * b * a^T + beta * c]
+      (if [trans] = {!Slap.Common.normal}) or
+    - [c := alpha * a^T * b + alpha * b^T * a + beta * c]
+      (if [trans] = {!Slap.Common.trans})
+
     with symmetric matrix [c], and general matrices [a] and [b].
 
     @param up default = [true]
@@ -376,10 +387,11 @@ val lassq : ?scale:float ->
             ?sumsq:float ->
             ('n, 'cd) vec ->
             float * float
-(** [lassq ?scale ?sumsq x] see LAPACK documentation.
-    @return [(scl, ssq)]
-    @param scale default = 0.
-    @param sumsq default = 1.
+(** [lassq ?scale ?sumsq x]
+    @return [(scl, smsq)] where [scl] and [smsq] satisfy
+    [scl^2 * smsq = x1^2 + x2^2 + ... + xn^2 + scale^2 * smsq].
+    @param scale default = [0.0]
+    @param sumsq default = [1.0]
  *)
 
 type larnv_liseed = Size.z Size.s Size.s Size.s Size.s
@@ -389,12 +401,22 @@ val larnv : ?idist:[ `Normal | `Uniform0 | `Uniform1 ] ->
             x:('n, cnt) vec ->
             unit ->
             ('n, 'cnt) vec
+(** [larnv ?idist ?iseed ~x ()] generates a random vector with the random
+    distribution specified by [idist] and random seed [iseed].
+    @return vector [x], which is overwritten.
+    @param idist default = [`Normal]
+    @param iseed a four-dimensional integer vector with all ones.
+*)
 
 type ('m, 'a) lange_min_lwork
 
 val lange_min_lwork : 'm Size.t ->
                       'a Common.norm4 ->
                       ('m, 'a) lange_min_lwork Size.t
+(** [lange_min_lwork m norm] computes the minimum length of workspace for
+    [lange] routine. [m] is the number of rows in a matrix, and [norm] is
+    the sort of matrix norms.
+ *)
 
 val lange : ?norm:'a Common.norm4 ->
             ?work:('lwork, cnt) rvec ->
@@ -402,7 +424,12 @@ val lange : ?norm:'a Common.norm4 ->
 (** [lange ?norm ?work a]
     @return the norm of matrix [a].
     @param norm default = {!Slap.Common.norm_1}.
-    @param work default = allocated work space for norm {!Slap.Common.norm_inf}.
+      - If [norm] = {!Slap.Common.norm_1}, the one norm is returned;
+      - If [norm] = {!Slap.Common.norm_inf}, the infinity norm is returned;
+      - If [norm] = {!Slap.Common.norm_amax}, the largest absolute value of
+        elements in matrix [a] (not a matrix norm) is returned;
+      - If [norm] = {!Slap.Common.norm_frob}, the Frobenius norm is returned.
+    @param work default = an optimum-length vector.
  *)
 
 val lauum : ?up:bool -> ('n, 'n, 'cd) mat -> unit
@@ -422,73 +449,236 @@ val lauum : ?up:bool -> ('n, 'n, 'cd) mat -> unit
 val getrf : ?ipiv:(('m, 'n) Size.min, cnt) Common.int32_vec ->
             ('m, 'n, 'cd) mat ->
             (('m, 'n) Size.min, 'cnt) Common.int32_vec
+(** [getrf ?ipiv a] computes LU factorization of matrix [a] using partial
+    pivoting with row interchanges: [a = P * L * U] where [P] is a permutation
+    matrix, and [L] and [U] are lower and upper triangular matrices,
+    respectively. the permutation matrix is returned in [ipiv].
+
+    @return vector [ipiv], which is overwritten.
+
+    @raise Failure if the matrix is singular.
+ *)
 
 val getrs : ?ipiv:(('n, 'n) Size.min, cnt) Common.int32_vec ->
             trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
             ('n, 'n, 'a_cd) mat ->
             ('n, 'n, 'b_cd) mat -> unit
+(** [getrs ?ipiv trans a b] solves systems of linear equations [OP(a) * x = b]
+    where [a] a ['n]-by-['n] general matrix, each column of matrix [b] is the
+    r.h.s. vector, and each column of matrix [x] is the corresponding solution.
+    The solution [x] is returned in [b].
+
+    @param ipiv  a result of [gesv] or [getrf]. It is internally computed by
+                 [getrf] if omitted.
+    @param trans the transpose flag for [a]:
+      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      (the conjugate transpose of [a]).
+
+    @raise Failure if the matrix is singular.
+ *)
 
 type 'n getri_min_lwork
 
-val getri_min_lwork : 'n Size.t -> 'ngetri_min_lwork Size.t
+val getri_min_lwork : 'n Size.t -> 'n getri_min_lwork Size.t
+(** [getri_min_lwork n] computes the minimum length of workspace for [getri]
+    routine. [n] is the number of columns or rows in a matrix.
+ *)
 
 val getri_opt_lwork : ('n, 'n, 'cd) mat -> (module Size.SIZE)
+(** [getri_opt_lwork a] computes the optimal length of workspace for [getri]
+    routine.
+ *)
 
 val getri : ?ipiv:(('n, 'n) Size.min, cnt) Common.int32_vec ->
             ?work:('lwork, cnt) vec ->
             ('n, 'n, 'cd) mat -> unit
 (** [getri ?ipiv ?work a] computes the inverse of general matrix [a] by
-    LU-factorization of [getrf].
+    LU-factorization. The inverse matrix is returned in [a].
+
+    @param ipiv a result of [gesv] or [getrf]. It is internally computed by
+                [getrf] if omitted.
+    @param work default = an optimum-length vector.
+
     @raise Failure if the matrix is singular.
  *)
 
 type sytrf_min_lwork
 
 val sytrf_min_lwork : unit -> sytrf_min_lwork Size.t
+(** [sytrf_min_lwork ()] computes the minimum length of workspace for [sytrf]
+    routine.
+ *)
 
 val sytrf_opt_lwork : ?up:bool ->
                       ('n, 'n, 'cd) mat -> (module Size.SIZE)
+(** [sytrf_opt_lwork ?up a] computes the optimal length of workspace for [sytrf]
+    routine.
+
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+ *)
 
 val sytrf : ?up:bool ->
             ?ipiv:('n, cnt) Common.int32_vec ->
             ?work:('lwork, cnt) vec ->
             ('n, 'n, 'cd) mat -> ('n, 'cnt) Common.int32_vec
+(** [sytrf ?up ?ipiv ?work a] factorizes symmetric matrix [a] using the
+    Bunch-Kaufman diagonal pivoting method:
+
+    - [a = P * U * D * U^T * P^T] if [up] = [true];
+    - [a = P * L * D * L^T * P^T] if [up] = [false]
+
+    where [P] is a permutation matrix, [U] and [L] are upper and lower
+    triangular matrices with unit diagonal, and [D] is a symmetric
+    block-diagonal matrix. The permutation matrix is returned in [ipiv].
+
+    @return vector [ipiv], which is overwritten.
+    @param up default = [true]
+    @param work default = an optimum-length vector.
+
+    @raise Failure if [a] is singular.
+ *)
 
 val sytrs : ?up:bool ->
             ?ipiv:('n, cnt) Common.int32_vec ->
             ('n, 'n, 'a_cd) mat ->
             ('n, 'nrhs, 'b_cd) mat -> unit
+(** [sytrs ?up ?ipiv a b] solves systems of linear equations [a * x = b] where
+    [a] is a symmetric matrix, each column of matrix [b] is the r.h.s. vector,
+    and each column of matrix [x] is the corresponding solution.
+    The solution [x] is returned in [b].
+
+    This routine uses the Bunch-Kaufman diagonal pivoting method:
+
+    - [a = P * U * D * U^T * P^T] if [up] = [true];
+    - [a = P * L * D * L^T * P^T] if [up] = [false]
+
+    where [P] is a permutation matrix, [U] and [L] are upper and lower
+    triangular matrices with unit diagonal, and [D] is a symmetric
+    block-diagonal matrix.
+
+    @param up   default = [true]
+    @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
+                omitted.
+
+    @raise Failure if [a] is singular.
+ *)
 
 type 'n sytri_min_lwork
 
 val sytri_min_lwork : 'n Size.t -> 'n sytri_min_lwork Size.t
+(** [sytri_min_lwork ()] computes the minimum length of workspace for [sytri]
+    routine.
+ *)
 
 val sytri : ?up:bool ->
             ?ipiv:('n, cnt) Common.int32_vec ->
             ?work:('lwork, cnt) vec ->
             ('n, 'n, 'cd) mat -> unit
+(** [sytri ?up ?ipiv ?work a] computes the inverse of symmetric matrix [a] using
+    the Bunch-Kaufman diagonal pivoting method:
+
+    - [a = P * U * D * U^T * P^T] if [up] = [true];
+    - [a = P * L * D * L^T * P^T] if [up] = [false]
+
+    where [P] is a permutation matrix, [U] and [L] are upper and lower
+    triangular matrices with unit diagonal, and [D] is a symmetric
+    block-diagonal matrix.
+
+    @param up   default = [true]
+    @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
+                omitted.
+    @param work default = an optimum-length vector.
+
+    @raise Failure if [a] is singular.
+ *)
 
 val potrf : ?up:bool ->
             ?jitter:num_type ->
             ('n, 'n, 'cd) mat -> unit
+(** [potrf ?up ?jitter a] computes the Cholesky factorization of symmetrix
+    (Hermitian) positive-definite matrix [a]:
+
+    - [a = U^T * U] (real) or [a = U^H * U] (complex) if [up] = [true];
+    - [a = L * L^T] (real) or [a = L * L^H] (complex) if [up] = [false]
+
+    where [U] and [L] are upper and lower triangular matrices, respectively.
+    Either of them is returned in the upper or lower triangular part of [a],
+    as specified by [up].
+
+    @param up default = [true]
+    @param jitter default = nothing
+
+    @raise Failure if [a] is singular.
+ *)
 
 val potrs : ?up:bool ->
             ('n, 'n, 'a_cd) mat ->
             ?factorize:bool ->
             ?jitter:num_type ->
             ('n, 'nrhs, 'b_cd) mat -> unit
+(** [potrf ?up a ?jitter b] solves systems of linear equations [a * x = b] using
+    the Cholesky factorization of symmetrix (Hermitian) positive-definite matrix
+    [a]:
+
+    - [a = U^T * U] (real) or [a = U^H * U] (complex) if [up] = [true];
+    - [a = L * L^T] (real) or [a = L * L^H] (complex) if [up] = [false]
+
+    where [U] and [L] are upper and lower triangular matrices, respectively.
+
+    @param up default = [true]
+    @param factorize default = [true] ([potrf] is called implicitly)
+    @param jitter default = nothing
+
+    @raise Failure if [a] is singular.
+ *)
 
 val potri : ?up:bool ->
             ?factorize:bool ->
             ?jitter:num_type ->
             ('n, 'n, 'cd) mat -> unit
+(** [potrf ?up ?jitter a] computes the inverse of symmetrix (Hermitian)
+    positive-definite matrix [a] using the Cholesky factorization:
+
+    - [a = U^T * U] (real) or [a = U^H * U] (complex) if [up] = [true];
+    - [a = L * L^T] (real) or [a = L * L^H] (complex) if [up] = [false]
+
+    where [U] and [L] are upper and lower triangular matrices, respectively.
+
+    @param up default = [true]
+    @param factorize default = [true] ([potrf] is called implicitly)
+    @param jitter default = nothing
+
+    @raise Failure if [a] is singular.
+ *)
 
 val trtrs : ?up:bool ->
-            trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3
-            ->
+            trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
             ?diag:Common.diag ->
             ('n, 'n, 'a_cd) mat ->
             ('n, 'nrhs, 'b_cd) mat -> unit
+(** [trtrs ?up trans ?diag a b] solves systems of linear equations
+    [OP(a) * x = b] where [a] is a triangular matrix of order ['n], each column
+    of matrix [b] is the r.h.s vector, and each column of matrix [x] is the
+    corresponding solution. The solution [x] is returned in [b].
+
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param trans the transpose flag for [a]:
+      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+        (the conjugate transpose of [a]).
+    @param diag default = [`N]
+      - If [diag] = [`U], then [a] is unit triangular;
+      - If [diag] = [`N], then [a] is not unit triangular.
+
+    @raise Failure if [a] is singular.
+ *)
 
 val tbtrs : kd:'kd Size.t ->
             ?up:bool ->
@@ -522,22 +712,61 @@ val tbtrs : kd:'kd Size.t ->
 val trtri : ?up:bool ->
             ?diag:Common.diag ->
             ('n, 'n, 'cd) mat -> unit
+(** [trtri ?up ?diag a] computes the inverse of triangular matrix [a]. The
+    inverse matrix is returned in [a].
+
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param diag default = [`N]
+      - If [diag] = [`U], then [a] is unit triangular;
+      - If [diag] = [`N], then [a] is not unit triangular.
+
+    @raise Failure if the matrix [a] is singular.
+    @since 0.2.0
+ *)
 
 type 'n geqrf_min_lwork
 
 val geqrf_min_lwork : n:'n Size.t -> 'n geqrf_min_lwork Size.t
+(** [geqrf_min_lwork ~n] computes the minimum length of workspace for [geqrf]
+    routine. [n] is the number of columns in a matrix.
+ *)
 
 val geqrf_opt_lwork : ('m, 'n, 'cd) mat -> (module Size.SIZE)
+(** [geqrf_opt_lwork a] computes the optimum length of workspace for [geqrf]
+    routine.
+ *)
 
 val geqrf : ?work:('lwork, cnt) vec ->
             ?tau:(('m, 'n) Size.min, cnt) vec ->
             ('m, 'n, 'cd) mat -> (('m, 'n) Size.min, 'cnt) vec
+(** [geqrf ?work ?tau a] computes the QR factorization of general matrix [a]:
+    [a = Q * R] where [Q] is an orthogonal (unitary) matrix and [R] is an
+    upper triangular matrix. [R] is returned in [a]. This routine does not
+    generate [Q] explicitly. It is generated by [orgqr].
+
+    @return vector [tau], which is overwritten.
+    @param work default = an optimum-length vector.
+ *)
 
 (** {3 Linear equations (simple drivers)} *)
 
 val gesv : ?ipiv:('n, cnt) Common.int32_vec ->
            ('n, 'n, 'a_cd) mat ->
            ('n, 'nrhs, 'b_cd) mat -> unit
+(** [gesv ?ipiv a b] solves a system of linear equations [a * x = b] where [a]
+    is a ['n]-by-['n] general matrix, each column of matrix [b] is the r.h.s.
+    vector, and each column of matrix [x] is the corresponding solution.
+
+    This routine uses LU factorization: [a = P * L * U] with  permutation matrix
+    [P], a lower triangular matrix [L] and an upper triangular matrix [U].
+    By this function, the upper triangular part of [a] is replaced by [U], the
+    lower triangular part by [L], and the solution [x] is returned in [b].
+
+    @raise Failure if the matrix is singular.
+    @since 0.2.0
+ *)
 
 val gbsv : ?ipiv:('n, cnt) Common.int32_vec ->
            (('n, 'n, 'kl, 'ku) Size.luband, 'n, 'a_cd) mat ->
@@ -554,9 +783,6 @@ val gbsv : ?ipiv:('n, cnt) Common.int32_vec ->
     By this function, the upper triangular part of [A] is replaced by [U], the
     lower triangular part by [L], and the solution [X] is returned in [B].
 
-    @param ipiv A ['n]-dimensional contiguous vector corresponding to [P].
-                This is internally computed if omitted.
-
     @raise Failure if the matrix is singular.
     @since 0.2.0
  *)
@@ -564,6 +790,25 @@ val gbsv : ?ipiv:('n, cnt) Common.int32_vec ->
 val posv : ?up:bool ->
            ('n, 'n, 'a_cd) mat ->
            ('n, 'nrhs, 'b_cd) mat -> unit
+(** [posv ?up a b] solves systems of linear equations [a * x = b] where [a] is
+    a ['n]-by-['n] symmetric positive-definite matrix, each column of matrix [b]
+    is the r.h.s vector, and each column of matrix [x] is the corresponding
+    solution. The solution [x] is returned in [b].
+
+    The Cholesky decomposition is used:
+
+    - If [up] = [true], then [a = U^T * U] (real) or [a = U^H * U] (complex)
+    - If [up] = [false], then [a = L^T * L] (real) or [a = L^H * L] (complex)
+
+    where [U] and [L] are the upper and lower triangular matrices, respectively.
+
+    @param up default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+
+    @raise Failure if the matrix is singular.
+    @since 0.2.0
+ *)
 
 val ppsv : ?up:bool ->
            ('n Size.packed, cnt) vec ->
@@ -571,11 +816,13 @@ val ppsv : ?up:bool ->
 (** [ppsv ?up a b] solves systems of linear equations [a * x = b] where [a] is
     a ['n]-by-['n] symmetric positive-definite matrix stored in packed format,
     each column of matrix [b] is the r.h.s vector, and each column of matrix [x]
-    is the corresponding solution. Matrix [x] is destructively assigns to [b].
+    is the corresponding solution. The solution [x] is returned in [b].
 
     The Cholesky decomposition is used:
+
     - If [up] = [true], then [a = U^T * U] (real) or [a = U^H * U] (complex)
     - If [up] = [false], then [a = L^T * L] (real) or [a = L^H * L] (complex)
+
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
     @param up default = [true]
@@ -596,8 +843,10 @@ val pbsv : ?up:bool -> kd:'kd Size.t ->
     solution. The solution [x] is returned in [b].
 
     This routine uses the Cholesky decomposition:
+
     - If [up] = [true], then [ab = U^T * U] (real) or [ab = U^H * U] (complex)
     - If [up] = [false], then [ab = L^T * L] (real) or [ab = L^H * L] (complex)
+
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
     @param up default = [true]
@@ -628,21 +877,44 @@ val ptsv : ('n, cnt) vec ->
 val sysv_opt_lwork : ?up:bool ->
                      ('n, 'n, 'a_cd) mat ->
                      ('n, 'nrhs, 'b_cd) mat -> (module Size.SIZE)
+(** [sysv_opt_lwork ?up a b] computes the optimal length of workspace for [sysv]
+    routine.
+ *)
 
 val sysv : ?up:bool ->
            ?ipiv:('n, cnt) Common.int32_vec ->
            ?work:('lwork, cnt) vec ->
            ('n, 'n, 'a_cd) mat ->
            ('n, 'nrhs, 'b_cd) mat -> unit
+(** [sysv ?up ?ipiv ?work a b] solves systems of linear equations [a * x = b]
+    where [a] is a ['n]-by-['n] symmetric matrix, each column of matrix [b] is
+    the r.h.s. vector, and each column of matrix [x] is the corresponding
+    solution. The solution [x] is returned in [b].
+
+    The diagonal pivoting method is used:
+    - If [up] = [true], then [a = U * D * U^T]
+    - If [up] = [false], then [a = L * D * L^T]
+    where [U] and [L] are the upper and lower triangular matrices, respectively.
+
+    @param up   default = [true]
+      - If [up] = [true], then the upper triangular part of [a] is used;
+      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
+                omitted.
+    @param work default = an optimum-length vector.
+
+    @raise Failure if the matrix is singular.
+    @since 0.2.0
+ *)
 
 val spsv : ?up:bool ->
            ?ipiv:('n, cnt) Common.int32_vec ->
            ('n Size.packed, cnt) vec ->
            ('n, 'nrhs, 'b_cd) mat -> unit
 (** [spsv ?up a b] solves systems of linear equations [a * x = b] where [a] is
-    a ['n]-by-['n] symmetric matrix stored in packed format,
-    each column of matrix [b] is the r.h.s vector, and each column of matrix [x]
-    is the corresponding solution. Matrix [x] is destructively assigns to [b].
+    a ['n]-by-['n] symmetric matrix stored in packed format, each column of
+    matrix [b] is the r.h.s. vector, and each column of matrix [x] is the
+    corresponding solution. The solution [x] is returned in [b].
 
     The diagonal pivoting method is used:
     - If [up] = [true], then [a = U * D * U^T]
@@ -652,7 +924,8 @@ val spsv : ?up:bool ->
     @param up default = [true]
       - If [up] = [true], then the upper triangular part of [a] is used;
       - If [up] = [false], then the lower triangular part of [a] is used.
-    @param ipiv a ['n]-dimensional vector
+    @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
+                omitted.
 
     @raise Failure if the matrix is singular.
     @since 0.2.0
@@ -665,17 +938,38 @@ type ('m, 'n, 'nrhs) gels_min_lwork
 val gels_min_lwork : m:'m Size.t ->
                      n:'n Size.t ->
                      nrhs:'nrhs Size.t -> ('m, 'n, 'nrhs) gels_min_lwork Size.t
+(** [gels_min_lwork ~n] computes the minimum length of workspace for [gels]
+    routine.
+    @param m    the number of rows in a matrix.
+    @param n    the number of columns in a matrix.
+    @param nrhs the number of right hand sides.
+ *)
 
 val gels_opt_lwork : trans:(('am, 'an, 'a_cd) mat ->
                             ('m, 'n, 'a_cd) mat) Common.trans2 ->
                      ('m, 'n, 'a_cd) mat ->
                      ('m, 'nrhs, 'b_cd) mat -> (module Size.SIZE)
+(** [gels_opt_lwork ~trans a b] computes the optimum length of workspace for
+    [gels] routine.
+ *)
 
 val gels : ?work:('work, cnt) vec ->
            trans:(('am, 'an, 'a_cd) mat ->
                   ('m, 'n, 'a_cd) mat) Common.trans2 ->
            ('m, 'n, 'a_cd) mat ->
            ('m, 'nrhs, 'b_cd) mat -> unit
-(** [gels ?work ~trans a b] see LAPACK documentation.
+(** [gels ?work ~trans a b] solves an overdetermined or underdetermined system
+    of linear equations using QR or LU factorization.
+
+    - If [trans] = {!Slap.Common.normal} and ['m >= 'n]: find the least square
+      solution of an overdetermined system by minimizing [||b - A * x||^2].
+    - If [trans] = {!Slap.Common.normal} and ['m < 'n]: find the minimum norm
+      solution of an underdetermined system [a * x = b].
+    - If [trans] = {!Slap.Common.trans}, and ['m >= 'n]: find the minimum norm
+      solution of an underdetermined system [a^H * x = b].
+    - If [trans] = {!Slap.Common.trans} and ['m < 'n]: find the least square
+      solution of an overdetermined system by minimizing [||b - A^H * x||^2].
+
     @param work default = an optimum-length vector.
+    @param trans the transpose flag for [a].
  *)
