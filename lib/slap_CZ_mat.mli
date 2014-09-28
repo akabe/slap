@@ -16,3 +16,23 @@
    License along with this library; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
+
+(** {2 Creation of vectors} *)
+
+val random : ?rnd_state:Random.State.t ->
+             ?re_from:float -> ?re_range:float ->
+             ?im_from:float -> ?im_range:float ->
+             'm Size.t -> 'n Size.t -> ('m, 'n, 'cnt) mat
+(** [random ?rnd_state ?from ?range m n] creates a [m]-by-[n] matrix randomly
+    initialized with the uniform distribution between [re_from]/[im_from] and
+    [re_from+re_range]/[im_from+im_range] for real and imaginary parts,
+    respectively.
+
+    @param rnd_state default = [Random.get_state ()].
+    @param re_from   default = [-1.0].
+    @param re_range  default = [2.0].
+    @param im_from   default = [-1.0].
+    @param im_range  default = [2.0].
+
+    @since 0.2.0
+ *)

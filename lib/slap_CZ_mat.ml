@@ -16,3 +16,9 @@
    License along with this library; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
+
+(** {2 Creation of vectors} *)
+
+let random ?rnd_state ?re_from ?re_range ?im_from ?im_range m n =
+  let a = I.Mat.random ?rnd_state ?re_from ?re_range ?im_from ?im_range m n in
+  (m, n, 1, 1, a)
