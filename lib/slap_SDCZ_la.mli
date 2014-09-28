@@ -962,13 +962,13 @@ val gels : ?work:('work, cnt) vec ->
     of linear equations using QR or LU factorization.
 
     - If [trans] = {!Slap.Common.normal} and ['m >= 'n]: find the least square
-      solution of an overdetermined system by minimizing [||b - A * x||^2].
+      solution to an overdetermined system by minimizing [||b - A * x||^2].
     - If [trans] = {!Slap.Common.normal} and ['m < 'n]: find the minimum norm
-      solution of an underdetermined system [a * x = b].
+      solution to an underdetermined system [a * x = b].
     - If [trans] = {!Slap.Common.trans}, and ['m >= 'n]: find the minimum norm
-      solution of an underdetermined system [a^H * x = b].
+      solution to an underdetermined system [a^H * x = b].
     - If [trans] = {!Slap.Common.trans} and ['m < 'n]: find the least square
-      solution of an overdetermined system by minimizing [||b - A^H * x||^2].
+      solution to an overdetermined system by minimizing [||b - A^H * x||^2].
 
     @param work default = an optimum-length vector.
     @param trans the transpose flag for [a].
