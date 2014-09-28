@@ -10,7 +10,9 @@
 <link title="Slap" rel="Chapter" href="Slap.html"><title>Index of types</title>
 </head>
 <body>
-<center><h1>Index of types</h1></center>
+<div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;</div>
+<h1>Index of types</h1>
 <table>
 <tr><td align="left"><br>A</td></tr>
 <tr><td><a href="Slap.Size.html#TYPEadd">add</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
@@ -32,6 +34,13 @@ The tag for discrete vectors and matrices.
 </div>
 </td></tr>
 <tr><td align="left"><br>G</td></tr>
+<tr><td><a href="Slap.Size.html#TYPEgeband">geband</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
+<td><div class="info">
+<code class="code">('m, 'n, 'kl, 'ku) geband</code> represents <i>band storage</i> size:
+    A <code class="code">'m</code>-by-<code class="code">'n</code> band matrix with <code class="code">'kl</code> subdiagonals and <code class="code">'ku</code> superdiagonals
+    is stored in a <code class="code">('kl+'ku+1)</code>-by-<code class="code">'n</code> matrix where <code class="code">'kl, 'ku &lt;&lt; min('m, 'n)</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.S.html#TYPEgecon_min_liwork">gecon_min_liwork</a> [<a href="Slap.S.html">Slap.S</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.D.html#TYPEgecon_min_liwork">gecon_min_liwork</a> [<a href="Slap.D.html">Slap.D</a>]</td>
@@ -120,6 +129,14 @@ The tag for discrete vectors and matrices.
 <td></td></tr>
 <tr><td><a href="Slap.D.html#TYPElarnv_liseed">larnv_liseed</a> [<a href="Slap.D.html">Slap.D</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.Size.html#TYPEluband">luband</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
+<td><div class="info">
+<code class="code">('m, 'n, 'kl, 'ku) luband</code> represents <i>band storage</i> size for LU
+    factorization: A <code class="code">'m</code>-by-<code class="code">'n</code> band matrix with <code class="code">'kl</code> subdiagonals and <code class="code">'ku</code>
+    superdiagonals for LU factorization is stored in band storage format with
+    <code class="code">'kl+'ku</code> superdiagonals.
+</div>
+</td></tr>
 <tr><td align="left"><br>M</td></tr>
 <tr><td><a href="Slap.C.Mat.DSCMAT.html#TYPEm">m</a> [<a href="Slap.C.Mat.DSCMAT.html">Slap.C.Mat.DSCMAT</a>]</td>
 <td><div class="info">
@@ -323,6 +340,14 @@ Values of this type are <a href="Slap.Common.html#VALnorm_1"><code class="code">
 <tr><td><a href="Slap.D.html#TYPEormqr_min_lwork">ormqr_min_lwork</a> [<a href="Slap.D.html">Slap.D</a>]</td>
 <td></td></tr>
 <tr><td align="left"><br>P</td></tr>
+<tr><td><a href="Slap.Size.html#TYPEp">p</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap.Size.html#TYPEpacked">packed</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
+<td><div class="info">
+Type <code class="code">'n packed</code> corresponds to the <i>packed storage</i> size of a <code class="code">n</code>-by-<code class="code">n</code>
+    matrix.
+</div>
+</td></tr>
 <tr><td><a href="Slap.S.html#TYPEpocon_min_liwork">pocon_min_liwork</a> [<a href="Slap.S.html">Slap.S</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.D.html#TYPEpocon_min_liwork">pocon_min_liwork</a> [<a href="Slap.D.html">Slap.D</a>]</td>
@@ -386,6 +411,10 @@ Real vectors.
 successor, i.e., <code class="code">'n s</code> corresponds to <code class="code">'n + 1</code>.
 </div>
 </td></tr>
+<tr><td><a href="Slap.S.html#TYPEsbev_min_lwork">sbev_min_lwork</a> [<a href="Slap.S.html">Slap.S</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap.D.html#TYPEsbev_min_lwork">sbev_min_lwork</a> [<a href="Slap.D.html">Slap.D</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap.Common.html#TYPEside">side</a> [<a href="Slap.Common.html">Slap.Common</a>]</td>
 <td><div class="info">
 <code class="code">('k, 'm, 'n) side</code> is the type of left- and right-multiplication flags.
@@ -395,6 +424,13 @@ successor, i.e., <code class="code">'n s</code> corresponds to <code class="code
 <td></td></tr>
 <tr><td><a href="Slap.Common.html#TYPEsvd_job">svd_job</a> [<a href="Slap.Common.html">Slap.Common</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap.Size.html#TYPEsyband">syband</a> [<a href="Slap.Size.html">Slap.Size</a>]</td>
+<td><div class="info">
+<code class="code">('n, 'kd) syband</code> represents <i>symmetric or Hermitian band storage</i> size:
+    A <code class="code">n</code>-by-<code class="code">n</code> symmetric or Hermitian band matrix with <code class="code">kd</code> superdiagonals or
+    subdiagonals is stored in a <code class="code">(kd+1)</code>-by-<code class="code">n</code> matrix where <code class="code">kd &lt;&lt; n</code>.
+</div>
+</td></tr>
 <tr><td><a href="Slap.S.html#TYPEsycon_min_liwork">sycon_min_liwork</a> [<a href="Slap.S.html">Slap.S</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.D.html#TYPEsycon_min_liwork">sycon_min_liwork</a> [<a href="Slap.D.html">Slap.D</a>]</td>
@@ -414,10 +450,6 @@ successor, i.e., <code class="code">'n s</code> corresponds to <code class="code
 <tr><td><a href="Slap.S.html#TYPEsyevr_min_lwork">syevr_min_lwork</a> [<a href="Slap.S.html">Slap.S</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.D.html#TYPEsyevr_min_lwork">syevr_min_lwork</a> [<a href="Slap.D.html">Slap.D</a>]</td>
-<td></td></tr>
-<tr><td><a href="Slap.S.html#TYPEsyevr_result">syevr_result</a> [<a href="Slap.S.html">Slap.S</a>]</td>
-<td></td></tr>
-<tr><td><a href="Slap.D.html#TYPEsyevr_result">syevr_result</a> [<a href="Slap.D.html">Slap.D</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap.C.html#TYPEsytrf_min_lwork">sytrf_min_lwork</a> [<a href="Slap.C.html">Slap.C</a>]</td>
 <td></td></tr>
@@ -524,6 +556,6 @@ Vectors.
 zero
 </div>
 </td></tr>
-</table><br>
+</table>
 </body>
 </html>

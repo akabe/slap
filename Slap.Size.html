@@ -12,21 +12,25 @@
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
 <link title="Slap" rel="Chapter" href="Slap.html"><link title="Constants" rel="Section" href="#2_Constants">
 <link title="Arithmetic operations" rel="Section" href="#2_Arithmeticoperations">
+<link title="Storage sizes for BLAS and LAPACK" rel="Section" href="#2_StoragesizesforBLASandLAPACK">
 <link title="Conversion between a size and an integer" rel="Section" href="#2_Conversionbetweenasizeandaninteger">
 <link title="Iterators on sizes" rel="Section" href="#2_Iteratorsonsizes">
 <link title="Iterators on integers" rel="Section" href="#2_Iteratorsonintegers">
 <title>Slap.Size</title>
 </head>
 <body>
-<div class="navbar">&nbsp;<a href="Slap.html">Up</a>
-&nbsp;<a href="Slap.Vec.html">Next</a>
+<div class="navbar">&nbsp;<a class="up" href="Slap.html" title="Slap">Up</a>
+&nbsp;<a class="post" href="Slap.Vec.html" title="Slap.Vec">Next</a>
 </div>
-<center><h1>Module <a href="type_Slap.Size.html">Slap.Size</a></h1></center>
-<br>
-<pre><span class="keyword">module</span> Size: <code class="code">sig</code> <a href="Slap.Size.html">..</a> <code class="code">end</code></pre>Sizes (dimensions of vectors and matrices).<br>
+<h1>Module <a href="type_Slap.Size.html">Slap.Size</a></h1>
+
+<pre><span class="keyword">module</span> Size: <code class="code">sig</code> <a href="Slap.Size.html">..</a> <code class="code">end</code></pre><div class="info module top">
+Sizes (dimensions of vectors and matrices).<br>
+</div>
 <hr width="100%">
-<pre><span id="TYPEt"><span class="keyword">type</span> <code class="type">'a</code> t</span> = private <code class="type">int</code> </pre>
-<div class="info">
+
+<pre><span id="TYPEt"><span class="keyword">type</span> <code class="type">'n</code> t</span> = private <code class="type">int</code> </pre>
+<div class="info ">
 A singleton type on sizes (i.e., dimensions of vectors and matrices).
 <p>
 
@@ -38,118 +42,243 @@ A singleton type on sizes (i.e., dimensions of vectors and matrices).
 </div>
 
 <br>
-<span id="2_Constants"><h2>Constants</h2></span><br>
+<h2 id="2_Constants">Constants</h2><br>
+
 <pre><span id="TYPEz"><span class="keyword">type</span> <code class="type"></code>z</span> </pre>
-<div class="info">
+<div class="info ">
 zero<br>
 </div>
 
-<pre><span id="TYPEs"><span class="keyword">type</span> <code class="type">'a</code> s</span> </pre>
-<div class="info">
+
+<pre><span id="TYPEs"><span class="keyword">type</span> <code class="type">'n</code> s</span> </pre>
+<div class="info ">
 successor, i.e., <code class="code">'n s</code> corresponds to <code class="code">'n + 1</code>.<br>
 </div>
 
-<pre><span id="VALzero"><span class="keyword">val</span> zero</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><pre><span id="VALone"><span class="keyword">val</span> one</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><pre><span id="VALtwo"><span class="keyword">val</span> two</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><pre><span id="VALthree"><span class="keyword">val</span> three</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><pre><span id="VALfour"><span class="keyword">val</span> four</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><pre><span id="VALfive"><span class="keyword">val</span> five</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a><br>       <a href="Slap.Size.html#TYPEt">t</a></code></pre><pre><span id="TYPEten"><span class="keyword">type</span> <code class="type"></code>ten</span> = <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a><br>       <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a></code> </pre>
+
+<pre><span id="VALzero"><span class="keyword">val</span> zero</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="VALone"><span class="keyword">val</span> one</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="VALtwo"><span class="keyword">val</span> two</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="VALthree"><span class="keyword">val</span> three</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="VALfour"><span class="keyword">val</span> four</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="VALfive"><span class="keyword">val</span> five</span> : <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a><br>       <a href="Slap.Size.html#TYPEt">t</a></code></pre>
+<pre><span id="TYPEten"><span class="keyword">type</span> <code class="type"></code>ten</span> = <code class="type"><a href="Slap.Size.html#TYPEz">z</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a><br>       <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEs">s</a></code> </pre>
+
 
 <pre><span id="VALten"><span class="keyword">val</span> ten</span> : <code class="type"><a href="Slap.Size.html#TYPEten">ten</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><br>
-<span id="2_Arithmeticoperations"><h2>Arithmetic operations</h2></span><br>
-<pre><span id="VALsucc"><span class="keyword">val</span> succ</span> : <code class="type">'a <a href="Slap.Size.html#TYPEt">t</a> -> 'a <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info">
+<h2 id="2_Arithmeticoperations">Arithmetic operations</h2><br>
+
+<pre><span id="VALsucc"><span class="keyword">val</span> succ</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEs">s</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">succ n</code><br>
 <b>Returns</b> <code class="code">n</code> + <code class="code">1</code><br>
 </div>
-<pre><span id="TYPEadd"><span class="keyword">type</span> <code class="type">('a, 'b)</code> add</span> </pre>
 
-<pre><span id="VALadd"><span class="keyword">val</span> add</span> : <code class="type">'a <a href="Slap.Size.html#TYPEt">t</a> -> 'b <a href="Slap.Size.html#TYPEt">t</a> -> ('a, 'b) <a href="Slap.Size.html#TYPEadd">add</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info">
+<pre><span id="TYPEp"><span class="keyword">type</span> <code class="type">'n</code> p</span> </pre>
+
+
+<pre><span id="VALpred_dyn"><span class="keyword">val</span> pred_dyn</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEp">p</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">pred_dyn n</code><br>
+<b>Since</b> 0.2.0<br>
+<b>Raises</b> <code>Invalid_arg</code> if <code class="code">n &lt;= 0</code>.<br>
+<b>Returns</b> <code class="code">n</code> - <code class="code">1</code><br>
+</div>
+
+<pre><span id="TYPEadd"><span class="keyword">type</span> <code class="type">('m, 'n)</code> add</span> </pre>
+
+
+<pre><span id="VALadd"><span class="keyword">val</span> add</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEadd">add</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">add m n</code><br>
 <b>Returns</b> <code class="code">m</code> + <code class="code">n</code><br>
 </div>
-<pre><span id="TYPEsub"><span class="keyword">type</span> <code class="type">('a, 'b)</code> sub</span> </pre>
 
-<pre><span id="VALsub_dyn"><span class="keyword">val</span> sub_dyn</span> : <code class="type">'a <a href="Slap.Size.html#TYPEt">t</a> -> 'b <a href="Slap.Size.html#TYPEt">t</a> -> ('a, 'b) <a href="Slap.Size.html#TYPEsub">sub</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info">
+<pre><span id="TYPEsub"><span class="keyword">type</span> <code class="type">('m, 'n)</code> sub</span> </pre>
+
+
+<pre><span id="VALsub_dyn"><span class="keyword">val</span> sub_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEsub">sub</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">sub_dyn m n</code><br>
 <b>Raises</b> <code>Invalid_argument</code> <code class="code">m</code> &lt; <code class="code">n</code><br>
 <b>Returns</b> <code class="code">m</code> - <code class="code">n</code><br>
 </div>
-<pre><span id="TYPEmul"><span class="keyword">type</span> <code class="type">('a, 'b)</code> mul</span> </pre>
 
-<pre><span id="VALmul"><span class="keyword">val</span> mul</span> : <code class="type">'a <a href="Slap.Size.html#TYPEt">t</a> -> 'b <a href="Slap.Size.html#TYPEt">t</a> -> ('a, 'b) <a href="Slap.Size.html#TYPEmul">mul</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info">
+<pre><span id="TYPEmul"><span class="keyword">type</span> <code class="type">('m, 'n)</code> mul</span> </pre>
+
+
+<pre><span id="VALmul"><span class="keyword">val</span> mul</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEmul">mul</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">mul m n</code><br>
 <b>Returns</b> the product of <code class="code">m</code> and <code class="code">n</code><br>
 </div>
-<pre><span id="TYPEdiv"><span class="keyword">type</span> <code class="type">('a, 'b)</code> div</span> </pre>
 
-<pre><span id="VALdiv_dyn"><span class="keyword">val</span> div_dyn</span> : <code class="type">'a <a href="Slap.Size.html#TYPEt">t</a> -> 'b <a href="Slap.Size.html#TYPEt">t</a> -> ('a, 'b) <a href="Slap.Size.html#TYPEdiv">div</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info">
+<pre><span id="TYPEdiv"><span class="keyword">type</span> <code class="type">('m, 'n)</code> div</span> </pre>
+
+
+<pre><span id="VALdiv_dyn"><span class="keyword">val</span> div_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEdiv">div</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">div_dyn m n</code><br>
 <b>Raises</b> <code>Invalid_argument</code> <code class="code">n</code> is zero<br>
 <b>Returns</b> <code class="code">m</code> / <code class="code">n</code><br>
 </div>
-<pre><span id="TYPEmin"><span class="keyword">type</span> <code class="type">('a, 'b)</code> min</span> </pre>
 
-<pre><span id="VALmin"><span class="keyword">val</span> min</span> : <code class="type">'a <a href="Slap.Size.html#TYPEt">t</a> -> 'b <a href="Slap.Size.html#TYPEt">t</a> -> ('a, 'b) <a href="Slap.Size.html#TYPEmin">min</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info">
+<pre><span id="TYPEmin"><span class="keyword">type</span> <code class="type">('m, 'n)</code> min</span> </pre>
+
+
+<pre><span id="VALmin"><span class="keyword">val</span> min</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEmin">min</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">min m n</code><br>
 <b>Returns</b> the minimum of <code class="code">m</code> and <code class="code">n</code><br>
 </div>
-<pre><span id="TYPEmax"><span class="keyword">type</span> <code class="type">('a, 'b)</code> max</span> </pre>
 
-<pre><span id="VALmax"><span class="keyword">val</span> max</span> : <code class="type">'a <a href="Slap.Size.html#TYPEt">t</a> -> 'b <a href="Slap.Size.html#TYPEt">t</a> -> ('a, 'b) <a href="Slap.Size.html#TYPEmax">max</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info">
+<pre><span id="TYPEmax"><span class="keyword">type</span> <code class="type">('m, 'n)</code> max</span> </pre>
+
+
+<pre><span id="VALmax"><span class="keyword">val</span> max</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n) <a href="Slap.Size.html#TYPEmax">max</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">max m n</code><br>
 <b>Returns</b> the maximum of <code class="code">m</code> and <code class="code">n</code><br>
 </div>
 <br>
-<span id="2_Conversionbetweenasizeandaninteger"><h2>Conversion between a size and an integer</h2></span><br>
+<h2 id="2_StoragesizesforBLASandLAPACK">Storage sizes for BLAS and LAPACK</h2><br>
+
+<pre><span id="TYPEpacked"><span class="keyword">type</span> <code class="type">'n</code> packed</span> </pre>
+<div class="info ">
+Type <code class="code">'n packed</code> corresponds to the <i>packed storage</i> size of a <code class="code">n</code>-by-<code class="code">n</code>
+    matrix.<br>
+<b>Since</b> 0.2.0<br>
+<b>See also</b> <a href="http://www.netlib.org/lapack/lug/node123.html">Packed Storage (BLAS &amp; LAPACK)</a><br>
+</div>
+
+
+<pre><span id="VALpacked"><span class="keyword">val</span> packed</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEpacked">packed</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">packed n</code> computes the packed storage size of a <code class="code">n</code>-by-<code class="code">n</code> matrix.<br>
+<b>Since</b> 0.2.0<br>
+</div>
+
+<pre><span id="VALunpacked"><span class="keyword">val</span> unpacked</span> : <code class="type">'n <a href="Slap.Size.html#TYPEpacked">packed</a> <a href="Slap.Size.html#TYPEt">t</a> -> 'n <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">unpacked n</code> computes the inverse of the packed storage size, i.e.,
+    <code class="code">unpacked (packed n) = n</code> for all <code class="code">n</code>.<br>
+<b>Since</b> 0.2.0<br>
+</div>
+
+<pre><span id="TYPEgeband"><span class="keyword">type</span> <code class="type">('m, 'n, 'kl, 'ku)</code> geband</span> </pre>
+<div class="info ">
+<code class="code">('m, 'n, 'kl, 'ku) geband</code> represents <i>band storage</i> size:
+    A <code class="code">'m</code>-by-<code class="code">'n</code> band matrix with <code class="code">'kl</code> subdiagonals and <code class="code">'ku</code> superdiagonals
+    is stored in a <code class="code">('kl+'ku+1)</code>-by-<code class="code">'n</code> matrix where <code class="code">'kl, 'ku &lt;&lt; min('m, 'n)</code>.
+    <code class="code">('m, 'n, 'kl, 'ku) geband</code> corresponds to the number of columns of a
+    band-storage-format matrix for such a band matrix.<br>
+<b>Since</b> 0.2.0<br>
+<b>See also</b> <a href="http://www.netlib.org/lapack/lug/node124.html">Band Storage (BLAS &amp; LAPACK)</a><br>
+</div>
+
+
+<pre><span id="VALgeband_dyn"><span class="keyword">val</span> geband_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">t</a> -><br>       'kl <a href="Slap.Size.html#TYPEt">t</a> -><br>       'ku <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n, 'kl, 'ku) <a href="Slap.Size.html#TYPEgeband">geband</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">geband_dyn m n kl ku</code> computs the band storage size of <code class="code">m</code>-by-<code class="code">n</code> band
+    matrices with <code class="code">kl</code> subdiagonals and <code class="code">ku</code> superdiagonals.<br>
+<b>Since</b> 0.2.0<br>
+<b>Raises</b> <code>Invalid_argument</code> if <code class="code">m &gt;= kl</code> and <code class="code">n &gt;= ku</code>.<br>
+</div>
+
+<pre><span id="TYPEsyband"><span class="keyword">type</span> <code class="type">('n, 'kd)</code> syband</span> </pre>
+<div class="info ">
+<code class="code">('n, 'kd) syband</code> represents <i>symmetric or Hermitian band storage</i> size:
+    A <code class="code">n</code>-by-<code class="code">n</code> symmetric or Hermitian band matrix with <code class="code">kd</code> superdiagonals or
+    subdiagonals is stored in a <code class="code">(kd+1)</code>-by-<code class="code">n</code> matrix where <code class="code">kd &lt;&lt; n</code>.
+    <code class="code">('n, 'kd) syband</code> corresponds to the number of columns of a
+    band-storage-format matrix for such a symmetric band matrix.<br>
+<b>Since</b> 0.2.0<br>
+<b>See also</b> <a href="http://www.netlib.org/lapack/lug/node124.html">Band Storage (BLAS &amp; LAPACK)</a><br>
+</div>
+
+
+<pre><span id="VALsyband_dyn"><span class="keyword">val</span> syband_dyn</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">t</a> -> 'kd <a href="Slap.Size.html#TYPEt">t</a> -> ('n, 'kd) <a href="Slap.Size.html#TYPEsyband">syband</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">syband_dyn n kd</code> computs the band storage size of symmetric or Hermitian
+    band matrices with <code class="code">kd</code> superdiagonals or subdiagonals.<br>
+<b>Since</b> 0.2.0<br>
+<b>Raises</b> <code>Invalid_argument</code> if <code class="code">kd &gt;= n</code>.<br>
+</div>
+
+<pre><span id="TYPEluband"><span class="keyword">type</span> <code class="type">('m, 'n, 'kl, 'ku)</code> luband</span> = <code class="type">('m, 'n, 'kl, ('kl, 'ku) <a href="Slap.Size.html#TYPEadd">add</a>) <a href="Slap.Size.html#TYPEgeband">geband</a></code> </pre>
+<div class="info ">
+<code class="code">('m, 'n, 'kl, 'ku) luband</code> represents <i>band storage</i> size for LU
+    factorization: A <code class="code">'m</code>-by-<code class="code">'n</code> band matrix with <code class="code">'kl</code> subdiagonals and <code class="code">'ku</code>
+    superdiagonals for LU factorization is stored in band storage format with
+    <code class="code">'kl+'ku</code> superdiagonals.<br>
+<b>Since</b> 0.2.0<br>
+<b>See also</b> <a href="http://www.netlib.org/lapack/lug/node124.html">Band Storage (BLAS &amp; LAPACK)</a><br>
+</div>
+
+
+<pre><span id="VALluband_dyn"><span class="keyword">val</span> luband_dyn</span> : <code class="type">'m <a href="Slap.Size.html#TYPEt">t</a> -><br>       'n <a href="Slap.Size.html#TYPEt">t</a> -><br>       'kl <a href="Slap.Size.html#TYPEt">t</a> -><br>       'ku <a href="Slap.Size.html#TYPEt">t</a> -> ('m, 'n, 'kl, 'ku) <a href="Slap.Size.html#TYPEluband">luband</a> <a href="Slap.Size.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">luband_dyn m n kl ku</code> computs the band storage size for LU factorization of
+    <code class="code">m</code>-by-<code class="code">n</code> band matrices with <code class="code">kl</code> subdiagonals and <code class="code">ku</code> superdiagonals.<br>
+<b>Since</b> 0.2.0<br>
+<b>Raises</b> <code>Invalid_argument</code> if <code class="code">m &gt;= kl</code> and <code class="code">n &gt;= ku</code>.<br>
+</div>
+<br>
+<h2 id="2_Conversionbetweenasizeandaninteger">Conversion between a size and an integer</h2><br>
+
 <pre><span class="keyword">module type</span> <a href="Slap.Size.SIZE.html">SIZE</a> = <code class="code">sig</code> <a href="Slap.Size.SIZE.html">..</a> <code class="code">end</code></pre><div class="info">
 The signature of modules as packages of types like <code class="code">exists n. n Size.t</code>.
 </div>
-<pre><span id="VALto_int"><span class="keyword">val</span> to_int</span> : <code class="type">'a <a href="Slap.Size.html#TYPEt">t</a> -> int</code></pre><div class="info">
+
+<pre><span id="VALto_int"><span class="keyword">val</span> to_int</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">t</a> -> int</code></pre><div class="info ">
 Return the integer correponding to the given size.<br>
 </div>
-<pre><span id="VALof_int_dyn"><span class="keyword">val</span> of_int_dyn</span> : <code class="type">int -> (module Slap.Size.SIZE)</code></pre><div class="info">
+
+<pre><span id="VALof_int_dyn"><span class="keyword">val</span> of_int_dyn</span> : <code class="type">int -> (module Slap.Size.SIZE)</code></pre><div class="info ">
 <code class="code">module N = (val of_int_dyn n : SIZE)</code><br>
 <b>Raises</b> <code>Invalid_argument</code> the given size is negative.<br>
 <b>Returns</b> module <code class="code">N</code> containing the size <code class="code">N.value</code> (= <code class="code">n</code>) that has the type
     <code class="code">N.n Size.t</code> with a generative phantom type <code class="code">N.n</code> as a package of an
     existential quantified sized type like <code class="code">exists n. n Size.t</code>.<br>
 </div>
-<pre><span id="VALunsafe_of_int"><span class="keyword">val</span> unsafe_of_int</span> : <code class="type">int -> (module Slap.Size.SIZE)</code></pre><div class="info">
+
+<pre><span id="VALunsafe_of_int"><span class="keyword">val</span> unsafe_of_int</span> : <code class="type">int -> (module Slap.Size.SIZE)</code></pre><div class="info ">
 Like <code class="code">of_int_dyn</code>, but dynamic size checking is not performed.<br>
 </div>
-<pre><span class="keyword">module</span> <a href="Slap.Size.Of_int_dyn.html">Of_int_dyn</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">N</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block"><pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type">int</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap.Size.SIZE.html">SIZE</a></code><code class="type"> </code></div></pre><div class="info">
+
+<pre><span class="keyword">module</span> <a href="Slap.Size.Of_int_dyn.html">Of_int_dyn</a>: <div class="sig_block"><code class="code">functor (</code><code class="code">N</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block">
+<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type">int</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap.Size.SIZE.html">SIZE</a></code><code class="type"> </code></div></pre><div class="info">
 A functor version of <code class="code">of_int_dyn</code>.
 </div>
 <br>
-<span id="2_Iteratorsonsizes"><h2>Iterators on sizes</h2></span>
+<h2 id="2_Iteratorsonsizes">Iterators on sizes</h2>
 <p>
 
     The following functions are iterators over <code class="code">[1; 2; ...; n]</code> where <code class="code">n</code> is a
     size.<br>
-<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">('a -> (module Slap.Size.SIZE) -> 'a) -> 'a -> 'b <a href="Slap.Size.html#TYPEt">t</a> -> 'a</code></pre><div class="info">
+
+<pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">('accum -> (module Slap.Size.SIZE) -> 'accum) -><br>       'accum -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
 <code class="code">fold_left f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) n</code>.<br>
 </div>
-<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">((module Slap.Size.SIZE) -> 'a -> 'a) -> 'b <a href="Slap.Size.html#TYPEt">t</a> -> 'a -> 'a</code></pre><div class="info">
+
+<pre><span id="VALfold_right"><span class="keyword">val</span> fold_right</span> : <code class="type">((module Slap.Size.SIZE) -> 'accum -> 'accum) -><br>       'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
 <code class="code">fold_right f n init</code> is <code class="code">f 1 (f 2 (... (f n init) ...))</code>.<br>
 </div>
-<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">((module Slap.Size.SIZE) -> unit) -> 'a <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+
+<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">((module Slap.Size.SIZE) -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
 <code class="code">iter f n</code> is <code class="code">f 1; f 2; ...; f n</code>.<br>
 </div>
-<pre><span id="VALriter"><span class="keyword">val</span> riter</span> : <code class="type">((module Slap.Size.SIZE) -> unit) -> 'a <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+
+<pre><span id="VALriter"><span class="keyword">val</span> riter</span> : <code class="type">((module Slap.Size.SIZE) -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
 <code class="code">riter f n</code> is <code class="code">f n; ...; f 2; f 1</code>.<br>
 </div>
 <br>
-<span id="2_Iteratorsonintegers"><h2>Iterators on integers</h2></span>
+<h2 id="2_Iteratorsonintegers">Iterators on integers</h2>
 <p>
 
     The following functions are iterators over <code class="code">[1; 2; ...; to_int n]</code> where
     <code class="code">n</code> is a size.<br>
-<pre><span id="VALfold_lefti"><span class="keyword">val</span> fold_lefti</span> : <code class="type">('a -> int -> 'a) -> 'a -> 'b <a href="Slap.Size.html#TYPEt">t</a> -> 'a</code></pre><div class="info">
+
+<pre><span id="VALfold_lefti"><span class="keyword">val</span> fold_lefti</span> : <code class="type">('accum -> int -> 'accum) -> 'accum -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
 <code class="code">fold_lefti f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) (to_int n)</code>.<br>
 </div>
-<pre><span id="VALfold_righti"><span class="keyword">val</span> fold_righti</span> : <code class="type">(int -> 'a -> 'a) -> 'b <a href="Slap.Size.html#TYPEt">t</a> -> 'a -> 'a</code></pre><div class="info">
+
+<pre><span id="VALfold_righti"><span class="keyword">val</span> fold_righti</span> : <code class="type">(int -> 'accum -> 'accum) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> 'accum -> 'accum</code></pre><div class="info ">
 <code class="code">fold_righti f n init</code> is <code class="code">f 1 (f 2 (... (f (to_int n) init) ...))</code>.<br>
 </div>
-<pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">(int -> unit) -> 'a <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+
+<pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">(int -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
 <code class="code">iteri f n</code> is <code class="code">f 1; f 2; ...; f (to_int n)</code>.<br>
 </div>
-<pre><span id="VALriteri"><span class="keyword">val</span> riteri</span> : <code class="type">(int -> unit) -> 'a <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+
+<pre><span id="VALriteri"><span class="keyword">val</span> riteri</span> : <code class="type">(int -> unit) -> 'n <a href="Slap.Size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
 <code class="code">riteri f n</code> is <code class="code">f (to_int n); ...; f 2; f 1</code>.<br>
 </div>
 </body></html>
