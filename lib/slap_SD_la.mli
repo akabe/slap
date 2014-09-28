@@ -731,10 +731,12 @@ val syev_opt_lwork : ?vectors:bool -> ?up:bool -> ('n, 'n, 'cd) mat ->
       - If [up] = [false], then the lower triangular part of [a] is used.
  *)
 
-val syev : ?vectors:bool -> ?up:bool -> ?w:('n, cnt) vec ->
+val syev : ?vectors:bool -> ?up:bool ->
+           ?work:('lwork, cnt) vec ->
+           ?w:('n, cnt) vec ->
            ('n, 'n, 'cd) mat -> ('n, 'cnt) vec
-(** [syev ?vectors ?up ?w a] computes the eigenvalues and the eigenvectors of
-    ['n]-by-['n] symmetric matrix [a].
+(** [syev ?vectors ?up ?work ?w a] computes the eigenvalues and the eigenvectors
+    of ['n]-by-['n] symmetric matrix [a].
 
     @return the vector [w] of eigenvalues in ascending order.
     @param vectors whether eigenvectors are computed, or not.
@@ -744,6 +746,7 @@ val syev : ?vectors:bool -> ?up:bool -> ?w:('n, cnt) vec ->
     @param up default = [true]
       - If [up] = [true], then the upper triangular part of [a] is used;
       - If [up] = [false], then the lower triangular part of [a] is used.
+    @param work default = an optimum-length vector.
     @param w a return location for eigenvalues.
              (default = an implicitly allocated vector.)
 

@@ -379,10 +379,10 @@ let syev_opt_lwork ?vectors ?up (n, n', ar, ac, a) =
   I.syev_opt_lwork ~n ?vectors ?up ~ar ~ac a
   |> Size.unsafe_of_int
 
-let syev ?vectors ?up ?w (n, n', ar, ac, a) =
+let syev ?vectors ?up ?work ?w (n, n', ar, ac, a) =
   assert(n = n');
   let w = PVec.opt_cnt_vec_alloc prec n w in
-  ignore (I.syev ~n ?vectors ?up ~w ~ar ~ac a);
+  ignore (I.syev ~n ?vectors ?up ?work:(PVec.opt_work work) ~w ~ar ~ac a);
   (n, 1, 1, w)
 
 (** {4 syevd} *)
