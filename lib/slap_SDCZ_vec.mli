@@ -466,12 +466,26 @@ val exists2 : (num_type -> num_type -> bool) ->
 (** {2 Arithmetic operations} *)
 
 val max : ('n, 'cd) vec -> num_type
+(** [max x]
+    @return the largest element in [x]. [NaN]s is ignored. If only [NaN]s are
+            encountered, the negative [infinity] value is returned.
+ *)
 
 val min : ('n, 'cd) vec -> num_type
+(** [min x]
+    @return the smallest element in [x]. [NaN]s is ignored. If only [NaN]s are
+            encountered, the positive [infinity] value is returned.
+ *)
 
 val sum : ('n, 'cd) vec -> num_type
+(** [sum x]
+    @return the sum of all elements in [x].
+ *)
 
 val prod : ('n, 'cd) vec -> num_type
+(** [prod x]
+    @return the product of all elements in [x].
+ *)
 
 val add_const : num_type ->
                 ?y:('n, 'y_cd) vec ->
@@ -482,15 +496,45 @@ val add_const : num_type ->
  *)
 
 val sqr_nrm2 : ?stable:bool -> ('n, 'cd) vec -> float
+(** [sqr_nrm2 ?stable x] computes the square of the 2-norm (Euclidean norm) of
+    vector [x].
+
+    @param stable default = [false].
+      - If [stable] = [true], BLAS function [nrm2] is used;
+      - If [stable] = [false], BLAS function [dot] is used instead for greatly
+        improved performance.
+ *)
 
 val ssqr : ?c:num_type -> ('n, 'cd) vec -> num_type
+(** [ssqr ?c (x1, x2, ..., xn)] computes the sum of squared differences of the
+    elements in the given vector from scalar value [c]:
+    [(x1 - c)^2 + (x2 - c)^2 + ... + (xn - c)^2].
+
+    @param c default = [0.0].
+ *)
 
 val sort : ?cmp:(num_type -> num_type -> int) ->
            ?decr:bool ->
            ?p:('n, 'p_cd) Common.int_vec ->
            ('n, 'x_cd) vec -> unit
+(** [sort ?cmp ?decr ?p x] sorts the elements in vector [x] in increasing order
+    according to the comparison function [cmp].
+
+    @param cmp default = the usual order (on real numbers) or the lexicographic
+               order (on complex numbers).
+      - [cmp a b < 0] iff [a < b];
+      - [cmp a b = 0] iff [a = b];
+      - [cmp a b > 0] iff [a > b].
+      - [NaN]s must be considered larger than any other value.
+    @param decr sort in decreasing order.
+    @param p    If [p] is passed, [x] is unchanged and the permutation is stored
+                into [p]. (default = [None].)
+ *)
 
 val neg : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+(** [neg ?y (x1, x2, ..., xn)] returns [(-x1, -x2, ..., -xn)].
+    @return the vector [y], which is overwritten.
+ *)
 
 val reci : ?y:('n, 'y_cd) vec ->
            ('n, 'x_cd) vec -> ('n, 'y_cd) vec
@@ -501,15 +545,31 @@ val reci : ?y:('n, 'y_cd) vec ->
 
 val add : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
           ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+(** [add ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
+    [(x1 + y1, x2 + y2, ..., xn + yn)].
+    @return the vector [z], which is overwritten.
+ *)
 
 val sub : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
           ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+(** [sub ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
+    [(x1 - y1, x2 - y2, ..., xn - yn)].
+    @return the vector [z], which is overwritten.
+ *)
 
 val mul : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
           ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+(** [mul ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
+    [(x1 * y1, x2 * y2, ..., xn * yn)].
+    @return the vector [z], which is overwritten.
+ *)
 
 val div : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
           ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+(** [div ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
+    [(x1 / y1, x2 / y2, ..., xn / yn)].
+    @return the vector [z], which is overwritten.
+ *)
 
 val zpxy : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
           ('n, 'y_cd) vec -> ('n, 'z_cd) vec
@@ -536,6 +596,9 @@ val zmxy : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
  *)
 
 val ssqr_diff : ('n, 'x_cd) vec -> ('n, 'y_cd) vec -> num_type
+(** [ssqr_diff x y]returns the sum of squared differences of the elements of
+    vectors [x] and [y].
+ *)
 
 (** {2 Subvectors} *)
 
