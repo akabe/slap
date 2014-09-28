@@ -539,6 +539,20 @@ val syrk_diag : ?beta:num_type ->
                        ('n, 'k, 'a_cd) mat) Common.trans2 ->
                 ?alpha:num_type ->
                 ('a_n, 'a_k, 'a_cd) mat -> ('n, 'cnt) vec
+(** [syrk_diag ?beta ?y ~transa ?alpha a] executes
+
+    - [y := alpha * DIAG(a * a^T) + beta * y]
+      (if [trans] = {!Slap.Common.normal}) or
+    - [y := alpha * DIAG(a^T * a) + beta * y]
+      (if [trans] = {!Slap.Common.trans})
+
+    where [DIAG(x)] is the vector of the diagonal elements in matrix [x].
+
+    @return the vector [y], which is overwritten.
+    @param beta default = [0.0]
+    @param transa the transpose flag for [a].
+    @param alpha default = [1.0]
+ *)
 
 val gemm_trace : transa:(('a_n, 'a_k, 'a_cd) mat ->
                          ('n, 'k, 'a_cd) mat) trans3 ->
@@ -546,6 +560,18 @@ val gemm_trace : transa:(('a_n, 'a_k, 'a_cd) mat ->
                  transb:(('b_k, 'b_n, 'b_cd) mat ->
                          ('k, 'n, 'b_cd) mat) trans3 ->
                  ('b_k, 'b_n, 'b_cd) mat -> num_type
+(** [gemm_trace ~transa a ~transb b]
+
+    @return the trace of [OP(a) * OP(b)].
+    @param transa the transpose flag for [a]:
+       - if {!Slap.Common.normal}, then [OP(a)] = [a];
+       - if {!Slap.Common.trans}, then [OP(a)] = [a^T];
+       - if {!Slap.Common.conjtr}, then [OP(a)] = [a^H].
+    @param transb the transpose flag for [b]:
+       - if {!Slap.Common.normal}, then [OP(b)] = [b];
+       - if {!Slap.Common.trans}, then [OP(b)] = [b^T];
+       - if {!Slap.Common.conjtr}, then [OP(b)] = [b^H].
+ *)
 
 val syrk_trace : ('n, 'k, 'cd) mat -> num_type
 (** [syrk_trace a] computes the trace of [a * a^T] or [a^T * a].
@@ -556,6 +582,16 @@ val symm2_trace : ?upa:bool ->
                   ('n, 'n, 'a_cd) mat ->
                   ?upb:bool ->
                   ('n, 'n, 'b_cd) mat -> num_type
+(** [symm2_trace ?upa a ?upb b] computes the trace of [a * b] with symmetric
+    matrices [a] and [b].
+
+    @param upa default = [true]
+      - If [upa] = [true], then the upper triangular part of [a] is used;
+      - If [upa] = [false], then the lower triangular part of [a] is used.
+    @param upb default = [true]
+      - If [upb] = [true], then the upper triangular part of [b] is used;
+      - If [upb] = [false], then the lower triangular part of [b] is used.
+ *)
 
 (** {2 Submatrices} *)
 
