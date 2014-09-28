@@ -463,8 +463,6 @@ module type SYEVR_RESULT =
                       ((m, m) Size.add, 'cnt) Common.int32_vec
   end
 
-type 'n syevr_result = (module SYEVR_RESULT with type n = 'n)
-
 let syevr_dyn (type nn) ?vectors ?range ?up ?abstol ?work ?iwork ?w ?z ?isuppz
               ((n, n', ar, ac, a) : (nn, nn, 'a_cd) mat) =
   assert(n = n');
