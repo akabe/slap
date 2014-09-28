@@ -22,3 +22,10 @@
 val random : ?rnd_state:Random.State.t ->
              ?from:float -> ?range:float ->
              'm Size.t -> 'n Size.t -> ('m, 'n, 'cnt) mat
+(** [random ?rnd_state ?from ?range m n] creates a [m]-by-[n] matrix randomly
+    initialized with the uniform distribution between [from] and [from + range].
+
+    @param rnd_state default = [Random.get_state ()].
+    @param from      default = [-1.0].
+    @param range     default = [2.0].
+ *)
