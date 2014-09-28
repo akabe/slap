@@ -584,8 +584,8 @@ val gesdd : jobz:('u_cols * 'vt_rows,
             ?iwork:('liwork, cnt) Common.int32_vec ->
             ('m, 'n, 'a_cd) mat ->
             (('m, 'n) Size.min, 'cnt) vec
-            * ('m, 'u_cols, 'u_cd) mat
-            * ('vt_rows, 'n, 'vt_cd) mat
+            * ('m, 'u_cols, 'u_cd) mat option
+            * ('vt_rows, 'n, 'vt_cd) mat option
 (** [gesdd ~jobz ?s ?u ?vt ?work ?iwork a] computes the singular value
     decomposition (SVD) of general rectangular matrix [a] using a divide and
     conquer method: [a = U * D * V^T] where
@@ -599,6 +599,7 @@ val gesdd : jobz:('u_cols * 'vt_rows,
 
     @return [(s, u, vt)] with singular values [s] in descreasing order,
             left singular vectors [u] and right singular vectors [vt].
+            If [u] ([vt]) is not needed, [None] is returned.
     @param jobz  the SVD job flag:
     - If [jobz] is {!Slap.Common.svd_all}, all ['m] columns of [U] and all ['n]
       rows of [V^T] are returned in [u] and [vt].

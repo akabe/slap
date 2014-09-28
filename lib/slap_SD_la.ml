@@ -288,17 +288,15 @@ type ('m, 'n, 'jobz) gesdd_min_lwork
 let gesdd_min_lwork ~jobz ~m ~n () =
   I.gesdd_min_lwork ~jobz ~m ~n ()
 
-let gesdd_calc_sizes m n jobz =
-  let min_mn = min m n in
-  let u_cols, vt_rows = match jobz with
-    | `A -> m, n
-    | `S -> min_mn, min_mn
-    | `O -> m, n
-    | `N -> 0, 0 in
-  (min_mn, u_cols, vt_rows)
+let gesdd_calc_sizes min_mn m n = function
+  | `A -> (m, n)
+  | `S -> (min_mn, min_mn)
+  | `O -> if m >= n then (0, n) else (m, 0)
+  | `N -> (0, 0)
 
 let gesdd_opt_lwork ~jobz ?s ?u ?vt ?iwork (m, n, ar, ac, a) =
-  let min_mn, u_cols, vt_rows = gesdd_calc_sizes m n jobz in
+  let min_mn = min m n in
+  let u_cols, vt_rows = gesdd_calc_sizes min_mn m n jobz in
   let ur, uc, u = opt_mat m u_cols u in
   let vtr, vtc, vt = opt_mat vt_rows n vt in
   I.gesdd_opt_lwork ~m ~n ~jobz ?s:(PVec.opt_cnt_vec min_mn s)
@@ -308,14 +306,33 @@ let gesdd_opt_lwork ~jobz ?s ?u ?vt ?iwork (m, n, ar, ac, a) =
   |> Size.unsafe_of_int
 
 let gesdd ~jobz ?s ?u ?vt ?work ?iwork (m, n, ar, ac, a) =
-  let min_mn, u_cols, vt_rows = gesdd_calc_sizes m n jobz in
-  let ur, uc, u = opt_mat_alloc prec m u_cols u in
-  let vtr, vtc, vt = opt_mat_alloc prec vt_rows n vt in
-  let s, u, vt = I.gesdd ~m ~n ~jobz ?s:(PVec.opt_cnt_vec min_mn s)
-                         ~ur ~uc ~u ~vtr ~vtc ~vt
-                         ?work:(PVec.opt_work work) ?iwork:(PVec.opt_work iwork)
-                         ~ar ~ac a in
-  ((min_mn, 1, 1, s), (m, u_cols, ur, uc, u), (vt_rows, n, vtr, vtc, vt))
+  let min_mn = min m n in
+  let _gesdd ?ur ?uc ?u ?vtr ?vtc ?vt () =
+    I.gesdd ~m ~n ~jobz ?ur ?uc ?u ?vtr ?vtc ?vt
+            ?s:(PVec.opt_cnt_vec min_mn s)
+            ?work:(PVec.opt_work work)
+            ?iwork:(PVec.opt_work iwork)
+            ~ar ~ac a
+  in
+  match gesdd_calc_sizes min_mn m n jobz with
+  | 0, 0 ->
+     let s, _, _ = _gesdd () in
+     ((min_mn, 1, 1, s), None, None)
+  | 0, vt_rows ->
+     let vtr, vtc, vt = opt_mat_alloc prec vt_rows n vt in
+     let s, _, vt = _gesdd ~vtr ~vtc ~vt () in
+     ((min_mn, 1, 1, s), None, Some (vt_rows, n, vtr, vtc, vt))
+  | u_cols, 0 ->
+     let ur, uc, u = opt_mat_alloc prec m u_cols u in
+     let s, u, _ = _gesdd ~ur ~uc ~u () in
+     ((min_mn, 1, 1, s), Some (m, u_cols, ur, uc, u), None)
+  | u_cols, vt_rows ->
+     let ur, uc, u = opt_mat_alloc prec m u_cols u in
+     let vtr, vtc, vt = opt_mat_alloc prec vt_rows n vt in
+     let s, u, vt = _gesdd ~ur ~uc ~u ~vtr ~vtc ~vt () in
+     ((min_mn, 1, 1, s),
+      Some (m, u_cols, ur, uc, u),
+      Some (vt_rows, n, vtr, vtc, vt))
 
 (** {3 General eigenvalue problem (simple drivers)} *)
 
