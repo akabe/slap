@@ -1,3 +1,9 @@
+2014-09-28  Akinori ABE  <abe@sf.ecei.tohoku.ac.jp>
+
+	* Support Packed & Band Storage (BLAS/LAPACK)
+	* Add five examples (trsv_tpsv, gemv_gbmv, symv_sbmv, gesv_gbsv, posv_ppsv_pbsv)
+	* Improve documentation
+
 2014-09-21  Akinori ABE  <abe@sf.ecei.tohoku.ac.jp>
 
 	* Add 16 Lacaml functions
