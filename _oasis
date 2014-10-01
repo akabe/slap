@@ -19,8 +19,8 @@ XStdFilesAUTHORS:       false
 XStdFilesREADME:        false
 BuildTools:             ocamlbuild,ocamldoc,cppo
 
-PreBuildCommand:        cppo lib/slap_main.mli > lib/slap.mli && \
-                        cppo lib/slap_main.ml > lib/slap.ml
+PreBuildCommand:        cppo lib/slap.cppo.mli > lib/slap.mli && \
+                        cppo lib/slap.cppo.ml > lib/slap.ml
 PostCleanCommand:       rm -rf lib/slap.ml lib/slap.mli
 
 Library slap
