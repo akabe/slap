@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: d2168b8a1a7b0fc26e673467a6f126cd)
+# DO NOT EDIT (digest: 88c4f17f330d0bffd20f25f022c2436d)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -15,6 +15,19 @@
 "_darcs": not_hygienic
 # Library slap
 "lib/slap.cmxs": use_slap
+<lib/*.ml{,i}>: oasis_library_slap_ccopt
+"lib/slap_utils.c": oasis_library_slap_ccopt
+"lib/slap_mat_stubs.c": oasis_library_slap_ccopt
+<lib/slap.{cma,cmxa}>: oasis_library_slap_cclib
+"lib/libslap_stubs.lib": oasis_library_slap_cclib
+"lib/dllslap_stubs.dll": oasis_library_slap_cclib
+"lib/libslap_stubs.a": oasis_library_slap_cclib
+"lib/dllslap_stubs.so": oasis_library_slap_cclib
+<lib/slap.{cma,cmxa}>: use_libslap_stubs
+"lib/slap_utils.c": pkg_bigarray
+"lib/slap_utils.c": pkg_lacaml
+"lib/slap_mat_stubs.c": pkg_bigarray
+"lib/slap_mat_stubs.c": pkg_lacaml
 # Library slap_top
 "lib/slap_top.cmxs": use_slap_top
 <lib/*.ml{,i}>: pkg_bigarray

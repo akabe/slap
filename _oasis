@@ -28,6 +28,16 @@ Library slap
   FindlibName:          slap
   BuildDepends:         bigarray,lacaml
   Modules:              Slap
+  CSources:             slap_utils.h, slap_utils.c,
+                        slap_mat_stubs.c
+  CCOpt:                -g -std=c99 -O2 -fPIC -DPIC
+  # TODO: Mac OS X is untested.
+  if system(macosx)
+     CCOpt+:            -DEXTERNAL_EXP10
+     CCLib+:            -framework Accelerate
+  # TODO: MinGW is untested.
+  if system(mingw)
+     CCOpt+:            -DEXTERNAL_EXP10
 
 Library slap_top
   Path:                 lib
