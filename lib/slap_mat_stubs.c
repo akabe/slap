@@ -38,7 +38,6 @@ slap_mat_fill (int m, int n, enum caml_ba_kind kind,
 
   switch (kind)
   {
-  default: caml_failwith("Slap.Mat.fill: Unsupported kind"); break;
   case CAML_BA_FLOAT32: FILL(float, Double_val(v_init)); break;
   case CAML_BA_FLOAT64: FILL(double, Double_val(v_init)); break;
   case CAML_BA_CHAR:
@@ -50,22 +49,9 @@ slap_mat_fill (int m, int n, enum caml_ba_kind kind,
   case CAML_BA_INT64: FILL(int64_t, Int64_val(v_init)); break;
   case CAML_BA_NATIVE_INT: FILL(intnat, Nativeint_val(v_init)); break;
   case CAML_BA_CAML_INT: FILL(intnat, Long_val(v_init)); break;
-  case CAML_BA_COMPLEX32: {
-    float init0 = Double_field(v_init, 0);
-    float init1 = Double_field(v_init, 1);
-    float *p = a;
-    for (j = 0; j < n; ++j, p += lda * 2)
-      for (i = 0; i < m; i += 2) p[i] = init0, p[i+1] = init1;
-    break;
-  }
-  case CAML_BA_COMPLEX64: {
-    double init0 = Double_field(v_init, 0);
-    double init1 = Double_field(v_init, 1);
-    double *p = a;
-    for (j = 0; j < n; ++j, p += lda * 2)
-      for (i = 0; i < m; i += 2) p[i] = init0, p[i+1] = init1;
-    break;
-  }
+  case CAML_BA_COMPLEX32: FILL(complex32_t, Complex_val(v_init)); break;
+  case CAML_BA_COMPLEX64: FILL(complex64_t, Complex_val(v_init)); break;
+  default: caml_failwith("Slap.Mat.fill: Unsupported kind");
   }
 
   return;
