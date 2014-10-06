@@ -28,13 +28,30 @@
 #include <caml/mlvalues.h>
 #include <caml/signals.h>
 
+#ifdef __GNUC__
+#define PACKED __attribute__ ((__packed__))
+#else
+#define PACKED
+#endif
+
 typedef char byte;
+
+typedef struct PACKED {
+  float re;
+  float im;
+} complex32_t;
+
+typedef struct PACKED {
+  double re;
+  double im;
+} complex64_t;
 
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
 
 #define Val_none Val_int(0)
 #define Some_val(v) Field(v,0)
+#define Complex_val(v) {Double_field(v, 0), Double_field(v, 1)}
 
 #define SLAP_BA_KIND(v_ba) (Bigarray_val(v_ba)->flags & CAML_BA_KIND_MASK)
 
@@ -43,6 +60,9 @@ typedef char byte;
 #define SLAP_BA_LD(v_ba) (Bigarray_val(v_ba)->dim[0])
 
 #define SLAP_BA_DATA(v_ba) ((byte *) Bigarray_val(v_ba)->data)
+
+#define SLAP_BA_VEC_DATA(v_x, v_ofsx) \
+  (SLAP_BA_DATA(v_x) + (Int_val(v_ofsx) - 1) * SLAP_BA_ELEMENT_SIZE(v_x))
 
 #define SLAP_BA_MAT_DATA(v_a, v_ar, v_ac)                               \
   (SLAP_BA_DATA(v_a) + (SLAP_BA_LD(v_a) * (Int_val(v_ac) - 1)           \

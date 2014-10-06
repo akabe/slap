@@ -29,8 +29,10 @@ Library slap
   BuildDepends:         bigarray,lacaml
   Modules:              Slap
   CSources:             slap_utils.h, slap_utils.c,
+                        slap_vec_stubs.c,
                         slap_mat_stubs.c
   CCOpt:                -g -std=c99 -O2 -fPIC -DPIC
+  CCLib:                -lblas -llapack
   # TODO: Mac OS X is untested.
   if system(macosx)
      CCOpt+:            -DEXTERNAL_EXP10
