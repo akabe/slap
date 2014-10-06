@@ -80,24 +80,45 @@ slap_mat_fill_stub_bc (value * argv, int argn)
                             argv[5]);
 }
 
+void slacpy_ (char *uplo, int *m, int *n,
+              float *a, int *lda, float *b, int *ldb);
+void dlacpy_ (char *uplo, int *m, int *n,
+              double *a, int *lda, double *b, int *ldb);
+void clacpy_ (char *uplo, int *m, int *n,
+              float *a, int *lda, float *b, int *ldb);
+void zlacpy_ (char *uplo, int *m, int *n,
+              double *a, int *lda, double *b, int *ldb);
+
 CAMLprim value
 slap_mat_copy_stub (value v_m, value v_n,
                     value v_ar, value v_ac, value v_a,
                     value v_br, value v_bc, value v_b)
 {
+  int m = Int_val(v_m);
   int n = Int_val(v_n);
-  char *adata = SLAP_BA_MAT_DATA(v_a, v_ar, v_ac);
-  char *bdata = SLAP_BA_MAT_DATA(v_b, v_br, v_bc);
-  int elm_size = SLAP_BA_ELEMENT_SIZE(v_a);
-  int lda = SLAP_BA_LD(v_a) * elm_size;
-  int ldb = SLAP_BA_LD(v_b) * elm_size;
-  int len = Int_val(v_m) * elm_size;
-  int j;
+  void *a = SLAP_BA_MAT_DATA(v_a, v_ar, v_ac);
+  void *b = SLAP_BA_MAT_DATA(v_b, v_br, v_bc);
+  int lda = SLAP_BA_LD(v_a);
+  int ldb = SLAP_BA_LD(v_b);
 
-  for (j = 0; j < n; ++j) {
-    memcpy(bdata, adata, len);
-    adata += lda;
-    bdata += ldb;
+  switch (SLAP_BA_KIND(v_a))
+  {
+  case CAML_BA_FLOAT32: slacpy_("*", &m, &n, a, &lda, b, &ldb); break;
+  case CAML_BA_FLOAT64: dlacpy_("*", &m, &n, a, &lda, b, &ldb); break;
+  case CAML_BA_COMPLEX32: clacpy_("*", &m, &n, a, &lda, b, &ldb); break;
+  case CAML_BA_COMPLEX64: zlacpy_("*", &m, &n, a, &lda, b, &ldb); break;
+  default: {
+    int elm_size = SLAP_BA_ELEMENT_SIZE(v_a);
+    int len = m * elm_size;
+    int j;
+    lda *= elm_size;
+    ldb *= elm_size;
+    for (j = 0; j < n; ++j) {
+      memcpy(b, a, len);
+      a = (byte *) a + lda;
+      b = (byte *) b + ldb;
+    }
+  }
   }
 
   return Val_unit;
