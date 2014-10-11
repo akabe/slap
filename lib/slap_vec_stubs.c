@@ -44,7 +44,9 @@ slap_vec_copy (int n, enum caml_ba_kind kind,
   case CAML_BA_FLOAT64: dcopy_(&n, xdata, &incx, ydata, &incy); break;
   case CAML_BA_COMPLEX32: ccopy_(&n, xdata, &incx, ydata, &incy); break;
   case CAML_BA_COMPLEX64: zcopy_(&n, xdata, &incx, ydata, &incy); break;
+#if HAVE_CAML_BA_CHAR
   case CAML_BA_CHAR:
+#endif
   case CAML_BA_SINT8:
   case CAML_BA_UINT8: COPY(int8_t); break;
   case CAML_BA_SINT16:
@@ -96,7 +98,9 @@ slap_vec_fill (int n, enum caml_ba_kind kind,
   {
   case CAML_BA_FLOAT32: FILL(float, Double_val(v_init)); break;
   case CAML_BA_FLOAT64: FILL(double, Double_val(v_init)); break;
+#if HAVE_CAML_BA_CHAR
   case CAML_BA_CHAR:
+#endif
   case CAML_BA_SINT8:
   case CAML_BA_UINT8: FILL(unsigned char, Int_val(v_init)); break;
   case CAML_BA_SINT16:

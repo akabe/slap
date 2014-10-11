@@ -27,6 +27,7 @@
 #include <caml/memory.h>
 #include <caml/mlvalues.h>
 #include <caml/signals.h>
+#include "config.h"
 
 #ifdef __GNUC__
 #define PACKED __attribute__ ((__packed__))
@@ -67,6 +68,13 @@ typedef struct PACKED {
 #define SLAP_BA_MAT_DATA(v_a, v_ar, v_ac)                               \
   (SLAP_BA_DATA(v_a) + (SLAP_BA_LD(v_a) * (Int_val(v_ac) - 1)           \
                         + (Int_val(v_ar) - 1)) * SLAP_BA_ELEMENT_SIZE(v_a))
+
+/* CAML_BA_CHAR is supported by OCaml 4.02 or above */
+#if OCAML_MAJOR >= 4 && OCAML_MINOR >= 2
+#define HAVE_CAML_BA_CHAR 1
+#else
+#define HAVE_CAML_BA_CHAR 0
+#endif
 
 extern const int * const slap_ba_element_size;
 
