@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: 7945cfe168ee6e8dfde27cd90e7a2b4b) *)
+(* DO NOT EDIT (digest: 615b0df51ce175bb103839e1f6a9d6ed) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -597,7 +597,7 @@ let package_default =
   {
      MyOCamlbuildBase.lib_ocaml =
        [("slap", ["lib"], []); ("slap_top", ["lib"], [])];
-     lib_c = [("slap", "lib", ["lib/slap_utils.h"])];
+     lib_c = [("slap", "lib", ["lib/config.h"; "lib/slap_utils.h"])];
      flags =
        [
           (["oasis_library_slap_ccopt"; "compile"],

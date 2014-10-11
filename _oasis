@@ -19,16 +19,18 @@ XStdFilesAUTHORS:       false
 XStdFilesREADME:        false
 BuildTools:             ocamlbuild,ocamldoc,cppo
 
-PreBuildCommand:        cppo lib/slap.cppo.mli > lib/slap.mli && \
+PreBuildCommand:        ocaml gen_config.ml && \
+                        cppo lib/slap.cppo.mli > lib/slap.mli && \
                         cppo lib/slap.cppo.ml > lib/slap.ml
-PostCleanCommand:       rm -rf lib/slap.ml lib/slap.mli
+PostCleanCommand:       rm -f lib/slap.ml lib/slap.mli lib/config.h
 
 Library slap
   Path:                 lib
   FindlibName:          slap
   BuildDepends:         bigarray,lacaml
   Modules:              Slap
-  CSources:             slap_utils.h, slap_utils.c,
+  CSources:             config.h,
+                        slap_utils.h, slap_utils.c,
                         slap_vec_stubs.c,
                         slap_mat_stubs.c
   CCOpt:                -g -std=c99 -O2 -fPIC -DPIC

@@ -11,6 +11,7 @@
 
 lib/slap.mli
 lib/slap.ml
+lib/config.h
 _build/
 /setup.data
 /setup.log
