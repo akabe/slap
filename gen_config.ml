@@ -1,7 +1,6 @@
 (* 'gen_config.h' generates 'lib/config.h' *)
 
-#use "topfind";;
-#require "str";;
+#load "str.cma";;
 
 open Format
 
