@@ -1,3 +1,8 @@
+2014-10-11  Akinori ABE  <akinori@pc5>
+
+	* Several functions are reimplemented in C
+	* Add files for Travis CI
+
 2014-09-28  Akinori ABE  <abe@sf.ecei.tohoku.ac.jp>
 
 	* Support Packed & Band Storage (BLAS/LAPACK)
