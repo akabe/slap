@@ -270,34 +270,32 @@ let mem ?(equal=(=)) a = exists (equal a)
 
 (** {2 Basic operations} *)
 
-let copy_aux n ofsx incx x ofsy incy y =
-  let rec loop count ix iy =
-    if count <> 0 then begin
-      Array1.unsafe_set y iy (Array1.unsafe_get x ix);
-      loop (count - 1) (ix + incx) (iy + incy)
-    end
-  in
-  loop n ofsx ofsy
+external copy_stub : n:int ->
+                     ofsx:int -> incx:int ->
+                     ('num, 'prec, fortran_layout) Array1.t ->
+                     ofsy:int -> incy:int ->
+                     ('num, 'prec, fortran_layout) Array1.t -> unit
+  = "slap_vec_copy_stub_bc" "slap_vec_copy_stub"
 
 let copy ?y (n, ofsx, incx, x) =
   let ofsy, incy, y = opt_vec_alloc (Array1.kind x) n y in
-  copy_aux n ofsx incx x ofsy incy y;
+  copy_stub ~n ~ofsx ~incx x ~ofsy ~incy y;
   (n, ofsy, incy, y)
 
+external fill_stub : n:int ->
+                     ofsx:int -> incx:int ->
+                     ('num, 'prec, fortran_layout) Array1.t ->
+                     'num -> unit
+  = "slap_vec_fill_stub_bc" "slap_vec_fill_stub"
+
 let fill (n, ofsx, incx, x) c =
-  let rec loop count i =
-    if count <= n then begin
-      Array1.unsafe_set x i c;
-      loop (count + 1) (i + incx)
-    end
-  in
-  loop 1 ofsx
+  fill_stub ~n ~ofsx ~incx x c
 
 let append (m, ofsx, incx, x) (n, ofsy, incy, y) =
   let k = m + n in
   let z = create_array1 (Array1.kind x) k in
-  copy_aux m ofsx incx x 1 1 z;
-  copy_aux n ofsy incy y (m + 1) 1 z;
+  copy_stub ~n:m ~ofsx ~incx x ~ofsy:1 ~incy:1 z;
+  copy_stub ~n ~ofsx:ofsy ~incx:incy y ~ofsy:(m + 1) ~incy:1 z;
   (k, 1, 1, z)
 
 let rev vx = copy (shared_rev vx)

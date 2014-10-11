@@ -150,124 +150,118 @@ let as_vec (m, n, ar, ac, a) =
 
 (** {2 Basic operations} *)
 
+external fill_stub : m:int -> n:int ->
+                     ar:int -> ac:int ->
+                     ('num, 'prec, fortran_layout) Array2.t ->
+                     'num -> unit
+  = "slap_mat_fill_stub_bc" "slap_mat_fill_stub"
+
 let fill (m, n, ar, ac, a) x =
-  for j = 0 to n - 1 do
-    for i = 0 to m - 1 do
-      Array2.unsafe_set a (i + ar) (j + ac) x
-    done
-  done
+  fill_stub ~m ~n ~ar ~ac a x
+
+external copy_stub : m:int -> n:int ->
+                     ar:int -> ac:int ->
+                     ('num, 'prec, fortran_layout) Array2.t ->
+                     br:int -> bc:int ->
+                     ('num, 'prec, fortran_layout) Array2.t -> unit
+  = "slap_mat_copy_stub_bc" "slap_mat_copy_stub"
 
 let copy ?b (m, n, ar, ac, a) =
   let br, bc, b = opt_mat_alloc (Array2.kind a) m n b in
-  for j = 0 to n - 1 do
-    for i = 0 to m - 1 do
-      let e = Array2.unsafe_get a (i + ar) (j + ac) in
-      Array2.unsafe_set b (i + br) (j + bc) e
-    done
-  done;
+  copy_stub ~m ~n ~ar ~ac a ~br ~bc b;
   (m, n, br, bc, b)
 
 (** {2 Matrix transformations} *)
+
+external packed_stub : n:int -> up:bool ->
+                       ('num, 'prec, fortran_layout) Array1.t ->
+                       ar:int -> ac:int ->
+                       ('num, 'prec, fortran_layout) Array2.t -> unit
+  = "slap_mat_packed_stub_bc" "slap_mat_packed_stub"
 
 let packed ?(up = true) ?x (n, n', ar, ac, a) =
   assert(n = n');
   let k = Size.packed n in
   let x = Vec.opt_cnt_vec_alloc (Array2.kind a) k x in
-  let pos_ref = ref 1 in
-  let r = ar - 1 in
-  let c = ac - 1 in
-  let store_column j i_start i_end =
-    for i = i_start to i_end do
-      let e = Array2.unsafe_get a (r + i) (c + j) in
-      let pos = !pos_ref in
-      Array1.unsafe_set x pos e;
-      pos_ref := pos + 1
-    done
-  in
-  if up
-  then for j = 1 to n do store_column j 1 j done
-  else for j = 1 to n do store_column j j n done;
+  packed_stub ~up ~n x ~ar ~ac a;
   (k, 1, 1, x)
+
+external unpacked_stub : n:int -> up:bool ->
+                         fill_num:'num option ->
+                         ('num, 'prec, fortran_layout) Array1.t ->
+                         ar:int -> ac:int ->
+                         ('num, 'prec, fortran_layout) Array2.t -> unit
+  = "slap_mat_unpacked_stub_bc" "slap_mat_unpacked_stub"
 
 let unpacked ?(up = true) ?(fill_num = None) ?a (k, ofsx, incx, x) =
   assert(Vec.check_cnt k ofsx incx x);
   let n = Size.unpacked k in
   let ar, ac, a = opt_mat_alloc (Array1.kind x) n n a in
-  let pos_ref = ref 1 in
-  let r = ar - 1 in
-  let c = ac - 1 in
-  let store_column j i_start i_end =
-    for i = i_start to i_end do
-      let pos = !pos_ref in
-      let e = Array1.unsafe_get x pos in
-      Array2.unsafe_set a (r + i) (c + j) e;
-      pos_ref := pos + 1
-    done
-  in
-  begin
-    match fill_num with
-    | None -> ()
-    | Some c -> fill (n, n, ar, ac, a) c
-  end;
-  if up
-  then for j = 1 to n do store_column j 1 j done
-  else for j = 1 to n do store_column j j n done;
+  unpacked_stub ~n ~up ~fill_num x ~ar ~ac a;
   (n, n, ar, ac, a)
+
+external geband_stub : m:int -> n:int ->
+                       kl:int -> ku:int ->
+                       ar:int -> ac:int ->
+                       ('num, 'prec, fortran_layout) Array2.t ->
+                       br:int -> bc:int ->
+                       ('num, 'prec, fortran_layout) Array2.t -> unit
+  = "slap_mat_geband_stub_bc" "slap_mat_geband_stub"
 
 let geband_dyn kl ku ?b (m, n, ar, ac, a) =
   if kl >= m then invalid_arg "Slap.Mat.geband_dyn: kl >= m";
   if ku >= n then invalid_arg "Slap.Mat.geband_dyn: ku >= n";
-  let gbs = Size.geband_dyn m n kl ku in
-  let br, bc, b = opt_mat_alloc (Array2.kind a) gbs n b in
-  for j = 0 to n - 1 do
-    for i = max 0 (j - ku) to min (m - 1) (j + kl) do
-      let e = Array2.unsafe_get a (ar + i) (ac + j) in
-      let i' = ku + i - j in
-      Array2.unsafe_set b (br + i') (bc + j) e
-    done
-  done;
-  (gbs, n, br, bc, b)
+  let gbsize = kl + ku + 1 in
+  let br, bc, b = opt_mat_alloc (Array2.kind a) gbsize n b in
+  geband_stub ~m ~n ~kl ~ku ~ar ~ac a ~br ~bc b;
+  (gbsize, n, br, bc, b)
 
-let ungeband m kl ku ?(fill_num = None) ?a (gbs, n, br, bc, b) =
-  assert(gbs = Size.geband_dyn m n kl ku);
+external ungeband_stub : m:int -> n:int ->
+                         kl:int -> ku:int ->
+                         fill_num:'num option ->
+                         ar:int -> ac:int ->
+                         ('num, 'prec, fortran_layout) Array2.t ->
+                         br:int -> bc:int ->
+                         ('num, 'prec, fortran_layout) Array2.t -> unit
+  = "slap_mat_ungeband_stub_bc" "slap_mat_ungeband_stub"
+
+let ungeband m kl ku ?(fill_num = None) ?a (gbsize, n, br, bc, b) =
+  assert(gbsize = kl + ku + 1);
   let ar, ac, a = opt_mat_alloc (Array2.kind b) m n a in
-  begin
-    match fill_num with
-    | None -> ()
-    | Some c -> fill (m, n, ar, ac, a) c
-  end;
-  for j = 0 to n - 1 do
-    for i = max 0 (j - ku) to min (m - 1) (j + kl) do
-      let i' = ku + i - j in
-      let e = Array2.unsafe_get b (br + i') (bc + j) in
-      Array2.unsafe_set a (ar + i) (ac + j) e
-    done
-  done;
+  ungeband_stub ~m ~n ~kl ~ku ~fill_num ~ar ~ac a ~br ~bc b;
   (m, n, ar, ac, a)
 
 let syband_dyn kd ?(up = true) ?b (n, n', ar, ac, a) =
   assert(n = n');
   if kd >= n then invalid_arg "Slap.Mat.syband_dyn: kd >= n";
+  let sbsize = kd + 1 in
+  let br, bc, b = opt_mat_alloc (Array2.kind a) sbsize n b in
   if up
-  then geband_dyn 0 kd ?b (n, n, ar, ac, a)
-  else geband_dyn kd 0 ?b (n, n, ar, ac, a)
+  then geband_stub ~m:n ~n ~kl:0 ~ku:kd ~ar ~ac a ~br ~bc b
+  else geband_stub ~m:n ~n ~kl:kd ~ku:0 ~ar ~ac a ~br ~bc b;
+  (sbsize, n, br, bc, b)
 
-let unsyband kd ?(up = true) ?fill_num ?a (sbs, n, br, bc, b) =
-  assert(sbs = Size.syband_dyn n kd);
+let unsyband kd ?(up = true) ?(fill_num = None) ?a (sbsize, n, br, bc, b) =
+  assert(sbsize = kd + 1);
+  let ar, ac, a = opt_mat_alloc (Array2.kind b) n n a in
   if up
-  then ungeband n 0 kd ?fill_num ?a (sbs, n, br, bc, b)
-  else ungeband n kd 0 ?fill_num ?a (sbs, n, br, bc, b)
+  then ungeband_stub ~m:n ~n ~kl:0 ~ku:kd ~fill_num ~ar ~ac a ~br ~bc b
+  else ungeband_stub ~m:n ~n ~kl:kd ~ku:0 ~fill_num ~ar ~ac a ~br ~bc b;
+  (n, n, ar, ac, a)
 
 let luband_dyn kl ku ?ab (m, n, ar, ac, a) =
-  let lusize = Size.luband_dyn m n kl ku in
-  let gbsize = Size.geband_dyn m n kl ku in
+  if kl >= m then invalid_arg "Slap.Mat.geband_dyn: kl >= m";
+  if ku >= n then invalid_arg "Slap.Mat.geband_dyn: ku >= n";
+  let lusize = 2 * kl + ku + 1 in
   let abr, abc, ab = opt_mat_alloc (Array2.kind a) lusize n ab in
-  ignore (geband_dyn kl ku ~b:(gbsize, n, abr + kl, abc, ab) (m, n, ar, ac, a));
+  geband_stub ~m ~n ~kl ~ku ~ar ~ac a ~br:(abr + kl) ~bc:abc ab;
   (lusize, n, abr, abc, ab)
 
-let unluband m kl ku ?fill_num ?a (lusize, n, abr, abc, ab) =
-  let gbsize = lusize - kl in
-  ungeband m kl ku ?fill_num ?a (gbsize, n, abr + kl, abc, ab)
+let unluband m kl ku ?(fill_num = None) ?a (lusize, n, abr, abc, ab) =
+  assert(lusize = 2 * kl + ku + 1);
+  let ar, ac, a = opt_mat_alloc (Array2.kind ab) m n a in
+  ungeband_stub ~m ~n ~kl ~ku ~fill_num ~ar ~ac a ~br:(abr + kl) ~bc:abc ab;
+  (m, n, ar, ac, a)
 
 (** {2 Iterators} *)
 
