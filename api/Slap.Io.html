@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Slap.Mat.html">
+<link rel="next" href="Slap.Common.html">
+<link rel="Up" href="Slap.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Slap" rel="Chapter" href="Slap.html"><link title="General pretty printers" rel="Section" href="#2_Generalprettyprinters">
+<link title="Default pretty printers for elements of vectors or matrices" rel="Section" href="#2_Defaultprettyprintersforelementsofvectorsormatrices">
+<link title="Pretty-printing in standard style" rel="Section" href="#2_Prettyprintinginstandardstyle">
+<link title="Toplevel pretty-printers" rel="Section" href="#2_Toplevelprettyprinters">
+<title>Slap.Io</title>
+</head>
+<body>
+<div class="navbar"><a href="Slap.Mat.html">Previous</a>
+&nbsp;<a href="Slap.html">Up</a>
+&nbsp;<a href="Slap.Common.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Slap.Io.html">Slap.Io</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Io: <code class="code">sig</code> <a href="Slap.Io.html">..</a> <code class="code">end</code></pre>Pretty-printers of vector and matrices.<br>
+<hr width="100%">
+<pre><span class="keyword">module</span> <a href="Slap.Io.Context.html">Context</a>: <code class="code">sig</code> <a href="Slap.Io.Context.html">..</a> <code class="code">end</code></pre><br>
+<span id="2_Generalprettyprinters"><h2>General pretty printers</h2></span><br>
+<br><code><span id="TYPEindex"><span class="keyword">type</span> <code class="type"></code>index</span> = </code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">Head</span></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">Foot</span></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">Ellipsis</span></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">Cell</span> <span class="keyword">of</span> <code class="type">int</code></code></td>
+
+</tr></table>
+
+
+<pre><span id="VALpp_table"><span class="keyword">val</span> pp_table</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?vertical_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       ?horizontal_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       Format.formatter -><br>       (Format.formatter -> 'a -> unit) -> int -> int -> (int -> int -> 'a) -> unit</code></pre><div class="info">
+<code class="code">pp_table
+       ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
+       ?pp_left ?pp_right ?pad ?ellipsis ?vertical_context ?horizontal_context
+       ppf pp_el n_rows n_cols get_el</code>
+<p>
+
+    Generic printing of tables.
+<p>
+<ul>
+<li><code class="code">pp_open ppf</code> is called when a table is started.
+      (default = <code class="code">pp_open_box ppf 0</code>)</li>
+<li><code class="code">pp_close ppf</code> is called when a table is complete.
+      (default = <code class="code">pp_close_box ppf ()</code>)</li>
+<li><code class="code">pp_head other_ppf j</code> is used to print a header for column <code class="code">j</code> in a table.
+      The first argument <code class="code">other_ppf</code> is not <code class="code">ppf</code>!
+      (default = no header, <code class="code">1 &lt;= j &lt;= n_cols</code>)</li>
+<li><code class="code">pp_foot other_ppf j</code> is used to print a footer for column <code class="code">j</code> in a
+      table. The first argument <code class="code">other_ppf</code> is not <code class="code">ppf</code>!
+      (default = no footer, <code class="code">1 &lt;= j &lt;= n_cols</code>)</li>
+<li><code class="code">pp_end_row ~row</code> is called at the end of each row.
+      (default = <code class="code">pp_force_newline ppf ()</code>)</li>
+<li><code class="code">pp_end_col ~col</code> is called at the end of each column (element).
+      (default = <code class="code">pp_print_string ppf " "</code>)</li>
+<li><code class="code">pp_left other_ppf i</code> is used to print left labels for row <code class="code">i</code> in a table.
+      The first argument <code class="code">other_ppf</code> is not <code class="code">ppf</code>!
+      (default = no left labels, <code class="code">1 &lt;= i &lt;= n_rows</code>)</li>
+<li><code class="code">pp_right other_ppf i</code> is used to print right labels for row <code class="code">i</code> in a
+      table. The first argument <code class="code">other_ppf</code> is not <code class="code">ppf</code>!
+      (default = no right labels)</li>
+<li><code class="code">pad</code> is a padding character for each column. (default = <code class="code">' '</code>)</li>
+<li><code class="code">ellipsis</code> is used as a filler when elements need to be skipped.
+      (default = <code class="code">!default_ellipsis</code>)</li>
+<li>If <code class="code">vertical_context</code> is <code class="code">Some n</code>, the first <code class="code">n</code> rows and the last
+      <code class="code">n</code> rows of a table are printed. When the number of rows is smaller
+      than <code class="code">2 * n</code>, all rows are shown. If <code class="code">None</code>, all rows of a table are
+      output.
+      (default = <code class="code">!Context.vertical_default</code>)</li>
+<li>If <code class="code">horizontal_context</code> is <code class="code">Some n</code>, the first <code class="code">n</code> columns and the last
+      <code class="code">n</code> columns of a table are printed. When the number of columns is smaller
+      than <code class="code">2 * n</code>, all columns are shown. If <code class="code">None</code>, all columns of a table are
+      output.
+      (default = <code class="code">!Context.horizontal_default</code>)</li>
+<li><code class="code">pp_el</code> is a pretty printer to used to output elements.</li>
+<li><code class="code">ppf</code> is the formatter to which all output is finally printed.</li>
+<li><code class="code">n_rows</code> is the number of all rows of a table.</li>
+<li><code class="code">n_cols</code> is the number of all columns of a table.</li>
+<li><code class="code">get_el i j</code> returns the <code class="code">(i,j)</code> element of a table.
+      (<code class="code">1 &lt;= i &lt;= n_rows</code> and <code class="code">1 &lt;= j &lt;= n_cols</code>)</li>
+</ul>
+<br>
+</div>
+<pre><span id="VALpp_vec_gen"><span class="keyword">val</span> pp_vec_gen</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?vertical_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       ?horizontal_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       Format.formatter -><br>       (Format.formatter -> 'a -> unit) -> ('b, 'a, 'c, 'd) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> unit</code></pre><div class="info">
+A generator of pretty printers for (column) vectors.<br>
+</div>
+<pre><span id="VALpp_rvec_gen"><span class="keyword">val</span> pp_rvec_gen</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?vertical_context:int option -><br>       ?horizontal_context:int option -><br>       Format.formatter -><br>       (Format.formatter -> 'a -> unit) -> ('b, 'a, 'c, 'd) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> unit</code></pre><div class="info">
+A generator of pretty printers for row vectors.<br>
+</div>
+<pre><span id="VALpp_mat_gen"><span class="keyword">val</span> pp_mat_gen</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap.Io.html#TYPEindex">index</a> -> col:<a href="Slap.Io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?vertical_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       ?horizontal_context:<a href="Slap.Io.Context.html#TYPEt">Context.t</a> option -><br>       Format.formatter -><br>       (Format.formatter -> 'a -> unit) -> ('b, 'c, 'a, 'd, 'e) <a href="Slap.Mat.html#TYPEt">Slap.Mat.t</a> -> unit</code></pre><div class="info">
+A generator of pretty printers for matrices.<br>
+</div>
+<br>
+<span id="2_Defaultprettyprintersforelementsofvectorsormatrices"><h2>Default pretty printers for elements of vectors or matrices</h2></span><br>
+<pre><span id="TYPEpp_el_default"><span class="keyword">type</span> <code class="type">'a</code> pp_el_default</span> = <code class="type">(Format.formatter -> 'a -> unit) Pervasives.ref</code> </pre>
+
+<pre><span id="VALpp_float_el_default"><span class="keyword">val</span> pp_float_el_default</span> : <code class="type">float <a href="Slap.Io.html#TYPEpp_el_default">pp_el_default</a></code></pre><div class="info">
+<code class="code">fprintf ppf "%G" el</code><br>
+</div>
+<pre><span id="VALpp_complex_el_default"><span class="keyword">val</span> pp_complex_el_default</span> : <code class="type">Complex.t <a href="Slap.Io.html#TYPEpp_el_default">pp_el_default</a></code></pre><div class="info">
+<code class="code">fprintf ppf "(%G, %Gi)" x.re x.im</code><br>
+</div>
+<pre><span id="VALpp_int32_el_default"><span class="keyword">val</span> pp_int32_el_default</span> : <code class="type">int32 <a href="Slap.Io.html#TYPEpp_el_default">pp_el_default</a></code></pre><div class="info">
+<code class="code">fprintf ppf "%ld" x</code><br>
+</div>
+<br>
+<span id="2_Prettyprintinginstandardstyle"><h2>Pretty-printing in standard style</h2></span><br>
+<pre><span id="TYPEpp_vec"><span class="keyword">type</span> <code class="type">('a, 'b, 'c, 'd)</code> pp_vec</span> = <code class="type">Format.formatter -> ('a, 'b, 'c, 'd) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a> -> unit</code> </pre>
+<div class="info">
+A type of standard pretty printers for vectors.<br>
+</div>
+
+<pre><span id="VALpp_fvec"><span class="keyword">val</span> pp_fvec</span> : <code class="type">('a, float, 'b, 'c) <a href="Slap.Io.html#TYPEpp_vec">pp_vec</a></code></pre><pre><span id="VALpp_cvec"><span class="keyword">val</span> pp_cvec</span> : <code class="type">('a, Complex.t, 'b, 'c) <a href="Slap.Io.html#TYPEpp_vec">pp_vec</a></code></pre><pre><span id="VALpp_ivec"><span class="keyword">val</span> pp_ivec</span> : <code class="type">('a, int32, 'b, <a href="Slap.html#TYPEcnt">Slap.cnt</a>) <a href="Slap.Io.html#TYPEpp_vec">pp_vec</a></code></pre><pre><span id="VALpp_rfvec"><span class="keyword">val</span> pp_rfvec</span> : <code class="type">('a, float, 'b, 'c) <a href="Slap.Io.html#TYPEpp_vec">pp_vec</a></code></pre><pre><span id="VALpp_rcvec"><span class="keyword">val</span> pp_rcvec</span> : <code class="type">('a, Complex.t, 'b, 'c) <a href="Slap.Io.html#TYPEpp_vec">pp_vec</a></code></pre><pre><span id="VALpp_rivec"><span class="keyword">val</span> pp_rivec</span> : <code class="type">('a, int32, 'b, 'c) <a href="Slap.Io.html#TYPEpp_vec">pp_vec</a></code></pre><pre><span id="TYPEpp_mat"><span class="keyword">type</span> <code class="type">('a, 'b, 'c, 'd, 'e)</code> pp_mat</span> = <code class="type">Format.formatter -> ('a, 'b, 'c, 'd, 'e) <a href="Slap.Mat.html#TYPEt">Slap.Mat.t</a> -> unit</code> </pre>
+<div class="info">
+A type of standard pretty printers for matrices.<br>
+</div>
+
+<pre><span id="VALpp_fmat"><span class="keyword">val</span> pp_fmat</span> : <code class="type">('a, 'b, float, 'c, 'd) <a href="Slap.Io.html#TYPEpp_mat">pp_mat</a></code></pre><pre><span id="VALpp_cmat"><span class="keyword">val</span> pp_cmat</span> : <code class="type">('a, 'b, Complex.t, 'c, 'd) <a href="Slap.Io.html#TYPEpp_mat">pp_mat</a></code></pre><pre><span id="VALpp_imat"><span class="keyword">val</span> pp_imat</span> : <code class="type">('a, 'b, int32, 'c, 'd) <a href="Slap.Io.html#TYPEpp_mat">pp_mat</a></code></pre><br>
+<span id="2_Toplevelprettyprinters"><h2>Toplevel pretty-printers</h2></span><br>
+<pre><span class="keyword">module</span> <a href="Slap.Io.Toplevel.html">Toplevel</a>: <code class="code">sig</code> <a href="Slap.Io.Toplevel.html">..</a> <code class="code">end</code></pre></body></html>
