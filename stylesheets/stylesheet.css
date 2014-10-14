@@ -40,6 +40,7 @@ ol, ul {
 }
 
 table {
+  width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
 }
@@ -231,23 +232,15 @@ hr {
   background: url('../images/bg_hr.png') repeat-x center;
 }
 
-table {
-  border: 1px solid #373737;
-  margin-bottom: 20px;
+th, td {
   text-align: left;
- }
+  padding: 5px 10px;
+  border-bottom: 1px solid #aaa;
+}
 
 th {
-  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  padding: 10px;
-  background: #373737;
-  color: #fff;
- }
-
-td {
-  padding: 10px;
-  border: 1px solid #373737;
- }
+  font-weight: bold;
+}
 
 form {
   background: #f2f2f2;
@@ -264,7 +257,7 @@ Full-Width Styles
 
 .inner {
   position: relative;
-  max-width: 640px;
+  max-width: 720px;
   padding: 20px 10px;
   margin: 0 auto;
 }

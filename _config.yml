@@ -1,0 +1,6 @@
+title: Sized Linear Algebra Library (SLAP)
+description: BLAS and LAPACK binding in OCaml with type-based static size checking for matrix operations
+
+markdown: redcarpet
+redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data"]
