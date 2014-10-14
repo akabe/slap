@@ -73,7 +73,7 @@ open Slap.Size
 open Slap.Common
 
 let jacobi a b =
-  let d_inv = Vec.map (fun di -> 1.0 /. di) (Mat.diag a) in
+  let d_inv = Vec.reci (Mat.diag a) in (* reciprocal diagonal elements *)
   let r = Mat.mapi (fun i j aij -> if i = j then 0.0 else aij) a in
   let y = Vec.create (Vec.dim b) in (* temporary memory *)
   let rec loop z x =
