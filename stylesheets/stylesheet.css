@@ -306,6 +306,35 @@ Full-Width Styles
   text-shadow: #111 0px 0px 10px;
 }
 
+#menu {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#menu_item {
+  display: block;
+  float: left;
+}
+
+#menu_button {
+  text-decoration: none;
+  padding: 15px 15px 10px 15px;
+  border-radius: 0 0 10px 10px;
+  font-weight: 700;
+  color: #0099ff;
+}
+
+#menu_button:hover {
+  background-color: #0099ff;
+  color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+}
+
 #downloads {
   position: absolute;
   width: 210px;
