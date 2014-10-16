@@ -6,9 +6,6 @@ title: SLAP - Getting Started
 Getting Started
 ===============
 
-Introduction
-------------
-
 ### How to install SLAP
 
 You can install SLAP by using [OPAM](http://opam.ocamlpro.com/), which is a
@@ -93,11 +90,6 @@ val x : (z s s s, 'a) vec = R1 R2 R3
                              1  2  3
 ```
 
-The vector has a curious type: The types `z` and `'n s` correspond to zero and
-`'n + 1`, respectively. Thus, `z s s s` represents 0+1+1+1 = 3. Thus
-`(z s s s, 'a) vec` is the type of three-dimensional vectors. We will explain
-the reason why we give such a type in the second example.
-
 Next, print the vector:
 
 ```ocaml
@@ -125,21 +117,8 @@ the i-th element in the vector by calling `f i`.
 So `Vec.init three (fun i -> float_of_int i)` is the same as
 `(float_of_int 1, float_of_int 2, float_of_int 3)`, i.e., `(1.0, 2.0, 3.0)`
 where `(...)` is notation of a vector, not a tuple.
-
-`three` is **not** a normal integer: Show the type of `three`.
-
-```ocaml
-# three;;
-- : z s s s t = 3
-```
-
-The value is three, but the type is not `int`.
-`'n t` (= `'n Slap.Size.t`) is the type of _sizes_ (i.e., natural numbers as
-dimensions of vectors and matrices). This is also known as a _singleton type_ on
-natural numbers; i.e., evaluation of a term (i.e., an expression) of type `'n t`
-**always** results in the natural number corresponding to `'n`. Therefore
-`z s s s t` is the type of terms always evaluated to three (`z s s s`).
-Module `Slap.Size` provides constants and operations on sizes.
+`three` is a special value for dimensions of vectors and matrices.
+Sizes are provided by module `Slap.Size`.
 
 Last, `Slap.Io` is a module providing pretty printers for vectors and matrices,
 e.g., `Slap.Io.pp_rfvec` is a pretty printer for real row vectors. When you
