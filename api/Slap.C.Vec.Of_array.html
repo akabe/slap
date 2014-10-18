@@ -13,12 +13,15 @@
 <link title="Slap" rel="Chapter" href="Slap.html"><title>Slap.C.Vec.Of_array</title>
 </head>
 <body>
-<div class="navbar">&nbsp;<a href="Slap.C.Vec.html">Up</a>
-&nbsp;<a href="Slap.C.Vec.Of_list.html">Next</a>
+<div class="navbar">&nbsp;<a class="up" href="Slap.C.Vec.html" title="Slap.C.Vec">Up</a>
+&nbsp;<a class="post" href="Slap.C.Vec.Of_list.html" title="Slap.C.Vec.Of_list">Next</a>
 </div>
-<center><h1>Functor <a href="type_Slap.C.Vec.Of_array.html">Slap.C.Vec.Of_array</a></h1></center>
-<br>
-<pre><span class="keyword">module</span> Of_array: <div class="sig_block"><code class="code">functor (</code><code class="code">X</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block"><pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type"><a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> array</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap.C.Vec.CNTVEC.html">CNTVEC</a></code><code class="type"> </code></div></pre>A functor version of <code class="code">of_array</code>.<br>
+<h1>Functor <a href="type_Slap.C.Vec.Of_array.html">Slap.C.Vec.Of_array</a></h1>
+
+<pre><span class="keyword">module</span> Of_array: <div class="sig_block"><code class="code">functor (</code><code class="code">X</code><code class="code"> : </code><code class="code">sig</code><div class="sig_block">
+<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type"><a href="Slap.C.html#TYPEnum_type">Slap.C.num_type</a> array</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap.C.Vec.CNTVEC.html">CNTVEC</a></code><code class="type"> </code></div></pre><div class="info module top">
+A functor version of <code class="code">of_array</code>.<br>
+</div>
 <table border="0" cellpadding="3" width="100%">
 <tr>
 <td align="left" valign="top" width="1%%"><b>Parameters: </b></td>
@@ -34,12 +37,14 @@
 </tr>
 </table>
 <hr width="100%">
+
 <pre><span id="TYPEn"><span class="keyword">type</span> <code class="type"></code>n</span> </pre>
-<div class="info">
+<div class="info ">
 A generative phantom type.<br>
 </div>
 
-<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type">(<a href="Slap.C.Vec.CNTVEC.html#TYPEn">n</a>, 'a) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info">
+
+<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type">(<a href="Slap.C.Vec.CNTVEC.html#TYPEn">n</a>, 'cnt) <a href="Slap.C.html#TYPEvec">Slap.C.vec</a></code></pre><div class="info ">
 A dynamically-sized contiguous vector with type like
         <code class="code">exists n. (n, 'cnt) vec</code>.<br>
 </div>

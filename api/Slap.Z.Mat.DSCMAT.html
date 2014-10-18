@@ -13,24 +13,29 @@
 <link title="Slap" rel="Chapter" href="Slap.html"><title>Slap.Z.Mat.DSCMAT</title>
 </head>
 <body>
-<div class="navbar"><a href="Slap.Z.Mat.CNTMAT.html">Previous</a>
-&nbsp;<a href="Slap.Z.Mat.html">Up</a>
+<div class="navbar"><a class="pre" href="Slap.Z.Mat.CNTMAT.html" title="Slap.Z.Mat.CNTMAT">Previous</a>
+&nbsp;<a class="up" href="Slap.Z.Mat.html" title="Slap.Z.Mat">Up</a>
 &nbsp;</div>
-<center><h1>Module type <a href="type_Slap.Z.Mat.DSCMAT.html">Slap.Z.Mat.DSCMAT</a></h1></center>
-<br>
-<pre><span class="keyword">module type</span> DSCMAT = <code class="code">sig</code> <a href="Slap.Z.Mat.DSCMAT.html">..</a> <code class="code">end</code></pre>The signature of modules containing dynamically-sized discrete matrices.<br>
+<h1>Module type <a href="type_Slap.Z.Mat.DSCMAT.html">Slap.Z.Mat.DSCMAT</a></h1>
+
+<pre><span class="keyword">module type</span> DSCMAT = <code class="code">sig</code> <a href="Slap.Z.Mat.DSCMAT.html">..</a> <code class="code">end</code></pre><div class="info modtype top">
+The signature of modules containing dynamically-sized discrete matrices.<br>
+</div>
 <hr width="100%">
+
 <pre><span id="TYPEm"><span class="keyword">type</span> <code class="type"></code>m</span> </pre>
-<div class="info">
+<div class="info ">
 A generative phantom type.<br>
 </div>
+
 
 <pre><span id="TYPEn"><span class="keyword">type</span> <code class="type"></code>n</span> </pre>
-<div class="info">
+<div class="info ">
 A generative phantom type.<br>
 </div>
 
-<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type">(<a href="Slap.Z.Mat.DSCMAT.html#TYPEm">m</a>, <a href="Slap.Z.Mat.DSCMAT.html#TYPEn">n</a>, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a></code></pre><div class="info">
+
+<pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type">(<a href="Slap.Z.Mat.DSCMAT.html#TYPEm">m</a>, <a href="Slap.Z.Mat.DSCMAT.html#TYPEn">n</a>, <a href="Slap.html#TYPEdsc">Slap.dsc</a>) <a href="Slap.Z.html#TYPEmat">Slap.Z.mat</a></code></pre><div class="info ">
 A dynamically-sized discrete matrix with type like
         <code class="code">exists m, n. (m, n, dsc) vec</code>.<br>
 </div>
