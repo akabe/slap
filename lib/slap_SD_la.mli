@@ -537,8 +537,8 @@ type ('m, 'n, 'jobz) gesdd_min_lwork
 val gesdd_min_lwork : jobz:('u_cols * 'vt_rows,
                             'm * 'n,
                             ('m, 'n) Size.min * ('m, 'n) Size.min,
-                            Size.z * 'n,
-                            'm * Size.z) Common.svd_job ->
+                            'm * 'n,
+                            Size.z * Size.z) Common.svd_job ->
                       m:'m Size.t -> n:'n Size.t -> unit ->
                       ('m, 'n, 'u_cols * 'vt_rows) gesdd_min_lwork Size.t
 (** [gesdd_min_lwork ~m ~n] computes the minimum length of workspace [work] for
@@ -552,8 +552,8 @@ val gesdd_min_lwork : jobz:('u_cols * 'vt_rows,
 val gesdd_opt_lwork : jobz:('u_cols * 'vt_rows,
                             'm * 'n,
                             ('m, 'n) Size.min * ('m, 'n) Size.min,
-                            Size.z * 'n,
-                            'm * Size.z) Common.svd_job ->
+                            'm * 'n,
+                            Size.z * Size.z) Common.svd_job ->
                       ?s:(('m, 'n) Size.min, cnt) vec ->
                       ?u:('m, 'u_cols, 'u_cd) mat ->
                       ?vt:('vt_rows, 'n, 'vt_cd) mat ->
