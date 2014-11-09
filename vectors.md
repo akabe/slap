@@ -122,7 +122,7 @@ subtraction `Vec.sub`, multiplication `Vec.mul`, division `Vec.div`, square root
 
 ### Level 1 BLAS
 
-In BLAS, vector-vector operations are defined as _Level 1_ under `Slap.D`, not
+Vector-vector operations (Level 1 BLAS routines) are defined under `Slap.D`, not
 `Slap.D.Vec`. For example, `axpy alpha ~x y` computes `y := alpha * x + y` with
 a scalar value `alpha`, and vectors `x` and `y`.
 
