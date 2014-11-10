@@ -136,7 +136,7 @@ The above example calculates
 
 The parameter `trans` indicates whether matrix `a` is transposed, or not:
 When `normal` (= `Slap.Common.normal`) is passed, `a` is not transposed.
-In contrast, `trans` (= `Slap.Common.normal`) means that `a` is transposed as
+In contrast, `trans` (= `Slap.Common.trans`) means that `a` is transposed as
 follows.
 
 ```ocaml
@@ -221,9 +221,11 @@ The above code computes
 \\)
 
 The parameters `transa` and `transb` indicate whether matrices `a` and `b` are
-transposed, or not, respectively: When `normal` (= `Slap.Common.normal`) is
-given to `transa`, `a` is not transposed. In contrast, passing `trans`
-(= `Slap.Common.normal`) means that `a` is transposed as follows.
+transposed, or not, respectively. They have the same effect as argument `trans`
+of `gemv`. Differently from `gemv`, `gemm` takes two transpose flags because it
+takes two matrices. As mentioned above, `a` is not transposed when `normal`
+(= `Slap.Common.normal`) is given to `transa`. `trans` (= `Slap.Common.trans`)
+means transposition as follows.
 
 ```ocaml
 # gemm ~transa:trans ~transb:normal a a;; (* a^T * a *)
