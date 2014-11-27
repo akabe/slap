@@ -86,7 +86,7 @@ slap_vec_copy_stub_bc (value * argv, int argn)
     type init = init_value;                          \
     type *p = xdata;                                 \
     int i;                                           \
-    for (i = 0; i < n; ++i, p += incx) p[i] = init;  \
+    for (i = 0; i < n; ++i, p += incx) *p = init;    \
   }
 
 void
