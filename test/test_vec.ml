@@ -107,6 +107,23 @@ let test_copy () =
   "sv_dng <- sv_dle" @? (cp make0_sv_dng sv_dle [10;0;0;8;0;0;6;0;0;4]);
   "sv_dng <- sv_dng" @? (cp make0_sv_dng sv_dng [1;0;0;4;0;0;7;0;0;10])
 
+(* test of Slap.Vec.fill *)
+let test_fill () =
+  let fl mk0 e l =
+    let v, sv = mk0 () in
+    fill sv e;
+    let s1 = List.fold_left (fun s e -> s ^ string_of_int e ^ ";")
+                           "" (to_list v) in
+    let s2 = List.fold_left (fun s e -> s ^ string_of_int e ^ ";")
+                           "" (to_list sv) in
+    List.for_all ((=) e) (to_list sv) && (to_list v = l)
+  in
+  "v_emp"  @? (fl make0_v_emp  42 []);
+  "v_sgl"  @? (fl make0_v_sgl  42 [42]);
+  "v_ord"  @? (fl make0_v_ord  42 [42;42;42;42;42;42;42;42;42;42]);
+  "sv_dle" @? (fl make0_sv_dle 42 [ 0; 0; 0;42; 0;42; 0;42; 0;42]);
+  "sv_dng" @? (fl make0_sv_dng 42 [42; 0; 0;42; 0; 0;42; 0; 0;42])
+
 (* test of Slap.Vec.fold_lefti *)
 let test_fold_lefti () =
   let fold_lefti v = fold_lefti (fun i l x -> (i, x) :: l) [] v in
@@ -328,6 +345,7 @@ let suite =
      "of_array_dyn" >:: test_of_array_dyn;
      "of_list_dyn"  >:: test_of_list_dyn;
      "copy"         >:: test_copy;
+     "fill"         >:: test_fill;
      "fold_lefti"   >:: test_fold_lefti;
      "fold_righti"  >:: test_fold_righti;
      "iteri"        >:: test_iteri;
