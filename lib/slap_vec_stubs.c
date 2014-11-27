@@ -127,7 +127,7 @@ slap_vec_fill_stub (value v_n,
   slap_vec_fill(Int_val(v_n),
                 SLAP_BA_KIND(v_x),
                 SLAP_BA_VEC_DATA(v_x, v_ofsx),
-                Int_val(v_x),
+                Int_val(v_incx),
                 v_init);
 
   return Val_unit;
