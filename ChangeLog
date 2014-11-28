@@ -1,3 +1,10 @@
+2014-11-28  Akinori ABE  <akinori@pc5>
+
+	* Add tests for Slap.Vec.fill
+	* Fix the implementation of slap_vec_fill
+	* Fix the types of gesdd_{min,opt}_lwork
+	* Improve README.md and an example of Jacobi method
+
 2014-10-11  Akinori ABE  <akinori@pc5>
 
 	* Several functions are reimplemented in C
