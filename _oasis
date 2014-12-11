@@ -157,6 +157,14 @@ Executable two_layer_neural_network
   Install:        false
   CompiledObject: best
 
+Executable multilayer_neural_network
+  Path:           examples/neural-network/multilayer
+  MainIs:         multilayer_neural_network.ml
+  Build$:         flag(examples)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
 Executable qr_lacaml
   Path:           examples/porting/qr_factorize
   MainIs:         qr_lacaml.ml
