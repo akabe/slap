@@ -5,6 +5,8 @@ open Slap.D
 
 module NN = NeuralNetwork
 
+let (|>) x f = f x (* for OCaml 4.00 or below *)
+
 let gen_gaussian_samples n klass (xmean, ymean) stddev =
   let gen_point _ =
     let r = sqrt (-2.0 *. log (Random.float 1.0)) in
