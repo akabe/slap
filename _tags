@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 8168d9fb7e19df1cc51d3a602ed57096)
+# DO NOT EDIT (digest: 140d0ff94691a709d1d92b7b15e12ce9)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -84,6 +84,13 @@ true: annot, bin_annot
 <examples/neural-network/perceptron/*.ml{,i,y}>: pkg_bigarray
 <examples/neural-network/perceptron/*.ml{,i,y}>: pkg_lacaml
 <examples/neural-network/perceptron/*.ml{,i,y}>: use_slap
+# Executable logistic_regression
+<examples/neural-network/logistic-regression/logistic_regression.{native,byte}>: pkg_bigarray
+<examples/neural-network/logistic-regression/logistic_regression.{native,byte}>: pkg_lacaml
+<examples/neural-network/logistic-regression/logistic_regression.{native,byte}>: use_slap
+<examples/neural-network/logistic-regression/*.ml{,i,y}>: pkg_bigarray
+<examples/neural-network/logistic-regression/*.ml{,i,y}>: pkg_lacaml
+<examples/neural-network/logistic-regression/*.ml{,i,y}>: use_slap
 # Executable qr_lacaml
 <examples/porting/qr_factorize/qr_lacaml.{native,byte}>: pkg_lacaml
 # Executable qr_slap

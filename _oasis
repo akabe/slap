@@ -141,6 +141,14 @@ Executable perceptron
   Install:        false
   CompiledObject: best
 
+Executable logistic_regression
+  Path:           examples/neural-network/logistic-regression
+  MainIs:         logistic_regression.ml
+  Build$:         flag(examples)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
 Executable qr_lacaml
   Path:           examples/porting/qr_factorize
   MainIs:         qr_lacaml.ml
