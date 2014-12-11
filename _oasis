@@ -133,6 +133,14 @@ Executable posv_ppsv_pbsv
   Install:        false
   CompiledObject: best
 
+Executable perceptron
+  Path:           examples/neural-network/perceptron
+  MainIs:         perceptron.ml
+  Build$:         flag(examples)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
 Executable qr_lacaml
   Path:           examples/porting/qr_factorize
   MainIs:         qr_lacaml.ml
