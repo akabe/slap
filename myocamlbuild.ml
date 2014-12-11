@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: f0e3cfc82fd19405b608bab4997f9a6d) *)
+(* DO NOT EDIT (digest: f6563a91c84de70954848c68321433c4) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -713,6 +713,7 @@ let package_default =
           ("examples/porting/pca", ["lib"]);
           ("examples/porting/lu_factorize", ["lib"]);
           ("examples/porting/k-means", ["lib"]);
+          ("examples/neural-network/two-layer", ["lib"]);
           ("examples/neural-network/perceptron", ["lib"]);
           ("examples/neural-network/logistic-regression", ["lib"]);
           ("examples/mult", ["lib"]);
@@ -725,6 +726,6 @@ let conf = {MyOCamlbuildFindlib.no_automatic_syntax = false}
 
 let dispatch_default = MyOCamlbuildBase.dispatch_default conf package_default;;
 
-# 729 "myocamlbuild.ml"
+# 730 "myocamlbuild.ml"
 (* OASIS_STOP *)
 Ocamlbuild_plugin.dispatch dispatch_default;;
