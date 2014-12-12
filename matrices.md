@@ -21,7 +21,7 @@ val a : (z s s s, z s s s s s, 'a) mat =
 ```
 
 `Mat.make` returns a matrix initialized by a given value.
-Note that it takes two dimensions: The first parameter `three` is the number of
+Note that it takes two dimensions: the first parameter `three` is the number of
 columns (i.e., the height) of the matrix and the second `five` is the number of
 rows (i.e., the width). Thus `Mat.make three five x` returns a three-by-five
 matrix initialized by the value of `x`.
@@ -60,15 +60,15 @@ val b : (z s s s s, z s s s s, 'a) mat =
   R4 2.48343 6.52787   9.87177 1.67445
 ```
 
-`Mat.random` is similar to `Vec.random`: The elements of a created matrix are in
-interval `[from, from + range]`. Arguments `from` and `range` are optional:
+`Mat.random` is similar to `Vec.random`. The elements of a created matrix are in
+interval `[from, from + range]`. Arguments `from` and `range` are optional.
 If they are omitted, `-1.0` and `2.0` are passed, respectively, i.e., the
 interval is `[-1.0, +1.0]`.
 
 Matrix types
 ------------
 
-Basically, the strange types of the matrices are the same as those of vectors:
+Basically, the strange types of the matrices are the same as those of vectors.
 Consider the type of the following matrix `a`, again.
 
 ```ocaml
@@ -95,7 +95,7 @@ Matrix-vector operations
 ------------------------
 
 Matrix-vector operations (Level 2 BLAS routines) are defined under `Slap.D`.
-For example, `gemv` multiplies a general rectangular matrix and a vector:
+For example, `gemv` multiplies a general rectangular matrix and a vector.
 `gemv ?beta ?y ~trans ?alpha a x` basically computes
 `y := alpha * a * x + beta * y` where `alpha` (= 1 by default) and `beta`
 (= 0 by default) are scalar values, `x` and `y` are vectors, and `a` is a
@@ -119,8 +119,8 @@ val a : (z s s s, z s s s s s, 'a) mat =
 
 The above example calculates
 
-\\(
-  \\mathbf{A} \\mathbf{x} =
+$$
+  \\bm{A} \\bm{x} =
   \\begin{pmatrix}
     1 & 2 & 3 & 4 & 5 \\\\
     2 & 4 & 6 & 8 & 10 \\\\
@@ -132,11 +132,11 @@ The above example calculates
   \\begin{pmatrix}
     55 \\\\ 110 \\\\ 165
   \\end{pmatrix}.
-\\)
+$$
 
 The parameter `trans` indicates whether matrix `a` is transposed, or not:
-When `normal` (= `Slap.Common.normal`) is passed, `a` is not transposed.
-In contrast, `trans` (= `Slap.Common.trans`) means that `a` is transposed as
+when `normal` (= `Slap.Common.normal`) is passed, `a` is not transposed;
+in contrast, `trans` (= `Slap.Common.trans`) means that `a` is transposed as
 follows.
 
 ```ocaml
@@ -150,8 +150,8 @@ val x' : (z s s s, 'a) vec = R1 R2 R3
 
 The latter example computes
 
-\\(
-  \\mathbf{A}^\top \\mathbf{x}' =
+$$
+  \\bm{A}^\top \\bm{x}' =
   \\begin{pmatrix}
     1 & 2 & 3 & 4 & 5 \\\\
     2 & 4 & 6 & 8 & 10 \\\\
@@ -163,7 +163,7 @@ The latter example computes
   \\begin{pmatrix}
     14 \\\\ 28 \\\\ 42 \\\\ 56 \\\\ 70
   \\end{pmatrix}.
-\\)
+$$
 
 For example, you can use `gemv` for affine transformation.
 
@@ -176,7 +176,7 @@ examples, but more routines are supported.
 
 ### gemm: Multiplication of two general matrices
 
-`gemm` multiplies two general rectangular matrices: Basically,
+`gemm` multiplies two general rectangular matrices. Basically,
 `gemm ?beta ?c ~transa ?alpha a ~transb b` executes
 `c := alpha * a * b + beta * c` where `alpha` (= 1 by default) and `beta` (= 0
 by default) are scalar values, and `a`, `b` and `c` are matrices:
@@ -202,8 +202,8 @@ val b : (z s s s s, z s s s, 'a) mat =
 
 The above code computes
 
-\\(
-  \\mathbf{A} \\mathbf{B} =
+$$
+  \\bm{A} \\bm{B} =
   \\begin{pmatrix}
     1 & 2 & 3 & 4 \\\\
     2 & 4 & 6 & 8
@@ -218,7 +218,7 @@ The above code computes
     40 & 50 & 60 \\\\
     80 & 100 & 120
   \\end{pmatrix}.
-\\)
+$$
 
 The parameters `transa` and `transb` indicate whether matrices `a` and `b` are
 transposed, or not, respectively. They have the same effect as argument `trans`
@@ -238,7 +238,7 @@ R4 20 40 60 80
 ```
 
 In this case, a four-by-four matrix is returned because
-\\(\\mathbf{A}^\\top \\mathbf{A}\\) is executed. Similarly, you can specify
+$\\bm{A}^\\top \\bm{A}$ is executed. Similarly, you can specify
 whether `b` is transposed, or not though `transb`:
 
 ```ocaml
@@ -249,7 +249,7 @@ whether `b` is transposed, or not though `transb`:
                              R2 60 120
 ```
 
-The above example calculates \\(\\mathbf{A} \\mathbf{A}^\\top\\).
+The above example calculates $\\bm{A} \\bm{A}^\\top$.
 Nothing to say, both `a` and `b` can be transposed at the same time.
 
 ### symm: Multiplication of a symmetric matrix and a general matrix
@@ -261,9 +261,9 @@ where `alpha` (= 1 by default) and `beta` (= 0 by default) are scalar values,
 `symm` does not have arguments to indicate transposition (e.g., `transa` and
 `transb` of `gemm`) because a symmetric matrix is equal to the transpose of
 itself. Instead of them, `symm` takes _side flags_ to specify direction of
-the multiplication via argument `side`: When `side` = `Slap.Common.left`,
-`a` is multiplied from the left by `b`, i.e., `c := alpha * a * b + beta * c`.
-Conversely, if `side` = `Slap.Common.right`, `a` is right-multiplied by `b`,
+the multiplication via argument `side`: when `side` = `Slap.Common.left`,
+`a` is multiplied from the left by `b`, i.e., `c := alpha * a * b + beta * c`;
+conversely, if `side` = `Slap.Common.right`, `a` is right-multiplied by `b`,
 `c := alpha * b * a + beta * c`.
 
 For example, the following code left-multiplies symmetric matrix `a` by
@@ -290,8 +290,8 @@ val b : (z s s s, z s s, 'a) mat =    C1 C2
 
 It computes
 
-\\(
-  \\mathbf{A} \\mathbf{B} =
+$$
+  \\bm{A} \\bm{B} =
   \\begin{pmatrix}
     1 & 2 & 3 \\\\
     2 & 4 & 6 \\\\
@@ -307,7 +307,7 @@ It computes
     292 & 304 \\\\
     438 & 456
   \\end{pmatrix}.
-\\)
+$$
 
 You can also right-multiply `a` by `b'`:
 
@@ -324,8 +324,8 @@ val b' : (z s s, z s s s, 'a) mat =    C1 C2 C3
 
 The latter example computes
 
-\\(
-  \\mathbf{B}' \\mathbf{A} =
+$$
+  \\bm{B}' \\bm{A} =
   \\begin{pmatrix}
     11 & 12 & 13 \\\\
     21 & 22 & 23
@@ -339,7 +339,7 @@ The latter example computes
      74 & 148 & 222 \\\\
     134 & 268 & 402
   \\end{pmatrix}.
-\\)
+$$
 
 Optional argument `up` of `symm` specifies whether the upper or lower part of
 `a` is used for computation. By default, `up` is `true`, so the upper part is

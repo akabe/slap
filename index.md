@@ -79,9 +79,9 @@ Demo
 
 The following code
 ([examples/linsys/jacobi.ml](https://github.com/akabe/slap/blob/master/examples/linsys/jacobi.ml))
-is an implementation of
-[Jacobi method](http://en.wikipedia.org/wiki/Jacobi_method) (to solve a
-system of linear equations).
+is simple demonstration for static size checking of SLAP. It is implementation
+of [Jacobi method](http://en.wikipedia.org/wiki/Jacobi_method) (to solve a
+system of linear equations). You do not need to understand the implementation.
 
 ```ocaml
 open Slap.Io

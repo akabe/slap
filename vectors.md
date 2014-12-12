@@ -29,7 +29,7 @@ The vector has a curious type:
   vectors (and matrices).
 
 `three` (= `Slap.Size.three`), which is passed to the first argument of
-`Vec.init`, is **not** a normal integer: See the type of it.
+`Vec.init`, is **not** a normal integer. See the type of it.
 
 ```ocaml
 # three;;
@@ -83,7 +83,7 @@ You can create a randomly-initialized vector using `Vec.random`.
 ```
 
 The elements of a created vector are in interval `[from, from + range]`.
-Arguments `from` and `range` are optional: If they are omitted, `-1.0` and `2.0`
+Arguments `from` and `range` are optional: if they are omitted, `-1.0` and `2.0`
 are passed, respectively.
 
 Vector-vector operations

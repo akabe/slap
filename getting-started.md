@@ -42,7 +42,7 @@ open Slap.D
 
 let () =
   let x = Vec.init three (fun i -> float_of_int i) in (* Create a three-dimensional vector. *)
-  Format.printf "x = (%a)@." pp_rfvec x (* Print the vector *)
+  Format.printf "x = ( %a)@." pp_rfvec x (* Print the vector *)
 ```
 
 We will explain the program after telling you how to compile it.
@@ -64,13 +64,14 @@ When you run the compiled program, it shows the following output:
 
 ```
 $ ./a.out
-x = (1 2 3 )
+x = ( 1 2 3 )
 ```
 
 ### Using SLAP on toplevel
 
 You can interactively use SLAP on the toplevel system of OCaml, a.k.a.,
-REPL (Read-Eval-and-Print Loop).
+REPL (Read-Eval-and-Print Loop). The default REPL of OCaml is inconvenient,
+so that we recommend you to use UTop or OCaml REPL on Emacs.
 Note that you require to load "topfind" at first:
 
 ```ocaml
@@ -93,10 +94,13 @@ val x : (z s s s, 'a) vec = R1 R2 R3
 Next, print the vector:
 
 ```ocaml
-# Format.printf "x = (%a)@." pp_rfvec x;;
-x = (1 2 3 )
+# Format.printf "x = ( %a)@." pp_rfvec x;;
+x = ( 1 2 3 )
 - : unit = ()
 ```
+
+Hereafter we show example programs and response from REPL for convenience.
+You can byte- or native-compile the examples as well.
 
 ### Explanation of the first program
 
@@ -132,3 +136,10 @@ Format.printf "%a" pretty_printer vector
 In `example01.ml`, `pretty_printer` = `pp_rfvec` and `vector` = `x`.
 Other pretty printers are described in
 http://akabe.github.com/slap/api/Slap.Io.html .
+
+### Demonstration of static size checking
+
+Have you tried the [demonstration of static size checking](index.html#demo) on
+the home? If not so, we suggest you to try it because the most important feature
+of SLAP is **static size checking** for vector and matrix operations.
+SLAP detects dimensional inconsistency at compile time and helps you debug.
