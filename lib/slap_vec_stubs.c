@@ -132,9 +132,3 @@ slap_vec_fill_stub (value v_n,
 
   return Val_unit;
 }
-
-CAMLprim value
-slap_vec_fill_stub_bc (value * argv, int argn)
-{
-  return slap_vec_fill_stub(argv[0], argv[1], argv[2], argv[3], argv[4]);
-}

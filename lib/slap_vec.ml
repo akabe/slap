@@ -286,7 +286,7 @@ external fill_stub : n:int ->
                      ofsx:int -> incx:int ->
                      ('num, 'prec, fortran_layout) Array1.t ->
                      'num -> unit
-  = "slap_vec_fill_stub_bc" "slap_vec_fill_stub"
+  = "slap_vec_fill_stub"
 
 let fill (n, ofsx, incx, x) c =
   fill_stub ~n ~ofsx ~incx x c
