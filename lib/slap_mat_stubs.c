@@ -30,7 +30,7 @@
   }
 
 CAMLprim value
-slap_mat_create_bigarray (value v_kind, value v_m, value v_n)
+slap_mat_create_array2 (value v_kind, value v_m, value v_n)
 {
   CAMLparam3(v_kind, v_m, v_n);
   CAMLlocal1(v_ba);

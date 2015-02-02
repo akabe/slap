@@ -45,9 +45,9 @@ let dim_list_list = function
     let n = List.length l in
     if List.for_all (fun l -> List.length l = n) rest then Some (m, n) else None
 
-external create_bigarray :
+external create_array2 :
   ('a, 'b) kind -> int -> int -> ('a, 'b, fortran_layout) Array2.t
-  = "slap_mat_create_bigarray"
+  = "slap_mat_create_array2"
 
 let opt_mat m n = function
   | None -> (None, None, None)
@@ -57,7 +57,7 @@ let opt_mat m n = function
 
 let opt_mat_alloc kind m n = function
   | None ->
-     (1, 1, create_bigarray kind m n)
+     (1, 1, create_array2 kind m n)
   | Some (m', n', ar, ac, a) ->
      assert(m = m' && n = n');
      (ar, ac, a)
@@ -65,15 +65,15 @@ let opt_mat_alloc kind m n = function
 (** {2 Creation of matrices} *)
 
 let create kind m n =
-  (m, n, 1, 1, create_bigarray kind m n)
+  (m, n, 1, 1, create_array2 kind m n)
 
 let make kind m n x =
-  let a = create_bigarray kind m n in
+  let a = create_array2 kind m n in
   Array2.fill a x;
   (m, n, 1, 1, a)
 
 let init_cols kind m n f =
-  let a = create_bigarray kind m n in
+  let a = create_array2 kind m n in
   for j = 1 to n do
     for i = 1 to m do
       Array2.unsafe_set a i j (f i j)
@@ -82,7 +82,7 @@ let init_cols kind m n f =
   (m, n, 1, 1, a)
 
 let init_rows kind m n f =
-  let a = create_bigarray kind m n in
+  let a = create_array2 kind m n in
   for i = 1 to m do
     for j = 1 to n do
       Array2.unsafe_set a i j (f i j)
@@ -382,7 +382,7 @@ let to_list (m, n, ar, ac, a) =
 
 let unsafe_of_list kind m n ll =
   assert(dim_list_list ll <> None);
-  let mat = create_bigarray kind m n in
+  let mat = create_array2 kind m n in
   let list_iteri f l = ignore (List.fold_left (fun i x -> f i x; i + 1) 1 l) in
   list_iteri (fun i l -> list_iteri (fun j x -> mat.{i,j} <- x) l) ll;
   (m, n, 1, 1, mat)
