@@ -29,7 +29,9 @@ let cnt v = v
 
 let shared_rev (n, ofsx, incx, x) = (n, (n - 1) * incx + ofsx, -incx, x)
 
-let create_array1 kind n = Array1.create kind fortran_layout n
+external create_array1 :
+  ('a, 'b) kind -> int -> ('a, 'b, fortran_layout) Array1.t
+  = "slap_vec_create_array1"
 
 let check_cnt n ofsx incx x =
   n = Array1.dim x && ofsx = 1 && incx = 1

@@ -29,6 +29,21 @@
       for (i = 0; i < m; ++i) p[i] = init;           \
   }
 
+CAMLprim value
+slap_mat_create_bigarray (value v_kind, value v_m, value v_n)
+{
+  CAMLparam3(v_kind, v_m, v_n);
+  CAMLlocal1(v_ba);
+  long m = Long_val(v_m), n = Long_val(v_n);
+  v_ba = alloc_bigarray_dims(Caml_ba_kind_val(v_kind) | BIGARRAY_FORTRAN_LAYOUT,
+                             2, NULL, m, n);
+  long elm_size = SLAP_BA_ELEMENT_SIZE(v_ba);
+  /* Initialize allocated memory for prevention of tricky bugs,
+     e.g., operations on NaN and infinity. */
+  memset(SLAP_BA_DATA(v_ba), 0, m * n * elm_size);
+  CAMLreturn(v_ba);
+}
+
 void
 slap_mat_fill (int m, int n, enum caml_ba_kind kind,
                void *a, int lda,

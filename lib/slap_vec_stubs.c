@@ -33,6 +33,21 @@ extern void zcopy_ (int *n, double *x, int *incx, double *y, int *incy);
     for (i = 0; i < n; ++i, x += incx, y += incy) *y = *x;              \
   } while(0)
 
+CAMLprim value
+slap_vec_create_array1 (value v_kind, value v_n)
+{
+  CAMLparam2(v_kind, v_n);
+  CAMLlocal1(v_ba);
+  long n = Long_val(v_n);
+  v_ba = alloc_bigarray_dims(Caml_ba_kind_val(v_kind) | BIGARRAY_FORTRAN_LAYOUT,
+                             1, NULL, n);
+  long elm_size = SLAP_BA_ELEMENT_SIZE(v_ba);
+  /* Initialize allocated memory for prevention of tricky bugs,
+     e.g., operations on NaN and infinity. */
+  memset(SLAP_BA_DATA(v_ba), 0, n * elm_size);
+  CAMLreturn(v_ba);
+}
+
 void
 slap_vec_copy (int n, enum caml_ba_kind kind,
                void * xdata, int incx,

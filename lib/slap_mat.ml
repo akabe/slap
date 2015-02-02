@@ -45,8 +45,9 @@ let dim_list_list = function
     let n = List.length l in
     if List.for_all (fun l -> List.length l = n) rest then Some (m, n) else None
 
-let create_bigarray kind m n =
-  Array2.create kind (fortran_layout) m n
+external create_bigarray :
+  ('a, 'b) kind -> int -> int -> ('a, 'b, fortran_layout) Array2.t
+  = "slap_mat_create_bigarray"
 
 let opt_mat m n = function
   | None -> (None, None, None)
