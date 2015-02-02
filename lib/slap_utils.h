@@ -76,6 +76,11 @@ typedef struct PACKED {
 #define HAVE_CAML_BA_CHAR 0
 #endif
 
+/* Caml_ba_kind_val is supported by OCaml 4.02 or above */
+#ifndef Caml_ba_kind_val
+#define Caml_ba_kind_val(v) Int_val(v)
+#endif
+
 extern const int * const slap_ba_element_size;
 
 #endif /* SLAP_UTILS_H */
