@@ -1,11 +1,17 @@
-2014-11-28  Akinori ABE  <akinori@pc5>
+2015-02-02  Akinori ABE  <abe@sf.ecei.tohoku.ac.jp>
+
+	* Fix the implementation of slap_vec_fill
+	* Initialize all newly allocated vectors and matrices
+	* Add several examples of neural networks
+
+2014-11-28  Akinori ABE  <abe@sf.ecei.tohoku.ac.jp>
 
 	* Add tests for Slap.Vec.fill
 	* Fix the implementation of slap_vec_fill
 	* Fix the types of gesdd_{min,opt}_lwork
 	* Improve README.md and an example of Jacobi method
 
-2014-10-11  Akinori ABE  <akinori@pc5>
+2014-10-11  Akinori ABE  <abe@sf.ecei.tohoku.ac.jp>
 
 	* Several functions are reimplemented in C
 	* Add files for Travis CI
