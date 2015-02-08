@@ -1,7 +1,7 @@
 OASISFormat:            0.4
 OCamlVersion:           >= 3.12
 Name:                   SLAP
-Version:                0.2.1
+Version:                0.2.3
 Synopsis:               Linear algebra library with static size checking for matrix operations
 Description:            This OCaml-library is a wrapper of Lacaml, a binding of two widely used
                         linear algebra libraries BLAS and LAPACK for FORTRAN. Sized Linear Algebra
@@ -11,7 +11,7 @@ Description:            This OCaml-library is a wrapper of Lacaml, a binding of 
                         type error at compile time, and dynamic errors like exceptions do not happen.
 Maintainers:            Akinori ABE <abe@sf.ecei.tohoku.ac.jp>
 Authors:                Akinori ABE <abe@sf.ecei.tohoku.ac.jp>
-Copyrights:             (C) 2013-2014 Akinori ABE <abe@sf.ecei.tohoku.ac.jp>
+Copyrights:             (C) 2013-2015 Akinori ABE <abe@sf.ecei.tohoku.ac.jp>
 License:                LGPL-2.1 with OCaml linking exception
 Homepage:               https://github.com/akabe/slap
 Plugins:                META (0.4), StdFiles (0.4), DevFiles (0.4)
