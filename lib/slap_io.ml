@@ -18,6 +18,7 @@
 *)
 
 open Format
+open Slap_common
 
 module Context =
   struct
@@ -65,17 +66,17 @@ let make_index_array ?pp_head ?pp_foot context n =
   let add_if_some pp_print f idx =
     match pp_print with Some pp_print -> f pp_print idx | None -> idx in
   idx
-  |> add_if_some pp_head (fun pp_head idx -> Array.append [|Head|] idx)
-  |> add_if_some pp_foot (fun pp_foot idx -> Array.append idx [|Foot|])
+  |> add_if_some pp_head (fun _ idx -> Array.append [|Head|] idx)
+  |> add_if_some pp_foot (fun _ idx -> Array.append idx [|Foot|])
 
-let pp_dummy ppf = assert(false)
+let pp_dummy _ = assert(false)
 (* This is a dummy pretty printer. This is never called. *)
 
 let stringize_table ?(pp_head = pp_dummy)
                     ?(pp_foot = pp_dummy)
                     ?(pp_left = pp_dummy)
                     ?(pp_right = pp_dummy)
-                    ~ellipsis ~idx_m ~idx_n m n pp_el =
+                    ~ellipsis ~idx_m ~idx_n pp_el =
   let buf = Buffer.create 32 in
   let ppf_buf = formatter_of_buffer buf in
   let stringize_pp pp =
@@ -146,7 +147,7 @@ let pp_table ?(pp_open = default_pp_open)
       let idx_n = make_index_array ?pp_head:pp_left ?pp_foot:pp_right
                                    horizontal_context n in
       let str_tbl = stringize_table ?pp_head ?pp_foot ?pp_left ?pp_right
-                                    ~ellipsis ~idx_m ~idx_n m n pp_el in
+                                    ~ellipsis ~idx_m ~idx_n pp_el in
       let width = calc_column_width str_tbl in
       pp_open ppf;
       pp_print_table ppf ~pp_end_row ~pp_end_col ~pad ~idx_m ~idx_n
@@ -162,7 +163,7 @@ let pp_vec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
            ?pp_left ?pp_right ?pad ?ellipsis
            ?vertical_context ?horizontal_context
            ppf pp_el
-           (Vec.dim x) 1 (fun i _ -> Vec.get_dyn x i)
+           (__expose_size (Slap_vec.dim x)) 1 (fun i _ -> Slap_vec.get_dyn x i)
 
 let pp_rvec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
                 ?pp_left ?pp_right ?pad ?ellipsis
@@ -172,18 +173,18 @@ let pp_rvec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
            ?pp_left ?pp_right ?pad ?ellipsis
            ?vertical_context ?horizontal_context
            ppf pp_el
-           1 (Vec.dim x) (fun _ j -> Vec.get_dyn x j)
+           1 (__expose_size (Slap_vec.dim x)) (fun _ j -> Slap_vec.get_dyn x j)
 
 let pp_mat_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
                ?pp_left ?pp_right ?pad ?ellipsis
                ?vertical_context ?horizontal_context
                ppf pp_el a =
-  let m, n = Mat.dim a in
+  let m, n = Slap_mat.dim a in
   pp_table ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
            ?pp_left ?pp_right ?pad ?ellipsis
            ?vertical_context ?horizontal_context
            ppf pp_el
-           m n (Mat.get_dyn a)
+           (__expose_size m) (__expose_size n) (Slap_mat.get_dyn a)
 
 (** {2 Default pretty-printers for elements of vectors or matrices} *)
 
@@ -199,7 +200,7 @@ let pp_int32_el_default = ref (fun ppf -> fprintf ppf "%ld")
 (** {2 Pretty-printing in standard style} *)
 
 type ('n, 'num, 'prec, 'cnt_or_dsc) pp_vec =
-    formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
+    formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) vec -> unit
 
 let pp_fvec ppf x = pp_vec_gen ppf (!pp_float_el_default) x
 let pp_cvec ppf x = pp_vec_gen ppf (!pp_complex_el_default) x
@@ -210,7 +211,7 @@ let pp_rcvec ppf x = pp_rvec_gen ppf (!pp_complex_el_default) x
 let pp_rivec ppf x = pp_rvec_gen ppf (!pp_int32_el_default) x
 
 type ('m, 'n, 'num, 'prec, 'cnt_or_dsc) pp_mat =
-    formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Mat.t -> unit
+    formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) mat -> unit
 
 let pp_fmat ppf a = pp_mat_gen ppf (!pp_float_el_default) a
 let pp_cmat ppf a = pp_mat_gen ppf (!pp_complex_el_default) a

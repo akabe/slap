@@ -17,15 +17,13 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-type +'n t = private int
-(** A singleton type on sizes (i.e., dimensions of vectors and matrices).
-
-    Evaluation of a term with {i singleton type} ['n Size.t] {b always} results
-    in the natural number corresponding to phantom type parameter ['n].
-    ['n] is instantiated to a generative phantom type or a (phantom) type that
-    represents an arithmetic operation defined in this module. In either case,
-    {b only} the equality of sizes is verified statically.
+(** {!Slap.Size} contains operations on sizes  (the dimensions of vectors and
+    matrices).
  *)
+
+open Slap_common
+
+type +'n t = 'n size
 
 (** {2 Constants} *)
 
@@ -37,15 +35,41 @@ type 'n s
 
 val zero : z t
 
-val one : z s t
+type one = z s
 
-val two : z s s t
+val one : one t
 
-val three : z s s s t
+type two = z s s
 
-val four : z s s s s t
+val two : two t
 
-val five : z s s s s s t
+type three = z s s s
+
+val three : three t
+
+type four = z s s s s
+
+val four : four t
+
+type five = z s s s s s
+
+val five : five t
+
+type six = z s s s s s s
+
+val six : six t
+
+type seven = z s s s s s s s
+
+val seven : seven t
+
+type eight = z s s s s s s s s
+
+val eight : eight t
+
+type nine = z s s s s s s s s s
+
+val nine : nine t
 
 type ten = z s s s s s s s s s s
 
@@ -281,3 +305,11 @@ val iteri : (int -> unit) -> 'n t -> unit
 
 val riteri : (int -> unit) -> 'n t -> unit
 (** [riteri f n] is [f (to_int n); ...; f 2; f 1]. *)
+
+(** {2 Checking} *)
+
+val iszero : 'n t -> bool
+(** [iszero n] returns [true] if size [n] is zero. *)
+
+val nonzero : 'n t -> bool
+(** [nonzero n] returns [true] if size [n] is not zero. *)

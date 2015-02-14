@@ -151,3 +151,9 @@ true: annot, bin_annot
 <examples/porting/pca/*.ml{,i,y}>: pkg_lacaml
 <examples/porting/pca/*.ml{,i,y}>: use_slap
 # OASIS_STOP
+
+true: -traverse
+<{lib,examples}/**>: traverse
+
+<**/*.ml{,i}>: warn(Aer-44), strict_sequence, safe_string
+<**/*>: no_alias_deps

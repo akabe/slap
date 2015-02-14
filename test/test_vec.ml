@@ -1,6 +1,5 @@
 (* test_vec.ml *)
 
-open Format
 open OUnit
 open Slap.Vec
 open Bigarray
@@ -112,10 +111,6 @@ let test_fill () =
   let fl mk0 e l =
     let v, sv = mk0 () in
     fill sv e;
-    let s1 = List.fold_left (fun s e -> s ^ string_of_int e ^ ";")
-                           "" (to_list v) in
-    let s2 = List.fold_left (fun s e -> s ^ string_of_int e ^ ";")
-                           "" (to_list sv) in
     List.for_all ((=) e) (to_list sv) && (to_list v = l)
   in
   "v_emp"  @? (fl make0_v_emp  42 []);

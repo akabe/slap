@@ -45,47 +45,50 @@ val cnt : ('m, 'n, cnt) mat -> ('m, 'n, 'cnt) mat
 
 (** {2 Creation of matrices} *)
 
-val empty : (Size.z, Size.z, 'cnt) mat
+val empty : (Slap_size.z, Slap_size.z, 'cnt) mat
 (** An empty matrix. *)
 
-val create : 'm Size.t -> 'n Size.t -> ('m, 'n, 'cnt) mat
+val create : 'm Slap_size.t -> 'n Slap_size.t -> ('m, 'n, 'cnt) mat
 (** [create m n]
     @return a fresh [m]-by-[n] matrix (not initialized).
  *)
 
-val make : 'm Size.t -> 'n Size.t -> num_type -> ('m, 'n, 'cnt) mat
+val make : 'm Slap_size.t -> 'n Slap_size.t -> num_type -> ('m, 'n, 'cnt) mat
 (** [make m n x]
     @return a fresh [m]-by-[n] matrix initialized with [x].
  *)
 
-val make0 : 'm Size.t -> 'n Size.t -> ('m, 'n, 'cnt) mat
+val make0 : 'm Slap_size.t -> 'n Slap_size.t -> ('m, 'n, 'cnt) mat
 (** [make0 m n]
     @return a fresh [m]-by-[n] matrix initialized with [0].
  *)
 
-val make1 : 'm Size.t -> 'n Size.t -> ('m, 'n, 'cnt) mat
+val make1 : 'm Slap_size.t -> 'n Slap_size.t -> ('m, 'n, 'cnt) mat
 (** [make1 m n]
     @return a fresh [m]-by-[n] matrix initialized with [1].
  *)
 
-val identity : 'n Size.t -> ('n, 'n, 'cnt) mat
+val identity : 'n Slap_size.t -> ('n, 'n, 'cnt) mat
 (** [identity n]
     @return a fresh [n]-by-[n] identity matrix.
  *)
 
-val init : 'm Size.t -> 'n Size.t ->
-                (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
+val init :
+  'm Slap_size.t -> 'n Slap_size.t ->
+  (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
 (** An alias of [init_cols]. *)
 
-val init_cols : 'm Size.t -> 'n Size.t ->
-                (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
+val init_cols :
+  'm Slap_size.t -> 'n Slap_size.t ->
+  (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
 (** [init_cols m n f] returns a fresh [m]-by-[n] matrix whose
     the [(i,j)] element is initialized by the result of calling [f i j].
     The elements are passed column-wise.
  *)
 
-val init_rows : 'm Size.t -> 'n Size.t ->
-                (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
+val init_rows :
+  'm Slap_size.t -> 'n Slap_size.t ->
+  (int -> int -> num_type) -> ('m, 'n, 'cnt) mat
 (** [init_rows m n f] returns a fresh [m]-by-[n] matrix whose
     the [(i,j)] element is initialized by the result of calling [f i j].
     The elements are passed row-wise.
@@ -93,15 +96,15 @@ val init_rows : 'm Size.t -> 'n Size.t ->
 
 (** {2 Accessors} *)
 
-val dim : ('m, 'n, 'cd) mat -> 'm Size.t * 'n Size.t
+val dim : ('m, 'n, 'cd) mat -> 'm Slap_size.t * 'n Slap_size.t
 (** [dim a] is [(dim1 a, dim2 a)]. *)
 
-val dim1 : ('m, 'n, 'cd) mat -> 'm Size.t
+val dim1 : ('m, 'n, 'cd) mat -> 'm Slap_size.t
 (** [dim1 a]
     @return the number of rows in [a].
  *)
 
-val dim2 : ('m, 'n, 'cd) mat -> 'n Size.t
+val dim2 : ('m, 'n, 'cd) mat -> 'n Slap_size.t
 (** [dim1 a]
     @return the number of columns in [a].
  *)
@@ -116,10 +119,10 @@ val set_dyn : ('m, 'n, 'cd) mat -> int -> int -> num_type -> unit
  *)
 
 val unsafe_get : ('m, 'n, 'cd) mat -> int -> int -> num_type
-(** Like {!Slap.Mat.get_dyn}, but size checking is not always performed. *)
+(** Like [get_dyn], but size checking is not always performed. *)
 
 val unsafe_set : ('m, 'n, 'cd) mat -> int -> int -> num_type -> unit
-(** Like {!Slap.Mat.set_dyn}, but size checking is not always performed. *)
+(** Like [set_dyn], but size checking is not always performed. *)
 
 val col_dyn : ('m, 'n, 'cd) mat -> int -> ('m, 'cnt) vec
 (** [col_dyn a i]
@@ -139,10 +142,24 @@ val diag : ('n, 'n, 'cd) mat -> ('n, dsc) vec
     @return the diagonal elements of the matrix [a]. The data are shared.
  *)
 
+val diag_rect :
+  ('m, 'n, 'cd) mat ->
+  (('m, 'n) Slap_size.min, dsc) vec
+(** [diag_rect a]
+    @return the diagonal elements of the rectangular matrix [a].
+    The data are shared.
+    @since 1.0.0
+*)
+
 val copy_diag : ('n, 'n, 'cd) mat -> ('n, 'cnt) vec
 (** [copy_diag a] is [Vec.copy (Mat.diag a)]. *)
 
-val as_vec : ('m, 'n, cnt) mat -> (('m, 'n) Size.mul, 'cnt) vec
+val copy_diag_rect : ('m, 'n, 'cd) mat -> (('m, 'n) Slap_size.min, 'cnt) vec
+(** [copy_diag_rect a] is [Vec.copy (Mat.diag_rect a)].
+    @since 1.0.0
+ *)
+
+val as_vec : ('m, 'n, cnt) mat -> (('m, 'n) Slap_size.mul, 'cnt) vec
 (** [as_vec a]
     @return the vector containing all elements of the matrix in column-major
     order. The data are shared.
@@ -168,8 +185,8 @@ val copy : ?uplo:[ `L | `U ] ->
     @param b    default = a fresh matrix.
  *)
 
-val of_col_vecs_dyn : 'm Size.t ->
-                      'n Size.t ->
+val of_col_vecs_dyn : 'm Slap_size.t ->
+                      'n Slap_size.t ->
                       ('m, cnt) vec array ->
                       ('m, 'n, 'cnt) mat
 
@@ -180,9 +197,10 @@ val to_array : ('m, 'n, 'cd) mat -> num_type array array
     @return the array of arrays of all the elements of [a].
  *)
 
-val of_array_dyn : 'm Size.t -> 'n Size.t ->
-                   num_type array array ->
-                   ('m, 'n, 'cnt) mat
+val of_array_dyn :
+  'm Slap_size.t -> 'n Slap_size.t ->
+  num_type array array ->
+  ('m, 'n, 'cnt) mat
 (** Build a matrix initialized from the given array of arrays.
     @raise Invalid_argument the given array of arrays is not rectangular or
     its size is not [m]-by-[n].
@@ -205,9 +223,10 @@ val to_list : ('m, 'n, 'cd) mat -> num_type list list
     @return the list of lists of all the elements of [a].
  *)
 
-val of_list_dyn : 'm Size.t -> 'n Size.t ->
-                  num_type list list ->
-                  ('m, 'n, 'cnt) mat
+val of_list_dyn :
+  'm Slap_size.t -> 'n Slap_size.t ->
+  num_type list list ->
+  ('m, 'n, 'cnt) mat
 (** Build a matrix initialized from the given list of lists.
     @raise Invalid_argument the given list of lists is not rectangular or
     its size is not [m]-by-[n].
@@ -227,72 +246,82 @@ module Of_list (X : sig val value : num_type list list end) : CNTMAT
 
 (** {2 Iterators} *)
 
-val map : (num_type -> num_type) -> ?b:('m, 'n, 'b_cd) mat ->
-          ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
+val map :
+  (num_type -> num_type) -> ?b:('m, 'n, 'b_cd) mat ->
+  ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
 
-val mapi : (int -> int -> num_type -> num_type) -> ?b:('m, 'n, 'b_cd) mat ->
-           ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
+val mapi :
+  (int -> int -> num_type -> num_type) -> ?b:('m, 'n, 'b_cd) mat ->
+  ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
 
-val fold_left : ('accum -> ('m, 'x_cd) vec -> 'accum) ->
-                'accum ->
-                ('m, 'n, 'a_cd) mat ->
-                'accum
+val fold_left :
+  ('accum -> ('m, 'x_cd) vec -> 'accum) ->
+  'accum ->
+  ('m, 'n, 'a_cd) mat ->
+  'accum
 (** [fold_left f init a] folds column vectors of matrix [a] by [f] in the order
     left to right.
  *)
 
-val fold_lefti : (int -> 'accum -> ('m, 'x_cd) vec -> 'accum) ->
-                 'accum ->
-                 ('m, 'n, 'a_cd) mat ->
-                 'accum
+val fold_lefti :
+  (int -> 'accum -> ('m, 'x_cd) vec -> 'accum) ->
+  'accum ->
+  ('m, 'n, 'a_cd) mat ->
+  'accum
 (** [fold_lefti f init a] folds column vectors of matrix [a] by [f] in the order
     left to right.
  *)
 
-val fold_right : (('m, 'x_cd) vec -> 'accum -> 'accum) ->
-                 ('m, 'n, 'a_cd) mat ->
-                 'accum ->
-                 'accum
+val fold_right :
+  (('m, 'x_cd) vec -> 'accum -> 'accum) ->
+  ('m, 'n, 'a_cd) mat ->
+  'accum ->
+  'accum
 (** [fold_right f a init] folds column vectors of matrix [a] by [f] in the
     order right to left.
  *)
 
-val fold_righti : (int -> ('m, 'x_cd) vec -> 'accum -> 'accum) ->
-                  ('m, 'n, 'a_cd) mat ->
-                  'accum ->
-                  'accum
+val fold_righti :
+  (int -> ('m, 'x_cd) vec -> 'accum -> 'accum) ->
+  ('m, 'n, 'a_cd) mat ->
+  'accum ->
+  'accum
 (** [fold_righti f a init] folds column vectors of matrix [a] by [f] in the
     order right to left.
  *)
 
-val fold_top : ('accum -> ('n, dsc) vec -> 'accum) ->
-               'accum ->
-               ('m, 'n, 'a_cd) mat ->
-               'accum
+val fold_top :
+  ('accum -> ('n, dsc) vec -> 'accum) ->
+  'accum ->
+  ('m, 'n, 'a_cd) mat ->
+  'accum
 (** [fold_top f init a] folds row vectors of matrix [a] by [f] in the order
     top to bottom.
  *)
 
-val fold_topi : (int -> 'accum -> ('n, dsc) vec -> 'accum) ->
-                'accum ->
-                ('m, 'n, 'a_cd) mat ->
-                'accum
+val fold_topi :
+  (int -> 'accum -> ('n, dsc) vec -> 'accum) ->
+  'accum ->
+  ('m, 'n, 'a_cd) mat ->
+  'accum
 (** [fold_topi f init a] folds row vectors of matrix [a] by [f] in the order
     top to bottom.
  *)
 
-val fold_bottom : (('m, dsc) vec -> 'accum -> 'accum) ->
-                  ('m, 'n, 'a_cd) mat ->
-                  'accum ->
-                  'accum
+val fold_bottom :
+  (('n, dsc) vec -> 'accum -> 'accum) ->
+  ('m, 'n, 'a_cd) mat ->
+  'accum ->
+  'accum
 (** [fold_bottom f a init] folds row vectors of matrix [a] by [f] in the
     order bottom to top.
  *)
 
-val fold_bottomi : (int -> ('m, dsc) vec -> 'accum -> 'accum) ->
-                   ('m, 'n, 'a_cd) mat ->
-                   'accum ->
-                   'accum
+val fold_bottomi :
+  (int -> ('n, dsc) vec -> 'accum -> 'accum) ->
+  ('m, 'n, 'a_cd) mat ->
+  'accum ->
+  'accum
 (** [fold_bottomi f a init] folds row vectors of matrix [a] by [f] in the
     order bottom to top.
  *)
@@ -302,8 +331,9 @@ val replace_all : ('m, 'n, 'cd) mat -> (num_type -> num_type) -> unit
     -- the [(i,j)]-element [aij] of [a] will be set to [f aij].
  *)
 
-val replace_alli : ('m, 'n, 'cd) mat ->
-                   (int -> int -> num_type -> num_type) -> unit
+val replace_alli :
+  ('m, 'n, 'cd) mat ->
+  (int -> int -> num_type -> num_type) -> unit
 (** [replace_all a f] modifies the matrix [a] in place
     -- the [(i,j)]-element [aij] of [a] will be set to [f i j aij].
  *)
@@ -327,10 +357,11 @@ val detri : ?up:bool -> ('n, 'n, 'cd) mat -> unit
     @since 0.1.0
  *)
 
-val packed : ?up:bool ->
-             ?x:('n Size.packed, cnt) vec ->
-             ('n, 'n, 'cd) mat ->
-             ('n Size.packed, 'cnt) vec
+val packed :
+  ?up:bool ->
+  ?x:('n Slap_size.packed, cnt) vec ->
+  ('n, 'n, 'cd) mat ->
+  ('n Slap_size.packed, 'cnt) vec
 (** [packed ?up ?x a] transforms matrix [a] into packed storage format.
     @return vector [x], which is overwritten.
     @param up default = [true]
@@ -339,11 +370,12 @@ val packed : ?up:bool ->
     @since 0.2.0
  *)
 
-val unpacked : ?up:bool ->
-               ?fill_num:num_type option ->
-               ?a:('n, 'n, 'cd) mat ->
-               ('n Size.packed, cnt) vec ->
-               ('n, 'n, 'cd) mat
+val unpacked :
+  ?up:bool ->
+  ?fill_num:num_type option ->
+  ?a:('n, 'n, 'cd) mat ->
+  ('n Slap_size.packed, cnt) vec ->
+  ('n, 'n, 'cd) mat
 (** [unpacked ?up ?fill_num ?a x] generates an upper or lower triangular matrix
     from packed-storage-format vector [x].
     @return matrix [a], which is overwritten.
@@ -358,10 +390,11 @@ val unpacked : ?up:bool ->
     @since 0.2.0
  *)
 
-val geband_dyn : 'kl Size.t -> 'ku Size.t ->
-                 ?b:(('m, 'n, 'kl, 'ku) Size.geband, 'n, 'b_cd) mat ->
-                 ('m, 'n, 'a_cd) mat ->
-                 (('m, 'n, 'kl, 'ku) Size.geband, 'n, 'b_cd) mat
+val geband_dyn :
+  'kl Slap_size.t -> 'ku Slap_size.t ->
+  ?b:(('m, 'n, 'kl, 'ku) Slap_size.geband, 'n, 'b_cd) mat ->
+  ('m, 'n, 'a_cd) mat ->
+  (('m, 'n, 'kl, 'ku) Slap_size.geband, 'n, 'b_cd) mat
 (** [geband_dyn kl ku ?b a] converts matrix [a] into a matrix stored in band
     storage.
     @return matrix [b], which is overwritten.
@@ -372,11 +405,12 @@ val geband_dyn : 'kl Size.t -> 'ku Size.t ->
     @since 0.2.0
  *)
 
-val ungeband : 'm Size.t -> 'kl Size.t -> 'ku Size.t ->
-               ?fill_num:num_type option ->
-               ?a:('m, 'n, 'a_cd) mat ->
-               (('m, 'n, 'kl, 'ku) Size.geband, 'n, 'b_cd) mat ->
-               ('m, 'n, 'a_cd) mat
+val ungeband :
+  'm Slap_size.t -> 'kl Slap_size.t -> 'ku Slap_size.t ->
+  ?fill_num:num_type option ->
+  ?a:('m, 'n, 'a_cd) mat ->
+  (('m, 'n, 'kl, 'ku) Slap_size.geband, 'n, 'b_cd) mat ->
+  ('m, 'n, 'a_cd) mat
 (** [ungeband m kl ku ?a b] converts matrix [b] stored in band storage into
     a matrix stored in the normal order.
     @return matrix [a], which is overwritten.
@@ -392,11 +426,12 @@ val ungeband : 'm Size.t -> 'kl Size.t -> 'ku Size.t ->
     @since 0.2.0
  *)
 
-val syband_dyn : 'kd Size.t ->
-                 ?up:bool ->
-                 ?b:(('n, 'kd) Size.syband, 'n, 'b_cd) mat ->
-                 ('n, 'n, 'a_cd) mat ->
-                 (('n, 'kd) Size.syband, 'n, 'b_cd) mat
+val syband_dyn :
+  'kd Slap_size.t ->
+  ?up:bool ->
+  ?b:(('n, 'kd) Slap_size.syband, 'n, 'b_cd) mat ->
+  ('n, 'n, 'a_cd) mat ->
+  (('n, 'kd) Slap_size.syband, 'n, 'b_cd) mat
 (** [syband_dyn kd ?b a] converts matrix [a] into a matrix stored in
     symmetric or Hermitian band storage.
     @return matrix [b], which is overwritten.
@@ -409,12 +444,13 @@ val syband_dyn : 'kd Size.t ->
     @since 0.2.0
  *)
 
-val unsyband : 'kd Size.t ->
-               ?up:bool ->
-               ?fill_num:num_type option ->
-               ?a:('n, 'n, 'a_cd) mat ->
-               (('n, 'kd) Size.syband, 'n, 'b_cd) mat ->
-               ('n, 'n, 'a_cd) mat
+val unsyband :
+  'kd Slap_size.t ->
+  ?up:bool ->
+  ?fill_num:num_type option ->
+  ?a:('n, 'n, 'a_cd) mat ->
+  (('n, 'kd) Slap_size.syband, 'n, 'b_cd) mat ->
+  ('n, 'n, 'a_cd) mat
 (** [unsyband kd ?a b] converts matrix [b] stored in symmetric or Hermitian
     band storage into a matrix stored in the normal order.
     @return matrix [a], which is overwritten.
@@ -433,10 +469,11 @@ val unsyband : 'kd Size.t ->
     @since 0.2.0
  *)
 
-val luband_dyn : 'kl Size.t -> 'ku Size.t ->
-                 ?ab:(('m, 'n, 'kl, 'ku) Size.luband, 'n, 'b_cd) mat ->
-                 ('m, 'n, 'a_cd) mat ->
-                 (('m, 'n, 'kl, 'ku) Size.luband, 'n, 'b_cd) mat
+val luband_dyn :
+  'kl Slap_size.t -> 'ku Slap_size.t ->
+  ?ab:(('m, 'n, 'kl, 'ku) Slap_size.luband, 'n, 'b_cd) mat ->
+  ('m, 'n, 'a_cd) mat ->
+  (('m, 'n, 'kl, 'ku) Slap_size.luband, 'n, 'b_cd) mat
 (** [luband_dyn kl ku ?ab a] converts matrix [a] into a matrix stored in band
     storage for LU factorization.
     @return matrix [ab], which is overwritten.
@@ -447,11 +484,12 @@ val luband_dyn : 'kl Size.t -> 'ku Size.t ->
     @since 0.2.0
  *)
 
-val unluband : 'm Size.t -> 'kl Size.t -> 'ku Size.t ->
-               ?fill_num:num_type option ->
-               ?a:('m, 'n, 'a_cd) mat ->
-               (('m, 'n, 'kl, 'ku) Size.luband, 'n, 'b_cd) mat ->
-               ('m, 'n, 'a_cd) mat
+val unluband :
+  'm Slap_size.t -> 'kl Slap_size.t -> 'ku Slap_size.t ->
+  ?fill_num:num_type option ->
+  ?a:('m, 'n, 'a_cd) mat ->
+  (('m, 'n, 'kl, 'ku) Slap_size.luband, 'n, 'b_cd) mat ->
+  ('m, 'n, 'a_cd) mat
 (** [unluband m kl ku ?a ab] converts matrix [ab] stored in band storage for LU
     factorization into a matrix stored in the normal order.
     @return matrix [a], which is overwritten.
@@ -469,9 +507,10 @@ val unluband : 'm Size.t -> 'kl Size.t -> 'ku Size.t ->
 
 (** {2 Arithmetic operations} *)
 
-val add_const : num_type ->
-                ?b:('m, 'n, 'b_cd) mat ->
-                ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
+val add_const :
+  num_type ->
+  ?b:('m, 'n, 'b_cd) mat ->
+  ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
 (** [add_const c ?b a] adds constant value [c] to all elements in [a].
     @return the matrix [b], which is overwritten.
     @since 0.1.0
@@ -503,15 +542,14 @@ val axpy : ?alpha:num_type ->
            ('m, 'n, 'y_cd) mat -> unit
 (** [axpy ?alpha ~x y] computes [y := alpha * x + y]. *)
 
-val gemm_diag : ?beta:num_type ->
-                ?y:('n, cnt) vec ->
-                transa:(('a_n, 'a_k, 'a_cd) mat ->
-                        ('n, 'k, 'a_cd) mat) trans3 ->
-                ?alpha:num_type ->
-                ('a_n, 'a_k, 'a_cd) mat ->
-                transb:(('b_k, 'b_n, 'b_cd) mat ->
-                        ('k, 'n, 'b_cd) mat) trans3 ->
-                ('b_k, 'b_n, 'b_cd) mat -> ('n, 'cnt) vec
+val gemm_diag :
+  ?beta:num_type ->
+  ?y:('n, cnt) vec ->
+  transa:(('a_n, 'a_k, 'a_cd) mat -> ('n, 'k, 'a_cd) mat) trans3 ->
+  ?alpha:num_type ->
+  ('a_n, 'a_k, 'a_cd) mat ->
+  transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans3 ->
+  ('b_k, 'b_n, 'b_cd) mat -> ('n, 'cnt) vec
 (** [gemm_diag ?beta ?y ~transa ?alpha a ~transb b] executes
     [y := DIAG(alpha * OP(a) * OP(b)) + beta * y] where
     [DIAG(x)] is the vector of the diagonal elements in matrix [x], and
@@ -521,30 +559,30 @@ val gemm_diag : ?beta:num_type ->
     @return the vector [y], which is overwritten.
     @param beta default = [0.0]
     @param transa the transpose flag for [a]:
-       - if {!Slap.Common.normal}, then [OP(a)] = [a];
-       - if {!Slap.Common.trans}, then [OP(a)] = [a^T];
-       - if {!Slap.Common.conjtr}, then [OP(a)] = [a^H].
+       - if {!Slap_common.normal}, then [OP(a)] = [a];
+       - if {!Slap_common.trans}, then [OP(a)] = [a^T];
+       - if {!Slap_common.conjtr}, then [OP(a)] = [a^H].
     @param transb the transpose flag for [b]:
-       - if {!Slap.Common.normal}, then [OP(b)] = [b];
-       - if {!Slap.Common.trans}, then [OP(b)] = [b^T];
-       - if {!Slap.Common.conjtr}, then [OP(b)] = [b^H].
+       - if {!Slap_common.normal}, then [OP(b)] = [b];
+       - if {!Slap_common.trans}, then [OP(b)] = [b^T];
+       - if {!Slap_common.conjtr}, then [OP(b)] = [b^H].
     @param alpha default = [1.0]
 
     @since 0.1.0
  *)
 
-val syrk_diag : ?beta:num_type ->
-                ?y:('n, cnt) vec ->
-                trans:(('a_n, 'a_k, 'a_cd) mat ->
-                       ('n, 'k, 'a_cd) mat) Common.trans2 ->
-                ?alpha:num_type ->
-                ('a_n, 'a_k, 'a_cd) mat -> ('n, 'cnt) vec
+val syrk_diag :
+  ?beta:num_type ->
+  ?y:('n, cnt) vec ->
+  trans:(('a_n, 'a_k, 'a_cd) mat -> ('n, 'k, 'a_cd) mat) Slap_common.trans2 ->
+  ?alpha:num_type ->
+  ('a_n, 'a_k, 'a_cd) mat -> ('n, 'cnt) vec
 (** [syrk_diag ?beta ?y ~transa ?alpha a] executes
 
     - [y := alpha * DIAG(a * a^T) + beta * y]
-      (if [trans] = {!Slap.Common.normal}) or
+      (if [trans] = {!Slap_common.normal}) or
     - [y := alpha * DIAG(a^T * a) + beta * y]
-      (if [trans] = {!Slap.Common.trans})
+      (if [trans] = {!Slap_common.trans})
 
     where [DIAG(x)] is the vector of the diagonal elements in matrix [x].
 
@@ -554,23 +592,22 @@ val syrk_diag : ?beta:num_type ->
     @param alpha default = [1.0]
  *)
 
-val gemm_trace : transa:(('a_n, 'a_k, 'a_cd) mat ->
-                         ('n, 'k, 'a_cd) mat) trans3 ->
-                 ('a_n, 'a_k, 'a_cd) mat ->
-                 transb:(('b_k, 'b_n, 'b_cd) mat ->
-                         ('k, 'n, 'b_cd) mat) trans3 ->
-                 ('b_k, 'b_n, 'b_cd) mat -> num_type
+val gemm_trace :
+  transa:(('a_n, 'a_k, 'a_cd) mat -> ('n, 'k, 'a_cd) mat) trans3 ->
+  ('a_n, 'a_k, 'a_cd) mat ->
+  transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans3 ->
+  ('b_k, 'b_n, 'b_cd) mat -> num_type
 (** [gemm_trace ~transa a ~transb b]
 
     @return the trace of [OP(a) * OP(b)].
     @param transa the transpose flag for [a]:
-       - if {!Slap.Common.normal}, then [OP(a)] = [a];
-       - if {!Slap.Common.trans}, then [OP(a)] = [a^T];
-       - if {!Slap.Common.conjtr}, then [OP(a)] = [a^H].
+       - if {!Slap_common.normal}, then [OP(a)] = [a];
+       - if {!Slap_common.trans}, then [OP(a)] = [a^T];
+       - if {!Slap_common.conjtr}, then [OP(a)] = [a^H].
     @param transb the transpose flag for [b]:
-       - if {!Slap.Common.normal}, then [OP(b)] = [b];
-       - if {!Slap.Common.trans}, then [OP(b)] = [b^T];
-       - if {!Slap.Common.conjtr}, then [OP(b)] = [b^H].
+       - if {!Slap_common.normal}, then [OP(b)] = [b];
+       - if {!Slap_common.trans}, then [OP(b)] = [b^T];
+       - if {!Slap_common.conjtr}, then [OP(b)] = [b^H].
  *)
 
 val syrk_trace : ('n, 'k, 'cd) mat -> num_type
@@ -578,10 +615,11 @@ val syrk_trace : ('n, 'k, 'cd) mat -> num_type
     @since 0.1.0
  *)
 
-val symm2_trace : ?upa:bool ->
-                  ('n, 'n, 'a_cd) mat ->
-                  ?upb:bool ->
-                  ('n, 'n, 'b_cd) mat -> num_type
+val symm2_trace :
+  ?upa:bool ->
+  ('n, 'n, 'a_cd) mat ->
+  ?upb:bool ->
+  ('n, 'n, 'b_cd) mat -> num_type
 (** [symm2_trace ?upa a ?upb b] computes the trace of [a * b] with symmetric
     matrices [a] and [b].
 
@@ -595,12 +633,13 @@ val symm2_trace : ?upa:bool ->
 
 (** {2 Submatrices} *)
 
-val submat_dyn : 'm Size.t ->
-                 'n Size.t ->
-                 ?ar:int ->
-                 ?ac:int ->
-                 (_, _, 'cd) mat ->
-                 ('m, 'n, dsc) mat
+val submat_dyn :
+  'm Slap_size.t ->
+  'n Slap_size.t ->
+  ?ar:int ->
+  ?ac:int ->
+  (_, _, 'cd) mat ->
+  ('m, 'n, dsc) mat
 (** [submat_dyn m n ?ar ?ac a]
     @return a [m]-by-[n] submatrix of the matrix [a].
     The [(i,j)] element of the returned matrix refers the [(ar+i-1,ac+j-1)]

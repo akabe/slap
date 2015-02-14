@@ -18,14 +18,15 @@
 *)
 
 open Bigarray
+open Slap_common
 
 type prec = CONCAT(CONCAT(complex, SLAP_SDCZ_BITS), _elt)
 
 type num_type = Complex.t
 
-type 'a trans3 = 'a Common.trans3
-(** Transpose parameter ({!Slap.Common.normal}, {!Slap.Common.trans} or
-    {!Slap.Common.conjtr}). *)
+type 'a trans3 = 'a Slap_common.trans3
+(** A type of transpose parameters ({!Slap_common.normal},
+    {!Slap_common.trans} or {!Slap_common.conjtr}). *)
 
 #include "slap_SDCZ_common.mli"
 

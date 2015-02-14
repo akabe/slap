@@ -18,14 +18,15 @@
 *)
 
 open Bigarray
+open Slap_common
 
 type prec = CONCAT(CONCAT(complex, SLAP_SDCZ_BITS), _elt)
 type num_type = Complex.t
-type 'a trans3 = 'a Common.trans3
+type 'a trans3 = 'a Slap_common.trans3
 let prec = CONCAT(complex, SLAP_SDCZ_BITS)
 let zero = Complex.zero
 let one = Complex.one
-let lacaml_trans3 t = t
+let lacaml_trans3 = Slap_common.lacaml_trans3
 
 #if SLAP_SDCZ_BITS = 32
 module I = Lacaml.C
@@ -38,16 +39,16 @@ let module_name = "Slap.Z"
 #include "slap_SDCZ_common.ml"
 
 module Vec =
-  struct
+struct
 #include "slap_SDCZ_vec.ml"
 #include "slap_CZ_vec.ml"
-  end
+end
 
 module Mat =
-  struct
+struct
 #include "slap_SDCZ_mat.ml"
 #include "slap_CZ_mat.ml"
-  end
+end
 
 #include "slap_SDCZ_la.ml"
 #include "slap_CZ_la.ml"

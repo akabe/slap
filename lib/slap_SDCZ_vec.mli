@@ -44,38 +44,37 @@ val cnt : ('n, cnt) vec -> ('n, 'cnt) vec
 
 (** {2 Creation of vectors} *)
 
-val empty : (Size.z, 'cnt) vec
+val empty : (Slap_size.z, 'cnt) vec
 (** An empty vector. *)
 
-val create : 'n Size.t -> ('n, 'cnt) vec
+val create : 'n Slap_size.t -> ('n, 'cnt) vec
 (** [create n]
     @return a fresh [n]-dimensional vector (not initialized).
  *)
 
-val make : 'n Size.t -> num_type -> ('n, 'cnt) vec
+val make : 'n Slap_size.t -> num_type -> ('n, 'cnt) vec
 (** [make n a]
     @return a fresh [n]-dimensional vector initialized with [a].
  *)
 
-val make0 : 'n Size.t -> ('n, 'cnt) vec
+val make0 : 'n Slap_size.t -> ('n, 'cnt) vec
 (** [zeros n]
     @return a fresh [n]-dimensional vector initialized with [0].
  *)
 
-val make1 : 'n Size.t -> ('n, 'cnt) vec
+val make1 : 'n Slap_size.t -> ('n, 'cnt) vec
 (** [make1 n]
     @return a fresh [n]-dimensional vector initialized with [1].
  *)
 
-val init : 'n Size.t ->
-           (int -> num_type) -> ('n, 'cnt) vec
+val init : 'n Slap_size.t -> (int -> num_type) -> ('n, 'cnt) vec
 (** [init n f]
     @return a fresh vector [(f 1, ..., f n)] with [n] elements.
  *)
 
 (** {2 Accessors} *)
 
-val dim : ('n, 'cd) vec -> 'n Size.t
+val dim : ('n, 'cd) vec -> 'n Slap_size.t
 (** [dim x]
     @return the dimension of the vector [x].
  *)
@@ -90,14 +89,12 @@ val set_dyn : ('n, 'cd) vec -> int -> num_type -> unit
  *)
 
 val unsafe_get : ('n, 'cd) vec -> int -> num_type
-(** Like {!Slap.Vec.get_dyn}, but size checking is not always performed. *)
+(** Like [get_dyn], but size checking is not always performed. *)
 
 val unsafe_set : ('n, 'cd) vec -> int -> num_type -> unit
-(** Like {!Slap.Vec.set_dyn}, but size checking is not always performed. *)
+(** Like [set_dyn], but size checking is not always performed. *)
 
-val replace_dyn : ('n, 'cd) vec ->
-                  int ->
-                  (num_type -> num_type) -> unit
+val replace_dyn : ('n, 'cd) vec -> int -> (num_type -> num_type) -> unit
 (** [replace_dyn v i f] is [set_dyn v i (f (get_dyn v i))]. *)
 
 (** {2 Basic operations} *)
@@ -112,8 +109,9 @@ val copy : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
 val fill : ('n, 'cd) vec -> num_type -> unit
 (** Fill the given vector with the given value. *)
 
-val append : ('m, 'x_cd) vec -> ('n, 'y_cd) vec ->
-             (('m, 'n) Size.add, 'cnt) vec
+val append :
+  ('m, 'x_cd) vec -> ('n, 'y_cd) vec ->
+  (('m, 'n) Slap_size.add, 'cnt) vec
 (** Concatenate two vectors. *)
 
 val shared_rev : ('n, 'cd) vec -> ('n, 'cd) vec
@@ -133,8 +131,9 @@ val to_array : ('n, 'cd) vec -> num_type array
     @return the array of all the elements of the vector [x].
  *)
 
-val of_array_dyn : 'n Size.t ->
-                   num_type array -> ('n, 'cnt) vec
+val of_array_dyn :
+  'n Slap_size.t ->
+  num_type array -> ('n, 'cnt) vec
 (** [of_array_dyn n [|a1; ...; an|]]
     @raise Invalid_argument the length of the given array is not equal to [n].
     @return a fresh vector [(a1, ..., an)].
@@ -151,13 +150,18 @@ val of_array : num_type array -> (module CNTVEC)
 module Of_array (X : sig val value : num_type array end) : CNTVEC
 (** A functor version of [of_array]. *)
 
+val unsafe_of_array :
+  'n Slap_size.t -> num_type array -> ('n, 'cnt) vec
+(** Like [of_array_dyn], but size checking is not always performed. *)
+
 val to_list : ('n, 'cd) vec -> num_type list
 (** [to_list x]
     @return the list of all the elements of the vector [x].
  *)
 
-val of_list_dyn : 'n Size.t ->
-                  num_type list -> ('n, 'cnt) vec
+val of_list_dyn :
+  'n Slap_size.t ->
+  num_type list -> ('n, 'cnt) vec
 (** [of_list_dyn n [a1; ...; an]]
     @raise Invalid_argument the length of the given list is not equal to [n].
     @return a fresh vector [(a1, ..., an)].
@@ -174,16 +178,22 @@ val of_list : num_type list -> (module CNTVEC)
 module Of_list (X : sig val value : num_type list end) : CNTVEC
 (** A functor version of [of_list]. *)
 
-val to_bigarray : ('n, 'cd) vec ->
-                  (num_type, prec, fortran_layout) Array1.t
+val unsafe_of_list :
+  'n Slap_size.t -> num_type list -> ('n, 'cnt) vec
+(** Like [of_list_dyn], but size checking is not always performed. *)
+
+val to_bigarray :
+  ('n, 'cd) vec ->
+  (num_type, prec, fortran_layout) Array1.t
 (** [to_bigarray x]
     @return the big array of all the elements of the vector [x].
  *)
 
-val of_bigarray_dyn : ?share:bool ->
-                      'n Size.t ->
-                      (num_type, prec, fortran_layout) Array1.t ->
-                      ('n, 'cnt) vec
+val of_bigarray_dyn :
+  ?share:bool ->
+  'n Slap_size.t ->
+  (num_type, prec, fortran_layout) Array1.t ->
+  ('n, 'cnt) vec
 (** [of_bigarray_dyn ?share n ba]
     @raise Invalid_argument the length of the given big array is not equal to
           [n].
@@ -191,9 +201,10 @@ val of_bigarray_dyn : ?share:bool ->
     @param share [true] if data are shared. (default = [false])
  *)
 
-val of_bigarray : ?share:bool ->
-                  (num_type, prec, fortran_layout) Array1.t ->
-                  (module CNTVEC)
+val of_bigarray :
+  ?share:bool ->
+  (num_type, prec, fortran_layout) Array1.t ->
+  (module CNTVEC)
 (** [module V = (val of_bigarray ?share n ba : CNTVEC)]
     @return module [V] containing the vector [V.value] (of all elements of big
     array [ba]) that has the type [(V.n, 'cnt) vec] with a generative phantom
@@ -208,168 +219,186 @@ module Of_bigarray (X : sig
                         end) : CNTVEC
 (** A functor version of [of_bigarray]. *)
 
+val unsafe_of_bigarray :
+  ?share:bool ->
+  'n Slap_size.t ->
+  (num_type, prec, fortran_layout) Array1.t -> ('n, 'cnt) vec
+(** Like [of_bigarray_dyn], but size checking is not always performed. *)
+
 (** {2 Iterators} *)
 
-val map : (num_type -> num_type) ->
-          ?y:('n, 'y_cd) vec ->
-          ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+val map :
+  (num_type -> num_type) ->
+  ?y:('n, 'y_cd) vec ->
+  ('n, 'x_cd) vec -> ('n, 'y_cd) vec
 (** [map f ?y (x1, ..., xn)] is [(f x1, ..., f xn)].
    @return the vector [y], which is overwritten.
    @param y default = a fresh vector.
  *)
 
-val mapi : (int -> num_type -> num_type) ->
-           ?y:('n, 'y_cd) vec ->
-           ('n, 'x_cd) vec ->
-           ('n, 'y_cd) vec
+val mapi :
+  (int -> num_type -> num_type) ->
+  ?y:('n, 'y_cd) vec ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec
 (** [mapi f ?y (x1, ..., xn)] is [(f 1 x1, ..., f n xn)] with
    the vector's dimension [n].
    @return the vector [y], which is overwritten.
    @param y default = a fresh vector.
  *)
 
-val fold_left : ('accum -> num_type -> 'accum) ->
-                'accum ->
-                ('n, 'cd) vec -> 'accum
+val fold_left :
+  ('accum -> num_type -> 'accum) ->
+  'accum ->
+  ('n, 'cd) vec -> 'accum
 (** [fold_left f init (x1, x2, ..., xn)] is
    [f (... (f (f init x1) x2) ...) xn].
  *)
 
-val fold_lefti : (int -> 'accum -> num_type -> 'accum) ->
-                 'accum ->
-                 ('n, 'cd) vec -> 'accum
+val fold_lefti :
+  (int -> 'accum -> num_type -> 'accum) ->
+  'accum ->
+  ('n, 'cd) vec -> 'accum
 (** [fold_lefti f init (x1, x2, ..., xn)] is
    [f n (... (f 2 (f 1 init x1) x2) ...) xn] with the vector's dimension [n].
  *)
 
-val fold_right : (num_type -> 'accum -> 'accum) ->
-                 ('n, 'cd) vec ->
-                 'accum -> 'accum
+val fold_right :
+  (num_type -> 'accum -> 'accum) ->
+  ('n, 'cd) vec ->
+  'accum -> 'accum
 (** [fold_right f (x1, x2, ..., xn) init] is
    [f x1 (f x2 (... (f xn init) ...))].
  *)
 
-val fold_righti : (int -> num_type -> 'accum -> 'accum) ->
-                  ('n, 'cd) vec ->
-                  'accum -> 'accum
+val fold_righti :
+  (int -> num_type -> 'accum -> 'accum) ->
+  ('n, 'cd) vec ->
+  'accum -> 'accum
 (** [fold_righti f (x1, x2, ..., xn) init] is
    [f 1 x1 (f 2 x2 (... (f n xn init) ...))] with the vector's dimension [n].
  *)
 
-val replace_all : ('n, 'cd) vec ->
-                  (num_type -> num_type) -> unit
+val replace_all : ('n, 'cd) vec -> (num_type -> num_type) -> unit
 (** [replace_all x f] modifies the vector [x] in place
    -- the [i]-th element [xi] of [x] will be set to [f xi].
  *)
 
-val replace_alli : ('n, 'cd) vec ->
-                   (int -> num_type -> num_type) -> unit
+val replace_alli : ('n, 'cd) vec -> (int -> num_type -> num_type) -> unit
 (** [replace_alli x f] modifies the vector [x] in place
    -- the [i]-th element [xi] of [x] will be set to [f i xi].
  *)
 
-val iter : (num_type -> unit) ->
-           ('n, 'cd) vec -> unit
+val iter : (num_type -> unit) -> ('n, 'cd) vec -> unit
 (** [iter f (x1, x2, ..., xn)] is [f x1; f x2; ...; f xn].
  *)
 
-val iteri : (int -> num_type -> unit) ->
-            ('n, 'cd) vec -> unit
+val iteri : (int -> num_type -> unit) -> ('n, 'cd) vec -> unit
 (** [iteri f (x1, x2, ..., xn)] is [f 1 x1; f 2 x2; ...; f n xn].
  *)
 
 (** {2 Iterators on two vectors} *)
 
-val map2 : (num_type -> num_type -> num_type) ->
-           ?z:('n, 'z_cd) vec ->
-           ('n, 'x_cd) vec ->
-           ('n, 'y_cd) vec ->
-           ('n, 'z_cd) vec
+val map2 :
+  (num_type -> num_type -> num_type) ->
+  ?z:('n, 'z_cd) vec ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  ('n, 'z_cd) vec
 (** [map2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] is
     [(f x1 y1, f x2 y2, ..., f xn yn)].
     @return the vector [z], which is overwritten.
     @param z default = a fresh vector.
  *)
 
-val mapi2 : (int -> num_type -> num_type -> num_type) ->
-            ?z:('n, 'z_cd) vec ->
-            ('n, 'x_cd) vec ->
-            ('n, 'y_cd) vec ->
-            ('n, 'z_cd) vec
+val mapi2 :
+  (int -> num_type -> num_type -> num_type) ->
+  ?z:('n, 'z_cd) vec ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  ('n, 'z_cd) vec
 (** [mapi2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] is
     [(f 1 x1 y1, f 2 x2 y2, ..., f n xn yn)] with the vectors' dimension [n].
     @return the vector [z], which is overwritten.
     @param z default = a fresh vector.
  *)
 
-val fold_left2 : ('accum -> num_type -> num_type -> 'accum) ->
-                 'accum ->
-                 ('n, 'x_cd) vec ->
-                 ('n, 'y_cd) vec -> 'accum
+val fold_left2 :
+  ('accum -> num_type -> num_type -> 'accum) ->
+  'accum ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> 'accum
 (** [fold_left2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)] is
     [f (... (f (f init x1 y1) x2 y2) ...) xn yn].
  *)
 
-val fold_lefti2 : (int -> 'accum -> num_type -> num_type -> 'accum) ->
-                  'accum ->
-                  ('n, 'x_cd) vec ->
-                  ('n, 'y_cd) vec -> 'accum
+val fold_lefti2 :
+  (int -> 'accum -> num_type -> num_type -> 'accum) ->
+  'accum ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> 'accum
 (** [fold_lefti2 f init (x1, x2, ..., xn) (y1, y2, ..., yn)] is
     [f n (... (f 2 (f 1 init x1 y1) x2 y2) ...) xn yn] with the vectors'
     dimension [n].
  *)
 
-val fold_right2 : (num_type -> num_type -> 'accum -> 'accum) ->
-                  ('n, 'x_cd) vec ->
-                  ('n, 'y_cd) vec ->
-                  'accum -> 'accum
+val fold_right2 :
+  (num_type -> num_type -> 'accum -> 'accum) ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  'accum -> 'accum
 (** [fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init] is
     [f x1 y1 (f x2 y2 (... (f xn yn init) ...))].
  *)
 
-val fold_righti2 : (int -> num_type -> num_type -> 'accum -> 'accum) ->
-                   ('n, 'x_cd) vec ->
-                   ('n, 'y_cd) vec ->
-                   'accum -> 'accum
+val fold_righti2 :
+  (int -> num_type -> num_type -> 'accum -> 'accum) ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  'accum -> 'accum
 (** [fold_righti2 f (x1, x2, ..., xn) (y1, y2, ..., yn) init] is
     [f 1 x1 y1 (f 2 x2 y2 (... (f n xn yn init) ...))] with the vectors'
     dimension [n].
  *)
 
-val iter2 : (num_type -> num_type -> unit) ->
-            ('n, 'x_cd) vec ->
-            ('n, 'y_cd) vec -> unit
+val iter2 :
+  (num_type -> num_type -> unit) ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> unit
 (** [iter2 f (x1, x2, ..., xn) (y1, y2, ..., yn)] is
     [f x1 y1; f x2 y2; ...; f xn yn].
  *)
 
-val iteri2 : (int -> num_type -> num_type -> unit) ->
-            ('n, 'x_cd) vec ->
-            ('n, 'y_cd) vec -> unit
+val iteri2 :
+  (int -> num_type -> num_type -> unit) ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> unit
 (** [iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)] is
     [f 1 x1 y1; f 2 x2 y2; ...; f n xn yn].
  *)
 
 (** {2 Iterators on three vectors} *)
 
-val map3 : (num_type -> num_type -> num_type -> num_type) ->
-           ?w:('n, 'w_cd) vec ->
-           ('n, 'x_cd) vec ->
-           ('n, 'y_cd) vec ->
-           ('n, 'z_cd) vec ->
-           ('n, 'w_cd) vec
+val map3 :
+  (num_type -> num_type -> num_type -> num_type) ->
+  ?w:('n, 'w_cd) vec ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  ('n, 'z_cd) vec ->
+  ('n, 'w_cd) vec
 (** [map3 f ?w (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
     [(f x1 y1 z1, f x2 y2 z2, ..., f xn yn zn)].
     @return the vector [w], which is overwritten.
     @param w default = a fresh vector.
  *)
 
-val mapi3 : (int -> num_type -> num_type -> num_type -> num_type) ->
-           ?w:('n, 'w_cd) vec ->
-           ('n, 'x_cd) vec ->
-           ('n, 'y_cd) vec ->
-           ('n, 'z_cd) vec ->
-           ('n, 'w_cd) vec
+val mapi3 :
+  (int -> num_type -> num_type -> num_type -> num_type) ->
+  ?w:('n, 'w_cd) vec ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  ('n, 'z_cd) vec ->
+  ('n, 'w_cd) vec
 (** [mapi3 f ?w (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
     [(f 1 x1 y1 z1, f 2 x2 y2 z2, ..., f n xn yn zn)] with the vectors'
     dimension [n].
@@ -377,56 +406,62 @@ val mapi3 : (int -> num_type -> num_type -> num_type -> num_type) ->
     @param w default = a fresh vector.
  *)
 
-val fold_left3 : ('accum -> num_type -> num_type -> num_type -> 'accum) ->
-                 'accum ->
-                 ('n, 'x_cd) vec ->
-                 ('n, 'y_cd) vec ->
-                 ('n, 'z_cd) vec -> 'accum
+val fold_left3 :
+  ('accum -> num_type -> num_type -> num_type -> 'accum) ->
+  'accum ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  ('n, 'z_cd) vec -> 'accum
 (** [fold_left3 f init (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)]
     is [f (... (f (f init x1 y1 z1) x2 y2 z2) ...) xn yn zn].
  *)
 
-val fold_lefti3 : (int -> 'accum -> num_type -> num_type -> num_type->'accum) ->
-                 'accum ->
-                 ('n, 'x_cd) vec ->
-                 ('n, 'y_cd) vec ->
-                 ('n, 'z_cd) vec -> 'accum
+val fold_lefti3 :
+  (int -> 'accum -> num_type -> num_type -> num_type->'accum) ->
+  'accum ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  ('n, 'z_cd) vec -> 'accum
 (** [fold_lefti3 f init (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)]
     is [f n (... (f 2 (f 1 init x1 y1 z1) x2 y2 z2) ...) xn yn zn] with the
     vectors' dimension [n].
  *)
 
-val fold_right3 : (num_type -> num_type -> num_type -> 'accum -> 'accum) ->
-                  ('n, 'x_cd) vec ->
-                  ('n, 'y_cd) vec ->
-                  ('n, 'z_cd) vec ->
-                  'accum -> 'accum
+val fold_right3 :
+  (num_type -> num_type -> num_type -> 'accum -> 'accum) ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  ('n, 'z_cd) vec ->
+  'accum -> 'accum
 (** [fold_right3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn) init]
     is [f x1 y1 z1 (f x2 y2 z2 (... (f xn yn zn init) ...))].
  *)
 
-val fold_righti3 : (int -> num_type -> num_type -> num_type -> 'accum->'accum)->
-                  ('n, 'x_cd) vec ->
-                  ('n, 'y_cd) vec ->
-                  ('n, 'z_cd) vec ->
-                  'accum -> 'accum
+val fold_righti3 :
+  (int -> num_type -> num_type -> num_type -> 'accum->'accum)->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  ('n, 'z_cd) vec ->
+  'accum -> 'accum
 (** [fold_righti3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn) init]
     is [f 1 x1 y1 z1 (f 2 x2 y2 z2 (... (f n xn yn zn init) ...))]
     with the vectors' dimension [n].
  *)
 
-val iter3 : (num_type -> num_type -> num_type -> unit) ->
-            ('n, 'x_cd) vec ->
-            ('n, 'y_cd) vec ->
-            ('n, 'z_cd) vec -> unit
+val iter3 :
+  (num_type -> num_type -> num_type -> unit) ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  ('n, 'z_cd) vec -> unit
 (** [iter3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
     [f x1 y1 z1; f x2 y2 z2; ...; f xn yn zn].
  *)
 
-val iteri3 : (int -> num_type -> num_type -> num_type -> unit) ->
-             ('n, 'x_cd) vec ->
-             ('n, 'y_cd) vec ->
-             ('n, 'z_cd) vec -> unit
+val iteri3 :
+  (int -> num_type -> num_type -> num_type -> unit) ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  ('n, 'z_cd) vec -> unit
 (** [iteri3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)] is
     [f 1 x1 y1 z1; f 2 x2 y2 z2; ...; f n xn yn zn].
  *)
@@ -445,18 +480,20 @@ val exists : (num_type -> bool) -> ('n, 'cd) vec -> bool
     satisfies the predicate [p].
  *)
 
-val for_all2 : (num_type -> num_type -> bool) ->
-               ('n, 'x_cd) vec ->
-               ('n, 'y_cd) vec -> bool
+val for_all2 :
+  (num_type -> num_type -> bool) ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> bool
 (** [for_all2 p (x1, x2, ..., xn) (y1, y2, ..., yn)] is
     [(p x1 y1) && (p x2 y2) && ... && (p xn yn)].
     @return [true] if and only if all elements of the given two vectors
     satisfy the predicate [p].
  *)
 
-val exists2 : (num_type -> num_type -> bool) ->
-               ('n, 'x_cd) vec ->
-               ('n, 'y_cd) vec -> bool
+val exists2 :
+  (num_type -> num_type -> bool) ->
+  ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> bool
 (** [exists2 p (x1, x2, ..., xn) (y1, y2, ..., yn)] is
     [(p x1 y1) || (p x2 y2) || ... || (p xn yn)].
     @return [true] if and only if at least one pair of elements of the given two
@@ -487,9 +524,10 @@ val prod : ('n, 'cd) vec -> num_type
     @return the product of all elements in [x].
  *)
 
-val add_const : num_type ->
-                ?y:('n, 'y_cd) vec ->
-                ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+val add_const :
+  num_type ->
+  ?y:('n, 'y_cd) vec ->
+  ('n, 'x_cd) vec -> ('n, 'y_cd) vec
 (** [add_const c ?y x] adds constant value [c] to all elements in vector [x].
     @return the vector [y], which is overwritten.
     @since 0.1.0
@@ -513,10 +551,11 @@ val ssqr : ?c:num_type -> ('n, 'cd) vec -> num_type
     @param c default = [0.0].
  *)
 
-val sort : ?cmp:(num_type -> num_type -> int) ->
-           ?decr:bool ->
-           ?p:('n, 'p_cd) Common.int_vec ->
-           ('n, 'x_cd) vec -> unit
+val sort :
+  ?cmp:(num_type -> num_type -> int) ->
+  ?decr:bool ->
+  ?p:('n, 'p_cd) Slap_common.int_vec ->
+  ('n, 'x_cd) vec -> unit
 (** [sort ?cmp ?decr ?p x] sorts the elements in vector [x] in increasing order
     according to the comparison function [cmp].
 
@@ -536,43 +575,49 @@ val neg : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
     @return the vector [y], which is overwritten.
  *)
 
-val reci : ?y:('n, 'y_cd) vec ->
-           ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+val reci :
+  ?y:('n, 'y_cd) vec ->
+  ('n, 'x_cd) vec -> ('n, 'y_cd) vec
 (** [reci ?y (x1, x2, ..., xn)] returns [(1 / x1, 1 / x2, ..., 1 / xn)].
     @return the vector [y], which is overwritten.
     @since 0.1.0
  *)
 
-val add : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
-          ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+val add :
+  ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> ('n, 'z_cd) vec
 (** [add ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
     [(x1 + y1, x2 + y2, ..., xn + yn)].
     @return the vector [z], which is overwritten.
  *)
 
-val sub : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
-          ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+val sub :
+  ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> ('n, 'z_cd) vec
 (** [sub ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
     [(x1 - y1, x2 - y2, ..., xn - yn)].
     @return the vector [z], which is overwritten.
  *)
 
-val mul : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
-          ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+val mul :
+  ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> ('n, 'z_cd) vec
 (** [mul ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
     [(x1 * y1, x2 * y2, ..., xn * yn)].
     @return the vector [z], which is overwritten.
  *)
 
-val div : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
-          ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+val div :
+  ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> ('n, 'z_cd) vec
 (** [div ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
     [(x1 / y1, x2 / y2, ..., xn / yn)].
     @return the vector [z], which is overwritten.
  *)
 
-val zpxy : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
-          ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+val zpxy :
+  ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> ('n, 'z_cd) vec
 (** [zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
 
     - [(z1 + x1 * y1, z2 + x2 * y2, ..., zn + xn * yn)]
@@ -583,8 +628,9 @@ val zpxy : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
     @since 0.1.0
  *)
 
-val zmxy : ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
-          ('n, 'y_cd) vec -> ('n, 'z_cd) vec
+val zmxy :
+  ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
+  ('n, 'y_cd) vec -> ('n, 'z_cd) vec
 (** [zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
 
     - [(z1 - x1 * y1, z2 - x2 * y2, ..., zn - xn * yn)]
@@ -602,10 +648,11 @@ val ssqr_diff : ('n, 'x_cd) vec -> ('n, 'y_cd) vec -> num_type
 
 (** {2 Subvectors} *)
 
-val subcntvec_dyn : 'm Size.t ->
-                 ?ofsx:int ->
-                 ('n, cnt) vec ->
-                 ('m, 'cnt) vec
+val subcntvec_dyn :
+  'm Slap_size.t ->
+  ?ofsx:int ->
+  ('n, cnt) vec ->
+  ('m, 'cnt) vec
 (** [subcntvec_dyn m ?ofsx x]
     @return a subvector of the contiguous vector [x].
     The [i]-th element of it refers [(ofsx+i-1)]-th element of [x].
@@ -615,11 +662,12 @@ val subcntvec_dyn : 'm Size.t ->
     [x].
  *)
 
-val subdscvec_dyn : 'm Size.t ->
-                    ?ofsx:int ->
-                    ?incx:int ->
-                    ('n, 'cd) vec ->
-                    ('m, dsc) vec
+val subdscvec_dyn :
+  'm Slap_size.t ->
+  ?ofsx:int ->
+  ?incx:int ->
+  ('n, 'cd) vec ->
+  ('m, dsc) vec
 (** [subdscvec_dyn m ?ofsx ?incx x]
     @return a subvector of the vector [x].
     The [i]-th element of it refers [(ofsx+(i-1)*incx)]-th element of [x].
@@ -630,9 +678,10 @@ val subdscvec_dyn : 'm Size.t ->
     a valid subvector of [x].
  *)
 
-val subvec_dyn : 'm Size.t ->
-                 ?ofsx:int ->
-                 ?incx:int ->
-                 ('n, 'cd) vec ->
-                 ('m, dsc) vec
+val subvec_dyn :
+  'm Slap_size.t ->
+  ?ofsx:int ->
+  ?incx:int ->
+  ('n, 'cd) vec ->
+  ('m, dsc) vec
 (** An alias of [subdscvec_dyn]. *)

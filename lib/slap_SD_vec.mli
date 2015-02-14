@@ -19,8 +19,9 @@
 
 (** {2 Creation of vectors} *)
 
-val random : ?rnd_state:Random.State.t ->
-             ?from:float -> ?range:float -> 'n Size.t -> ('n, 'cnt) vec
+val random :
+  ?rnd_state:Random.State.t ->
+  ?from:float -> ?range:float -> 'n Slap_size.t -> ('n, 'cnt) vec
 (** [random ?rnd_state ?from ?range n] creates a [n]-dimensional vector randomly
     initialized with the uniform distribution between [from] and [from + range].
 

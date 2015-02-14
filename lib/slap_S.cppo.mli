@@ -17,9 +17,10 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** {2 Creation of matrices} *)
+(** {!Slap.S} provides 64-bit real BLAS and LAPACK functions. *)
 
-let random ?rnd_state ?from ?range m n =
-  let a =
-    I.Mat.random ?rnd_state ?from ?range (__expose_size m) (__expose_size n) in
-  __unexpose_mat (m, n, 1, 1, a)
+#define SLAP_SDCZ_BITS 32
+
+#include "slap_SD.mli"
+
+#undef SLAP_SDCZ_BITS

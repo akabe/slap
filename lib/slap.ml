@@ -19,74 +19,37 @@
 
 (** SLAP (Sized Linear Algebra Package) *)
 
-type cnt
-(** The tag for contiguous vectors and matrices. *)
-
-type dsc
-(** The tag for discrete vectors and matrices. *)
+(** Types, flags and functions commonly used in SLAP. *)
+module Common = Slap_common
 
 (** Sizes (dimensions of vectors and matrices). *)
-module Size :
-sig
-  #include "slap_size.mli"
-end
+module Size = Slap_size
 
 (** Sized vectors. *)
-module Vec :
-sig
-  #include "slap_vec.mli"
-end
+module Vec = Slap_vec
 
 (** Sized matrices. *)
-module Mat :
-sig
-  #include "slap_mat.mli"
-end
+module Mat = Slap_mat
 
-(** {2 Pretty printing} *)
+(** Pretty printers. *)
+module Io = Slap_io
 
-(** Pretty-printers of vector and matrices. *)
-module Io :
-sig
-  #include "slap_io.mli"
-end
+type cnt = Slap_common.cnt
+(** For compatilibity with SLAP version 0 *)
+
+type dsc = Slap_common.dsc
+(** For compatilibity with SLAP version 0 *)
 
 (** {2 Precision dependent modules} *)
 
-(** Types, flags and functions common to all precision dependent modules. *)
-module Common :
-sig
-  #include "slap_common.mli"
-end
-
 (** 64-bit real BLAS and LAPACK functions. *)
-module D :
-sig
-#define SLAP_SDCZ_BITS 64
-#include "slap_SD.mli"
-#undef SLAP_SDCZ_BITS
-end
+module D = Slap_D
 
 (** 32-bit real BLAS and LAPACK functions. *)
-module S :
-sig
-#define SLAP_SDCZ_BITS 32
-#include "slap_SD.mli"
-#undef SLAP_SDCZ_BITS
-end
+module S = Slap_S
 
 (** 64-bit complex BLAS and LAPACK functions. *)
-module Z :
-sig
-#define SLAP_SDCZ_BITS 64
-#include "slap_CZ.mli"
-#undef SLAP_SDCZ_BITS
-end
+module Z = Slap_Z
 
 (** 32-bit complex BLAS and LAPACK functions. *)
-module C :
-sig
-#define SLAP_SDCZ_BITS 32
-#include "slap_CZ.mli"
-#undef SLAP_SDCZ_BITS
-end
+module C = Slap_C

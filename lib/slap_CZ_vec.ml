@@ -20,5 +20,6 @@
 (** {2 Creation of vectors} *)
 
 let random ?rnd_state ?re_from ?re_range ?im_from ?im_range n =
-  let x = I.Vec.random ?rnd_state ?re_from ?re_range ?im_from ?im_range n in
-  (n, 1, 1, x)
+  let x = I.Vec.random ?rnd_state ?re_from ?re_range ?im_from ?im_range
+      (__expose_size n) in
+  __unexpose_vec (n, 1, 1, x)

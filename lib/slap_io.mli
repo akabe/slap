@@ -17,8 +17,10 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
+(** {!Slap.Io} provides pretty printers for vectors and matrices. *)
+
 open Format
-open Bigarray
+open Slap_common
 
 module Context :
 sig
@@ -44,8 +46,8 @@ sig
    *)
 
   val set_dim_defaults : t option -> unit
-  (** [set_dim_defaults opt_n] sets both {!Slap.Io.Context.vertical_default} and
-      {!Slap.Io.Context.horizontal_default} to [opt_n].
+  (** [set_dim_defaults opt_n] sets both {!Slap_io.Context.vertical_default} and
+      {!Slap_io.Context.horizontal_default} to [opt_n].
    *)
 end
 
@@ -137,7 +139,7 @@ val pp_vec_gen :
   ?horizontal_context:Context.t option ->
   formatter ->
   (formatter -> 'num -> unit) ->
-  ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
+  ('n, 'num, 'prec, 'cnt_or_dsc) vec -> unit
 (** A generator of pretty printers for (column) vectors. *)
 
 val pp_rvec_gen :
@@ -155,7 +157,7 @@ val pp_rvec_gen :
   ?horizontal_context:int option ->
   formatter ->
   (formatter -> 'num -> unit) ->
-  ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
+  ('n, 'num, 'prec, 'cnt_or_dsc) vec -> unit
 (** A generator of pretty printers for row vectors. *)
 
 val pp_mat_gen :
@@ -173,7 +175,7 @@ val pp_mat_gen :
   ?horizontal_context:Context.t option ->
   formatter ->
   (formatter -> 'num -> unit) ->
-  ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Mat.t -> unit
+  ('m, 'n, 'num, 'prec, 'cnt_or_dsc) mat -> unit
 (** A generator of pretty printers for matrices. *)
 
 (** {2 Default pretty printers for elements of vectors or matrices} *)
@@ -192,7 +194,7 @@ val pp_int32_el_default : int32 pp_el_default
 (** {2 Pretty-printing in standard style} *)
 
 type ('n, 'num, 'prec, 'cnt_or_dsc) pp_vec =
-    formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) Vec.t -> unit
+    formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) vec -> unit
 (** A type of standard pretty printers for vectors. *)
 
 val pp_fvec : ('n, float, 'prec, 'cnt_or_dsc) pp_vec
@@ -208,7 +210,7 @@ val pp_rcvec : ('n, Complex.t, 'prec, 'cnt_or_dsc) pp_vec
 val pp_rivec : ('n, int32, 'prec, 'cnt_or_dsc) pp_vec
 
 type ('m, 'n, 'num, 'prec, 'cnt_or_dsc) pp_mat =
-    formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Mat.t -> unit
+    formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) mat -> unit
 (** A type of standard pretty printers for matrices. *)
 
 val pp_fmat : ('m, 'n, float, 'prec, 'cnt_or_dsc) pp_mat
@@ -223,9 +225,9 @@ module Toplevel :
 sig
   val ssc : int -> unit
   (** {i SLAP Set Context}: [ssc n] sets sets both
-      {!Slap.Io.Context.vertical_default} and
-      {!Slap.Io.Context.horizontal_default} to [Some n].
-      This is the shortcut version of {Slap.Io.Context.set_dim_defaults}.
+      {!Slap_io.Context.vertical_default} and
+      {!Slap_io.Context.horizontal_default} to [Some n].
+      This is the shortcut version of {Slap_io.Context.set_dim_defaults}.
    *)
 
   val lsc : int -> unit

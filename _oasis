@@ -1,14 +1,17 @@
 OASISFormat:            0.4
 OCamlVersion:           >= 3.12
 Name:                   SLAP
-Version:                0.2.3
-Synopsis:               Linear algebra library with static size checking for matrix operations
-Description:            This OCaml-library is a wrapper of Lacaml, a binding of two widely used
-                        linear algebra libraries BLAS and LAPACK for FORTRAN. Sized Linear Algebra
-                        Library (SLAP) guarantees statically (i.e, at compile time) consistency
-                        (with respect to dimensions) of most high-level matrix (and vector)
-                        operations. For example, addition of two- and three-dimensional vectors causes
-                        type error at compile time, and dynamic errors like exceptions do not happen.
+Version:                1.0.0
+Synopsis:               A linear algebra library with static size checking for
+                        matrix operations
+Description:            Sized Linear Algebra Package (SLAP) is a wrapper of
+                        Lacaml, a binding of two widely used linear algebra
+                        libraries BLAS and LAPACK for FORTRAN. This guarantees
+                        statically (i.e, at compile time) consistency (with
+                        respect to dimensions) of most high-level matrix (and
+                        vector) operations. For example, addition of two- and
+                        three-dimensional vectors causes type error at compile
+                        time, and dynamic errors like exceptions do not happen.
 Maintainers:            Akinori ABE <abe@sf.ecei.tohoku.ac.jp>
 Authors:                Akinori ABE <abe@sf.ecei.tohoku.ac.jp>
 Copyrights:             (C) 2013-2015 Akinori ABE <abe@sf.ecei.tohoku.ac.jp>
@@ -17,18 +20,33 @@ Homepage:               https://github.com/akabe/slap
 Plugins:                META (0.4), StdFiles (0.4), DevFiles (0.4)
 XStdFilesAUTHORS:       false
 XStdFilesREADME:        false
-BuildTools:             ocamlbuild,ocamldoc,cppo
+BuildTools:             ocamlbuild,ocamldoc
 
-PreBuildCommand:        ocaml gen_config.ml && \
-                        cppo lib/slap.cppo.mli > lib/slap.mli && \
-                        cppo lib/slap.cppo.ml > lib/slap.ml
-PostCleanCommand:       rm -f lib/slap.ml lib/slap.mli lib/config.h
+PreBuildCommand:        ocaml gen_config.ml; \
+                        cppo lib/slap_S.cppo.mli > lib/slap_S.mli; \
+                        cppo lib/slap_S.cppo.ml > lib/slap_S.ml; \
+                        cppo lib/slap_D.cppo.mli > lib/slap_D.mli; \
+                        cppo lib/slap_D.cppo.ml > lib/slap_D.ml; \
+                        cppo lib/slap_C.cppo.mli > lib/slap_C.mli; \
+                        cppo lib/slap_C.cppo.ml > lib/slap_C.ml; \
+                        cppo lib/slap_Z.cppo.mli > lib/slap_Z.mli; \
+                        cppo lib/slap_Z.cppo.ml > lib/slap_Z.ml
+PostCleanCommand:       rm -f lib/config.h lib/slap_[SDCZ].mli lib/slap_[SDCZ].ml
 
 Library slap
   Path:                 lib
   FindlibName:          slap
   BuildDepends:         bigarray,lacaml
-  Modules:              Slap
+  Modules:              Slap,
+                        Slap_common,
+                        Slap_size,
+                        Slap_vec,
+                        Slap_mat,
+                        Slap_io,
+                        Slap_S,
+                        Slap_D,
+                        Slap_C,
+                        Slap_Z
   CSources:             config.h,
                         slap_utils.h, slap_utils.c,
                         slap_vec_stubs.c,

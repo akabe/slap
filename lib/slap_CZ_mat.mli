@@ -22,7 +22,7 @@
 val random : ?rnd_state:Random.State.t ->
              ?re_from:float -> ?re_range:float ->
              ?im_from:float -> ?im_range:float ->
-             'm Size.t -> 'n Size.t -> ('m, 'n, 'cnt) mat
+             'm Slap_size.t -> 'n Slap_size.t -> ('m, 'n, 'cnt) mat
 (** [random ?rnd_state ?from ?range m n] creates a [m]-by-[n] matrix randomly
     initialized with the uniform distribution between [re_from]/[im_from] and
     [re_from+re_range]/[im_from+im_range] for real and imaginary parts,

@@ -60,42 +60,44 @@ val amax : ('n, 'cd) vec -> num_type
 
 (** {3 Level 2} *)
 
-val gemv : ?beta:num_type ->
-           ?y:('m, 'y_cd) vec ->
-           trans:(('a_m, 'a_n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) trans3 ->
-           ?alpha:num_type ->
-           ('a_m, 'a_n, 'a_cd) mat ->
-           ('n, 'x_cd) vec -> ('m, 'y_cd) vec
+val gemv :
+  ?beta:num_type ->
+  ?y:('m, 'y_cd) vec ->
+  trans:(('a_m, 'a_n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) trans3 ->
+  ?alpha:num_type ->
+  ('a_m, 'a_n, 'a_cd) mat ->
+  ('n, 'x_cd) vec -> ('m, 'y_cd) vec
 (** [gemv ?beta ?y ~trans ?alpha a x] executes
     [y := alpha * OP(a) * x + beta * y].
 
     @param beta default = [0.0]
     @param trans the transpose flag for [a]:
-      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
-      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
-      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      - If [trans] = {!Slap_common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
     @param alpha default = [1.0]
  *)
 
-val gbmv : m:'a_m Size.t ->
-           ?beta:num_type ->
-           ?y:('m, 'y_cd) vec ->
-           trans:(('a_m, 'a_n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) trans3 ->
-           ?alpha:num_type ->
-           (('a_m, 'a_n, 'kl, 'ku) Size.geband, 'a_n, 'a_cd) mat ->
-           'kl Size.t ->
-           'ku Size.t ->
-           ('n, 'x_cd) vec -> ('m, 'y_cd) vec
+val gbmv :
+  m:'a_m Slap_size.t ->
+  ?beta:num_type ->
+  ?y:('m, 'y_cd) vec ->
+  trans:(('a_m, 'a_n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) trans3 ->
+  ?alpha:num_type ->
+  (('a_m, 'a_n, 'kl, 'ku) Slap_size.geband, 'a_n, 'a_cd) mat ->
+  'kl Slap_size.t ->
+  'ku Slap_size.t ->
+  ('n, 'x_cd) vec -> ('m, 'y_cd) vec
 (** [gbmv ~m ?beta ?y ~trans ?alpha a kl ku x] computes
     [y := alpha * OP(a) * x + beta * y] where [a] is a band matrix stored in
     band storage.
     @return vector [y], which is overwritten.
     @param beta default = [0.0]
     @param trans the transpose flag for [a]:
-      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
-      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
-      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      - If [trans] = {!Slap_common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
     @param alpha default = [1.0]
     @param kl the number of subdiagonals of [a]
@@ -103,12 +105,13 @@ val gbmv : m:'a_m Size.t ->
     @since 0.2.0
  *)
 
-val symv : ?beta:num_type ->
-           ?y:('n, 'y_cd) vec ->
-           ?up:bool ->
-           ?alpha:num_type ->
-           ('n, 'n, 'a_cd) mat ->
-           ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+val symv :
+  ?beta:num_type ->
+  ?y:('n, 'y_cd) vec ->
+  ?up:bool ->
+  ?alpha:num_type ->
+  ('n, 'n, 'a_cd) mat ->
+  ('n, 'x_cd) vec -> ('n, 'y_cd) vec
 (** [symv ?beta ?y ?up ?alpha a x] executes
     [y := alpha * a * x + beta * y].
 
@@ -119,17 +122,18 @@ val symv : ?beta:num_type ->
     @param alpha default = [1.0]
  *)
 
-val trmv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
-           ?diag:Common.diag ->
-           ?up:bool ->
-           ('n, 'n, 'a_cd) mat ->
-           ('n, 'x_cd) vec -> unit
+val trmv :
+  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  ?diag:Slap_common.diag ->
+  ?up:bool ->
+  ('n, 'n, 'a_cd) mat ->
+  ('n, 'x_cd) vec -> unit
 (** [trmv ~trans ?diag ?up a x] executes [x := OP(a) * x].
 
     @param trans the transpose flag for [a]:
-      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
-      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
-      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      - If [trans] = {!Slap_common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
     @param diag default = [`N]
       - If [diag] = [`U], then [a] is unit triangular;
@@ -139,18 +143,19 @@ val trmv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
       - If [up] = [false], then the lower triangular part of [a] is used.
  *)
 
-val trsv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
-           ?diag:Common.diag ->
-           ?up:bool ->
-           ('n, 'n, 'a_cd) mat ->
-           ('n, 'b_cd) vec -> unit
+val trsv :
+  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  ?diag:Slap_common.diag ->
+  ?up:bool ->
+  ('n, 'n, 'a_cd) mat ->
+  ('n, 'b_cd) vec -> unit
 (** [trmv ~trans ?diag ?up a b] solves linear system [OP(a) * x = b]
     and destructively assigns [x] to [b].
 
     @param trans the transpose flag for [a]:
-      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
-      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
-      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      - If [trans] = {!Slap_common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
     @param diag default = [`N]
       - If [diag] = [`U], then [a] is unit triangular;
@@ -160,18 +165,19 @@ val trsv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
       - If [up] = [false], then the lower triangular part of [a] is used.
  *)
 
-val tpmv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
-           ?diag:Common.diag ->
-           ?up:bool ->
-           ('n Size.packed, cnt) vec ->
-           ('n, 'x_cd) vec -> unit
+val tpmv :
+  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  ?diag:Slap_common.diag ->
+  ?up:bool ->
+  ('n Slap_size.packed, cnt) vec ->
+  ('n, 'x_cd) vec -> unit
 (** [tpmv ~trans ?diag ?up a x] executes [x := OP(a) * x]
     where [a] is a packed triangular matrix.
 
     @param trans the transpose flag for [a]:
-      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
-      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
-      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      - If [trans] = {!Slap_common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
     @param diag default = [`N]
       - If [diag] = [`U], then [a] is unit triangular;
@@ -183,19 +189,20 @@ val tpmv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
     @since 0.2.0
  *)
 
-val tpsv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
-           ?diag:Common.diag ->
-           ?up:bool ->
-           ('n Size.packed, cnt) vec ->
-           ('n, 'x_cd) vec -> unit
+val tpsv :
+  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  ?diag:Slap_common.diag ->
+  ?up:bool ->
+  ('n Slap_size.packed, cnt) vec ->
+  ('n, 'x_cd) vec -> unit
 (** [tpsv ~trans ?diag ?up a b] solves linear system [OP(a) * x = b]
     and destructively assigns [x] to [b] where [a] is a packed triangular
     matrix.
 
     @param trans the transpose flag for [a]:
-      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
-      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
-      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      - If [trans] = {!Slap_common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
     @param diag default = [`N]
       - If [diag] = [`U], then [a] is unit triangular;
@@ -209,41 +216,43 @@ val tpsv : trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
 
 (** {3 Level 3} *)
 
-val gemm : ?beta:num_type ->
-           ?c:('m, 'n, 'c_cd) mat ->
-           transa:(('a_m, 'a_k, 'a_cd) mat -> ('m, 'k, 'a_cd) mat) trans3 ->
-           ?alpha:num_type ->
-           ('a_m, 'a_k, 'a_cd) mat ->
-           transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans3 ->
-           ('b_k, 'b_n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat
+val gemm :
+  ?beta:num_type ->
+  ?c:('m, 'n, 'c_cd) mat ->
+  transa:(('a_m, 'a_k, 'a_cd) mat -> ('m, 'k, 'a_cd) mat) trans3 ->
+  ?alpha:num_type ->
+  ('a_m, 'a_k, 'a_cd) mat ->
+  transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans3 ->
+  ('b_k, 'b_n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat
 (** [gemm ?beta ?c ~transa ?alpha a ~transb b] executes
     [c := alpha * OP(a) * OP(b) + beta * c].
 
     @param beta default = [0.0]
     @param transa the transpose flag for [a]:
-      - If [transa] = {!Slap.Common.normal}, then [OP(a)] = [a];
-      - If [transa] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
-      - If [transa] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      - If [transa] = {!Slap_common.normal}, then [OP(a)] = [a];
+      - If [transa] = {!Slap_common.trans}, then [OP(a)] = [a^T];
+      - If [transa] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
     @param alpha default = [1.0]
     @param transb the transpose flag for [b]:
-      - If [transb] = {!Slap.Common.normal}, then [OP(b)] = [b];
-      - If [transb] = {!Slap.Common.trans}, then [OP(b)] = [b^T];
-      - If [transb] = {!Slap.Common.conjtr}, then [OP(b)] = [b^H]
+      - If [transb] = {!Slap_common.normal}, then [OP(b)] = [b];
+      - If [transb] = {!Slap_common.trans}, then [OP(b)] = [b^T];
+      - If [transb] = {!Slap_common.conjtr}, then [OP(b)] = [b^H]
       (the conjugate transpose of [b]).
  *)
 
-val symm : side:('k, 'm, 'n) Common.side ->
-           ?up:bool ->
-           ?beta:num_type ->
-           ?c:('m, 'n, 'c_cd) mat ->
-           ?alpha:num_type ->
-           ('k, 'k, 'a_cd) mat ->
-           ('m, 'n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat
+val symm :
+  side:('k, 'm, 'n) Slap_common.side ->
+  ?up:bool ->
+  ?beta:num_type ->
+  ?c:('m, 'n, 'c_cd) mat ->
+  ?alpha:num_type ->
+  ('k, 'k, 'a_cd) mat ->
+  ('m, 'n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat
 (** [symm ~side ?up ?beta ?c ?alpha a b] executes
 
-    - [c := alpha * a * b + beta * c] (if [side] = {!Slap.Common.left}) or
-    - [c := alpha * b * a + beta * c] (if [side] = {!Slap.Common.right})
+    - [c := alpha * a * b + beta * c] (if [side] = {!Slap_common.left}) or
+    - [c := alpha * b * a + beta * c] (if [side] = {!Slap_common.right})
 
     where [a] is a symmterix matrix, and [b] and [c] are general matrices.
 
@@ -256,17 +265,18 @@ val symm : side:('k, 'm, 'n) Common.side ->
     @param alpha default = [1.0]
  *)
 
-val trmm : side:('k, 'm, 'n) Common.side ->
-           ?up:bool ->
-           transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans3 ->
-           ?diag:Common.diag ->
-           ?alpha:num_type ->
-           a:('k, 'k, 'a_cd) mat ->
-           ('m, 'n, 'b_cd) mat -> unit
+val trmm :
+  side:('k, 'm, 'n) Slap_common.side ->
+  ?up:bool ->
+  transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans3 ->
+  ?diag:Slap_common.diag ->
+  ?alpha:num_type ->
+  a:('k, 'k, 'a_cd) mat ->
+  ('m, 'n, 'b_cd) mat -> unit
 (** [trmm ~side ?up ~transa ?diag ?alpha ~a b] executes
 
-    - [b := alpha * OP(a) * b] (if [side] = {!Slap.Common.left}) or
-    - [b := alpha * b * OP(a)] (if [side] = {!Slap.Common.right})
+    - [b := alpha * OP(a) * b] (if [side] = {!Slap_common.left}) or
+    - [b := alpha * b * OP(a)] (if [side] = {!Slap_common.right})
 
     where [a] is a triangular matrix, and [b] is a general matrix.
 
@@ -276,9 +286,9 @@ val trmm : side:('k, 'm, 'n) Common.side ->
       - If [up] = [true], then the upper triangular part of [a] is used;
       - If [up] = [false], then the lower triangular part of [a] is used.
     @param transa the transpose flag for [a]:
-      - If [transa] = {!Slap.Common.normal}, then [OP(a)] = [a];
-      - If [transa] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
-      - If [transa] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      - If [transa] = {!Slap_common.normal}, then [OP(a)] = [a];
+      - If [transa] = {!Slap_common.trans}, then [OP(a)] = [a^T];
+      - If [transa] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
         (the conjugate transpose of [a]).
     @param diag default = [`N]
       - If [diag] = [`U], then [a] is unit triangular;
@@ -286,18 +296,19 @@ val trmm : side:('k, 'm, 'n) Common.side ->
     @param alpha default = [1.0]
  *)
 
-val trsm : side:('k, 'm, 'n) Common.side ->
-           ?up:bool ->
-           transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans3 ->
-           ?diag:Common.diag ->
-           ?alpha:num_type ->
-           a:('k, 'k, 'a_cd) mat ->
-           ('m, 'n, 'b_cd) mat -> unit
+val trsm :
+  side:('k, 'm, 'n) Slap_common.side ->
+  ?up:bool ->
+  transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans3 ->
+  ?diag:Slap_common.diag ->
+  ?alpha:num_type ->
+  a:('k, 'k, 'a_cd) mat ->
+  ('m, 'n, 'b_cd) mat -> unit
 (** [trsm ~side ?up ~transa ?diag ?alpha ~a b] solves a system of linear
     equations
 
-    - [OP(a) * x = alpha * b] (if [side] = {!Slap.Common.left}) or
-    - [x * OP(a) = alpha * b] (if [side] = {!Slap.Common.right})
+    - [OP(a) * x = alpha * b] (if [side] = {!Slap_common.left}) or
+    - [x * OP(a) = alpha * b] (if [side] = {!Slap_common.right})
 
     where [a] is a triangular matrix, and [b] is a general matrix.
     The solution [x] is returned by [b].
@@ -308,9 +319,9 @@ val trsm : side:('k, 'm, 'n) Common.side ->
       - If [up] = [true], then the upper triangular part of [a] is used;
       - If [up] = [false], then the lower triangular part of [a] is used.
     @param transa the transpose flag for [a]:
-      - If [transa] = {!Slap.Common.normal}, then [OP(a)] = [a];
-      - If [transa] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
-      - If [transa] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      - If [transa] = {!Slap_common.normal}, then [OP(a)] = [a];
+      - If [transa] = {!Slap_common.trans}, then [OP(a)] = [a^T];
+      - If [transa] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
         (the conjugate transpose of [a]).
     @param diag default = [`N]
       - If [diag] = [`U], then [a] is unit triangular;
@@ -318,17 +329,18 @@ val trsm : side:('k, 'm, 'n) Common.side ->
     @param alpha default = [1.0]
  *)
 
-val syrk : ?up:bool ->
-           ?beta:num_type ->
-           ?c:('n, 'n, 'c_cd) mat ->
-           trans:(('a_n, 'a_k, 'a_cd) mat ->
-                  ('n, 'k, 'a_cd) mat) Common.trans2 ->
-           ?alpha:num_type ->
-           ('a_n, 'a_k, 'a_cd) mat -> ('n, 'n, 'c_cd) mat
+val syrk :
+  ?up:bool ->
+  ?beta:num_type ->
+  ?c:('n, 'n, 'c_cd) mat ->
+  trans:(('a_n, 'a_k, 'a_cd) mat ->
+         ('n, 'k, 'a_cd) mat) Slap_common.trans2 ->
+  ?alpha:num_type ->
+  ('a_n, 'a_k, 'a_cd) mat -> ('n, 'n, 'c_cd) mat
 (** [syrk ?up ?beta ?c ~trans ?alpha a] executes
 
-    - [c := alpha * a * a^T + beta * c] (if [trans] = {!Slap.Common.normal}) or
-    - [c := alpha * a^T * a + beta * c] (if [trans] = {!Slap.Common.trans})
+    - [c := alpha * a * a^T + beta * c] (if [trans] = {!Slap_common.normal}) or
+    - [c := alpha * a^T * a + beta * c] (if [trans] = {!Slap_common.trans})
 
     where [a] is a general matrix and [c] is a symmetric matrix.
 
@@ -341,21 +353,22 @@ val syrk : ?up:bool ->
  *)
 
 
-val syr2k : ?up:bool ->
-            ?beta:num_type ->
-            ?c:('n, 'n, 'c_cd) mat ->
-            trans:(('n, 'k, _) mat ->
-                   ('p, 'q, _) mat) Common.trans2 ->
-            ?alpha:num_type ->
-            ('p, 'q, 'a_cd) mat ->
-            ('p, 'q, 'b_cd) mat ->
-            ('n, 'n, 'c_cd) mat
+val syr2k :
+  ?up:bool ->
+  ?beta:num_type ->
+  ?c:('n, 'n, 'c_cd) mat ->
+  trans:(('p, 'q, _) mat ->
+         ('n, 'k, _) mat) Slap_common.trans2 ->
+  ?alpha:num_type ->
+  ('p, 'q, 'a_cd) mat ->
+  ('p, 'q, 'b_cd) mat ->
+  ('n, 'n, 'c_cd) mat
 (** [syr2k ?up ?beta ?c ~trans ?alpha a b] computes
 
     - [c := alpha * a * b^T + alpha * b * a^T + beta * c]
-      (if [trans] = {!Slap.Common.normal}) or
+      (if [trans] = {!Slap_common.normal}) or
     - [c := alpha * a^T * b + alpha * b^T * a + beta * c]
-      (if [trans] = {!Slap.Common.trans})
+      (if [trans] = {!Slap_common.trans})
 
     with symmetric matrix [c], and general matrices [a] and [b].
 
@@ -371,9 +384,10 @@ val syr2k : ?up:bool ->
 
 (** {3 Auxiliary routines} *)
 
-val lacpy : ?uplo:[ `L | `U ] ->
-            ?b:('m, 'n, 'b_cd) mat ->
-            ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
+val lacpy :
+  ?uplo:[ `L | `U ] ->
+  ?b:('m, 'n, 'b_cd) mat ->
+  ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
 (** [lacpy ?uplo ?b a] copies the matrix [a] into the matrix [b].
     - If [uplo] is omitted, all elements in [a] is copied.
     - If [uplo] is [`U], the upper trapezoidal part of [a] is copied.
@@ -383,10 +397,7 @@ val lacpy : ?uplo:[ `L | `U ] ->
     @param b    default = a fresh matrix.
  *)
 
-val lassq : ?scale:float ->
-            ?sumsq:float ->
-            ('n, 'cd) vec ->
-            float * float
+val lassq : ?scale:float -> ?sumsq:float -> ('n, 'cd) vec -> float * float
 (** [lassq ?scale ?sumsq x]
     @return [(scl, smsq)] where [scl] and [smsq] satisfy
     [scl^2 * smsq = x1^2 + x2^2 + ... + xn^2 + scale^2 * smsq].
@@ -394,13 +405,14 @@ val lassq : ?scale:float ->
     @param sumsq default = [1.0]
  *)
 
-type larnv_liseed = Size.z Size.s Size.s Size.s Size.s
+type larnv_liseed = Slap_size.four
 
-val larnv : ?idist:[ `Normal | `Uniform0 | `Uniform1 ] ->
-            ?iseed:(larnv_liseed, cnt) Common.int32_vec ->
-            x:('n, cnt) vec ->
-            unit ->
-            ('n, 'cnt) vec
+val larnv :
+  ?idist:[ `Normal | `Uniform0 | `Uniform1 ] ->
+  ?iseed:(larnv_liseed, cnt) Slap_common.int32_vec ->
+  x:('n, cnt) vec ->
+  unit ->
+  ('n, 'cnt) vec
 (** [larnv ?idist ?iseed ~x ()] generates a random vector with the random
     distribution specified by [idist] and random seed [iseed].
     @return vector [x], which is overwritten.
@@ -410,25 +422,27 @@ val larnv : ?idist:[ `Normal | `Uniform0 | `Uniform1 ] ->
 
 type ('m, 'a) lange_min_lwork
 
-val lange_min_lwork : 'm Size.t ->
-                      'a Common.norm4 ->
-                      ('m, 'a) lange_min_lwork Size.t
+val lange_min_lwork :
+  'm Slap_size.t ->
+  'a Slap_common.norm4 ->
+  ('m, 'a) lange_min_lwork Slap_size.t
 (** [lange_min_lwork m norm] computes the minimum length of workspace for
     [lange] routine. [m] is the number of rows in a matrix, and [norm] is
     the sort of matrix norms.
  *)
 
-val lange : ?norm:'a Common.norm4 ->
-            ?work:('lwork, cnt) rvec ->
-            ('m, 'n, 'cd) mat -> float
+val lange :
+  ?norm:'a Slap_common.norm4 ->
+  ?work:('lwork, cnt) rvec ->
+  ('m, 'n, 'cd) mat -> float
 (** [lange ?norm ?work a]
     @return the norm of matrix [a].
-    @param norm default = {!Slap.Common.norm_1}.
-      - If [norm] = {!Slap.Common.norm_1}, the one norm is returned;
-      - If [norm] = {!Slap.Common.norm_inf}, the infinity norm is returned;
-      - If [norm] = {!Slap.Common.norm_amax}, the largest absolute value of
+    @param norm default = {!Slap_common.norm_1}.
+      - If [norm] = {!Slap_common.norm_1}, the one norm is returned;
+      - If [norm] = {!Slap_common.norm_inf}, the infinity norm is returned;
+      - If [norm] = {!Slap_common.norm_amax}, the largest absolute value of
         elements in matrix [a] (not a matrix norm) is returned;
-      - If [norm] = {!Slap.Common.norm_frob}, the Frobenius norm is returned.
+      - If [norm] = {!Slap_common.norm_frob}, the Frobenius norm is returned.
     @param work default = an optimum-length vector.
  *)
 
@@ -446,9 +460,10 @@ val lauum : ?up:bool -> ('n, 'n, 'cd) mat -> unit
 
 (** {3 Linear equations (computational routines)} *)
 
-val getrf : ?ipiv:(('m, 'n) Size.min, cnt) Common.int32_vec ->
-            ('m, 'n, 'cd) mat ->
-            (('m, 'n) Size.min, 'cnt) Common.int32_vec
+val getrf :
+  ?ipiv:(('m, 'n) Slap_size.min, cnt) Slap_common.int32_vec ->
+  ('m, 'n, 'cd) mat ->
+  (('m, 'n) Slap_size.min, 'cnt) Slap_common.int32_vec
 (** [getrf ?ipiv a] computes LU factorization of matrix [a] using partial
     pivoting with row interchanges: [a = P * L * U] where [P] is a permutation
     matrix, and [L] and [U] are lower and upper triangular matrices,
@@ -459,10 +474,11 @@ val getrf : ?ipiv:(('m, 'n) Size.min, cnt) Common.int32_vec ->
     @raise Failure if the matrix is singular.
  *)
 
-val getrs : ?ipiv:(('n, 'n) Size.min, cnt) Common.int32_vec ->
-            trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
-            ('n, 'n, 'a_cd) mat ->
-            ('n, 'n, 'b_cd) mat -> unit
+val getrs :
+  ?ipiv:(('n, 'n) Slap_size.min, cnt) Slap_common.int32_vec ->
+  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  ('n, 'n, 'a_cd) mat ->
+  ('n, 'n, 'b_cd) mat -> unit
 (** [getrs ?ipiv trans a b] solves systems of linear equations [OP(a) * x = b]
     where [a] a ['n]-by-['n] general matrix, each column of matrix [b] is the
     r.h.s. vector, and each column of matrix [x] is the corresponding solution.
@@ -471,9 +487,9 @@ val getrs : ?ipiv:(('n, 'n) Size.min, cnt) Common.int32_vec ->
     @param ipiv  a result of [gesv] or [getrf]. It is internally computed by
                  [getrf] if omitted.
     @param trans the transpose flag for [a]:
-      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
-      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
-      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      - If [trans] = {!Slap_common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
 
     @raise Failure if the matrix is singular.
@@ -481,19 +497,20 @@ val getrs : ?ipiv:(('n, 'n) Size.min, cnt) Common.int32_vec ->
 
 type 'n getri_min_lwork
 
-val getri_min_lwork : 'n Size.t -> 'n getri_min_lwork Size.t
+val getri_min_lwork : 'n Slap_size.t -> 'n getri_min_lwork Slap_size.t
 (** [getri_min_lwork n] computes the minimum length of workspace for [getri]
     routine. [n] is the number of columns or rows in a matrix.
  *)
 
-val getri_opt_lwork : ('n, 'n, 'cd) mat -> (module Size.SIZE)
+val getri_opt_lwork : ('n, 'n, 'cd) mat -> (module Slap_size.SIZE)
 (** [getri_opt_lwork a] computes the optimal length of workspace for [getri]
     routine.
  *)
 
-val getri : ?ipiv:(('n, 'n) Size.min, cnt) Common.int32_vec ->
-            ?work:('lwork, cnt) vec ->
-            ('n, 'n, 'cd) mat -> unit
+val getri :
+  ?ipiv:(('n, 'n) Slap_size.min, cnt) Slap_common.int32_vec ->
+  ?work:('lwork, cnt) vec ->
+  ('n, 'n, 'cd) mat -> unit
 (** [getri ?ipiv ?work a] computes the inverse of general matrix [a] by
     LU-factorization. The inverse matrix is returned in [a].
 
@@ -506,13 +523,14 @@ val getri : ?ipiv:(('n, 'n) Size.min, cnt) Common.int32_vec ->
 
 type sytrf_min_lwork
 
-val sytrf_min_lwork : unit -> sytrf_min_lwork Size.t
+val sytrf_min_lwork : unit -> sytrf_min_lwork Slap_size.t
 (** [sytrf_min_lwork ()] computes the minimum length of workspace for [sytrf]
     routine.
  *)
 
-val sytrf_opt_lwork : ?up:bool ->
-                      ('n, 'n, 'cd) mat -> (module Size.SIZE)
+val sytrf_opt_lwork :
+  ?up:bool ->
+  ('n, 'n, 'cd) mat -> (module Slap_size.SIZE)
 (** [sytrf_opt_lwork ?up a] computes the optimal length of workspace for [sytrf]
     routine.
 
@@ -521,10 +539,11 @@ val sytrf_opt_lwork : ?up:bool ->
       - If [up] = [false], then the lower triangular part of [a] is used.
  *)
 
-val sytrf : ?up:bool ->
-            ?ipiv:('n, cnt) Common.int32_vec ->
-            ?work:('lwork, cnt) vec ->
-            ('n, 'n, 'cd) mat -> ('n, 'cnt) Common.int32_vec
+val sytrf :
+  ?up:bool ->
+  ?ipiv:('n, cnt) Slap_common.int32_vec ->
+  ?work:('lwork, cnt) vec ->
+  ('n, 'n, 'cd) mat -> ('n, 'cnt) Slap_common.int32_vec
 (** [sytrf ?up ?ipiv ?work a] factorizes symmetric matrix [a] using the
     Bunch-Kaufman diagonal pivoting method:
 
@@ -542,10 +561,11 @@ val sytrf : ?up:bool ->
     @raise Failure if [a] is singular.
  *)
 
-val sytrs : ?up:bool ->
-            ?ipiv:('n, cnt) Common.int32_vec ->
-            ('n, 'n, 'a_cd) mat ->
-            ('n, 'nrhs, 'b_cd) mat -> unit
+val sytrs :
+  ?up:bool ->
+  ?ipiv:('n, cnt) Slap_common.int32_vec ->
+  ('n, 'n, 'a_cd) mat ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [sytrs ?up ?ipiv a b] solves systems of linear equations [a * x = b] where
     [a] is a symmetric matrix, each column of matrix [b] is the r.h.s. vector,
     and each column of matrix [x] is the corresponding solution.
@@ -569,15 +589,16 @@ val sytrs : ?up:bool ->
 
 type 'n sytri_min_lwork
 
-val sytri_min_lwork : 'n Size.t -> 'n sytri_min_lwork Size.t
+val sytri_min_lwork : 'n Slap_size.t -> 'n sytri_min_lwork Slap_size.t
 (** [sytri_min_lwork ()] computes the minimum length of workspace for [sytri]
     routine.
  *)
 
-val sytri : ?up:bool ->
-            ?ipiv:('n, cnt) Common.int32_vec ->
-            ?work:('lwork, cnt) vec ->
-            ('n, 'n, 'cd) mat -> unit
+val sytri :
+  ?up:bool ->
+  ?ipiv:('n, cnt) Slap_common.int32_vec ->
+  ?work:('lwork, cnt) vec ->
+  ('n, 'n, 'cd) mat -> unit
 (** [sytri ?up ?ipiv ?work a] computes the inverse of symmetric matrix [a] using
     the Bunch-Kaufman diagonal pivoting method:
 
@@ -596,9 +617,10 @@ val sytri : ?up:bool ->
     @raise Failure if [a] is singular.
  *)
 
-val potrf : ?up:bool ->
-            ?jitter:num_type ->
-            ('n, 'n, 'cd) mat -> unit
+val potrf :
+  ?up:bool ->
+  ?jitter:num_type ->
+  ('n, 'n, 'cd) mat -> unit
 (** [potrf ?up ?jitter a] computes the Cholesky factorization of symmetrix
     (Hermitian) positive-definite matrix [a]:
 
@@ -615,11 +637,12 @@ val potrf : ?up:bool ->
     @raise Failure if [a] is singular.
  *)
 
-val potrs : ?up:bool ->
-            ('n, 'n, 'a_cd) mat ->
-            ?factorize:bool ->
-            ?jitter:num_type ->
-            ('n, 'nrhs, 'b_cd) mat -> unit
+val potrs :
+  ?up:bool ->
+  ('n, 'n, 'a_cd) mat ->
+  ?factorize:bool ->
+  ?jitter:num_type ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [potrf ?up a ?jitter b] solves systems of linear equations [a * x = b] using
     the Cholesky factorization of symmetrix (Hermitian) positive-definite matrix
     [a]:
@@ -636,10 +659,11 @@ val potrs : ?up:bool ->
     @raise Failure if [a] is singular.
  *)
 
-val potri : ?up:bool ->
-            ?factorize:bool ->
-            ?jitter:num_type ->
-            ('n, 'n, 'cd) mat -> unit
+val potri :
+  ?up:bool ->
+  ?factorize:bool ->
+  ?jitter:num_type ->
+  ('n, 'n, 'cd) mat -> unit
 (** [potrf ?up ?jitter a] computes the inverse of symmetrix (Hermitian)
     positive-definite matrix [a] using the Cholesky factorization:
 
@@ -655,11 +679,12 @@ val potri : ?up:bool ->
     @raise Failure if [a] is singular.
  *)
 
-val trtrs : ?up:bool ->
-            trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
-            ?diag:Common.diag ->
-            ('n, 'n, 'a_cd) mat ->
-            ('n, 'nrhs, 'b_cd) mat -> unit
+val trtrs :
+  ?up:bool ->
+  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  ?diag:Slap_common.diag ->
+  ('n, 'n, 'a_cd) mat ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [trtrs ?up trans ?diag a b] solves systems of linear equations
     [OP(a) * x = b] where [a] is a triangular matrix of order ['n], each column
     of matrix [b] is the r.h.s vector, and each column of matrix [x] is the
@@ -669,9 +694,9 @@ val trtrs : ?up:bool ->
       - If [up] = [true], then the upper triangular part of [a] is used;
       - If [up] = [false], then the lower triangular part of [a] is used.
     @param trans the transpose flag for [a]:
-      - If [trans] = {!Slap.Common.normal}, then [OP(a)] = [a];
-      - If [trans] = {!Slap.Common.trans}, then [OP(a)] = [a^T];
-      - If [trans] = {!Slap.Common.conjtr}, then [OP(a)] = [a^H]
+      - If [trans] = {!Slap_common.normal}, then [OP(a)] = [a];
+      - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
+      - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
         (the conjugate transpose of [a]).
     @param diag default = [`N]
       - If [diag] = [`U], then [a] is unit triangular;
@@ -680,12 +705,13 @@ val trtrs : ?up:bool ->
     @raise Failure if [a] is singular.
  *)
 
-val tbtrs : kd:'kd Size.t ->
-            ?up:bool ->
-            trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
-            ?diag:Common.diag ->
-            (('n, 'kd) Size.syband, 'n, 'a_cd) mat ->
-            ('n, 'nrhs, 'b_cd) mat -> unit
+val tbtrs :
+  kd:'kd Slap_size.t ->
+  ?up:bool ->
+  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  ?diag:Slap_common.diag ->
+  (('n, 'kd) Slap_size.syband, 'n, 'a_cd) mat ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [tbtrs ~kd ?up ~trans ?diag ab b] solves systems of linear equations
     [OP(A) * x = b] where [A] is a triangular band matrix with [kd] subdiagonals,
     each column of matrix [b] is the r.h.s vector, and each column of matrix [x]
@@ -697,9 +723,9 @@ val tbtrs : kd:'kd Size.t ->
       - If [up] = [true], then the upper triangular part of [A] is used;
       - If [up] = [false], then the lower triangular part of [A] is used.
     @param trans the transpose flag for [A]:
-      - If [trans] = {!Slap.Common.normal}, then [OP(A)] = [A];
-      - If [trans] = {!Slap.Common.trans}, then [OP(A)] = [A^T];
-      - If [trans] = {!Slap.Common.conjtr}, then [OP(A)] = [A^H]
+      - If [trans] = {!Slap_common.normal}, then [OP(A)] = [A];
+      - If [trans] = {!Slap_common.trans}, then [OP(A)] = [A^T];
+      - If [trans] = {!Slap_common.conjtr}, then [OP(A)] = [A^H]
         (the conjugate transpose of [A]).
     @param diag default = [`N]
       - If [diag] = [`U], then [A] is unit triangular;
@@ -710,7 +736,7 @@ val tbtrs : kd:'kd Size.t ->
  *)
 
 val trtri : ?up:bool ->
-            ?diag:Common.diag ->
+            ?diag:Slap_common.diag ->
             ('n, 'n, 'cd) mat -> unit
 (** [trtri ?up ?diag a] computes the inverse of triangular matrix [a]. The
     inverse matrix is returned in [a].
@@ -728,19 +754,20 @@ val trtri : ?up:bool ->
 
 type 'n geqrf_min_lwork
 
-val geqrf_min_lwork : n:'n Size.t -> 'n geqrf_min_lwork Size.t
+val geqrf_min_lwork : n:'n Slap_size.t -> 'n geqrf_min_lwork Slap_size.t
 (** [geqrf_min_lwork ~n] computes the minimum length of workspace for [geqrf]
     routine. [n] is the number of columns in a matrix.
  *)
 
-val geqrf_opt_lwork : ('m, 'n, 'cd) mat -> (module Size.SIZE)
+val geqrf_opt_lwork : ('m, 'n, 'cd) mat -> (module Slap_size.SIZE)
 (** [geqrf_opt_lwork a] computes the optimum length of workspace for [geqrf]
     routine.
  *)
 
-val geqrf : ?work:('lwork, cnt) vec ->
-            ?tau:(('m, 'n) Size.min, cnt) vec ->
-            ('m, 'n, 'cd) mat -> (('m, 'n) Size.min, 'cnt) vec
+val geqrf :
+  ?work:('lwork, cnt) vec ->
+  ?tau:(('m, 'n) Slap_size.min, cnt) vec ->
+  ('m, 'n, 'cd) mat -> (('m, 'n) Slap_size.min, 'cnt) vec
 (** [geqrf ?work ?tau a] computes the QR factorization of general matrix [a]:
     [a = Q * R] where [Q] is an orthogonal (unitary) matrix and [R] is an
     upper triangular matrix. [R] is returned in [a]. This routine does not
@@ -752,9 +779,10 @@ val geqrf : ?work:('lwork, cnt) vec ->
 
 (** {3 Linear equations (simple drivers)} *)
 
-val gesv : ?ipiv:('n, cnt) Common.int32_vec ->
-           ('n, 'n, 'a_cd) mat ->
-           ('n, 'nrhs, 'b_cd) mat -> unit
+val gesv :
+  ?ipiv:('n, cnt) Slap_common.int32_vec ->
+  ('n, 'n, 'a_cd) mat ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [gesv ?ipiv a b] solves a system of linear equations [a * x = b] where [a]
     is a ['n]-by-['n] general matrix, each column of matrix [b] is the r.h.s.
     vector, and each column of matrix [x] is the corresponding solution.
@@ -768,10 +796,11 @@ val gesv : ?ipiv:('n, cnt) Common.int32_vec ->
     @since 0.2.0
  *)
 
-val gbsv : ?ipiv:('n, cnt) Common.int32_vec ->
-           (('n, 'n, 'kl, 'ku) Size.luband, 'n, 'a_cd) mat ->
-           'kl Size.t -> 'ku Size.t ->
-           ('n, 'nrhs, 'b_cd) mat -> unit
+val gbsv :
+  ?ipiv:('n, cnt) Slap_common.int32_vec ->
+  (('n, 'n, 'kl, 'ku) Slap_size.luband, 'n, 'a_cd) mat ->
+  'kl Slap_size.t -> 'ku Slap_size.t ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [gbsv ?ipiv ab kl ku b] solves a system of linear equations [A * X = B]
     where [A] is a ['n]-by-['n] band matrix, each column of matrix [B] is the
     r.h.s. vector, and each column of matrix [X] is the corresponding solution.
@@ -787,9 +816,10 @@ val gbsv : ?ipiv:('n, cnt) Common.int32_vec ->
     @since 0.2.0
  *)
 
-val posv : ?up:bool ->
-           ('n, 'n, 'a_cd) mat ->
-           ('n, 'nrhs, 'b_cd) mat -> unit
+val posv :
+  ?up:bool ->
+  ('n, 'n, 'a_cd) mat ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [posv ?up a b] solves systems of linear equations [a * x = b] where [a] is
     a ['n]-by-['n] symmetric positive-definite matrix, each column of matrix [b]
     is the r.h.s vector, and each column of matrix [x] is the corresponding
@@ -810,9 +840,10 @@ val posv : ?up:bool ->
     @since 0.2.0
  *)
 
-val ppsv : ?up:bool ->
-           ('n Size.packed, cnt) vec ->
-           ('n, 'nrhs, 'b_cd) mat -> unit
+val ppsv :
+  ?up:bool ->
+  ('n Slap_size.packed, cnt) vec ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [ppsv ?up a b] solves systems of linear equations [a * x = b] where [a] is
     a ['n]-by-['n] symmetric positive-definite matrix stored in packed format,
     each column of matrix [b] is the r.h.s vector, and each column of matrix [x]
@@ -833,9 +864,10 @@ val ppsv : ?up:bool ->
     @since 0.2.0
  *)
 
-val pbsv : ?up:bool -> kd:'kd Size.t ->
-           (('n, 'kd) Size.syband, 'n, 'ab_cd) mat ->
-           ('n, 'nrhs, 'b_cd) mat -> unit
+val pbsv :
+  ?up:bool -> kd:'kd Slap_size.t ->
+  (('n, 'kd) Slap_size.syband, 'n, 'ab_cd) mat ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [pbsv ?up ~kd ab b] solves systems of linear equations [ab * x = b] where
     [ab] is a ['n]-by-['n] symmetric positive-definite band matrix with [kd]
     subdiangonals, stored in band storage format, each column of matrix [b] is
@@ -858,9 +890,10 @@ val pbsv : ?up:bool -> kd:'kd Size.t ->
     @since 0.2.0
  *)
 
-val ptsv : ('n, cnt) vec ->
-           ('n Size.p, cnt) vec ->
-           ('n, 'nrhs, 'b_cd) mat -> unit
+val ptsv :
+  ('n, cnt) vec ->
+  ('n Slap_size.p, cnt) vec ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [ptsv d e b] solves systems of linear equations [A * x = b] where [A] is a
     ['n]-by-['n] symmetric positive-definite tridiagonal matrix with diagonal
     elements [d] and subdiagonal elements [e], each column of matrix [b] is the
@@ -874,18 +907,20 @@ val ptsv : ('n, cnt) vec ->
     @since 0.2.0
  *)
 
-val sysv_opt_lwork : ?up:bool ->
-                     ('n, 'n, 'a_cd) mat ->
-                     ('n, 'nrhs, 'b_cd) mat -> (module Size.SIZE)
+val sysv_opt_lwork :
+  ?up:bool ->
+  ('n, 'n, 'a_cd) mat ->
+  ('n, 'nrhs, 'b_cd) mat -> (module Slap_size.SIZE)
 (** [sysv_opt_lwork ?up a b] computes the optimal length of workspace for [sysv]
     routine.
  *)
 
-val sysv : ?up:bool ->
-           ?ipiv:('n, cnt) Common.int32_vec ->
-           ?work:('lwork, cnt) vec ->
-           ('n, 'n, 'a_cd) mat ->
-           ('n, 'nrhs, 'b_cd) mat -> unit
+val sysv :
+  ?up:bool ->
+  ?ipiv:('n, cnt) Slap_common.int32_vec ->
+  ?work:('lwork, cnt) vec ->
+  ('n, 'n, 'a_cd) mat ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [sysv ?up ?ipiv ?work a b] solves systems of linear equations [a * x = b]
     where [a] is a ['n]-by-['n] symmetric matrix, each column of matrix [b] is
     the r.h.s. vector, and each column of matrix [x] is the corresponding
@@ -907,10 +942,11 @@ val sysv : ?up:bool ->
     @since 0.2.0
  *)
 
-val spsv : ?up:bool ->
-           ?ipiv:('n, cnt) Common.int32_vec ->
-           ('n Size.packed, cnt) vec ->
-           ('n, 'nrhs, 'b_cd) mat -> unit
+val spsv :
+  ?up:bool ->
+  ?ipiv:('n, cnt) Slap_common.int32_vec ->
+  ('n Slap_size.packed, cnt) vec ->
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [spsv ?up a b] solves systems of linear equations [a * x = b] where [a] is
     a ['n]-by-['n] symmetric matrix stored in packed format, each column of
     matrix [b] is the r.h.s. vector, and each column of matrix [x] is the
@@ -935,9 +971,10 @@ val spsv : ?up:bool ->
 
 type ('m, 'n, 'nrhs) gels_min_lwork
 
-val gels_min_lwork : m:'m Size.t ->
-                     n:'n Size.t ->
-                     nrhs:'nrhs Size.t -> ('m, 'n, 'nrhs) gels_min_lwork Size.t
+val gels_min_lwork :
+  m:'m Slap_size.t ->
+  n:'n Slap_size.t ->
+  nrhs:'nrhs Slap_size.t -> ('m, 'n, 'nrhs) gels_min_lwork Slap_size.t
 (** [gels_min_lwork ~n] computes the minimum length of workspace for [gels]
     routine.
     @param m    the number of rows in a matrix.
@@ -945,29 +982,29 @@ val gels_min_lwork : m:'m Size.t ->
     @param nrhs the number of right hand sides.
  *)
 
-val gels_opt_lwork : trans:(('am, 'an, 'a_cd) mat ->
-                            ('m, 'n, 'a_cd) mat) Common.trans2 ->
-                     ('m, 'n, 'a_cd) mat ->
-                     ('m, 'nrhs, 'b_cd) mat -> (module Size.SIZE)
+val gels_opt_lwork :
+  trans:(('am, 'an, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) Slap_common.trans2 ->
+  ('am, 'an, 'a_cd) mat ->
+  ('m, 'nrhs, 'b_cd) mat -> (module Slap_size.SIZE)
 (** [gels_opt_lwork ~trans a b] computes the optimum length of workspace for
     [gels] routine.
  *)
 
-val gels : ?work:('work, cnt) vec ->
-           trans:(('am, 'an, 'a_cd) mat ->
-                  ('m, 'n, 'a_cd) mat) Common.trans2 ->
-           ('m, 'n, 'a_cd) mat ->
-           ('m, 'nrhs, 'b_cd) mat -> unit
+val gels :
+  ?work:('work, cnt) vec ->
+  trans:(('am, 'an, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) Slap_common.trans2 ->
+  ('am, 'an, 'a_cd) mat ->
+  ('m, 'nrhs, 'b_cd) mat -> unit
 (** [gels ?work ~trans a b] solves an overdetermined or underdetermined system
     of linear equations using QR or LU factorization.
 
-    - If [trans] = {!Slap.Common.normal} and ['m >= 'n]: find the least square
+    - If [trans] = {!Slap_common.normal} and ['m >= 'n]: find the least square
       solution to an overdetermined system by minimizing [||b - A * x||^2].
-    - If [trans] = {!Slap.Common.normal} and ['m < 'n]: find the minimum norm
+    - If [trans] = {!Slap_common.normal} and ['m < 'n]: find the minimum norm
       solution to an underdetermined system [a * x = b].
-    - If [trans] = {!Slap.Common.trans}, and ['m >= 'n]: find the minimum norm
+    - If [trans] = {!Slap_common.trans}, and ['m >= 'n]: find the minimum norm
       solution to an underdetermined system [a^H * x = b].
-    - If [trans] = {!Slap.Common.trans} and ['m < 'n]: find the least square
+    - If [trans] = {!Slap_common.trans} and ['m < 'n]: find the least square
       solution to an overdetermined system by minimizing [||b - A^H * x||^2].
 
     @param work default = an optimum-length vector.

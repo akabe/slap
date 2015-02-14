@@ -19,6 +19,25 @@
 
 open Bigarray
 
+type +'n size = int
+
+type (+'n, 'num, 'prec, +'cnt_or_dsc) vec =
+    int   (* the number of elements in a vector (>= 0) *)
+    * int (* an offset (>= 1) *)
+    * int (* an incrementation *)
+    * ('num, 'prec, fortran_layout) Array1.t
+
+type (+'m, +'n, 'num, 'prec, +'cnt_or_dsc) mat =
+    int   (* the number of rows in a matrix    (>= 0) *)
+    * int (* the number of columns in a matrix (>= 0) *)
+    * int (* an offset of rows    (>= 1) *)
+    * int (* an offset of columns (>= 1) *)
+    * ('num, 'prec, fortran_layout) Array2.t
+
+type cnt
+
+type dsc
+
 (** {2 Flags} *)
 
 type diag = [ `N | `U ]
@@ -41,15 +60,6 @@ let trans = `T
 
 let conjtr = `C
 
-let get_transposed_dim t m n =
-  match t with
-  | `N -> (m, n)
-  | _ -> (n, m)
-
-let lacaml_trans2 = function
-  | `N -> `N
-  | `T | `C -> `T
-
 (** {3 Direction of multiplication of matrices} *)
 
 type (+'k, +'m, +'n) side = [ `L | `R ]
@@ -65,16 +75,6 @@ type (+'a, +'tag) norm = [ `O | `I | `M | `F ]
 type norm2_tag
 
 type +'a norm2 = ('a, norm2_tag) norm
-
-let lacaml_norm2 v : Lacaml.Common.norm2 =
-  match v with
-  | `O -> `O
-  | `I -> `I
-  | _ -> assert(false)
-
-let lacaml_norm2_opt = function
-  | None -> None
-  | Some v -> Some (lacaml_norm2 v)
 
 type norm4_tag
 
@@ -111,19 +111,59 @@ let svd_no = `N
 (** {2 Integer vectors} *)
 
 type (+'n, +'cnt_or_dsc) int_vec =
-    ('n, int, int_elt, 'cnt_or_dsc) Vec.t
+    ('n, int, int_elt, 'cnt_or_dsc) vec
 
-let create_int_vec n = Vec.create int n
+let create_int_vec n = (n, 1, 1, Array1.create int fortran_layout n)
 
 type (+'n, +'cnt_or_dsc) int32_vec =
-    ('n, int32, int32_elt, 'cnt_or_dsc) Vec.t
+    ('n, int32, int32_elt, 'cnt_or_dsc) vec
 
-let create_int32_vec n = Vec.create int32 n
+let create_int32_vec n = (n, 1, 1, Array1.create int32 fortran_layout n)
 
-(*
-  type +'n packed
-  (** Packed storage size of [n]-by-[n] matrix.
-   It is [n*(n+1)/2].
-   @see <http://www.netlib.org/lapack/lug/node123.html> Packed Storage (NetLib)
-   *)
- *)
+(** {2 Utilities} *)
+
+let id x = x
+
+let get_transposed_dim t m n =
+  match t with
+  | `N -> (m, n)
+  | _ -> (n, m)
+
+let lacaml_trans2 = function
+  | `N -> `N
+  | `T | `C -> `T
+
+let lacaml_trans3 = id
+
+let lacaml_side = id
+
+let lacaml_norm2 v : Lacaml.Common.norm2 =
+  match v with
+  | `O -> `O
+  | `I -> `I
+  | _ -> assert(false)
+
+let lacaml_norm4 = id
+
+let lacaml_norm2_opt = function
+  | None -> None
+  | Some v -> Some (lacaml_norm2 v)
+
+let lacaml_norm4_opt = function
+  | None -> None
+  | Some v -> Some (lacaml_norm4 v)
+
+let lacaml_svd_job = id
+
+(** {2 Internal functions} *)
+
+let __expose_size = id
+let __unexpose_size = id
+let __expose_vec = id
+let __unexpose_vec = id
+let __expose_mat = id
+let __unexpose_mat = id
+
+let check_side_dim m n k = function
+  | `L -> m = k
+  | `R -> n = k

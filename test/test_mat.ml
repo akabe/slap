@@ -1,6 +1,5 @@
 (* test_mat.ml *)
 
-open Format
 open OUnit
 open Slap.Size
 open Slap.Mat

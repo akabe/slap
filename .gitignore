@@ -9,9 +9,15 @@
 *.cmxs
 *.cmxa
 
-lib/slap.mli
-lib/slap.ml
 lib/config.h
+lib/slap_S.mli
+lib/slap_S.ml
+lib/slap_D.mli
+lib/slap_D.ml
+lib/slap_C.mli
+lib/slap_C.ml
+lib/slap_Z.mli
+lib/slap_Z.ml
 _build/
 /setup.data
 /setup.log

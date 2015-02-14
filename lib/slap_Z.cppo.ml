@@ -17,9 +17,8 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** {2 Creation of matrices} *)
+#define SLAP_SDCZ_BITS 64
 
-let random ?rnd_state ?from ?range m n =
-  let a =
-    I.Mat.random ?rnd_state ?from ?range (__expose_size m) (__expose_size n) in
-  __unexpose_mat (m, n, 1, 1, a)
+#include "slap_CZ.ml"
+
+#undef SLAP_SDCZ_BITS

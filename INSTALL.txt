@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: 654c62e94b2da363719e403f69b92194) *)
+(* DO NOT EDIT (digest: 4aa9c31192ad70cb8ab08f545b2b5a4b) *)
 
 This is the INSTALL file for the SLAP distribution.
 
@@ -15,7 +15,6 @@ In order to compile this package, you will need:
 * findlib
 * lacaml for library slap, executable kmeans_lacaml, executable lu_lacaml,
   executable pca_lacaml, executable perceptron_lacaml, executable qr_lacaml
-* cppo for all, test test, doc slap
 * compiler-libs for library slap_top
 * oUnit for executable test
 

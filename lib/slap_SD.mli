@@ -18,14 +18,16 @@
 *)
 
 open Bigarray
+open Slap_common
 
 type prec = CONCAT(CONCAT(float, SLAP_SDCZ_BITS), _elt)
 
 type num_type = float
 
-type 'a trans3 = 'a Common.trans2
-(** Transpose parameter ({!Slap.Common.normal} or {!Slap.Common.trans}).
-    For complex matrices, {!Slap.Common.conjtr} is also offered, hence the name.
+type 'a trans3 = 'a Slap_common.trans2
+(** A type of transpose parameters ({!Slap_common.normal} and
+    {!Slap_common.trans}).
+    For complex matrices, {!Slap_common.conjtr} is also offered, hence the name.
  *)
 
 #include "slap_SDCZ_common.mli"

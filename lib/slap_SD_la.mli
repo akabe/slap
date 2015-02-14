@@ -33,9 +33,9 @@ val asum : ('n, 'x_cd) vec -> float
 
 (** {3 Level 2} *)
 
-val sbmv : k:'k Size.t ->
+val sbmv : k:'k Slap_size.t ->
            ?y:('n, 'y_cd) vec ->
-           (('n, 'k) Size.syband, 'n, 'a_cd) mat ->
+           (('n, 'k) Slap_size.syband, 'n, 'a_cd) mat ->
            ?up:bool ->
            ?alpha:float ->
            ?beta:float ->
@@ -81,25 +81,25 @@ val syr : ?alpha:float -> ?up:bool -> ('n, 'x_cd) vec ->
 
 type ('m, 'a) lansy_min_lwork
 
-val lansy_min_lwork : 'n Size.t -> 'a Common.norm4 ->
-                      ('n, 'a) lansy_min_lwork Size.t
+val lansy_min_lwork : 'n Slap_size.t -> 'a Slap_common.norm4 ->
+                      ('n, 'a) lansy_min_lwork Slap_size.t
 (** [lansy_min_lwork n norm] computes the minimum length of workspace for
     [lansy] routine. [n] is the number of rows or columns in a matrix.
     [norm] is a matrix norm.
  *)
 
 val lansy : ?up:bool ->
-            ?norm:'norm Common.norm4 ->
+            ?norm:'norm Slap_common.norm4 ->
             ?work:('lwork, cnt) vec -> ('n, 'n, 'cd) mat -> float
 (** [lansy ?up ?norm ?work a]
     @return the norm of matrix [a].
     @param up   default = [true]
-    @param norm default = {!Slap.Common.norm_1}
-      - If [norm] = {!Slap.Common.norm_1}, the one norm is returned;
-      - If [norm] = {!Slap.Common.norm_inf}, the infinity norm is returned;
-      - If [norm] = {!Slap.Common.norm_amax}, the largest absolute value of
+    @param norm default = {!Slap_common.norm_1}
+      - If [norm] = {!Slap_common.norm_1}, the one norm is returned;
+      - If [norm] = {!Slap_common.norm_inf}, the infinity norm is returned;
+      - If [norm] = {!Slap_common.norm_amax}, the largest absolute value of
         elements in matrix [a] (not a matrix norm) is returned;
-      - If [norm] = {!Slap.Common.norm_frob}, the Frobenius norm is returned.
+      - If [norm] = {!Slap_common.norm_frob}, the Frobenius norm is returned.
     @param work default = an optimum-length vector.
  *)
 
@@ -114,13 +114,13 @@ val lamch : [ `B | `E | `L | `M | `N | `O | `P | `R | `S | `U ] -> float
 
 type 'n orgqr_min_lwork
 
-val orgqr_min_lwork : n:'n Size.t -> 'n orgqr_min_lwork Size.t
+val orgqr_min_lwork : n:'n Slap_size.t -> 'n orgqr_min_lwork Slap_size.t
 (** [orgqr_min_lwork ~n] computes the minimum length of workspace for
     [orgqr] routine. [n] is the number of columns in a matrix.
  *)
 
 val orgqr_opt_lwork : tau:('k, cnt) vec ->
-                      ('m, 'n, 'cd) mat -> (module Size.SIZE)
+                      ('m, 'n, 'cd) mat -> (module Slap_size.SIZE)
 (** [orgqr_min_lwork ~tau a] computes the optimum length of workspace for
     [orgqr] routine.
  *)
@@ -143,10 +143,10 @@ val orgqr_dyn : ?work:('lwork, cnt) vec ->
 
 type ('r, 'm, 'n) ormqr_min_lwork
 
-val ormqr_min_lwork : side:('r, 'm, 'n) Common.side ->
-                      m:'m Size.t ->
-                      n:'n Size.t ->
-                      ('r, 'm, 'n) ormqr_min_lwork Size.t
+val ormqr_min_lwork : side:('r, 'm, 'n) Slap_common.side ->
+                      m:'m Slap_size.t ->
+                      n:'n Slap_size.t ->
+                      ('r, 'm, 'n) ormqr_min_lwork Slap_size.t
 (** [ormqr_min_lwork ~side ~m ~n] computes the minimum length of workspace for
     [ormqr] routine.
 
@@ -155,11 +155,11 @@ val ormqr_min_lwork : side:('r, 'm, 'n) Common.side ->
     @param n    the number of columns in a matrix.
  *)
 
-val ormqr_opt_lwork : side:('r, 'm, 'n) Common.side ->
-                      trans:(('r, 'r, _) mat -> ('r, 'r, _) mat) Common.trans2 ->
+val ormqr_opt_lwork : side:('r, 'm, 'n) Slap_common.side ->
+                      trans:(('r, 'r, _) mat -> ('r, 'r, _) mat) Slap_common.trans2 ->
                       tau:('k, cnt) vec ->
                       ('r, 'k, 'a_cd) mat ->
-                      ('m, 'n, 'c_cd) mat -> (module Size.SIZE)
+                      ('m, 'n, 'c_cd) mat -> (module Slap_size.SIZE)
 (** [ormqr_opt_lwork ~side ~trans ~tau a c] computes the optimum length of
     workspace for [ormqr] routine.
 
@@ -168,8 +168,8 @@ val ormqr_opt_lwork : side:('r, 'm, 'n) Common.side ->
     @param tau   a result of [geqrf].
  *)
 
-val ormqr_dyn : side:('r, 'm, 'n) Common.side ->
-                trans:(('r, 'r, _) mat -> ('r, 'r, _) mat) Common.trans2 ->
+val ormqr_dyn : side:('r, 'm, 'n) Slap_common.side ->
+                trans:(('r, 'r, _) mat -> ('r, 'r, _) mat) Slap_common.trans2 ->
                 ?work:('lwork, cnt) vec ->
                 tau:('k, cnt) vec ->
                 ('r, 'k, 'a_cd) mat ->
@@ -177,14 +177,14 @@ val ormqr_dyn : side:('r, 'm, 'n) Common.side ->
 (** [ormqr_dyn ~side ~trans ?work ~tau a c] multiplies a matrix [c] by the
     orthogonal matrix [Q] of the QR factorization formed by [geqrf]/[geqpf]:
 
-    - [Q * c] if [side] = {!Slap.Common.left} and
-                 [trans] = {!Slap.Common.normal};
-    - [Q^T * c] if [side] = {!Slap.Common.left} and
-                   [trans] = {!Slap.Common.trans};
-    - [c * Q] if [side] = {!Slap.Common.right} and
-                 [trans] = {!Slap.Common.normal};
-    - [c * Q^T] if [side] = {!Slap.Common.right} and
-                   [trans] = {!Slap.Common.trans}.
+    - [Q * c] if [side] = {!Slap_common.left} and
+                 [trans] = {!Slap_common.normal};
+    - [Q^T * c] if [side] = {!Slap_common.left} and
+                   [trans] = {!Slap_common.trans};
+    - [c * Q] if [side] = {!Slap_common.right} and
+                 [trans] = {!Slap_common.normal};
+    - [c * Q^T] if [side] = {!Slap_common.right} and
+                   [trans] = {!Slap_common.trans}.
 
     @param side  the side flag to specify direction of matrix multiplication of
                  [Q] and [c].
@@ -193,37 +193,37 @@ val ormqr_dyn : side:('r, 'm, 'n) Common.side ->
     @param tau   a result of [geqrf].
 
     @raise Invalid_argument if the following inequality is not satisfied:
-                            - ['m >= 'k] if [side] = {!Slap.Common.left};
-                            - ['n >= 'k] if [side] = {!Slap.Common.right}.
+                            - ['m >= 'k] if [side] = {!Slap_common.left};
+                            - ['n >= 'k] if [side] = {!Slap_common.right}.
  *)
 
 (** {4 gecon} *)
 
 type 'n gecon_min_lwork
 
-val gecon_min_lwork : 'n Size.t -> 'n gecon_min_lwork Size.t
+val gecon_min_lwork : 'n Slap_size.t -> 'n gecon_min_lwork Slap_size.t
 (** [gecon_min_lwork n] computes the minimum length of workspace [work] for
     [gecon] routine. [n] is the number of rows or columns in a matrix.
  *)
 
 type 'n gecon_min_liwork
 
-val gecon_min_liwork : 'n Size.t -> 'n gecon_min_liwork Size.t
+val gecon_min_liwork : 'n Slap_size.t -> 'n gecon_min_liwork Slap_size.t
 (** [gecon_min_liwork n] computes the minimum length of workspace [iwork] for
     [gecon] routine. [n] is the number of rows or columns in a matrix.
  *)
 
-val gecon : ?norm:_ Common.norm2 ->
+val gecon : ?norm:_ Slap_common.norm2 ->
             ?anorm:float ->
             ?work:('lwork, cnt) vec ->
-            ?iwork:('liwork, cnt) Common.int32_vec ->
+            ?iwork:('liwork, cnt) Slap_common.int32_vec ->
             ('n, 'n, 'cd) mat -> float
 (** [gecon ?norm ?anorm ?work ?iwork a] estimates the reciprocal of the
     condition number of general matrix [a].
 
-    @param norm  default = {!Slap.Common.norm_1}.
-      - If [norm] = {!Slap.Common.norm_1}, the one norm is returned;
-      - If [norm] = {!Slap.Common.norm_inf}, the infinity norm is returned.
+    @param norm  default = {!Slap_common.norm_1}.
+      - If [norm] = {!Slap_common.norm_1}, the one norm is returned;
+      - If [norm] = {!Slap_common.norm_inf}, the infinity norm is returned.
     @param anorm default = the norm of matrix [a] as returned by [lange].
     @param work  default = an optimum-length vector.
     @param iwork default = an optimum-length vector.
@@ -233,23 +233,23 @@ val gecon : ?norm:_ Common.norm2 ->
 
 type 'n sycon_min_lwork
 
-val sycon_min_lwork : 'n Size.t -> 'n sycon_min_lwork Size.t
+val sycon_min_lwork : 'n Slap_size.t -> 'n sycon_min_lwork Slap_size.t
 (** [sycon_min_lwork n] computes the minimum length of workspace [work] for
     [sycon] routine. [n] is the number of rows or columns in a matrix.
  *)
 
 type 'n sycon_min_liwork
 
-val sycon_min_liwork : 'n Size.t -> 'n sycon_min_liwork Size.t
+val sycon_min_liwork : 'n Slap_size.t -> 'n sycon_min_liwork Slap_size.t
 (** [sycon_min_liwork n] computes the minimum length of workspace [iwork] for
     [sycon] routine. [n] is the number of rows or columns in a matrix.
  *)
 
 val sycon : ?up:bool ->
-            ?ipiv:('n, cnt) Common.int32_vec ->
+            ?ipiv:('n, cnt) Slap_common.int32_vec ->
             ?anorm:float ->
             ?work:('lwork, cnt) vec ->
-            ?iwork:('liwork, cnt) Common.int32_vec ->
+            ?iwork:('liwork, cnt) Slap_common.int32_vec ->
             ('n, 'n, 'cd) mat -> float
 (** [sycon ?up ?ipiv ?anorm ?work ?iwork a] estimates the reciprocal of the
     condition number of symmetric matrix [a]. Since [a] is symmetric, the
@@ -269,14 +269,14 @@ val sycon : ?up:bool ->
 
 type 'n pocon_min_lwork
 
-val pocon_min_lwork : 'n Size.t -> 'n pocon_min_lwork Size.t
+val pocon_min_lwork : 'n Slap_size.t -> 'n pocon_min_lwork Slap_size.t
 (** [pocon_min_lwork n] computes the minimum length of workspace [work] for
     [pocon] routine. [n] is the number of rows or columns in a matrix.
  *)
 
 type 'n pocon_min_liwork
 
-val pocon_min_liwork : 'n Size.t -> 'n pocon_min_liwork Size.t
+val pocon_min_liwork : 'n Slap_size.t -> 'n pocon_min_liwork Slap_size.t
 (** [pocon_min_liwork n] computes the minimum length of workspace [iwork] for
     [pocon] routine. [n] is the number of rows or columns in a matrix.
  *)
@@ -284,7 +284,7 @@ val pocon_min_liwork : 'n Size.t -> 'n pocon_min_liwork Size.t
 val pocon : ?up:bool ->
             ?anorm:float ->
             ?work:('lwork, cnt) vec ->
-            ?iwork:('liwork, cnt) Common.int32_vec ->
+            ?iwork:('liwork, cnt) Slap_common.int32_vec ->
             ('n, 'n, 'cd) mat -> float
 (** [pocon ?up ?anorm ?work ?iwork a] estimates the reciprocal of the
     condition number of symmetric positive-definite matrix [a].
@@ -304,10 +304,10 @@ val pocon : ?up:bool ->
 
 type ('m, 'n, 'nrhs) gelsy_min_lwork
 
-val gelsy_min_lwork : m:'m Size.t ->
-                      n:'n Size.t ->
-                      nrhs:'nrhs Size.t ->
-                      ('m, 'n, 'nrhs) gelsy_min_lwork Size.t
+val gelsy_min_lwork : m:'m Slap_size.t ->
+                      n:'n Slap_size.t ->
+                      nrhs:'nrhs Slap_size.t ->
+                      ('m, 'n, 'nrhs) gelsy_min_lwork Slap_size.t
 (** [gelsy_min_lwork ~m ~n ~nrhs] computes the minimum length of workspace for
     [gelsy] routine.
 
@@ -317,14 +317,14 @@ val gelsy_min_lwork : m:'m Size.t ->
  *)
 
 val gelsy_opt_lwork : ('m, 'n, 'a_cd) mat ->
-                      ('n, 'nrhs, 'b_cd) mat -> (module Size.SIZE)
+                      ('n, 'nrhs, 'b_cd) mat -> (module Slap_size.SIZE)
 (** [gelsy_opt_lwork a b] computes the optimum length of workspace for
     [gelsy] routine.
  *)
 
 val gelsy : ('m, 'n, 'a_cd) mat ->
             ?rcond:float ->
-            ?jpvt:('n, cnt) Common.int32_vec ->
+            ?jpvt:('n, cnt) Slap_common.int32_vec ->
             ?work:('lwork, cnt) vec ->
             ('n, 'nrhs, 'b_cd) mat -> int
 (** [gelsy a ?rcond ?jpvt ?work b] computes the minimum-norm solution to a
@@ -341,10 +341,10 @@ val gelsy : ('m, 'n, 'a_cd) mat ->
 
 type ('m, 'n, 'nrhs) gelsd_min_lwork
 
-val gelsd_min_lwork : m:'m Size.t ->
-                      n:'n Size.t ->
-                      nrhs:'nrhs Size.t ->
-                      ('m, 'n, 'nrhs) gelsd_min_lwork Size.t
+val gelsd_min_lwork : m:'m Slap_size.t ->
+                      n:'n Slap_size.t ->
+                      nrhs:'nrhs Slap_size.t ->
+                      ('m, 'n, 'nrhs) gelsd_min_lwork Slap_size.t
 (** [gelsd_min_lwork ~m ~n ~nrhs] computes the minimum length of workspace for
     [gelsd] routine.
 
@@ -354,16 +354,16 @@ val gelsd_min_lwork : m:'m Size.t ->
  *)
 
 val gelsd_opt_lwork : ('m, 'n, 'a_cd) mat ->
-                      ('n, 'nrhs, 'b_cd) mat -> (module Size.SIZE)
+                      ('n, 'nrhs, 'b_cd) mat -> (module Slap_size.SIZE)
 (** [gelsd_opt_lwork a b] computes the optimum length of workspace for
     [gelsd] routine.
  *)
 
 type ('m, 'n, 'nrhs) gelsd_min_iwork
 
-val gelsd_min_iwork : 'm Size.t ->
-                      'n Size.t ->
-                      ('m, 'n, 'nrhs) gelsd_min_iwork Size.t
+val gelsd_min_iwork : 'm Slap_size.t ->
+                      'n Slap_size.t ->
+                      ('m, 'n, 'nrhs) gelsd_min_iwork Slap_size.t
 (** [gelsd_min_iwork ~m ~n ~nrhs] computes the minimum length of workspace
     [iwork] for [gelsd] routine.
 
@@ -373,7 +373,7 @@ val gelsd_min_iwork : 'm Size.t ->
 
 val gelsd : ('m, 'n, 'a_cd) mat ->
             ?rcond:float ->
-            ?s:(('m, 'n) Size.min, cnt) vec ->
+            ?s:(('m, 'n) Slap_size.min, cnt) vec ->
             ?work:('lwork, cnt) vec ->
             ?iwork:('liwork, cnt) vec ->
             ('n, 'nrhs, 'b_cd) mat -> int
@@ -395,10 +395,10 @@ val gelsd : ('m, 'n, 'a_cd) mat ->
 
 type ('m, 'n, 'nrhs) gelss_min_lwork
 
-val gelss_min_lwork : m:'m Size.t ->
-                      n:'n Size.t ->
-                      nrhs:'nrhs Size.t ->
-                      ('m, 'n, 'nrhs) gelss_min_lwork Size.t
+val gelss_min_lwork : m:'m Slap_size.t ->
+                      n:'n Slap_size.t ->
+                      nrhs:'nrhs Slap_size.t ->
+                      ('m, 'n, 'nrhs) gelss_min_lwork Slap_size.t
 (** [gelss_min_lwork ~m ~n ~nrhs] computes the minimum length of workspace for
     [gelss] routine.
 
@@ -408,14 +408,14 @@ val gelss_min_lwork : m:'m Size.t ->
  *)
 
 val gelss_opt_lwork : ('m, 'n, 'a_cd) mat ->
-                      ('n, 'nrhs, 'b_cd) mat -> (module Size.SIZE)
+                      ('n, 'nrhs, 'b_cd) mat -> (module Slap_size.SIZE)
 (** [gelss_min_lwork a b] computes the optimum length of workspace for
     [gelss] routine.
  *)
 
 val gelss : ('m, 'n, 'a_cd) mat ->
             ?rcond:float ->
-            ?s:(('m, 'n) Size.min, cnt) vec ->
+            ?s:(('m, 'n) Slap_size.min, cnt) vec ->
             ?work:('lwork, cnt) vec ->
             ('n, 'nrhs, 'b_cd) mat -> int
 (** [gelss a ?rcond ?work b] computes the minimum-norm solution to a
@@ -437,8 +437,8 @@ val gelss : ('m, 'n, 'a_cd) mat ->
 
 type ('m, 'n) gesvd_min_lwork
 
-val gesvd_min_lwork : m:'m Size.t -> n:'n Size.t ->
-                      ('m, 'n) gesvd_min_lwork Size.t
+val gesvd_min_lwork : m:'m Slap_size.t -> n:'n Slap_size.t ->
+                      ('m, 'n) gesvd_min_lwork Slap_size.t
 (** [gesvd_min_lwork ~m ~n] computes the minimum length of workspace for
     [gesvd] routine.
 
@@ -446,14 +446,14 @@ val gesvd_min_lwork : m:'m Size.t -> n:'n Size.t ->
     @param n the number of columns in a matrix.
  *)
 
-val gesvd_opt_lwork : jobu:('u_cols, 'm, ('m, 'n) Size.min,
-                            Size.z, Size.z) Common.svd_job ->
-                      jobvt:('vt_rows, 'n, ('m, 'n) Size.min,
-                             Size.z, Size.z) Common.svd_job ->
-                      ?s:(('m, 'n) Size.min, cnt) vec ->
+val gesvd_opt_lwork : jobu:('u_cols, 'm, ('m, 'n) Slap_size.min,
+                            Slap_size.z, Slap_size.z) Slap_common.svd_job ->
+                      jobvt:('vt_rows, 'n, ('m, 'n) Slap_size.min,
+                             Slap_size.z, Slap_size.z) Slap_common.svd_job ->
+                      ?s:(('m, 'n) Slap_size.min, cnt) vec ->
                       ?u:('m, 'u_cols, 'u_cd) mat ->
                       ?vt:('vt_rows, 'n, 'vt_cd) mat ->
-                      ('m, 'n, 'a_cd) mat -> (module Size.SIZE)
+                      ('m, 'n, 'a_cd) mat -> (module Slap_size.SIZE)
 (** [gesvd_opt_lwork ~jobu ~jobvt ?s ?u ?vt] computes the optimum length of
     workspace for [gesvd] routine.
 
@@ -464,16 +464,16 @@ val gesvd_opt_lwork : jobu:('u_cols, 'm, ('m, 'n) Size.min,
     @param vt    a return location for (transposed) right singular vectors.
  *)
 
-val gesvd : jobu:('u_cols, 'm, ('m, 'n) Size.min,
-                  Size.z, Size.z) Common.svd_job ->
-            jobvt:('vt_rows, 'n, ('m, 'n) Size.min,
-                   Size.z, Size.z) Common.svd_job ->
-            ?s:(('m, 'n) Size.min, cnt) vec ->
+val gesvd : jobu:('u_cols, 'm, ('m, 'n) Slap_size.min,
+                  Slap_size.z, Slap_size.z) Slap_common.svd_job ->
+            jobvt:('vt_rows, 'n, ('m, 'n) Slap_size.min,
+                   Slap_size.z, Slap_size.z) Slap_common.svd_job ->
+            ?s:(('m, 'n) Slap_size.min, cnt) vec ->
             ?u:('m, 'u_cols, 'u_cd) mat ->
             ?vt:('vt_rows, 'n, 'vt_cd) mat ->
             ?work:('lwork, cnt) vec ->
             ('m, 'n, 'a_cd) mat ->
-            (('m, 'n) Size.min, 'cnt) vec
+            (('m, 'n) Slap_size.min, 'cnt) vec
             * ('m, 'u_cols, 'cnt) mat
             * ('vt_rows, 'n, 'cnt) mat
 (** [gesvd ?jobu ?jobvt ?s ?u ?vt ?work a] computes the singular value
@@ -490,24 +490,24 @@ val gesvd : jobu:('u_cols, 'm, ('m, 'n) Size.min,
     @return [(s, u, vt)] with singular values [s] in descreasing order,
             left singular vectors [u] and right singular vectors [vt].
     @param jobu the SVD job flag for [u]:
-      - If [jobu] = {!Slap.Common.svd_all}, then all ['m] columns of [U] are
+      - If [jobu] = {!Slap_common.svd_all}, then all ['m] columns of [U] are
         returned in [u]. (['u_cols] = ['m].)
-      - If [jobu] = {!Slap.Common.svd_top}, then the first [('m, 'n) min]
+      - If [jobu] = {!Slap_common.svd_top}, then the first [('m, 'n) min]
         columns of [U] are returned in [u]. (['u_cols] = [('m, 'n) min].)
-      - If [jobu] = {!Slap.Common.svd_overwrite}, then the first [('m, 'n) min]
+      - If [jobu] = {!Slap_common.svd_overwrite}, then the first [('m, 'n) min]
         columns of [U] are overwritten on [a]. (['u_cols] = [z] since [u]
         is unused.)
-      - If [jobu] = {!Slap.Common.svd_no}, then no columns of [U] are computed.
+      - If [jobu] = {!Slap_common.svd_no}, then no columns of [U] are computed.
         (['u_cols] = [z].)
     @param jobvt the SVD job flag for [vt]:
-      - If [jobvt] = {!Slap.Common.svd_all}, then all ['n] rows of [V^T] are
+      - If [jobvt] = {!Slap_common.svd_all}, then all ['n] rows of [V^T] are
         returned in [vt]. (['vt_rows] = ['n].)
-      - If [jobvt] = {!Slap.Common.svd_top}, then the first [('m, 'n) min]
+      - If [jobvt] = {!Slap_common.svd_top}, then the first [('m, 'n) min]
         rows of [V^T] are returned in [vt]. (['vt_rows] = [('m, 'n) min].)
-      - If [jobvt] = {!Slap.Common.svd_overwrite}, then the first [('m, 'n) min]
+      - If [jobvt] = {!Slap_common.svd_overwrite}, then the first [('m, 'n) min]
         rows of [V^T] are overwritten on [a]. (['vt_cols] = [z] since [vt]
         is unused.)
-      - If [jobvt] = {!Slap.Common.svd_no}, then no columns of [V^T] are
+      - If [jobvt] = {!Slap_common.svd_no}, then no columns of [V^T] are
         computed. (['vt_cols] = [z].)
     @param s    a return location for singular values.
                 (default = an implicitly allocated vector.)
@@ -517,14 +517,14 @@ val gesvd : jobu:('u_cols, 'm, ('m, 'n) Size.min,
                 (default = an implicitly allocated matrix.)
     @param work default = an optimum-length vector.
 
-    ({b Note}: [jobu] and [jobvt] cannot both be {!Slap.Common.svd_overwrite}.)
+    ({b Note}: [jobu] and [jobvt] cannot both be {!Slap_common.svd_overwrite}.)
  *)
 
 (** {4 gesdd} *)
 
 type ('m, 'n) gesdd_liwork
 
-val gesdd_liwork : m:'m Size.t -> n:'n Size.t -> ('m, 'n) gesdd_liwork Size.t
+val gesdd_liwork : m:'m Slap_size.t -> n:'n Slap_size.t -> ('m, 'n) gesdd_liwork Slap_size.t
 (** [gesdd_liwork ~m ~n] computes the length of workspace [iwork] for
     [gesdd] routine.
 
@@ -536,11 +536,11 @@ type ('m, 'n, 'jobz) gesdd_min_lwork
 
 val gesdd_min_lwork : jobz:('u_cols * 'vt_rows,
                             'm * 'n,
-                            ('m, 'n) Size.min * ('m, 'n) Size.min,
+                            ('m, 'n) Slap_size.min * ('m, 'n) Slap_size.min,
                             'm * 'n,
-                            Size.z * Size.z) Common.svd_job ->
-                      m:'m Size.t -> n:'n Size.t -> unit ->
-                      ('m, 'n, 'u_cols * 'vt_rows) gesdd_min_lwork Size.t
+                            Slap_size.z * Slap_size.z) Slap_common.svd_job ->
+                      m:'m Slap_size.t -> n:'n Slap_size.t -> unit ->
+                      ('m, 'n, 'u_cols * 'vt_rows) gesdd_min_lwork Slap_size.t
 (** [gesdd_min_lwork ~m ~n] computes the minimum length of workspace [work] for
     [gesdd] routine.
 
@@ -551,14 +551,14 @@ val gesdd_min_lwork : jobz:('u_cols * 'vt_rows,
 
 val gesdd_opt_lwork : jobz:('u_cols * 'vt_rows,
                             'm * 'n,
-                            ('m, 'n) Size.min * ('m, 'n) Size.min,
+                            ('m, 'n) Slap_size.min * ('m, 'n) Slap_size.min,
                             'm * 'n,
-                            Size.z * Size.z) Common.svd_job ->
-                      ?s:(('m, 'n) Size.min, cnt) vec ->
+                            Slap_size.z * Slap_size.z) Slap_common.svd_job ->
+                      ?s:(('m, 'n) Slap_size.min, cnt) vec ->
                       ?u:('m, 'u_cols, 'u_cd) mat ->
                       ?vt:('vt_rows, 'n, 'vt_cd) mat ->
-                      ?iwork:('liwork, cnt) Common.int32_vec ->
-                      ('m, 'n, 'a_cd) mat -> (module Size.SIZE)
+                      ?iwork:('liwork, cnt) Slap_common.int32_vec ->
+                      ('m, 'n, 'a_cd) mat -> (module Slap_size.SIZE)
 (** [gesdd_opt_lwork ~jobz ?s ?u ?vt ?iwork a] computes the optimum length of
     workspace [work] for [gesdd] routine.
 
@@ -574,16 +574,16 @@ val gesdd_opt_lwork : jobz:('u_cols * 'vt_rows,
 
 val gesdd : jobz:('u_cols * 'vt_rows,
                   'm * 'n,
-                  ('m, 'n) Size.min * ('m, 'n) Size.min,
+                  ('m, 'n) Slap_size.min * ('m, 'n) Slap_size.min,
                   'm * 'n,
-                  Size.z * Size.z) Common.svd_job ->
-            ?s:(('m, 'n) Size.min, cnt) vec ->
+                  Slap_size.z * Slap_size.z) Slap_common.svd_job ->
+            ?s:(('m, 'n) Slap_size.min, cnt) vec ->
             ?u:('m, 'u_cols, 'u_cd) mat ->
             ?vt:('vt_rows, 'n, 'vt_cd) mat ->
             ?work:('lwork, cnt) vec ->
-            ?iwork:('liwork, cnt) Common.int32_vec ->
+            ?iwork:('liwork, cnt) Slap_common.int32_vec ->
             ('m, 'n, 'a_cd) mat ->
-            (('m, 'n) Size.min, 'cnt) vec
+            (('m, 'n) Slap_size.min, 'cnt) vec
             * ('m, 'u_cols, 'u_cd) mat option
             * ('vt_rows, 'n, 'vt_cd) mat option
 (** [gesdd ~jobz ?s ?u ?vt ?work ?iwork a] computes the singular value
@@ -601,13 +601,13 @@ val gesdd : jobz:('u_cols * 'vt_rows,
             left singular vectors [u] and right singular vectors [vt].
             If [u] ([vt]) is not needed, [None] is returned.
     @param jobz  the SVD job flag:
-    - If [jobz] is {!Slap.Common.svd_all}, all ['m] columns of [U] and all ['n]
+    - If [jobz] is {!Slap_common.svd_all}, all ['m] columns of [U] and all ['n]
       rows of [V^T] are returned in [u] and [vt].
       (['u_cols] = ['m] and ['vt_rows] = ['n].)
-    - If [jobz] is {!Slap.Common.svd_top}, the first [('m, 'n) min] columns of
+    - If [jobz] is {!Slap_common.svd_top}, the first [('m, 'n) min] columns of
       [U] and the first [('m, 'n) min] rows of [V^T] are returned in [u] and
       [vt]. (['u_cols] = [('m, 'n) min] and ['vt_rows] = [('m, 'n) min].)
-    - If [jobz] is {!Slap.Common.svd_overwrite}, then
+    - If [jobz] is {!Slap_common.svd_overwrite}, then
     {ul
       {- if ['m >= 'n], [a] is overwritten with the first [('m, 'n) min] columns
          of [U], and all ['n] rows of [V^T] is returned in [vt], thus [vt] is
@@ -617,7 +617,7 @@ val gesdd : jobz:('u_cols * 'vt_rows,
          ['m]-by-['m] and [vt] is not used.}}
       (In either case, ['u_cols] = ['m] and ['vt_rows] = ['n], but either [u] or
       [vt] should be omitted.)
-    - If [jobz] is {!Slap.Common.svd_no}, no singular vectors are computed.
+    - If [jobz] is {!Slap_common.svd_no}, no singular vectors are computed.
       (['u_cols] = [z] and ['vt_rows] = [z].)
     @param s     a return location for singular values.
                  (default = an implicitly allocated vector.)
@@ -633,7 +633,7 @@ val gesdd : jobz:('u_cols * 'vt_rows,
 
 (** {4 geev} *)
 
-val geev_min_lwork : ?vectors:bool -> 'n Size.t -> (module Size.SIZE)
+val geev_min_lwork : ?vectors:bool -> 'n Slap_size.t -> (module Slap_size.SIZE)
 (** [geev_min_lwork ?vectors n] computes the minimum length of workspace for
     [geev] routine. [n] is the number of rows or columns of a matrix.
 
@@ -645,7 +645,7 @@ val geev_opt_lwork : ?vl:('n, 'n, 'vl_cd) mat option ->
                      ?vr:('n, 'n, 'vr_cd) mat option ->
                      ?wr:('n, cnt) vec ->
                      ?wi:('n, cnt) vec ->
-                     ('n, 'n, 'a_cd) mat -> (module Size.SIZE)
+                     ('n, 'n, 'a_cd) mat -> (module Slap_size.SIZE)
 (** [geev_opt_lwork ?vl ?vr ?wr ?vi a] computes the optimum length of workspace
     for [geev] routine.
 
@@ -713,13 +713,13 @@ val geev : ?work:('lwork, cnt) vec ->
 
 type 'n syev_min_lwork
 
-val syev_min_lwork : 'n Size.t -> 'n syev_min_lwork Size.t
+val syev_min_lwork : 'n Slap_size.t -> 'n syev_min_lwork Slap_size.t
 (** [syev_min_lwork n] computes the minimum length of workspace for
     [syev] routine. [n] is the number of rows or columns of a matrix.
  *)
 
 val syev_opt_lwork : ?vectors:bool -> ?up:bool -> ('n, 'n, 'cd) mat ->
-                     (module Size.SIZE)
+                     (module Slap_size.SIZE)
 (** [syev_opt_lwork ?vectors ?up a] computes the optimum length of workspace for
     [syev] routine.
 
@@ -756,7 +756,7 @@ val syev : ?vectors:bool -> ?up:bool ->
 
 (** {4 syevd} *)
 
-val syevd_min_lwork : vectors:bool -> 'n Size.t -> (module Size.SIZE)
+val syevd_min_lwork : vectors:bool -> 'n Slap_size.t -> (module Slap_size.SIZE)
 (** [syevd_min_lwork ?vectors n] computes the minimum length of workspace [work]
     for [syevd] routine. [n] is the number of rows or columns of a matrix.
 
@@ -764,7 +764,7 @@ val syevd_min_lwork : vectors:bool -> 'n Size.t -> (module Size.SIZE)
                    (default = [false], i.e., they are not computed.)
  *)
 
-val syevd_min_liwork : vectors:bool -> 'n Size.t -> (module Size.SIZE)
+val syevd_min_liwork : vectors:bool -> 'n Slap_size.t -> (module Slap_size.SIZE)
 (** [syevd_min_liwork ?vectors n] computes the minimum length of workspace
     [iwork] for [syevd] routine. [n] is the number of rows or columns of a
     matrix.
@@ -774,7 +774,7 @@ val syevd_min_liwork : vectors:bool -> 'n Size.t -> (module Size.SIZE)
  *)
 
 val syevd_opt_lwork : ?vectors:bool -> ?up:bool ->
-                      ('n, 'n, 'cd) mat -> (module Size.SIZE)
+                      ('n, 'n, 'cd) mat -> (module Slap_size.SIZE)
 (** [syevd_opt_lwork ?vectors ?up a] computes the optimum length of workspace
     [work] for [syevd] routine.
 
@@ -786,7 +786,7 @@ val syevd_opt_lwork : ?vectors:bool -> ?up:bool ->
  *)
 
 val syevd_opt_liwork : ?vectors:bool -> ?up:bool ->
-                       ('n, 'n, 'cd) mat -> (module Size.SIZE)
+                       ('n, 'n, 'cd) mat -> (module Slap_size.SIZE)
 (** [syevd_opt_liwork ?vectors ?up a] computes the optimum length of workspace
     [iwork] for [syevd] routine.
 
@@ -800,7 +800,7 @@ val syevd_opt_liwork : ?vectors:bool -> ?up:bool ->
 val syevd : ?vectors:bool ->
             ?up:bool ->
             ?work:('lwork, cnt) vec ->
-            ?iwork:('liwork, cnt) Common.int32_vec ->
+            ?iwork:('liwork, cnt) Slap_common.int32_vec ->
             ?w:('n, cnt) vec ->
             ('n, 'n, 'a_cd) mat -> ('n, 'w_cd) vec
 (** [syev ?vectors ?up ?w a] computes the eigenvalues and the eigenvectors of
@@ -826,17 +826,17 @@ val syevd : ?vectors:bool ->
 
 type 'n sbev_min_lwork
 
-val sbev_min_lwork : 'n Size.t -> 'n sbev_min_lwork Size.t
+val sbev_min_lwork : 'n Slap_size.t -> 'n sbev_min_lwork Slap_size.t
 (** [sbev_min_lwork n] computes the minimum length of workspace [work]
     for [sbev] routine. [n] is the number of rows or columns of a matrix.
  *)
 
-val sbev : kd:'kd Size.t ->
+val sbev : kd:'kd Slap_size.t ->
            ?z:('n, 'n, 'z_cd) mat ->
            ?up:bool ->
            ?work:('lwork, cnt) vec ->
            ?w:('n, cnt) vec ->
-           (('n, 'kd) Size.syband, 'n, 'a_cd) mat -> ('n, 'cnt) vec
+           (('n, 'kd) Slap_size.syband, 'n, 'a_cd) mat -> ('n, 'cnt) vec
 (** [sbev ~kd ?z ?up ?work ?w ab] computes all eigenvalues and, optionally,
     eigenvectors of real symmetric band matrix [ab] store in band storage
     format.
@@ -863,14 +863,14 @@ val sbev : kd:'kd Size.t ->
 
 type 'n syevr_min_lwork
 
-val syevr_min_lwork : 'n Size.t -> 'n syevr_min_lwork Size.t
+val syevr_min_lwork : 'n Slap_size.t -> 'n syevr_min_lwork Slap_size.t
 (** [sbevr_min_lwork n] computes the minimum length of workspace [work]
     for [syevr] routine. [n] is the number of rows or columns of a matrix.
  *)
 
 type 'n syevr_min_liwork
 
-val syevr_min_liwork : 'n Size.t -> 'n syevr_min_liwork Size.t
+val syevr_min_liwork : 'n Slap_size.t -> 'n syevr_min_liwork Slap_size.t
 (** [sbevr_min_liwork n] computes the minimum length of workspace [iwork]
     for [syevr] routine. [n] is the number of rows or columns of a matrix.
  *)
@@ -879,7 +879,7 @@ val syevr_opt_lwork : ?vectors:bool ->
                       ?range:[ `A | `I of int * int | `V of float * float ] ->
                       ?up:bool ->
                       ?abstol:float ->
-                      ('n, 'n, 'a_cd) mat -> (module Size.SIZE)
+                      ('n, 'n, 'a_cd) mat -> (module Slap_size.SIZE)
 (** [sbevr_opt_lwork ?vectors ?range ?up ?abstol a] computes the optimum length
     of workspace [work] for [syevr] routine.
 
@@ -895,7 +895,7 @@ val syevr_opt_liwork : ?vectors:bool ->
                        ?range:[ `A | `I of int * int | `V of float * float ] ->
                        ?up:bool ->
                        ?abstol:float ->
-                       ('n, 'n, 'a_cd) mat -> (module Size.SIZE)
+                       ('n, 'n, 'a_cd) mat -> (module Slap_size.SIZE)
 (** [sbevr_opt_liwork ?vectors ?range ?up ?abstol a] computes the optimum length
     of workspace [iwork] for [sbevr] routine.
 
@@ -911,10 +911,10 @@ module type SYEVR_RESULT =
   sig
     type m
     type n
-    val value : m Size.t
+    val value : m Slap_size.t
                 * (n, 'cnt) vec
                 * (n, m, 'cnt) mat
-                * ((m, m) Size.add, 'cnt) Common.int32_vec
+                * ((m, m) Slap_size.add, 'cnt) Slap_common.int32_vec
   end
 (** The signature of returned modules of [syevr_dyn]. *)
 
@@ -923,10 +923,10 @@ val syevr_dyn : ?vectors:bool ->
                 ?up:bool ->
                 ?abstol:float ->
                 ?work:('lwork, cnt) vec ->
-                ?iwork:('liwork, cnt) Common.int32_vec ->
+                ?iwork:('liwork, cnt) Slap_common.int32_vec ->
                 ?w:('n, cnt) vec ->
                 ?z:('n, 'k, 'z_cd) mat ->
-                ?isuppz:(('k, 'k) Size.add, cnt) Common.int32_vec ->
+                ?isuppz:(('k, 'k) Slap_size.add, cnt) Slap_common.int32_vec ->
                 ('n, 'n, 'a_cd) mat -> (module SYEVR_RESULT with type n = 'n)
 (** [syevr_dyn ?vectors ?range ?up ?abstol ?work ?iwork ?w ?z ?isuppz a]
     computes selected eigenvalues [w] and, optionally, eigenvectors [z] of a
@@ -947,12 +947,12 @@ let f (type nn) ... =
     The returned module [X] contains tuple [X.value = (m, w, z, isuppz)] and
     type [X.m] for representation of the number of computed eigenvalues:
 
-    - Size [m : X.m Size.t] is the number of eigenvalues.
+    - Size [m : X.m Slap_size.t] is the number of eigenvalues.
     - Vector [w : (X.n, _) vec] contains the [m] eigenvalues in ascending order.
     - Matrix [z : (X.n, X.m, _) mat] contains the [m] eigenvectors of dimension
       [n] in the same order.
     - [2*m]-dimensional vector
-      [isuppz : ((m, m) Slap.Size.add, _) Common.int32_vec] indicates the
+      [isuppz : ((m, m) Slap.Slap_size.add, _) Slap_common.int32_vec] indicates the
       nonzero elements in [z].
 
     @return the above-mentioned module [X].
@@ -993,7 +993,7 @@ val sygv_opt_lwork : ?vectors:bool ->
                      ?up:bool ->
                      ?itype:[ `AB | `A_B | `BA ] ->
                      ('n, 'n, 'a_cd) mat ->
-                     ('n, 'n, 'b_cd) mat -> (module Size.SIZE)
+                     ('n, 'n, 'b_cd) mat -> (module Slap_size.SIZE)
 (** [sygv_opt_lwork ?vectors ?up ?itype a b] computes the optimum length of
     workspace [work] for [sbevr] routine.
 
@@ -1039,13 +1039,13 @@ val sygv : ?vectors:bool ->
 
 (** {4 sbgv} *)
 
-val sbgv : ka:'ka Size.t -> kb:'kb Size.t ->
+val sbgv : ka:'ka Slap_size.t -> kb:'kb Slap_size.t ->
            ?z:('n, 'n, 'z_cd) mat ->
            ?up:bool ->
            ?work:('lwork, cnt) vec ->
            ?w:('n, cnt) vec ->
-           (('n, 'ka) Size.syband, 'n, 'ab_cd) mat ->
-           (('n, 'kb) Size.syband, 'n, 'bb_cd) mat -> ('n, 'cnt) vec
+           (('n, 'ka) Slap_size.syband, 'n, 'ab_cd) mat ->
+           (('n, 'kb) Slap_size.syband, 'n, 'bb_cd) mat -> ('n, 'cnt) vec
 (** [sbgv ~ka ~kb ?z ?up ?work ?w ab bb] solves a general eigenvalue problem
     [ab * z = (lambda) * bb * z] where [ab] is a ['n]-by-['n] symmetric band
     matrix with [ka] subdiagonals, and [bb] is a ['n]-by-['n] symmetric

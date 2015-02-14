@@ -20,37 +20,19 @@
 (** {2 Creation of vectors} *)
 
 let random ?rnd_state ?from ?range n =
-  let x = I.Vec.random ?rnd_state ?from ?range n in
-  (n, 1, 1, x)
+  let x = I.Vec.random ?rnd_state ?from ?range (__expose_size n) in
+  __unexpose_vec (n, 1, 1, x)
 
 (** {2 Arithmetic operations} *)
 
-let sqr ?y (n, ofsx, incx, x) =
-  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
-  let _ = I.Vec.sqr ~n ~ofsy ~incy ~y ~ofsx ~incx x in
-  (n, ofsy, incy, y)
+let sqr ?y x = wrap2opt I.Vec.sqr ?y x
 
-let sqrt ?y (n, ofsx, incx, x) =
-  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
-  let _ = I.Vec.sqrt ~n ~ofsy ~incy ~y ~ofsx ~incx x in
-  (n, ofsy, incy, y)
+let sqrt ?y x = wrap2opt I.Vec.sqrt ?y x
 
-let exp ?y (n, ofsx, incx, x) =
-  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
-  let _ = I.Vec.exp ~n ~ofsy ~incy ~y ~ofsx ~incx x in
-  (n, ofsy, incy, y)
+let exp ?y x = wrap2opt I.Vec.exp ?y x
 
-let log ?y (n, ofsx, incx, x) =
-  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
-  let _ = I.Vec.log ~n ~ofsy ~incy ~y ~ofsx ~incx x in
-  (n, ofsy, incy, y)
+let log ?y x = wrap2opt I.Vec.log ?y x
 
-let sin ?y (n, ofsx, incx, x) =
-  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
-  let _ = I.Vec.sin ~n ~ofsy ~incy ~y ~ofsx ~incx x in
-  (n, ofsy, incy, y)
+let sin ?y x = wrap2opt I.Vec.sin ?y x
 
-let cos ?y (n, ofsx, incx, x) =
-  let ofsy, incy, y = PVec.opt_vec_alloc prec n y in
-  let _ = I.Vec.cos ~n ~ofsy ~incy ~y ~ofsx ~incx x in
-  (n, ofsy, incy, y)
+let cos ?y x = wrap2opt I.Vec.cos ?y x
