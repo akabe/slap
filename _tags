@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 255432a3f4c59cc44a70b9b86e17f174)
+# DO NOT EDIT (digest: 637f091113f504b0b2b55dcac6ea275c)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -61,10 +61,6 @@ true: annot, bin_annot
 <examples/mult/*.ml{,i,y}>: package(bigarray)
 <examples/mult/*.ml{,i,y}>: package(lacaml)
 <examples/mult/*.ml{,i,y}>: use_slap
-# Executable jacobi
-<examples/linsys/jacobi.{native,byte}>: package(bigarray)
-<examples/linsys/jacobi.{native,byte}>: package(lacaml)
-<examples/linsys/jacobi.{native,byte}>: use_slap
 # Executable gesv_gbsv
 <examples/linsys/gesv_gbsv.{native,byte}>: package(bigarray)
 <examples/linsys/gesv_gbsv.{native,byte}>: package(lacaml)

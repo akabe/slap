@@ -126,14 +126,6 @@ Executable symv_sbmv
   Install:        false
   CompiledObject: best
 
-Executable jacobi
-  Path:           examples/linsys
-  MainIs:         jacobi.ml
-  Build$:         flag(examples)
-  BuildDepends:   slap
-  Install:        false
-  CompiledObject: best
-
 Executable gesv_gbsv
   Path:           examples/linsys
   MainIs:         gesv_gbsv.ml
