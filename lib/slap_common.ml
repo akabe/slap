@@ -124,6 +124,8 @@ let create_int32_vec n = (n, 1, 1, Array1.create int32 fortran_layout n)
 
 let id x = x
 
+let (|>) x f = f x (* for OCaml 4.00 or below *)
+
 let get_transposed_dim t m n =
   match t with
   | `N -> (m, n)

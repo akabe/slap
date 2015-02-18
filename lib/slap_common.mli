@@ -174,6 +174,9 @@ val create_int32_vec : 'n size -> ('n, 'cnt) int32_vec
 
 (** {2 Utilities} *)
 
+val (|>) : 'a -> ('a -> 'b) -> 'b
+(** for compatibility with OCaml 4.00 or below *)
+
 val get_transposed_dim :
   (('m, 'n, 'num, 'prec, _) mat ->
    ('k, 'l, 'num, 'prec, _) mat, _) trans ->
