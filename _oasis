@@ -1,5 +1,5 @@
 OASISFormat:            0.4
-OCamlVersion:           >= 3.12
+OCamlVersion:           >= 4.02
 Name:                   SLAP
 Version:                1.0.0
 Synopsis:               A linear algebra library with static size checking for
@@ -69,6 +69,13 @@ Library slap_top
   XMETARequires:        slap
   XMETADescription:     Toplevel module for SLAP.
   BuildDepends:         slap,compiler-libs.toplevel
+
+Executable ppx_slap
+  Path:                 ppx
+  MainIs:               ppx_slap.ml
+  Install:              true
+  BuildDepends:         compiler-libs.common
+  CompiledObject:       best
 
 # Documentation
 

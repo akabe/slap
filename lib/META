@@ -21,3 +21,4 @@ package "top" (
 )
 # OASIS_STOP
 
+ppx = "ppx_slap"
