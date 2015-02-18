@@ -5,9 +5,9 @@
  *)
 
 open Slap.Io
-open Slap.D
-open Slap.Size
 open Slap.Common
+open Slap.Size
+open Slap.D
 
 let jacobi a b =
   let d_inv = Vec.reci (Mat.diag a) in (* reciprocal diagonal elements *)
@@ -23,10 +23,11 @@ let jacobi a b =
   let z = Vec.create (Vec.dim b) in (* temporary memory *)
   loop z x0
 
-let _ =
-  let a = Mat.init four four (fun i j -> let p = float_of_int (i - j) in
-                                         exp (~-. p *. p)) in
-  let b = Vec.init four (fun i -> float_of_int i) in
+let () =
+  let a = [%mat [5.0, 1.0, 0.0;
+                 1.0, 3.0, 1.0;
+                 0.0, 1.0, 4.0]] in
+  let b = [%vec [7.0; 10.0; 14.0]] in
   let x = jacobi a b in
   Format.printf "a = @[%a@]@.b = @[%a@]@." pp_fmat a pp_rfvec b;
   Format.printf "x = @[%a@]@." pp_rfvec x;
