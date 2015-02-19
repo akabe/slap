@@ -301,11 +301,7 @@ let get_exprs_list e0 =
 
 let get_exprs_list_or_tuple = function
   | { pexp_desc = Pexp_tuple el } -> el
-  | e0 ->
-    try get_exprs_list e0 with
-    | Error (loc, _) ->
-      errorf loc "Syntax Error: @[This expression should be a list \
-                  or a tuple syntactically@]" ()
+  | e0 -> try get_exprs_list e0 with Error _ -> [e0]
 
 let get_exprs_matrix e =
   let get_column acc ei =
@@ -317,7 +313,7 @@ let get_exprs_matrix e =
       if n = n' then Some (n, eil :: acc)
       else errorf ei.pexp_loc
           "Error: @[The length of this column is %d,@ \
-           but should be length %d@]" n' n ()
+           but it should be %d@]" n' n ()
   in
   match List.fold_left get_column None (get_exprs_list e) with
   | None -> []
