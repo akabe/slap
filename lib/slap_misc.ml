@@ -27,8 +27,3 @@ type dsc
 
 (** The identity function. *)
 let identity x = x
-
-(** Pipe operator: [x |> f] is [f x].
-    (for compatibility with OCaml 4.01 or below)
- *)
-let (|>) x f = f x
