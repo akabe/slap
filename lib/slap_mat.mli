@@ -20,10 +20,14 @@
 (** {!Slap.Mat} provides operations on sized matrices. *)
 
 open Bigarray
-open Slap_common
+open Slap_misc
 
-type (+'m, +'n, 'num, 'prec, +'cnt_or_dsc) t =
-  ('m, 'n, 'num, 'prec, 'cnt_or_dsc) mat
+type (+'m, +'n, 'num, 'prec, +'cnt_or_dsc) t
+(** [('m, 'n, 'num, 'prec) mat] is the type of ['m]-by-['n] matrix whose
+    elements have OCaml type ['num], representation kind ['prec] and memory
+    contiguity ['cnt_or_dsc].
+    The internal implementation is fortran-style two-dimensional big array.
+*)
 
 val cnt : ('m, 'n, 'num, 'prec, cnt) t -> ('m, 'n, 'num, 'prec, 'cnt) t
 (** Recover polymorphism of the fifth type parameter. *)
@@ -84,15 +88,15 @@ val init_rows :
 val kind : ('m, 'n, 'num, 'prec, 'cd) t -> ('num, 'prec) kind
 (** @return the kind of the given big array. *)
 
-val dim : ('m, 'n, 'num, 'prec, 'cd) t -> 'm size * 'n size
+val dim : ('m, 'n, 'num, 'prec, 'cd) t -> 'm Slap_size.t * 'n Slap_size.t
 (** [dim a] is [(dim1 a, dim2 a)]. *)
 
-val dim1 : ('m, 'n, 'num, 'prec, 'cd) t -> 'm size
+val dim1 : ('m, 'n, 'num, 'prec, 'cd) t -> 'm Slap_size.t
 (** [dim1 a]
     @return the number of rows in [a].
  *)
 
-val dim2 : ('m, 'n, 'num, 'prec, 'cd) t -> 'n size
+val dim2 : ('m, 'n, 'num, 'prec, 'cd) t -> 'n Slap_size.t
 (** [dim1 a]
     @return the number of columns in [a].
  *)
@@ -514,3 +518,13 @@ val opt_mat_alloc :
   'm Slap_size.t -> 'n Slap_size.t ->
   ('m, 'n, 'num, 'prec, 'cd) t option ->
   int * int * ('num, 'prec, fortran_layout) Array2.t
+
+val __expose :
+  ('m, 'n, 'num, 'prec, 'cnt_or_dsc) t ->
+  'm Slap_size.t * 'n Slap_size.t *
+  int * int * ('num, 'prec, fortran_layout) Array2.t
+
+val __unexpose :
+  'm Slap_size.t * 'n Slap_size.t *
+  int * int * ('num, 'prec, fortran_layout) Array2.t ->
+  ('m, 'n, 'num, 'prec, 'cnt_or_dsc) t

@@ -574,7 +574,7 @@ val gemm_diag :
 val syrk_diag :
   ?beta:num_type ->
   ?y:('n, cnt) vec ->
-  trans:(('a_n, 'a_k, 'a_cd) mat -> ('n, 'k, 'a_cd) mat) Slap_common.trans2 ->
+  trans:(('a_n, 'a_k, 'a_cd) mat -> ('n, 'k, 'a_cd) mat) trans2 ->
   ?alpha:num_type ->
   ('a_n, 'a_k, 'a_cd) mat -> ('n, 'cnt) vec
 (** [syrk_diag ?beta ?y ~transa ?alpha a] executes

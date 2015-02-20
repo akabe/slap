@@ -20,7 +20,7 @@
 (** {!Slap.Io} provides pretty printers for vectors and matrices. *)
 
 open Format
-open Slap_common
+open Slap_misc
 
 module Context :
 sig
@@ -139,7 +139,7 @@ val pp_vec_gen :
   ?horizontal_context:Context.t option ->
   formatter ->
   (formatter -> 'num -> unit) ->
-  ('n, 'num, 'prec, 'cnt_or_dsc) vec -> unit
+  ('n, 'num, 'prec, 'cnt_or_dsc) Slap_vec.t -> unit
 (** A generator of pretty printers for (column) vectors. *)
 
 val pp_rvec_gen :
@@ -157,7 +157,7 @@ val pp_rvec_gen :
   ?horizontal_context:int option ->
   formatter ->
   (formatter -> 'num -> unit) ->
-  ('n, 'num, 'prec, 'cnt_or_dsc) vec -> unit
+  ('n, 'num, 'prec, 'cnt_or_dsc) Slap_vec.t -> unit
 (** A generator of pretty printers for row vectors. *)
 
 val pp_mat_gen :
@@ -175,7 +175,7 @@ val pp_mat_gen :
   ?horizontal_context:Context.t option ->
   formatter ->
   (formatter -> 'num -> unit) ->
-  ('m, 'n, 'num, 'prec, 'cnt_or_dsc) mat -> unit
+  ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Slap_mat.t -> unit
 (** A generator of pretty printers for matrices. *)
 
 (** {2 Default pretty printers for elements of vectors or matrices} *)
@@ -194,7 +194,7 @@ val pp_int32_el_default : int32 pp_el_default
 (** {2 Pretty-printing in standard style} *)
 
 type ('n, 'num, 'prec, 'cnt_or_dsc) pp_vec =
-    formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) vec -> unit
+    formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) Slap_vec.t -> unit
 (** A type of standard pretty printers for vectors. *)
 
 val pp_fvec : ('n, float, 'prec, 'cnt_or_dsc) pp_vec
@@ -210,7 +210,7 @@ val pp_rcvec : ('n, Complex.t, 'prec, 'cnt_or_dsc) pp_vec
 val pp_rivec : ('n, int32, 'prec, 'cnt_or_dsc) pp_vec
 
 type ('m, 'n, 'num, 'prec, 'cnt_or_dsc) pp_mat =
-    formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) mat -> unit
+    formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Slap_mat.t -> unit
 (** A type of standard pretty printers for matrices. *)
 
 val pp_fmat : ('m, 'n, float, 'prec, 'cnt_or_dsc) pp_mat

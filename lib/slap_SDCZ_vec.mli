@@ -554,7 +554,7 @@ val ssqr : ?c:num_type -> ('n, 'cd) vec -> num_type
 val sort :
   ?cmp:(num_type -> num_type -> int) ->
   ?decr:bool ->
-  ?p:('n, 'p_cd) Slap_common.int_vec ->
+  ?p:('n, 'p_cd) int_vec ->
   ('n, 'x_cd) vec -> unit
 (** [sort ?cmp ?decr ?p x] sorts the elements in vector [x] in increasing order
     according to the comparison function [cmp].

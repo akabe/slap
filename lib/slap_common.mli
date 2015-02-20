@@ -21,36 +21,6 @@
 
 open Bigarray
 
-type +'n size = private int
-(** A singleton type on sizes (i.e., dimensions of vectors and matrices).
-
-    Evaluation of a term with {i singleton type} ['n size] {b always} results
-    in the natural number corresponding to phantom type parameter ['n].
-    ['n] is instantiated to a generative phantom type or a (phantom) type that
-    represents an arithmetic operation defined in this module. In either case,
-    {b only} the equality of sizes is verified statically.
- *)
-
-type (+'n, 'num, 'prec, +'cnt_or_dsc) vec
-(** [('n, 'num, 'prec, 'cnt_or_dsc) vec] is the type of ['n]-dimensional vector
-    whose elements have OCaml type ['num], representation kind ['prec] and
-    memory contiguity flag ['cnt_or_dsc].
-    The internal implementation is fortran-style one-dimensional big array.
-*)
-
-type (+'m, +'n, 'num, 'prec, +'cnt_or_dsc) mat
-(** [('m, 'n, 'num, 'prec) mat] is the type of ['m]-by-['n] matrix whose
-    elements have OCaml type ['num], representation kind ['prec] and memory
-    contiguity ['cnt_or_dsc].
-    The internal implementation is fortran-style two-dimensional big array.
-*)
-
-type cnt
-(** The tag for contiguous vectors and matrices. *)
-
-type dsc
-(** The tag for discrete vectors and matrices. *)
-
 (** {2 Flags} *)
 
 type diag = [ `N | `U ]
@@ -62,7 +32,7 @@ type (+'a, +'tag) trans
 type transNT
 
 type +'a trans2 = ('a, transNT) trans
-(** Types of transpose flags for real vectors or matrices.
+(** Types of transpose flags for real vectors or Slap_mat.trices.
  Values of this type are
  - {!Slap_common.normal} and
  - {!Slap_common.trans}.
@@ -71,32 +41,32 @@ type +'a trans2 = ('a, transNT) trans
 type transNTC
 
 type +'a trans3 = ('a, transNTC) trans
-(** Types of transpose flags for complex vectors or matrices.
+(** Types of transpose flags for complex vectors or Slap_mat.trices.
  Values of this type are
  - {!Slap_common.normal},
  - {!Slap_common.trans} and
  - {!Slap_common.conjtr}.
  *)
 
-val normal : (('m, 'n, 'num, 'prec, 'cd) mat ->
-              ('m, 'n, 'num, 'prec, 'cd) mat, _) trans
-(** Non-transposed matrix. *)
+val normal : (('m, 'n, 'num, 'prec, 'cd) Slap_mat.t ->
+              ('m, 'n, 'num, 'prec, 'cd) Slap_mat.t, _) trans
+(** Non-transposed Slap_mat.trix. *)
 
-val trans : (('m, 'n, 'num, 'prec, 'cd) mat ->
-             ('n, 'm, 'num, 'prec, 'cd) mat, _) trans
-(** Transpose of a matrix. *)
+val trans : (('m, 'n, 'num, 'prec, 'cd) Slap_mat.t ->
+             ('n, 'm, 'num, 'prec, 'cd) Slap_mat.t, _) trans
+(** Transpose of a Slap_mat.trix. *)
 
-val conjtr : (('m, 'n, 'num, 'prec, 'cd) mat ->
-              ('n, 'm, 'num, 'prec, 'cd) mat) trans3
-(** Conjugate transpose of a matrix. *)
+val conjtr : (('m, 'n, 'num, 'prec, 'cd) Slap_mat.t ->
+              ('n, 'm, 'num, 'prec, 'cd) Slap_mat.t) trans3
+(** Conjugate transpose of a Slap_mat.trix. *)
 
-(** {3 Direction of matrix multiplication} *)
+(** {3 Direction of Slap_mat.trix multiplication} *)
 
 type (+'k, +'m, +'n) side
 (** [('k, 'm, 'n) side] is the type of left- and right-multiplication flags.
  The type parameters ['k], ['m] and ['n] correspond to dimensions of two
- multiplied matrices: Let [A] be a ['k]-by-['k] square matrix and [B] be
- a ['m]-by-['n] general matrix.
+ multiplied Slap_mat.trices: Let [A] be a ['k]-by-['k] square Slap_mat.trix and [B] be
+ a ['m]-by-['n] general Slap_mat.trix.
  - When [A] is multiplied from the left by [B] (i.e., [A*B]), ['k] is equal to
    ['m]; therefore the type of {!Slap_common.left} is [('m, 'm, 'n) side].
  - Conversely, if [A] is right-multiplied by [B] (i.e., [B*A]), ['k] is equal to
@@ -108,7 +78,7 @@ val left : ('m, 'm, 'n) side
 
 val right : ('n, 'm, 'n) side
 
-(** {3 Matrix norms} *)
+(** {3 Slap_Mat.Trix norms} *)
 
 type (+'a, +'tag) norm
 
@@ -131,22 +101,22 @@ type +'a norm4 = ('a, norm4_tag) norm
 type norm_1
 
 val norm_1 : (norm_1, _) norm
-(** 1-norm of a matrix (maximum column sum). *)
+(** 1-norm of a Slap_mat.trix (maximum column sum). *)
 
 type norm_inf
 
 val norm_inf : (norm_inf, _) norm
-(** Infinity-norm of a matrix (maximum row sum). *)
+(** Infinity-norm of a Slap_mat.trix (maximum row sum). *)
 
 type norm_amax
 
 val norm_amax : (norm_amax, norm4_tag) norm
-(** Largest absolute value of a matrix. (not a matrix norm) *)
+(** Largest absolute value of a Slap_mat.trix. (not a Slap_mat.trix norm) *)
 
 type norm_frob
 
 val norm_frob : (norm_frob, norm4_tag) norm
-(** Frobenius norm of a matrix. *)
+(** Frobenius norm of a Slap_mat.trix. *)
 
 (** {3 SVD computation flags} *)
 
@@ -162,25 +132,21 @@ val svd_no : ('d, 'a, 'b, 'c, 'd) svd_job
 
 (** {2 Integer vectors} *)
 
-type (+'n, +'cnt_or_dsc) int_vec =
-    ('n, int, Bigarray.int_elt, 'cnt_or_dsc) vec
+type (+'n, +'cnt_or_dsc) int_vec = ('n, int, int_elt, 'cnt_or_dsc) Slap_vec.t
 
-val create_int_vec : 'n size -> ('n, 'cnt) int_vec
+val create_int_vec : 'n Slap_size.t -> ('n, 'cnt) int_vec
 
 type (+'n, +'cnt_or_dsc) int32_vec =
-    ('n, int32, Bigarray.int32_elt, 'cnt_or_dsc) vec
+  ('n, int32, int32_elt, 'cnt_or_dsc) Slap_vec.t
 
-val create_int32_vec : 'n size -> ('n, 'cnt) int32_vec
+val create_int32_vec : 'n Slap_size.t -> ('n, 'cnt) int32_vec
 
 (** {2 Utilities} *)
 
-val (|>) : 'a -> ('a -> 'b) -> 'b
-(** for compatibility with OCaml 4.00 or below *)
-
 val get_transposed_dim :
-  (('m, 'n, 'num, 'prec, _) mat ->
-   ('k, 'l, 'num, 'prec, _) mat, _) trans ->
-  'm size -> 'n size -> 'k size * 'l size
+  (('m, 'n, 'num, 'prec, _) Slap_mat.t ->
+   ('k, 'l, 'num, 'prec, _) Slap_mat.t, _) trans ->
+  'm Slap_size.t -> 'n Slap_size.t -> 'k Slap_size.t * 'l Slap_size.t
 (** [get_transposed_dim trans m n] returns
     - [(m * n)] if [trans] is {!Slap_common.normal};
     - [(n * m)] if [trans] is {!Slap_common.trans} or {!Slap_common.conjtr}.
@@ -206,25 +172,6 @@ val lacaml_svd_job : (_, _, _, _, _) svd_job -> Lacaml.Common.svd_job
 
 (** {2 Internal functions} *)
 
-val __expose_size : 'n size -> int
-
-val __unexpose_size : int -> 'n size
-
-val __expose_vec :
-  ('n, 'num, 'prec, 'cnt_or_dsc) vec ->
-  'n size * int * int * ('num, 'prec, fortran_layout) Array1.t
-
-val __unexpose_vec :
-  'n size * int * int * ('num, 'prec, fortran_layout) Array1.t ->
-  ('n, 'num, 'prec, 'cnt_or_dsc) vec
-
-val __expose_mat :
-  ('m, 'n, 'num, 'prec, 'cnt_or_dsc) mat ->
-  'm size * 'n size * int * int * ('num, 'prec, fortran_layout) Array2.t
-
-val __unexpose_mat :
-  'm size * 'n size * int * int * ('num, 'prec, fortran_layout) Array2.t ->
-  ('m, 'n, 'num, 'prec, 'cnt_or_dsc) mat
-
 val check_side_dim :
-  'k size -> 'm size -> 'n size -> ('k, 'm, 'n) side -> bool
+  'k Slap_size.t -> 'm Slap_size.t -> 'n Slap_size.t ->
+  ('k, 'm, 'n) side -> bool

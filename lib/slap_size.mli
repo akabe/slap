@@ -21,9 +21,15 @@
     matrices).
  *)
 
-open Slap_common
+type +'n t = private int
+(** A singleton type on sizes (i.e., dimensions of vectors and matrices).
 
-type +'n t = 'n size
+    Evaluation of a term with {i singleton type} ['n size] {b always} results
+    in the natural number corresponding to phantom type parameter ['n].
+    ['n] is instantiated to a generative phantom type or a (phantom) type that
+    represents an arithmetic operation defined in this module. In either case,
+    {b only} the equality of sizes is verified statically.
+ *)
 
 (** {2 Constants} *)
 
@@ -313,3 +319,11 @@ val iszero : 'n t -> bool
 
 val nonzero : 'n t -> bool
 (** [nonzero n] returns [true] if size [n] is not zero. *)
+
+(**/**)
+
+(** {2 Internal functions} *)
+
+val __expose : 'n t -> int
+
+val __unexpose : int -> 'n t

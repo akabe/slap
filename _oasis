@@ -38,6 +38,7 @@ Library slap
   FindlibName:          slap
   BuildDepends:         bigarray,lacaml
   Modules:              Slap,
+                        Slap_misc,
                         Slap_common,
                         Slap_size,
                         Slap_vec,

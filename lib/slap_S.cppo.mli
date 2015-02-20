@@ -17,7 +17,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** {!Slap.S} provides 64-bit real BLAS and LAPACK functions. *)
+(** {!Slap.S} provides 32-bit real BLAS and LAPACK functions. *)
 
 #define SLAP_SDCZ_BITS 32
 

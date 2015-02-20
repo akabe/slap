@@ -21,5 +21,5 @@
 
 let random ?rnd_state ?re_from ?re_range ?im_from ?im_range n =
   let x = I.Vec.random ?rnd_state ?re_from ?re_range ?im_from ?im_range
-      (__expose_size n) in
-  __unexpose_vec (n, 1, 1, x)
+      (S.__expose n) in
+  V.__unexpose (n, 1, 1, x)

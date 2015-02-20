@@ -17,9 +17,18 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** {2 Creation of matrices} *)
+(** Miscellaneous definitions. *)
 
-let random ?rnd_state ?from ?range m n =
-  let a =
-    I.Mat.random ?rnd_state ?from ?range (S.__expose m) (S.__expose n) in
-  M.__unexpose (m, n, 1, 1, a)
+type cnt
+(** The flag for contiguous vectors and matrices. *)
+
+type dsc
+(** The flag for discrete vectors and matrices. *)
+
+(** The identity function. *)
+let identity x = x
+
+(** Pipe operator: [x |> f] is [f x].
+    (for compatibility with OCaml 4.01 or below)
+ *)
+let (|>) x f = f x

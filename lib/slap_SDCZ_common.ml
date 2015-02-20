@@ -17,17 +17,17 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-open Bigarray
+module S = Slap_size
+module V = Slap_vec
+module M = Slap_mat
 
-type (+'n, +'cnt_or_dsc) vec =
-  ('n, num_type, prec, 'cnt_or_dsc) Slap_vec.t
+type (+'n, +'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) V.t
 
-type (+'m, +'n, +'cnt_or_dsc) mat =
-  ('m, 'n, num_type, prec, 'cnt_or_dsc) Slap_mat.t
+type (+'m, +'n, +'cnt_or_dsc) mat = ('m, 'n, num_type, prec, 'cnt_or_dsc) M.t
 
 type rprec = CONCAT(CONCAT(float, SLAP_SDCZ_BITS), _elt)
 
-type (+'n, +'cnt_or_dsc) rvec = ('n, float, rprec, 'cnt_or_dsc) Slap_vec.t
+type (+'n, +'cnt_or_dsc) rvec = ('n, float, rprec, 'cnt_or_dsc) V.t
 
 let rprec = CONCAT(float, SLAP_SDCZ_BITS)
 

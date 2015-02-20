@@ -18,25 +18,9 @@
 *)
 
 open Bigarray
+open Slap_misc
 
-type +'n size = int
-
-type (+'n, 'num, 'prec, +'cnt_or_dsc) vec =
-    int   (* the number of elements in a vector (>= 0) *)
-    * int (* an offset (>= 1) *)
-    * int (* an incrementation *)
-    * ('num, 'prec, fortran_layout) Array1.t
-
-type (+'m, +'n, 'num, 'prec, +'cnt_or_dsc) mat =
-    int   (* the number of rows in a matrix    (>= 0) *)
-    * int (* the number of columns in a matrix (>= 0) *)
-    * int (* an offset of rows    (>= 1) *)
-    * int (* an offset of columns (>= 1) *)
-    * ('num, 'prec, fortran_layout) Array2.t
-
-type cnt
-
-type dsc
+module S = Slap_size
 
 (** {2 Flags} *)
 
@@ -111,33 +95,30 @@ let svd_no = `N
 (** {2 Integer vectors} *)
 
 type (+'n, +'cnt_or_dsc) int_vec =
-    ('n, int, int_elt, 'cnt_or_dsc) vec
+    ('n, int, int_elt, 'cnt_or_dsc) Slap_vec.t
 
-let create_int_vec n = (n, 1, 1, Array1.create int fortran_layout n)
+let create_int_vec n = Slap_vec.create int n
 
 type (+'n, +'cnt_or_dsc) int32_vec =
-    ('n, int32, int32_elt, 'cnt_or_dsc) vec
+    ('n, int32, int32_elt, 'cnt_or_dsc) Slap_vec.t
 
-let create_int32_vec n = (n, 1, 1, Array1.create int32 fortran_layout n)
+let create_int32_vec n = Slap_vec.create int32 n
 
 (** {2 Utilities} *)
 
-let id x = x
-
-let (|>) x f = f x (* for OCaml 4.00 or below *)
-
 let get_transposed_dim t m n =
+  let retype n = S.__unexpose (S.__expose n) in
   match t with
-  | `N -> (m, n)
-  | _ -> (n, m)
+  | `N -> (retype m, retype n)
+  | _ -> (retype n, retype m)
 
 let lacaml_trans2 = function
   | `N -> `N
   | `T | `C -> `T
 
-let lacaml_trans3 = id
+let lacaml_trans3 = identity
 
-let lacaml_side = id
+let lacaml_side = identity
 
 let lacaml_norm2 v : Lacaml.Common.norm2 =
   match v with
@@ -145,7 +126,7 @@ let lacaml_norm2 v : Lacaml.Common.norm2 =
   | `I -> `I
   | _ -> assert(false)
 
-let lacaml_norm4 = id
+let lacaml_norm4 = identity
 
 let lacaml_norm2_opt = function
   | None -> None
@@ -155,17 +136,10 @@ let lacaml_norm4_opt = function
   | None -> None
   | Some v -> Some (lacaml_norm4 v)
 
-let lacaml_svd_job = id
+let lacaml_svd_job = identity
 
 (** {2 Internal functions} *)
 
-let __expose_size = id
-let __unexpose_size = id
-let __expose_vec = id
-let __unexpose_vec = id
-let __expose_mat = id
-let __unexpose_mat = id
-
 let check_side_dim m n k = function
-  | `L -> m = k
-  | `R -> n = k
+  | `L -> S.__expose m = S.__expose k
+  | `R -> S.__expose n = S.__expose k

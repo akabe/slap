@@ -20,8 +20,8 @@
 (** {2 Creation of vectors} *)
 
 let random ?rnd_state ?from ?range n =
-  let x = I.Vec.random ?rnd_state ?from ?range (__expose_size n) in
-  __unexpose_vec (n, 1, 1, x)
+  let x = I.Vec.random ?rnd_state ?from ?range (S.__expose n) in
+  V.__unexpose (n, 1, 1, x)
 
 (** {2 Arithmetic operations} *)
 

@@ -19,10 +19,10 @@
 
 (** SLAP (Sized Linear Algebra Package) *)
 
-(** Types, flags and functions commonly used in SLAP. *)
-module Common = Slap_common
+(** Miscellaneous definitions. *)
+include Slap_misc
 
-(** Sizes (dimensions of vectors and matrices). *)
+(** Sizes (the dimensions of vectors and matrices). *)
 module Size = Slap_size
 
 (** Sized vectors. *)
@@ -34,13 +34,10 @@ module Mat = Slap_mat
 (** Pretty printers. *)
 module Io = Slap_io
 
-type cnt = Slap_common.cnt
-(** For compatilibity with SLAP version 0 *)
-
-type dsc = Slap_common.dsc
-(** For compatilibity with SLAP version 0 *)
-
 (** {2 Precision dependent modules} *)
+
+(** Types, flags and functions commonly used in precision dependent modules. *)
+module Common = Slap_common
 
 (** 64-bit real BLAS and LAPACK functions. *)
 module D = Slap_D

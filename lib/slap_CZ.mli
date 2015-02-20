@@ -18,6 +18,7 @@
 *)
 
 open Bigarray
+open Slap_misc
 open Slap_common
 
 type prec = CONCAT(CONCAT(complex, SLAP_SDCZ_BITS), _elt)

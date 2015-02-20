@@ -20,28 +20,28 @@
 let wrap1
     (f : ?n:int -> ?ofsx:int -> ?incx:int -> I.vec -> 'a)
     x =
-  let n, ofsx, incx, x = __expose_vec x in
-  f ~n:(__expose_size n) ~ofsx ~incx x
+  let n, ofsx, incx, x = V.__expose x in
+  f ~n:(S.__expose n) ~ofsx ~incx x
 
 let wrap2
     (f : ?n:int ->
      ?ofsx:int -> ?incx:int -> I.vec ->
      ?ofsy:int -> ?incy:int -> I.vec -> 'a)
     x y =
-  let n, ofsx, incx, x = __expose_vec x in
-  let n', ofsy, incy, y = __expose_vec y in
+  let n, ofsx, incx, x = V.__expose x in
+  let n', ofsy, incy, y = V.__expose y in
   assert(n = n');
-  f ~n:(__expose_size n) ~ofsx ~incx x ~ofsy ~incy y
+  f ~n:(S.__expose n) ~ofsx ~incx x ~ofsy ~incy y
 
 let wrap2opt
     (f : ?n:int ->
      ?ofsy:int -> ?incy:int -> ?y:I.vec ->
      ?ofsx:int -> ?incx:int -> I.vec -> 'a)
     ?y x =
-  let n, ofsx, incx, x = __expose_vec x in
+  let n, ofsx, incx, x = V.__expose x in
   let ofsy, incy, y = Slap_vec.opt_vec_alloc prec n y in
-  ignore (f ~n:(__expose_size n) ~ofsy ~incy ~y ~ofsx ~incx x);
-  __unexpose_vec (n, ofsy, incy, y)
+  ignore (f ~n:(S.__expose n) ~ofsy ~incy ~y ~ofsx ~incx x);
+  V.__unexpose (n, ofsy, incy, y)
 
 let wrap3opt
     (f : ?n:int ->
@@ -49,12 +49,12 @@ let wrap3opt
      ?ofsx:int -> ?incx:int -> I.vec ->
      ?ofsy:int -> ?incy:int -> I.vec -> 'a)
     ?z x y =
-  let n, ofsx, incx, x = __expose_vec x in
-  let n', ofsy, incy, y = __expose_vec y in
+  let n, ofsx, incx, x = V.__expose x in
+  let n', ofsy, incy, y = V.__expose y in
   assert(n = n');
   let ofsz, incz, z = Slap_vec.opt_vec_alloc prec n z in
-  ignore (f ~n:(__expose_size n) ~ofsz ~incz ~z ~ofsx ~incx x ~ofsy ~incy y);
-  __unexpose_vec (n, ofsz, incz, z)
+  ignore (f ~n:(S.__expose n) ~ofsz ~incz ~z ~ofsx ~incx x ~ofsy ~incy y);
+  V.__unexpose (n, ofsz, incz, z)
 
 module type CNTVEC =
   sig
@@ -120,7 +120,7 @@ module Of_array (X : sig val value : num_type array end) : CNTVEC =
   struct
     type n
     let value = Slap_vec.unsafe_of_array prec
-        (__unexpose_size (Array.length X.value)) X.value
+        (S.__unexpose (Array.length X.value)) X.value
   end
 
 let of_array a =
@@ -137,7 +137,7 @@ module Of_list (X : sig val value : num_type list end) : CNTVEC =
   struct
     type n
     let value = Slap_vec.unsafe_of_list prec
-        (__unexpose_size (List.length X.value)) X.value
+        (S.__unexpose (List.length X.value)) X.value
   end
 
 let of_list l =
@@ -157,7 +157,7 @@ module Of_bigarray (X : sig
   struct
     type n
     let value = Slap_vec.unsafe_of_bigarray ~share:X.share
-        (__unexpose_size (Array1.dim X.value)) X.value
+        (S.__unexpose (Array1.dim X.value)) X.value
   end
 
 let of_bigarray ?(share=false) ba =
@@ -252,14 +252,14 @@ let sqr_nrm2 ?stable x = wrap1 (I.Vec.sqr_nrm2 ?stable) x
 let ssqr ?c x = wrap1 (I.Vec.ssqr ?c) x
 
 let sort ?cmp ?decr ?p x =
-  let n, ofsx, incx, x = __expose_vec x in
+  let n, ofsx, incx, x = V.__expose x in
   match p with
   | None ->
-     I.Vec.sort ?cmp ?decr ~n:(__expose_size n) ~ofsx ~incx x
+     I.Vec.sort ?cmp ?decr ~n:(S.__expose n) ~ofsx ~incx x
   | Some p ->
-    let n', ofsp, incp, p = __expose_vec p in
+    let n', ofsp, incp, p = V.__expose p in
     assert(n = n');
-    I.Vec.sort ?cmp ?decr ~n:(__expose_size n) ~ofsp ~incp ~p ~ofsx ~incx x
+    I.Vec.sort ?cmp ?decr ~n:(S.__expose n) ~ofsp ~incp ~p ~ofsx ~incx x
 
 let neg ?y x = wrap2opt I.Vec.neg ?y x
 

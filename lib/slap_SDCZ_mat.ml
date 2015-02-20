@@ -35,7 +35,7 @@ let cnt = Slap_mat.cnt
 
 (** {2 Creation of matrices} *)
 
-let empty = __unexpose_mat (Slap_size.zero, Slap_size.zero, 1, 1, I.Mat.empty)
+let empty = M.__unexpose (Slap_size.zero, Slap_size.zero, 1, 1, I.Mat.empty)
 
 let create m n = Slap_mat.create prec m n
 
@@ -45,7 +45,7 @@ let make0 m n = make m n zero
 
 let make1 m n = make m n one
 
-let identity n = __unexpose_mat (n, n, 1, 1, I.Mat.identity (__expose_size n))
+let identity n = M.__unexpose (n, n, 1, 1, I.Mat.identity (S.__expose n))
 
 let init_cols m n f = Slap_mat.init_cols prec m n f
 
@@ -90,24 +90,24 @@ let as_vec = Slap_mat.as_vec
 let fill = Slap_mat.fill
 
 let copy ?uplo ?b a =
-  let m, n, ar, ac, a = __expose_mat a in
+  let m, n, ar, ac, a = M.__expose a in
   let br, bc, b = Slap_mat.opt_mat_alloc prec m n b in
-  if __expose_size m <> 0 && __expose_size n <> 0
-  then ignore (I.lacpy ?uplo ~m:(__expose_size m) ~n:(__expose_size n)
+  if S.__expose m <> 0 && S.__expose n <> 0
+  then ignore (I.lacpy ?uplo ~m:(S.__expose m) ~n:(S.__expose n)
                  ~br ~bc ~b ~ar ~ac a);
-  __unexpose_mat (m, n, br, bc, b)
+  M.__unexpose (m, n, br, bc, b)
 
 let of_col_vecs_dyn m n vec_array =
   let convert x =
     assert(Slap_vec.check_cnt x);
-    let m', _, _, x = __expose_vec x in
+    let m', _, _, x = V.__expose x in
     assert(m = m');
     x
   in
-  if __expose_size n <> Array.length vec_array
+  if S.__expose n <> Array.length vec_array
   then invalid_argf "Mat.of_col_vecs_dyn" ();
   let mat = I.Mat.of_col_vecs (Array.map convert vec_array) in
-  __unexpose_mat (m, n, 1, 1, mat)
+  M.__unexpose (m, n, 1, 1, mat)
 
 (** {2 Type conversion} *)
 
@@ -123,7 +123,7 @@ module Of_array (X : sig val value : num_type array array end) : CNTMAT =
       | None -> invalid_argf "Mat.Of_array_dyn" ()
       | Some (m, n) ->
         Slap_mat.unsafe_of_array prec
-          (__unexpose_size m) (__unexpose_size n) X.value
+          (S.__unexpose m) (S.__unexpose n) X.value
   end
 
 let of_array aa =
@@ -142,7 +142,7 @@ module Of_list (X : sig val value : num_type list list end) : CNTMAT =
       | None -> invalid_argf "Mat.Of_list_dyn" ()
       | Some (m, n) ->
         Slap_mat.unsafe_of_list prec
-          (__unexpose_size m) (__unexpose_size n) X.value
+          (S.__unexpose m) (S.__unexpose n) X.value
   end
 
 let of_list ll =
@@ -178,21 +178,21 @@ let replace_alli = Slap_mat.replace_alli
 (** {2 Matrix transformations} *)
 
 let transpose_copy a b =
-  let m, n, ar, ac, a = __expose_mat a in
-  let n', m', br, bc, b = __expose_mat b in
+  let m, n, ar, ac, a = M.__expose a in
+  let n', m', br, bc, b = M.__expose b in
   assert(m = m' && n = n');
-  I.Mat.transpose_copy ~m:(__expose_size m) ~n:(__expose_size n)
+  I.Mat.transpose_copy ~m:(S.__expose m) ~n:(S.__expose n)
     ~ar ~ac a ~br ~bc b
 
 let transpose a =
-  let m, n, ar, ac, a = __expose_mat a in
-  let b = I.Mat.transpose ~m:(__expose_size m) ~n:(__expose_size n) ~ar ~ac a in
-  __unexpose_mat (n, m, 1, 1, b)
+  let m, n, ar, ac, a = M.__expose a in
+  let b = I.Mat.transpose ~m:(S.__expose m) ~n:(S.__expose n) ~ar ~ac a in
+  M.__unexpose (n, m, 1, 1, b)
 
 let detri ?up a =
-  let n, n', ar, ac, a = __expose_mat a in
+  let n, n', ar, ac, a = M.__expose a in
   assert(n = n');
-  I.Mat.detri ?up ~n:(__expose_size n) ~ar ~ac a
+  I.Mat.detri ?up ~n:(S.__expose n) ~ar ~ac a
 
 let packed = Slap_mat.packed
 
@@ -218,18 +218,18 @@ let unluband m kl ku ?(fill_num = Some zero) =
 let wrap1
     (f : ?m:int -> ?n:int -> ?ar:int -> ?ac:int -> I.mat -> _)
     a =
-  let m, n, ar, ac, a = __expose_mat a in
-  f ~m:(__expose_size m) ~n:(__expose_size n) ~ar ~ac a
+  let m, n, ar, ac, a = M.__expose a in
+  f ~m:(S.__expose m) ~n:(S.__expose n) ~ar ~ac a
 
 let wrap2
     (f : ?m:int -> ?n:int ->
      ?br:int -> ?bc:int -> ?b:I.mat ->
      ?ar:int -> ?ac:int -> I.mat -> _)
     ?b a =
-  let m, n, ar, ac, a = __expose_mat a in
+  let m, n, ar, ac, a = M.__expose a in
   let br, bc, b = Slap_mat.opt_mat_alloc prec m n b in
-  ignore (f ~m:(__expose_size m) ~n:(__expose_size n) ~br ~bc ~b ~ar ~ac a);
-  __unexpose_mat (m, n, br, bc, b)
+  ignore (f ~m:(S.__expose m) ~n:(S.__expose n) ~br ~bc ~b ~ar ~ac a);
+  M.__unexpose (m, n, br, bc, b)
 
 let add_const (c:I.num_type) ?b a = wrap2 (I.Mat.add_const c) ?b a
 
@@ -241,59 +241,59 @@ let scal alpha a =
   wrap1 (fun ?m ?n ?ar ?ac a -> I.Mat.scal alpha ?m ?n ?ar ?ac a) a
 
 let scal_cols a x =
-  let m, n', ar, ac, a = __expose_mat a in
-  let n, ofsx, incx, x = __expose_vec x in
+  let m, n', ar, ac, a = M.__expose a in
+  let n, ofsx, incx, x = V.__expose x in
   assert(n = n' && incx = 1);
-  I.Mat.scal_cols ~m:(__expose_size m) ~n:(__expose_size n) ~ar ~ac a ~ofs:ofsx x
+  I.Mat.scal_cols ~m:(S.__expose m) ~n:(S.__expose n) ~ar ~ac a ~ofs:ofsx x
 
 let scal_rows x a =
-  let m, ofsx, incx, x = __expose_vec x in
-  let m', n, ar, ac, a = __expose_mat a in
+  let m, ofsx, incx, x = V.__expose x in
+  let m', n, ar, ac, a = M.__expose a in
   assert(m = m' && incx = 1);
-  I.Mat.scal_rows ~m:(__expose_size m) ~n:(__expose_size n) ~ofs:ofsx x ~ar ~ac a
+  I.Mat.scal_rows ~m:(S.__expose m) ~n:(S.__expose n) ~ofs:ofsx x ~ar ~ac a
 
 let axpy ?alpha ~x y =
-  let m, n, xr, xc, x = __expose_mat x in
-  let m', n', yr, yc, y = __expose_mat y in
+  let m, n, xr, xc, x = M.__expose x in
+  let m', n', yr, yc, y = M.__expose y in
   assert(m = m' && n = n');
-  I.Mat.axpy ~m:(__expose_size m) ~n:(__expose_size n) ?alpha ~xr ~xc ~x ~yr ~yc y
+  I.Mat.axpy ~m:(S.__expose m) ~n:(S.__expose n) ?alpha ~xr ~xc ~x ~yr ~yc y
 
 let gemm_diag ?beta ?y ~transa ?alpha a ~transb b =
-  let an, ak, ar, ac, a = __expose_mat a in
-  let bk, bn, br, bc, b = __expose_mat b in
+  let an, ak, ar, ac, a = M.__expose a in
+  let bk, bn, br, bc, b = M.__expose b in
   let n, k = Slap_common.get_transposed_dim transa an ak in
   assert((k, n) = Slap_common.get_transposed_dim transb bk bn);
   let y = Slap_vec.opt_cnt_vec_alloc prec n y in
-  ignore (I.Mat.gemm_diag ~n:(__expose_size n) ~k:(__expose_size k) ?beta ~y
+  ignore (I.Mat.gemm_diag ~n:(S.__expose n) ~k:(S.__expose k) ?beta ~y
                           ~transa:(lacaml_trans3 transa) ?alpha ~ar ~ac a
                           ~transb:(lacaml_trans3 transb) ~br ~bc b);
-  __unexpose_vec (n, 1, 1, y)
+  V.__unexpose (n, 1, 1, y)
 
 let syrk_diag ?beta ?y ~trans ?alpha a =
-  let an, ak, ar, ac, a = __expose_mat a in
+  let an, ak, ar, ac, a = M.__expose a in
   let n, k = Slap_common.get_transposed_dim trans an ak in
   let y = Slap_vec.opt_cnt_vec_alloc prec n y in
-  ignore (I.Mat.syrk_diag ~n:(__expose_size n) ~k:(__expose_size k) ?beta ~y
+  ignore (I.Mat.syrk_diag ~n:(S.__expose n) ~k:(S.__expose k) ?beta ~y
                           ~trans:(Slap_common.lacaml_trans2 trans)
                           ?alpha ~ar ~ac a);
-  __unexpose_vec (n, 1, 1, y)
+  V.__unexpose (n, 1, 1, y)
 
 let gemm_trace ~transa a ~transb b =
-  let an, ak, ar, ac, a = __expose_mat a in
-  let bk, bn, br, bc, b = __expose_mat b in
+  let an, ak, ar, ac, a = M.__expose a in
+  let bk, bn, br, bc, b = M.__expose b in
   let n, k = Slap_common.get_transposed_dim transa an ak in
   assert((k, n) = Slap_common.get_transposed_dim transb bk bn);
-  I.Mat.gemm_trace ~n:(__expose_size n) ~k:(__expose_size k)
+  I.Mat.gemm_trace ~n:(S.__expose n) ~k:(S.__expose k)
                    ~transa:(lacaml_trans3 transa) ~ar ~ac a
                    ~transb:(lacaml_trans3 transb) ~br ~bc b
 
 let syrk_trace a = wrap1 (fun ?m ?n -> I.Mat.syrk_trace ?n:m ?k:n) a
 
 let symm2_trace ?upa a ?upb b =
-  let n, n', ar, ac, a = __expose_mat a in
-  let n'', n''', br, bc, b = __expose_mat b in
+  let n, n', ar, ac, a = M.__expose a in
+  let n'', n''', br, bc, b = M.__expose b in
   assert(n = n' && n = n'' && n = n''');
-  I.Mat.symm2_trace ~n:(__expose_size n) ?upa ~ar ~ac a ?upb ~br ~bc b
+  I.Mat.symm2_trace ~n:(S.__expose n) ?upa ~ar ~ac a ?upb ~br ~bc b
 
 (** {2 Submatrices} *)
 

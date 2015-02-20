@@ -20,9 +20,14 @@
 (** {!Slap.Vec} provides operations on sized vectors. *)
 
 open Bigarray
-open Slap_common
+open Slap_misc
 
-type (+'n, 'num, 'prec, +'cnt_or_dsc) t = ('n, 'num, 'prec, 'cnt_or_dsc) vec
+type (+'n, 'num, 'prec, +'cnt_or_dsc) t
+(** [('n, 'num, 'prec, 'cnt_or_dsc) vec] is the type of ['n]-dimensional vector
+    whose elements have OCaml type ['num], representation kind ['prec] and
+    memory contiguity flag ['cnt_or_dsc].
+    The internal implementation is fortran-style one-dimensional big array.
+*)
 
 val cnt : ('n, 'num, 'prec, cnt) t -> ('n, 'num, 'prec, 'cnt) t
 (** Recover polymorphism of the fourth type parameter. *)
@@ -537,3 +542,12 @@ val opt_vec_alloc :
   'n Slap_size.t ->
   ('n, 'num, 'prec, 'cd) t option ->
   int * int * ('num, 'prec, fortran_layout) Array1.t
+
+val __expose :
+  ('n, 'num, 'prec, 'cnt_or_dsc) t ->
+  'n Slap_size.t * int * int * ('num, 'prec, fortran_layout) Array1.t
+
+
+val __unexpose :
+  'n Slap_size.t * int * int * ('num, 'prec, fortran_layout) Array1.t ->
+  ('n, 'num, 'prec, 'cnt_or_dsc) t

@@ -18,7 +18,8 @@
 *)
 
 open Format
-open Slap_common
+
+module S = Slap_size
 
 module Context =
   struct
@@ -163,7 +164,7 @@ let pp_vec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
            ?pp_left ?pp_right ?pad ?ellipsis
            ?vertical_context ?horizontal_context
            ppf pp_el
-           (__expose_size (Slap_vec.dim x)) 1 (fun i _ -> Slap_vec.get_dyn x i)
+           (S.__expose (Slap_vec.dim x)) 1 (fun i _ -> Slap_vec.get_dyn x i)
 
 let pp_rvec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
                 ?pp_left ?pp_right ?pad ?ellipsis
@@ -173,7 +174,7 @@ let pp_rvec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
            ?pp_left ?pp_right ?pad ?ellipsis
            ?vertical_context ?horizontal_context
            ppf pp_el
-           1 (__expose_size (Slap_vec.dim x)) (fun _ j -> Slap_vec.get_dyn x j)
+           1 (S.__expose (Slap_vec.dim x)) (fun _ j -> Slap_vec.get_dyn x j)
 
 let pp_mat_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
                ?pp_left ?pp_right ?pad ?ellipsis
@@ -184,7 +185,7 @@ let pp_mat_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
            ?pp_left ?pp_right ?pad ?ellipsis
            ?vertical_context ?horizontal_context
            ppf pp_el
-           (__expose_size m) (__expose_size n) (Slap_mat.get_dyn a)
+           (S.__expose m) (S.__expose n) (Slap_mat.get_dyn a)
 
 (** {2 Default pretty-printers for elements of vectors or matrices} *)
 
@@ -200,7 +201,7 @@ let pp_int32_el_default = ref (fun ppf -> fprintf ppf "%ld")
 (** {2 Pretty-printing in standard style} *)
 
 type ('n, 'num, 'prec, 'cnt_or_dsc) pp_vec =
-    formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) vec -> unit
+  formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) Slap_vec.t -> unit
 
 let pp_fvec ppf x = pp_vec_gen ppf (!pp_float_el_default) x
 let pp_cvec ppf x = pp_vec_gen ppf (!pp_complex_el_default) x
@@ -211,7 +212,7 @@ let pp_rcvec ppf x = pp_rvec_gen ppf (!pp_complex_el_default) x
 let pp_rivec ppf x = pp_rvec_gen ppf (!pp_int32_el_default) x
 
 type ('m, 'n, 'num, 'prec, 'cnt_or_dsc) pp_mat =
-    formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) mat -> unit
+  formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Slap_mat.t -> unit
 
 let pp_fmat ppf a = pp_mat_gen ppf (!pp_float_el_default) a
 let pp_cmat ppf a = pp_mat_gen ppf (!pp_complex_el_default) a
