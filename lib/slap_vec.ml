@@ -312,7 +312,7 @@ let append (m, ofsx, incx, x) (n, ofsy, incy, y) =
 
 let rev vx = copy (shared_rev vx)
 
-(** {2 Type conversion} *)
+(** {2 Conversion} *)
 
 let to_array (n, ofsx, incx, x) =
   Array.init (S.__expose n) (fun i -> x.{incx * i + ofsx})

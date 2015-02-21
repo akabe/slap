@@ -130,9 +130,11 @@ let of_array aa =
   let module M = Of_array(struct let value = aa end) in
   (module M : CNTMAT)
 
+let unsafe_of_array m n aa = Slap_mat.unsafe_of_array prec m n aa
+
 let to_list = Slap_mat.to_list
 
-let of_list_dyn m n list = Slap_mat.of_list_dyn prec m n list
+let of_list_dyn m n ll = Slap_mat.of_list_dyn prec m n ll
 
 module Of_list (X : sig val value : num_type list list end) : CNTMAT =
   struct
@@ -148,6 +150,30 @@ module Of_list (X : sig val value : num_type list list end) : CNTMAT =
 let of_list ll =
   let module M = Of_list(struct let value = ll end) in
   (module M : CNTMAT)
+
+let unsafe_of_list m n ll = Slap_mat.unsafe_of_list prec m n ll
+
+let to_bigarray = Slap_mat.to_bigarray
+
+let of_bigarray_dyn = Slap_mat.of_bigarray_dyn
+
+module Of_bigarray
+    (X : sig
+       val value : (num_type, prec, fortran_layout) Array2.t
+     end) : CNTMAT =
+  struct
+    type m and n
+    let value =
+      let m = S.__unexpose (Array2.dim1 X.value) in
+      let n = S.__unexpose (Array2.dim2 X.value) in
+      Slap_mat.unsafe_of_bigarray m n X.value
+  end
+
+let of_bigarray ba =
+  let module M = Of_bigarray(struct let value = ba end) in
+  (module M : CNTMAT)
+
+let unsafe_of_bigarray = Slap_mat.unsafe_of_bigarray
 
 (** {2 Iterators} *)
 

@@ -17,7 +17,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-(** {!Slap_common} contains definitions independent of the precision. *)
+(** {!Slap.Common} contains definitions independent of the precision. *)
 
 open Bigarray
 
@@ -32,7 +32,7 @@ type (+'a, +'tag) trans
 type transNT
 
 type +'a trans2 = ('a, transNT) trans
-(** Types of transpose flags for real vectors or Slap_mat.trices.
+(** Types of transpose flags for real vectors or matrices.
  Values of this type are
  - {!Slap_common.normal} and
  - {!Slap_common.trans}.
@@ -41,7 +41,7 @@ type +'a trans2 = ('a, transNT) trans
 type transNTC
 
 type +'a trans3 = ('a, transNTC) trans
-(** Types of transpose flags for complex vectors or Slap_mat.trices.
+(** Types of transpose flags for complex vectors or matrices.
  Values of this type are
  - {!Slap_common.normal},
  - {!Slap_common.trans} and
@@ -50,23 +50,23 @@ type +'a trans3 = ('a, transNTC) trans
 
 val normal : (('m, 'n, 'num, 'prec, 'cd) Slap_mat.t ->
               ('m, 'n, 'num, 'prec, 'cd) Slap_mat.t, _) trans
-(** Non-transposed Slap_mat.trix. *)
+(** Non-transposed matrix. *)
 
 val trans : (('m, 'n, 'num, 'prec, 'cd) Slap_mat.t ->
              ('n, 'm, 'num, 'prec, 'cd) Slap_mat.t, _) trans
-(** Transpose of a Slap_mat.trix. *)
+(** Transpose of a matrix. *)
 
 val conjtr : (('m, 'n, 'num, 'prec, 'cd) Slap_mat.t ->
               ('n, 'm, 'num, 'prec, 'cd) Slap_mat.t) trans3
-(** Conjugate transpose of a Slap_mat.trix. *)
+(** Conjugate transpose of a matrix. *)
 
-(** {3 Direction of Slap_mat.trix multiplication} *)
+(** {3 Direction of matrix multiplication} *)
 
 type (+'k, +'m, +'n) side
 (** [('k, 'm, 'n) side] is the type of left- and right-multiplication flags.
- The type parameters ['k], ['m] and ['n] correspond to dimensions of two
- multiplied Slap_mat.trices: Let [A] be a ['k]-by-['k] square Slap_mat.trix and [B] be
- a ['m]-by-['n] general Slap_mat.trix.
+    The type parameters ['k], ['m] and ['n] correspond to dimensions of two
+    multiplied matrices: Let [A] be a ['k]-by-['k] square matrix
+    and [B] be a ['m]-by-['n] general matrix.
  - When [A] is multiplied from the left by [B] (i.e., [A*B]), ['k] is equal to
    ['m]; therefore the type of {!Slap_common.left} is [('m, 'm, 'n) side].
  - Conversely, if [A] is right-multiplied by [B] (i.e., [B*A]), ['k] is equal to
@@ -101,22 +101,22 @@ type +'a norm4 = ('a, norm4_tag) norm
 type norm_1
 
 val norm_1 : (norm_1, _) norm
-(** 1-norm of a Slap_mat.trix (maximum column sum). *)
+(** 1-norm of a matrix (maximum column sum). *)
 
 type norm_inf
 
 val norm_inf : (norm_inf, _) norm
-(** Infinity-norm of a Slap_mat.trix (maximum row sum). *)
+(** Infinity-norm of a matrix (maximum row sum). *)
 
 type norm_amax
 
 val norm_amax : (norm_amax, norm4_tag) norm
-(** Largest absolute value of a Slap_mat.trix. (not a Slap_mat.trix norm) *)
+(** Largest absolute value of a matrix. (not a matrix norm) *)
 
 type norm_frob
 
 val norm_frob : (norm_frob, norm4_tag) norm
-(** Frobenius norm of a Slap_mat.trix. *)
+(** Frobenius norm of a matrix. *)
 
 (** {3 SVD computation flags} *)
 

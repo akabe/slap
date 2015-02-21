@@ -1,39 +1,40 @@
 (* test_vec.ml *)
 
 open OUnit
+open Slap.Size
 open Slap.Vec
 open Bigarray
 
 (* an empty vector *)
-let v_emp = init int Slap.Size.zero (fun _ -> 42)
+let v_emp = init int zero (fun _ -> 42)
 (* a single-element vector *)
-let v_sgl = init int Slap.Size.one (fun _ -> 42)
+let v_sgl = init int one (fun _ -> 42)
 (* an ordinary vector *)
-let v_ord = init int Slap.Size.ten (fun i -> i)
+let v_ord = init int ten (fun i -> i)
 (* a contiguous subvector containing the first element in the original vector *)
-let sv_cfe = subcntvec_dyn Slap.Size.four ~ofsx:1 v_ord
+let sv_cfe = subcntvec_dyn four ~ofsx:1 v_ord
 (* a contiguous subvector containing the last element in the original vector *)
-let sv_cle = subcntvec_dyn Slap.Size.four ~ofsx:7 v_ord
+let sv_cle = subcntvec_dyn four ~ofsx:7 v_ord
 (* a discrete subvector containing the first element in the original vector *)
-let sv_dfe = subdscvec_dyn Slap.Size.four ~ofsx:1 ~incx:2 v_ord
+let sv_dfe = subdscvec_dyn four ~ofsx:1 ~incx:2 v_ord
 (* a discrete subvector containing the last element in the original vector *)
-let sv_dle = subdscvec_dyn Slap.Size.four ~ofsx:4 ~incx:2 v_ord
+let sv_dle = subdscvec_dyn four ~ofsx:4 ~incx:2 v_ord
 (* a discrete subvector with a negetive incrementation *)
-let sv_dng = subdscvec_dyn Slap.Size.four ~ofsx:10 ~incx:(-3) v_ord
+let sv_dng = subdscvec_dyn four ~ofsx:10 ~incx:(-3) v_ord
 
 (* Functions to generate a destination vector *)
 let duplicate x = (x, x)
-let make0_v_emp () = duplicate (make int Slap.Size.zero 0)
-let make0_v_sgl () = duplicate (make int Slap.Size.one 0)
-let make0_v_ord () = duplicate (make int Slap.Size.ten 0)
+let make0_v_emp () = duplicate (make int zero 0)
+let make0_v_sgl () = duplicate (make int one 0)
+let make0_v_ord () = duplicate (make int ten 0)
 
 let make0_sv f () =
-  let x = make int Slap.Size.ten 0 in
+  let x = make int ten 0 in
   let y = f x in
   (x, y)
 
-let make0_sv_dle = make0_sv (subdscvec_dyn Slap.Size.four ~ofsx:4 ~incx:2)
-let make0_sv_dng = make0_sv (subdscvec_dyn Slap.Size.four ~ofsx:10 ~incx:(-3))
+let make0_sv_dle = make0_sv (subdscvec_dyn four ~ofsx:4 ~incx:2)
+let make0_sv_dng = make0_sv (subdscvec_dyn four ~ofsx:10 ~incx:(-3))
 
 (* test of Slap.Vec.to_array *)
 let test_to_array () =
@@ -61,25 +62,25 @@ let test_to_list () =
 let test_of_array_dyn () =
   let of_array_dyn n a = of_array_dyn int n a in
   let (=) x y = (to_list x = to_list y) in
-  "v_emp"  @? (of_array_dyn Slap.Size.zero [||]                     = v_emp);
-  "v_sgl"  @? (of_array_dyn Slap.Size.one  [|42|]                   = v_sgl);
-  "v_ord"  @? (of_array_dyn Slap.Size.ten  [|1;2;3;4;5;6;7;8;9;10|] = v_ord);
+  "v_emp"  @? (of_array_dyn zero [||]                     = v_emp);
+  "v_sgl"  @? (of_array_dyn one  [|42|]                   = v_sgl);
+  "v_ord"  @? (of_array_dyn ten  [|1;2;3;4;5;6;7;8;9;10|] = v_ord);
   let (@!) msg f =
     assert_raises ~msg (Invalid_argument "Slap.Vec.of_array_dyn") f
   in
-  "exn" @! (fun () -> of_array_dyn Slap.Size.five [|1;2;3;4|])
+  "exn" @! (fun () -> of_array_dyn five [|1;2;3;4|])
 
 (* test of Slap.Vec.of_list_dyn *)
 let test_of_list_dyn () =
   let of_list_dyn n a = of_list_dyn int n a in
   let (=) x y = (to_list x = to_list y) in
-  "v_emp"  @? (of_list_dyn Slap.Size.zero []                     = v_emp);
-  "v_sgl"  @? (of_list_dyn Slap.Size.one  [42]                   = v_sgl);
-  "v_ord"  @? (of_list_dyn Slap.Size.ten  [1;2;3;4;5;6;7;8;9;10] = v_ord);
+  "v_emp"  @? (of_list_dyn zero []                     = v_emp);
+  "v_sgl"  @? (of_list_dyn one  [42]                   = v_sgl);
+  "v_ord"  @? (of_list_dyn ten  [1;2;3;4;5;6;7;8;9;10] = v_ord);
   let (@!) msg f =
     assert_raises ~msg (Invalid_argument "Slap.Vec.of_list_dyn") f
   in
-  "exn" @! (fun () -> of_list_dyn Slap.Size.five [1;2;3;4])
+  "exn" @! (fun () -> of_list_dyn five [1;2;3;4])
 
 (* test of Slap.Vec.copy *)
 let test_copy () =

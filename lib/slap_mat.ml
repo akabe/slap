@@ -409,6 +409,28 @@ let of_list_dyn kind m n ll =
      unsafe_of_list kind m n ll
   | _ -> invalid_arg "Slap.Mat.of_list_dyn"
 
+let to_bigarray (m, n, ar, ac, a) =
+  let b = create_array2 (Array2.kind a) m n in
+  copy_stub ~m ~n ~ar ~ac a ~br:1 ~bc:1 b;
+  b
+
+let unsafe_of_bigarray ?(share=false) m n ba =
+  let ba' = if share then ba
+    else begin
+      let ba' = create_array2 (Array2.kind ba) m n in
+      copy_stub ~m ~n ~ar:1 ~ac:1 ba ~br:1 ~bc:1 ba';
+      ba'
+    end in
+  (m, n, 1, 1, ba')
+
+let of_bigarray_dyn ?(share=false) m n ba =
+  let m' = Array2.dim1 ba in
+  let n' = Array2.dim2 ba in
+  if (m' <> 0 && (S.__expose m <> m')) ||
+     (n' <> 0 && (S.__expose n <> n'))
+  then invalid_arg "Slap.Mat.of_bigarray_dyn";
+  unsafe_of_bigarray ~share m n ba
+
 (** {2 Submatrices} *)
 
 let submat_dyn m n ?(ar=1) ?(ac=1) (m', n', ar', ac', a) =

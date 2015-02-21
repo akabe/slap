@@ -443,7 +443,8 @@ val unsafe_of_array :
   'n Slap_size.t ->
   'num array array ->
   ('m, 'n, 'num, 'prec, 'cnt) t
-(** Like [unsafe_of_array], but size checking is not always performed. *)
+(** Like [of_array_dyn], but size checking is not always performed.
+    @since 1.0.0 *)
 
 val to_list : ('m, 'n, 'num, 'prec, 'cd) t -> 'num list list
 (** [to_list a]
@@ -467,7 +468,39 @@ val unsafe_of_list :
   'n Slap_size.t ->
   'num list list ->
   ('m, 'n, 'num, 'prec, 'cnt) t
-(** Like [unsafe_of_list], but size checking is not always performed. *)
+(** Like [of_list_dyn], but size checking is not always performed.
+    @since 1.0.0 *)
+
+val to_bigarray :
+  ('m, 'n, 'num, 'prec, 'cd) t ->
+  ('num, 'prec, fortran_layout) Array2.t
+(** [to_bigarray a]
+    @return the big array of all the elements of the matrix [a].
+    @since 1.0.0
+ *)
+
+val of_bigarray_dyn :
+  ?share:bool ->
+  'm Slap_size.t ->
+  'n Slap_size.t ->
+  ('num, 'prec, fortran_layout) Array2.t ->
+  ('m, 'n, 'num, 'prec, 'cnt) t
+(** [of_bigarray_dyn ?share m n ba]
+    @raise Invalid_argument the size of the given big array is not equal
+    to [m]-by-[n].
+    @return a fresh matrix of all the elements of big array [ba].
+    @param share [true] if data are shared. (default = [false])
+    @since 1.0.0
+*)
+
+val unsafe_of_bigarray :
+  ?share:bool ->
+  'm Slap_size.t ->
+  'n Slap_size.t ->
+  ('num, 'prec, fortran_layout) Array2.t ->
+  ('m, 'n, 'num, 'prec, 'cnt) t
+(** Like [of_bigarray_dyn], but size checking is not always performed.
+    @since 1.0.0 *)
 
 (** {2 Submatrices} *)
 

@@ -315,10 +315,12 @@ val riteri : (int -> unit) -> 'n t -> unit
 (** {2 Checking} *)
 
 val iszero : 'n t -> bool
-(** [iszero n] returns [true] if size [n] is zero. *)
+(** [iszero n] returns [true] if size [n] is zero.
+    @since 1.0.0 *)
 
 val nonzero : 'n t -> bool
-(** [nonzero n] returns [true] if size [n] is not zero. *)
+(** [nonzero n] returns [true] if size [n] is not zero.
+    @since 1.0.0 *)
 
 (**/**)
 

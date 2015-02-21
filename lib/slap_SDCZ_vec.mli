@@ -152,7 +152,8 @@ module Of_array (X : sig val value : num_type array end) : CNTVEC
 
 val unsafe_of_array :
   'n Slap_size.t -> num_type array -> ('n, 'cnt) vec
-(** Like [of_array_dyn], but size checking is not always performed. *)
+(** Like [of_array_dyn], but size checking is not always performed.
+    @since 1.0.0 *)
 
 val to_list : ('n, 'cd) vec -> num_type list
 (** [to_list x]
@@ -180,7 +181,8 @@ module Of_list (X : sig val value : num_type list end) : CNTVEC
 
 val unsafe_of_list :
   'n Slap_size.t -> num_type list -> ('n, 'cnt) vec
-(** Like [of_list_dyn], but size checking is not always performed. *)
+(** Like [of_list_dyn], but size checking is not always performed.
+    @since 1.0.0 *)
 
 val to_bigarray :
   ('n, 'cd) vec ->
@@ -223,7 +225,8 @@ val unsafe_of_bigarray :
   ?share:bool ->
   'n Slap_size.t ->
   (num_type, prec, fortran_layout) Array1.t -> ('n, 'cnt) vec
-(** Like [of_bigarray_dyn], but size checking is not always performed. *)
+(** Like [of_bigarray_dyn], but size checking is not always performed.
+    @since 1.0.0 *)
 
 (** {2 Iterators} *)
 

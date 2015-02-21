@@ -404,7 +404,7 @@ val rev : ('n, 'num, 'prec, 'cd) t -> ('n, 'num, 'prec, 'cd) t
     @return reversed vector [(xn, ..., x2, x1)]. The data are NOT shared.
  *)
 
-(** {2 Type conversion} *)
+(** {2 Conversion} *)
 
 val to_array : ('n, 'num, 'prec, 'cd) t -> 'num array
 (** [to_array x]
@@ -424,7 +424,8 @@ val unsafe_of_array :
   ('num, 'prec) kind ->
   'n Slap_size.t ->
   'num array -> ('n, 'num, 'prec, 'cnt) t
-(** Like [of_array_dyn], but size checking is not always performed. *)
+(** Like [of_array_dyn], but size checking is not always performed.
+    @since 1.0.0 *)
 
 val to_list : ('n, 'num, 'prec, 'cd) t -> 'num list
 (** [to_list x]
@@ -444,7 +445,8 @@ val unsafe_of_list :
   ('num, 'prec) kind ->
   'n Slap_size.t ->
   'num list -> ('n, 'num, 'prec, 'cnt) t
-(** Like [of_list_dyn], but size checking is not always performed. *)
+(** Like [of_list_dyn], but size checking is not always performed.
+    @since 1.0.0 *)
 
 val to_bigarray :
   ('n, 'num, 'prec, 'cd) t ->
@@ -469,7 +471,8 @@ val unsafe_of_bigarray :
   ?share:bool ->
   'n Slap_size.t ->
   ('num, 'prec, fortran_layout) Array1.t -> ('n, 'num, 'prec, 'cnt) t
-(** Like [unsafe_of_bigarray_dyn], but size checking is not always performed. *)
+(** Like [unsafe_of_bigarray], but size checking is not always performed.
+    @since 1.0.0 *)
 
 (** {2 Subvectors} *)
 

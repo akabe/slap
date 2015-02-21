@@ -218,6 +218,13 @@ val of_array : num_type array array -> (module CNTMAT)
 module Of_array (X : sig val value : num_type array array end) : CNTMAT
 (** A functor vesion of [of_array]. *)
 
+val unsafe_of_array :
+  'm Slap_size.t -> 'n Slap_size.t ->
+  num_type array array ->
+  ('m, 'n, 'cnt) mat
+(** Like [of_array_dyn], but size checking is not always performed.
+    @since 1.0.0 *)
+
 val to_list : ('m, 'n, 'cd) mat -> num_type list list
 (** [to_list a]
     @return the list of lists of all the elements of [a].
@@ -243,6 +250,61 @@ val of_list : num_type list list -> (module CNTMAT)
 
 module Of_list (X : sig val value : num_type list list end) : CNTMAT
 (** A functor vesion of [of_list]. *)
+
+val unsafe_of_list :
+  'm Slap_size.t ->
+  'n Slap_size.t ->
+  num_type list list ->
+  ('m, 'n, 'cnt) mat
+(** Like [of_list_dyn], but size checking is not always performed.
+    @since 1.0.0 *)
+
+val to_bigarray :
+  ('m, 'n, 'cd) mat ->
+  (num_type, prec, fortran_layout) Array2.t
+(** [to_bigarray a]
+    @return the big array of all the elements of the matrix [a].
+    @since 1.0.0
+ *)
+
+val of_bigarray_dyn :
+  ?share:bool ->
+  'm Slap_size.t ->
+  'n Slap_size.t ->
+  (num_type, prec, fortran_layout) Array2.t ->
+  ('m, 'n, 'cnt) mat
+(** [of_bigarray_dyn ?share m n ba]
+    @raise Invalid_argument the size of the given big array is not equal
+    to [m]-by-[n].
+    @return a fresh matrix of all the elements of big array [ba].
+    @param share [true] if data are shared. (default = [false])
+    @since 1.0.0
+*)
+
+val of_bigarray : (num_type, prec, fortran_layout) Array2.t -> (module CNTMAT)
+(** [module M = (val of_bigarray ba : CNTMAT)]
+    @return module [M] containing the matrix [M.value] that
+    has the type [(M.m, M.n, 'cnt) mat] with a generative phantom types [M.m]
+    and [M.n] as a package of an existential quantified sized type like
+    [exists m, n. (m, n, 'cnt) mat].
+    @raise Invalid_argument the given big array is not rectangular.
+    @since 1.0.0 *)
+
+module Of_bigarray
+    (X : sig
+       val value : (num_type, prec, fortran_layout) Array2.t
+     end) : CNTMAT
+(** A functor vesion of [of_bigarray].
+    @since 1.0.0 *)
+
+val unsafe_of_bigarray :
+  ?share:bool ->
+  'm Slap_size.t ->
+  'n Slap_size.t ->
+  (num_type, prec, fortran_layout) Array2.t ->
+  ('m, 'n, 'cnt) mat
+(** Like [of_bigarray_dyn], but size checking is not always performed.
+    @since 1.0.0 *)
 
 (** {2 Iterators} *)
 

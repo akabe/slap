@@ -35,6 +35,20 @@ let test_to_list () =
   "m_sub" @? (to_list m_sub = [[22;23;24];
                                [32;33;34]])
 
+(* test of Slap.Mat.to_bigarray *)
+let test_to_bigarray () =
+  let create m n = Array2.create int fortran_layout m n in
+  let of_array a = Array2.of_array int fortran_layout a in
+  "m_00"  @? (to_bigarray m_00  = create 0 0);
+  "m_0n"  @? (to_bigarray m_0n  = create 0 4);
+  "m_n0"  @? (to_bigarray m_n0  = of_array [|[||];[||];[||];[||]|]);
+  "m_ord" @? (to_bigarray m_ord = of_array [|[|11;12;13;14;15|];
+                                             [|21;22;23;24;25|];
+                                             [|31;32;33;34;35|];
+                                             [|41;42;43;44;45|]|]);
+  "m_sub" @? (to_bigarray m_sub = of_array [|[|22;23;24|];
+                                             [|32;33;34|]|])
+
 (* test of Slap.Mat.of_array_dyn *)
 let test_of_array_dyn () =
   let of_array_dyn m n a = of_array_dyn int m n a in
@@ -74,6 +88,27 @@ let test_of_list_dyn () =
   "exn/cols" @! (fun () -> of_list_dyn two three [[11;12;13]]);
   "exn/rect" @! (fun () -> of_list_dyn two three [[11;12;13];
                                                   [21;22]])
+
+(* test of Slap.Mat.of_bigarray_dyn *)
+let test_of_bigarray_dyn () =
+  let of_bigarray_dyn m n a =
+    let ba = Array2.of_array int fortran_layout a in
+    of_bigarray_dyn m n ba
+  in
+  let (=) x y = (to_list x = to_list y) in
+  "m_00"  @? (of_bigarray_dyn zero zero [||] = m_00);
+  "m_0n"  @? (of_bigarray_dyn zero four [||] = m_0n);
+  "m_n0"  @? (of_bigarray_dyn four zero [|[||];[||];[||];[||]|] = m_n0);
+  "m_ord" @? (of_bigarray_dyn four five [|[|11;12;13;14;15|];
+                                          [|21;22;23;24;25|];
+                                          [|31;32;33;34;35|];
+                                          [|41;42;43;44;45|]|] = m_ord);
+  let (@!) msg f =
+    assert_raises ~msg (Invalid_argument "Slap.Mat.of_bigarray_dyn") f
+  in
+  "exn/rows" @! (fun () -> of_bigarray_dyn two three [|[|11;12|];
+                                                       [|21;22|]|]);
+  "exn/cols" @! (fun () -> of_bigarray_dyn two three [|[|11;12;13|]|])
 
 (* test of packed *)
 let test_packed () =
@@ -280,8 +315,10 @@ let suite =
   "Slap.Mat" >:::
     ["to_array"     >:: test_to_array;
      "to_list"      >:: test_to_list;
+     "to_bigarray"  >:: test_to_bigarray;
      "of_array_dyn" >:: test_of_array_dyn;
      "of_list_dyn"  >:: test_of_list_dyn;
+     "of_bigarray_dyn" >:: test_of_bigarray_dyn;
      "packed"       >:: test_packed;
      "unpacked"     >:: test_unpacked;
      "geband_dyn"   >:: test_geband_dyn;
