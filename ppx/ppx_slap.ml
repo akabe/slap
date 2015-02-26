@@ -246,7 +246,7 @@ struct
   (* for SLAP *)
 
   let size n =
-    let e_size = apply (ident "Slap.Common.__unexpose_size")
+    let e_size = apply (ident "Slap.Size.__unexpose")
         ["", constant (Const_int n)] in
     constraint_ e_size (Typ.size n)
 
@@ -258,7 +258,7 @@ struct
                          constant (Const_int 1); (* offset *)
                          constant (Const_int 1); (* incrementation *)
                          e_ba] in
-    let e_vec = apply (ident "Slap.Common.__unexpose_vec") ["", e_tuple] in
+    let e_vec = apply (ident "Slap.Vec.__unexpose") ["", e_tuple] in
     constraint_ e_vec (Typ.vec kind)
 
   let mat kind ell =
@@ -273,7 +273,7 @@ struct
                          constant (Const_int 1); (* offset of rows *)
                          constant (Const_int 1); (* offset of columns *)
                          e_ba] in
-    let e_vec = apply (ident "Slap.Common.__unexpose_mat") ["", e_tuple] in
+    let e_vec = apply (ident "Slap.Mat.__unexpose") ["", e_tuple] in
     constraint_ e_vec (Typ.mat kind)
 
   (* For errors *)
