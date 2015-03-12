@@ -189,6 +189,20 @@ let iteri f n = for i = 1 to n do f i done
 
 let riteri f n = for i = n downto 1 do f i done
 
+let for_alli f n =
+  let rec loop i =
+    if i > n then true else
+    if f i then loop (i + 1) else false
+  in
+  loop 1
+
+let existsi f n =
+  let rec loop i =
+    if i > n then false else
+    if f i then true else loop (i + 1)
+  in
+  loop 1
+
 (** {2 Iterators on sizes} *)
 
 let fold_left f = fold_lefti (fun acc i -> f acc (unsafe_of_int i))
@@ -198,6 +212,10 @@ let fold_right f = fold_righti (fun i -> f (unsafe_of_int i))
 let iter f = iteri (fun i -> f (unsafe_of_int i))
 
 let riter f = riteri (fun i -> f (unsafe_of_int i))
+
+let for_all f = for_alli (fun i -> f (unsafe_of_int i))
+
+let exists f = existsi (fun i -> f (unsafe_of_int i))
 
 (** {2 Checking} *)
 

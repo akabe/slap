@@ -1,9 +1,10 @@
 # OASIS_START
-# DO NOT EDIT (digest: 685c105786cea21e208af643b7d94f5a)
+# DO NOT EDIT (digest: 21849bc84c8cb66efa5d7f5e3828880f)
 Slap
 Slap_misc
 Slap_common
 Slap_size
+Slap_array
 Slap_vec
 Slap_mat
 Slap_io

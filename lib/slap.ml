@@ -58,6 +58,9 @@ include Slap_misc
 (** Sizes (the dimensions of vectors and matrices). *)
 module Size = Slap_size
 
+(** Sized arrays. *)
+module Array = Slap_array
+
 (** Sized vectors. *)
 module Vec = Slap_vec
 

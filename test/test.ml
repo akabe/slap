@@ -2,7 +2,8 @@ open OUnit
 
 let suite =
   "Slap" >:::
-    [Test_vec.suite;
+    [Test_array.suite;
+     Test_vec.suite;
      Test_mat.suite]
 
 let _ =

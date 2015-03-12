@@ -290,6 +290,12 @@ val iter : ((module SIZE) -> unit) -> 'n t -> unit
 val riter : ((module SIZE) -> unit) -> 'n t -> unit
 (** [riter f n] is [f n; ...; f 2; f 1]. *)
 
+val for_all : ((module SIZE) -> bool) -> 'n t -> bool
+(** @since 1.0.0 *)
+
+val exists : ((module SIZE) -> bool) -> 'n t -> bool
+(** @since 1.0.0 *)
+
 (** {2 Iterators on integers}
 
     The following functions are iterators over [[1; 2; ...; to_int n]] where
@@ -311,6 +317,12 @@ val iteri : (int -> unit) -> 'n t -> unit
 
 val riteri : (int -> unit) -> 'n t -> unit
 (** [riteri f n] is [f (to_int n); ...; f 2; f 1]. *)
+
+val for_alli : (int -> bool) -> 'n t -> bool
+(** @since 1.0.0 *)
+
+val existsi : (int -> bool) -> 'n t -> bool
+(** @since 1.0.0 *)
 
 (** {2 Checking} *)
 
