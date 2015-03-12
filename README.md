@@ -112,7 +112,7 @@ let () =
 
 `jacobi a b` solves a system of linear equations `a * x = b` where `a` is
 a n-by-n matrix, and `x` and `b` is a n-dimensional vectors. This code can
-be compiled by `ocamlfind ocamlc -linkpkg -package slap jacobi.ml`, and
+be compiled by `ocamlfind ocamlopt -package slap -linkpkg -short-paths jacobi.ml`, and
 `a.out` outputs:
 
 ```ocaml
@@ -130,7 +130,7 @@ the dimensions of `a`, `b` and `x` in the above code, e.g.,
 ```ocaml
 ...
 
-let _ =
+let () =
   let a = ... in
   let b = [%vec [7.0; 10.0]] in (* remove the last element `14.0' *)
   ...
@@ -140,10 +140,11 @@ and compile the changed code. Then OCaml reports a type error (not a runtime
 error like an exception):
 
 ```ocaml
+File "jacobi.ml", line 31, characters 19-20:
 Error: This expression has type
-         (two, 'a) Slap.D.vec = (two, float, rprec, 'a) Slap_common.vec
+         (two, 'a) vec = (two, float, rprec, 'a) Slap_vec.t
        but an expression was expected of type
-         (three, 'b) Slap.D.vec = (three, float, rprec, 'b) Slap_common.vec
+         (three, 'b) vec = (three, float, rprec, 'b) Slap_vec.t
        Type two = z s s is not compatible with type three = z s s s
        Type z is not compatible with type z s
 ```

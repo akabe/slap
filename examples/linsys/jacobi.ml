@@ -1,7 +1,7 @@
 (* jacobi.ml --- Solve a linear system by Jacobi method
 
    Compilation:
-   $ ocamlfind ocamlc -linkpkg -package slap jacobi.ml
+   $ ocamlfind ocamlopt -package slap -linkpkg -short-paths jacobi.ml
  *)
 
 open Slap.Io
