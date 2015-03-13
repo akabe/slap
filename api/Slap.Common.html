@@ -11,11 +11,22 @@
 <link title="Index of values" rel=Appendix href="index_values.html">
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
-<link title="Slap" rel="Chapter" href="Slap.html"><link title="Flags" rel="Section" href="#2_Flags">
+<link title="Slap" rel="Chapter" href="Slap.html">
+<link title="Slap_misc" rel="Chapter" href="Slap_misc.html">
+<link title="Slap_common" rel="Chapter" href="Slap_common.html">
+<link title="Slap_size" rel="Chapter" href="Slap_size.html">
+<link title="Slap_vec" rel="Chapter" href="Slap_vec.html">
+<link title="Slap_mat" rel="Chapter" href="Slap_mat.html">
+<link title="Slap_io" rel="Chapter" href="Slap_io.html">
+<link title="Slap_S" rel="Chapter" href="Slap_S.html">
+<link title="Slap_D" rel="Chapter" href="Slap_D.html">
+<link title="Slap_C" rel="Chapter" href="Slap_C.html">
+<link title="Slap_Z" rel="Chapter" href="Slap_Z.html"><link title="Flags" rel="Section" href="#2_Flags">
 <link title="Integer vectors" rel="Section" href="#2_Integervectors">
+<link title="Utilities" rel="Section" href="#2_Utilities">
 <link title="Transpose flags" rel="Subsection" href="#3_Transposeflags">
 <link title="Direction of matrix multiplication" rel="Subsection" href="#3_Directionofmatrixmultiplication">
-<link title="Matrix norms" rel="Subsection" href="#3_Matrixnorms">
+<link title="Slap_Mat.Trix norms" rel="Subsection" href="#3_SlapMatTrixnorms">
 <link title="SVD computation flags" rel="Subsection" href="#3_SVDcomputationflags">
 <title>Slap.Common</title>
 </head>
@@ -26,8 +37,8 @@
 </div>
 <h1>Module <a href="type_Slap.Common.html">Slap.Common</a></h1>
 
-<pre><span class="keyword">module</span> Common: <code class="code">sig</code> <a href="Slap.Common.html">..</a> <code class="code">end</code></pre><div class="info module top">
-Types, flags and functions common to all precision dependent modules.<br>
+<pre><span class="keyword">module</span> Common: <code class="type"><a href="Slap_common.html">Slap_common</a></code></pre><div class="info module top">
+Types, flags and functions commonly used in precision dependent modules.<br>
 </div>
 <hr width="100%">
 <br>
@@ -44,12 +55,12 @@ Types, flags and functions common to all precision dependent modules.<br>
 <pre><span id="TYPEtransNT"><span class="keyword">type</span> <code class="type"></code>transNT</span> </pre>
 
 
-<pre><span id="TYPEtrans2"><span class="keyword">type</span> <code class="type">'a</code> trans2</span> = <code class="type">('a, <a href="Slap.Common.html#TYPEtransNT">transNT</a>) <a href="Slap.Common.html#TYPEtrans">trans</a></code> </pre>
+<pre><span id="TYPEtrans2"><span class="keyword">type</span> <code class="type">'a</code> trans2</span> = <code class="type">('a, <a href="Slap_common.html#TYPEtransNT">transNT</a>) <a href="Slap_common.html#TYPEtrans">trans</a></code> </pre>
 <div class="info ">
 Types of transpose flags for real vectors or matrices.
  Values of this type are<ul>
-<li><a href="Slap.Common.html#VALnormal"><code class="code">Slap.Common.normal</code></a> and</li>
-<li><a href="Slap.Common.html#VALtrans"><code class="code">Slap.Common.trans</code></a>.</li>
+<li><a href="Slap_common.html#VALnormal"><code class="code">Slap_common.normal</code></a> and</li>
+<li><a href="Slap_common.html#VALtrans"><code class="code">Slap_common.trans</code></a>.</li>
 </ul>
 <br>
 </div>
@@ -58,27 +69,27 @@ Types of transpose flags for real vectors or matrices.
 <pre><span id="TYPEtransNTC"><span class="keyword">type</span> <code class="type"></code>transNTC</span> </pre>
 
 
-<pre><span id="TYPEtrans3"><span class="keyword">type</span> <code class="type">'a</code> trans3</span> = <code class="type">('a, <a href="Slap.Common.html#TYPEtransNTC">transNTC</a>) <a href="Slap.Common.html#TYPEtrans">trans</a></code> </pre>
+<pre><span id="TYPEtrans3"><span class="keyword">type</span> <code class="type">'a</code> trans3</span> = <code class="type">('a, <a href="Slap_common.html#TYPEtransNTC">transNTC</a>) <a href="Slap_common.html#TYPEtrans">trans</a></code> </pre>
 <div class="info ">
 Types of transpose flags for complex vectors or matrices.
  Values of this type are<ul>
-<li><a href="Slap.Common.html#VALnormal"><code class="code">Slap.Common.normal</code></a>,</li>
-<li><a href="Slap.Common.html#VALtrans"><code class="code">Slap.Common.trans</code></a> and</li>
-<li><a href="Slap.Common.html#VALconjtr"><code class="code">Slap.Common.conjtr</code></a>.</li>
+<li><a href="Slap_common.html#VALnormal"><code class="code">Slap_common.normal</code></a>,</li>
+<li><a href="Slap_common.html#VALtrans"><code class="code">Slap_common.trans</code></a> and</li>
+<li><a href="Slap_common.html#VALconjtr"><code class="code">Slap_common.conjtr</code></a>.</li>
 </ul>
 <br>
 </div>
 
 
-<pre><span id="VALnormal"><span class="keyword">val</span> normal</span> : <code class="type">(('m, 'n, 'num, 'prec, 'cd) <a href="Slap.Mat.html#TYPEt">Slap.Mat.t</a> -><br>        ('m, 'n, 'num, 'prec, 'cd) <a href="Slap.Mat.html#TYPEt">Slap.Mat.t</a>, 'a)<br>       <a href="Slap.Common.html#TYPEtrans">trans</a></code></pre><div class="info ">
+<pre><span id="VALnormal"><span class="keyword">val</span> normal</span> : <code class="type">(('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a> -><br>        ('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a>, 'a)<br>       <a href="Slap_common.html#TYPEtrans">trans</a></code></pre><div class="info ">
 Non-transposed matrix.<br>
 </div>
 
-<pre><span id="VALtrans"><span class="keyword">val</span> trans</span> : <code class="type">(('m, 'n, 'num, 'prec, 'cd) <a href="Slap.Mat.html#TYPEt">Slap.Mat.t</a> -><br>        ('n, 'm, 'num, 'prec, 'cd) <a href="Slap.Mat.html#TYPEt">Slap.Mat.t</a>, 'a)<br>       <a href="Slap.Common.html#TYPEtrans">trans</a></code></pre><div class="info ">
+<pre><span id="VALtrans"><span class="keyword">val</span> trans</span> : <code class="type">(('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a> -><br>        ('n, 'm, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a>, 'a)<br>       <a href="Slap_common.html#TYPEtrans">trans</a></code></pre><div class="info ">
 Transpose of a matrix.<br>
 </div>
 
-<pre><span id="VALconjtr"><span class="keyword">val</span> conjtr</span> : <code class="type">(('m, 'n, 'num, 'prec, 'cd) <a href="Slap.Mat.html#TYPEt">Slap.Mat.t</a> -><br>        ('n, 'm, 'num, 'prec, 'cd) <a href="Slap.Mat.html#TYPEt">Slap.Mat.t</a>)<br>       <a href="Slap.Common.html#TYPEtrans3">trans3</a></code></pre><div class="info ">
+<pre><span id="VALconjtr"><span class="keyword">val</span> conjtr</span> : <code class="type">(('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a> -><br>        ('n, 'm, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a>)<br>       <a href="Slap_common.html#TYPEtrans3">trans3</a></code></pre><div class="info ">
 Conjugate transpose of a matrix.<br>
 </div>
 <br>
@@ -87,22 +98,22 @@ Conjugate transpose of a matrix.<br>
 <pre><span id="TYPEside"><span class="keyword">type</span> <code class="type">(+'k, +'m, +'n)</code> side</span> </pre>
 <div class="info ">
 <code class="code">('k, 'm, 'n) side</code> is the type of left- and right-multiplication flags.
- The type parameters <code class="code">'k</code>, <code class="code">'m</code> and <code class="code">'n</code> correspond to dimensions of two
- multiplied matrices: Let <code class="code">A</code> be a <code class="code">'k</code>-by-<code class="code">'k</code> square matrix and <code class="code">B</code> be
- a <code class="code">'m</code>-by-<code class="code">'n</code> general matrix.<ul>
+    The type parameters <code class="code">'k</code>, <code class="code">'m</code> and <code class="code">'n</code> correspond to dimensions of two
+    multiplied matrices: Let <code class="code">A</code> be a <code class="code">'k</code>-by-<code class="code">'k</code> square matrix
+    and <code class="code">B</code> be a <code class="code">'m</code>-by-<code class="code">'n</code> general matrix.<ul>
 <li>When <code class="code">A</code> is multiplied from the left by <code class="code">B</code> (i.e., <code class="code">A*B</code>), <code class="code">'k</code> is equal to
-   <code class="code">'m</code>; therefore the type of <a href="Slap.Common.html#VALleft"><code class="code">Slap.Common.left</code></a> is <code class="code">('m, 'm, 'n) side</code>.</li>
+   <code class="code">'m</code>; therefore the type of <a href="Slap_common.html#VALleft"><code class="code">Slap_common.left</code></a> is <code class="code">('m, 'm, 'n) side</code>.</li>
 <li>Conversely, if <code class="code">A</code> is right-multiplied by <code class="code">B</code> (i.e., <code class="code">B*A</code>), <code class="code">'k</code> is equal to
-   <code class="code">'n</code>. Thus, the flag <a href="Slap.Common.html#VALright"><code class="code">Slap.Common.right</code></a> is given the type
+   <code class="code">'n</code>. Thus, the flag <a href="Slap_common.html#VALright"><code class="code">Slap_common.right</code></a> is given the type
    <code class="code">('n, 'm, 'n) side</code>.</li>
 </ul>
 <br>
 </div>
 
 
-<pre><span id="VALleft"><span class="keyword">val</span> left</span> : <code class="type">('m, 'm, 'n) <a href="Slap.Common.html#TYPEside">side</a></code></pre>
-<pre><span id="VALright"><span class="keyword">val</span> right</span> : <code class="type">('n, 'm, 'n) <a href="Slap.Common.html#TYPEside">side</a></code></pre><br>
-<h3 id="3_Matrixnorms">Matrix norms</h3><br>
+<pre><span id="VALleft"><span class="keyword">val</span> left</span> : <code class="type">('m, 'm, 'n) <a href="Slap_common.html#TYPEside">side</a></code></pre>
+<pre><span id="VALright"><span class="keyword">val</span> right</span> : <code class="type">('n, 'm, 'n) <a href="Slap_common.html#TYPEside">side</a></code></pre><br>
+<h3 id="3_SlapMatTrixnorms">Slap_Mat.Trix norms</h3><br>
 
 <pre><span id="TYPEnorm"><span class="keyword">type</span> <code class="type">(+'a, +'tag)</code> norm</span> </pre>
 
@@ -110,22 +121,22 @@ Conjugate transpose of a matrix.<br>
 <pre><span id="TYPEnorm2_tag"><span class="keyword">type</span> <code class="type"></code>norm2_tag</span> </pre>
 
 
-<pre><span id="TYPEnorm2"><span class="keyword">type</span> <code class="type">'a</code> norm2</span> = <code class="type">('a, <a href="Slap.Common.html#TYPEnorm2_tag">norm2_tag</a>) <a href="Slap.Common.html#TYPEnorm">norm</a></code> </pre>
+<pre><span id="TYPEnorm2"><span class="keyword">type</span> <code class="type">'a</code> norm2</span> = <code class="type">('a, <a href="Slap_common.html#TYPEnorm2_tag">norm2_tag</a>) <a href="Slap_common.html#TYPEnorm">norm</a></code> </pre>
 <div class="info ">
-Values of this type are <a href="Slap.Common.html#VALnorm_1"><code class="code">Slap.Common.norm_1</code></a> and <a href="Slap.Common.html#VALnorm_inf"><code class="code">Slap.Common.norm_inf</code></a>.<br>
+Values of this type are <a href="Slap_common.html#VALnorm_1"><code class="code">Slap_common.norm_1</code></a> and <a href="Slap_common.html#VALnorm_inf"><code class="code">Slap_common.norm_inf</code></a>.<br>
 </div>
 
 
 <pre><span id="TYPEnorm4_tag"><span class="keyword">type</span> <code class="type"></code>norm4_tag</span> </pre>
 
 
-<pre><span id="TYPEnorm4"><span class="keyword">type</span> <code class="type">'a</code> norm4</span> = <code class="type">('a, <a href="Slap.Common.html#TYPEnorm4_tag">norm4_tag</a>) <a href="Slap.Common.html#TYPEnorm">norm</a></code> </pre>
+<pre><span id="TYPEnorm4"><span class="keyword">type</span> <code class="type">'a</code> norm4</span> = <code class="type">('a, <a href="Slap_common.html#TYPEnorm4_tag">norm4_tag</a>) <a href="Slap_common.html#TYPEnorm">norm</a></code> </pre>
 <div class="info ">
 Values of this type are<ul>
-<li><a href="Slap.Common.html#VALnorm_1"><code class="code">Slap.Common.norm_1</code></a>,</li>
-<li><a href="Slap.Common.html#VALnorm_inf"><code class="code">Slap.Common.norm_inf</code></a>,</li>
-<li><a href="Slap.Common.html#VALnorm_amax"><code class="code">Slap.Common.norm_amax</code></a> and</li>
-<li><a href="Slap.Common.html#VALnorm_frob"><code class="code">Slap.Common.norm_frob</code></a>.</li>
+<li><a href="Slap_common.html#VALnorm_1"><code class="code">Slap_common.norm_1</code></a>,</li>
+<li><a href="Slap_common.html#VALnorm_inf"><code class="code">Slap_common.norm_inf</code></a>,</li>
+<li><a href="Slap_common.html#VALnorm_amax"><code class="code">Slap_common.norm_amax</code></a> and</li>
+<li><a href="Slap_common.html#VALnorm_frob"><code class="code">Slap_common.norm_frob</code></a>.</li>
 </ul>
 <br>
 </div>
@@ -134,28 +145,28 @@ Values of this type are<ul>
 <pre><span id="TYPEnorm_1"><span class="keyword">type</span> <code class="type"></code>norm_1</span> </pre>
 
 
-<pre><span id="VALnorm_1"><span class="keyword">val</span> norm_1</span> : <code class="type">(<a href="Slap.Common.html#TYPEnorm_1">norm_1</a>, 'a) <a href="Slap.Common.html#TYPEnorm">norm</a></code></pre><div class="info ">
+<pre><span id="VALnorm_1"><span class="keyword">val</span> norm_1</span> : <code class="type">(<a href="Slap_common.html#TYPEnorm_1">norm_1</a>, 'a) <a href="Slap_common.html#TYPEnorm">norm</a></code></pre><div class="info ">
 1-norm of a matrix (maximum column sum).<br>
 </div>
 
 <pre><span id="TYPEnorm_inf"><span class="keyword">type</span> <code class="type"></code>norm_inf</span> </pre>
 
 
-<pre><span id="VALnorm_inf"><span class="keyword">val</span> norm_inf</span> : <code class="type">(<a href="Slap.Common.html#TYPEnorm_inf">norm_inf</a>, 'a) <a href="Slap.Common.html#TYPEnorm">norm</a></code></pre><div class="info ">
+<pre><span id="VALnorm_inf"><span class="keyword">val</span> norm_inf</span> : <code class="type">(<a href="Slap_common.html#TYPEnorm_inf">norm_inf</a>, 'a) <a href="Slap_common.html#TYPEnorm">norm</a></code></pre><div class="info ">
 Infinity-norm of a matrix (maximum row sum).<br>
 </div>
 
 <pre><span id="TYPEnorm_amax"><span class="keyword">type</span> <code class="type"></code>norm_amax</span> </pre>
 
 
-<pre><span id="VALnorm_amax"><span class="keyword">val</span> norm_amax</span> : <code class="type">(<a href="Slap.Common.html#TYPEnorm_amax">norm_amax</a>, <a href="Slap.Common.html#TYPEnorm4_tag">norm4_tag</a>) <a href="Slap.Common.html#TYPEnorm">norm</a></code></pre><div class="info ">
+<pre><span id="VALnorm_amax"><span class="keyword">val</span> norm_amax</span> : <code class="type">(<a href="Slap_common.html#TYPEnorm_amax">norm_amax</a>, <a href="Slap_common.html#TYPEnorm4_tag">norm4_tag</a>) <a href="Slap_common.html#TYPEnorm">norm</a></code></pre><div class="info ">
 Largest absolute value of a matrix. (not a matrix norm)<br>
 </div>
 
 <pre><span id="TYPEnorm_frob"><span class="keyword">type</span> <code class="type"></code>norm_frob</span> </pre>
 
 
-<pre><span id="VALnorm_frob"><span class="keyword">val</span> norm_frob</span> : <code class="type">(<a href="Slap.Common.html#TYPEnorm_frob">norm_frob</a>, <a href="Slap.Common.html#TYPEnorm4_tag">norm4_tag</a>) <a href="Slap.Common.html#TYPEnorm">norm</a></code></pre><div class="info ">
+<pre><span id="VALnorm_frob"><span class="keyword">val</span> norm_frob</span> : <code class="type">(<a href="Slap_common.html#TYPEnorm_frob">norm_frob</a>, <a href="Slap_common.html#TYPEnorm4_tag">norm4_tag</a>) <a href="Slap_common.html#TYPEnorm">norm</a></code></pre><div class="info ">
 Frobenius norm of a matrix.<br>
 </div>
 <br>
@@ -164,17 +175,35 @@ Frobenius norm of a matrix.<br>
 <pre><span id="TYPEsvd_job"><span class="keyword">type</span> <code class="type">(+'a, +'b, +'c, +'d, +'e)</code> svd_job</span> </pre>
 
 
-<pre><span id="VALsvd_all"><span class="keyword">val</span> svd_all</span> : <code class="type">('a, 'a, 'b, 'c, 'd) <a href="Slap.Common.html#TYPEsvd_job">svd_job</a></code></pre>
-<pre><span id="VALsvd_top"><span class="keyword">val</span> svd_top</span> : <code class="type">('b, 'a, 'b, 'c, 'd) <a href="Slap.Common.html#TYPEsvd_job">svd_job</a></code></pre>
-<pre><span id="VALsvd_overwrite"><span class="keyword">val</span> svd_overwrite</span> : <code class="type">('c, 'a, 'b, 'c, 'd) <a href="Slap.Common.html#TYPEsvd_job">svd_job</a></code></pre>
-<pre><span id="VALsvd_no"><span class="keyword">val</span> svd_no</span> : <code class="type">('d, 'a, 'b, 'c, 'd) <a href="Slap.Common.html#TYPEsvd_job">svd_job</a></code></pre><br>
+<pre><span id="VALsvd_all"><span class="keyword">val</span> svd_all</span> : <code class="type">('a, 'a, 'b, 'c, 'd) <a href="Slap_common.html#TYPEsvd_job">svd_job</a></code></pre>
+<pre><span id="VALsvd_top"><span class="keyword">val</span> svd_top</span> : <code class="type">('b, 'a, 'b, 'c, 'd) <a href="Slap_common.html#TYPEsvd_job">svd_job</a></code></pre>
+<pre><span id="VALsvd_overwrite"><span class="keyword">val</span> svd_overwrite</span> : <code class="type">('c, 'a, 'b, 'c, 'd) <a href="Slap_common.html#TYPEsvd_job">svd_job</a></code></pre>
+<pre><span id="VALsvd_no"><span class="keyword">val</span> svd_no</span> : <code class="type">('d, 'a, 'b, 'c, 'd) <a href="Slap_common.html#TYPEsvd_job">svd_job</a></code></pre><br>
 <h2 id="2_Integervectors">Integer vectors</h2><br>
 
-<pre><span id="TYPEint_vec"><span class="keyword">type</span> <code class="type">('n, 'cnt_or_dsc)</code> int_vec</span> = <code class="type">('n, int, Bigarray.int_elt, 'cnt_or_dsc) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a></code> </pre>
+<pre><span id="TYPEint_vec"><span class="keyword">type</span> <code class="type">('n, 'cnt_or_dsc)</code> int_vec</span> = <code class="type">('n, int, Bigarray.int_elt, 'cnt_or_dsc) <a href="Slap_vec.html#TYPEt">Slap_vec.t</a></code> </pre>
 
 
-<pre><span id="VALcreate_int_vec"><span class="keyword">val</span> create_int_vec</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('n, 'cnt) <a href="Slap.Common.html#TYPEint_vec">int_vec</a></code></pre>
-<pre><span id="TYPEint32_vec"><span class="keyword">type</span> <code class="type">('n, 'cnt_or_dsc)</code> int32_vec</span> = <code class="type">('n, int32, Bigarray.int32_elt, 'cnt_or_dsc) <a href="Slap.Vec.html#TYPEt">Slap.Vec.t</a></code> </pre>
+<pre><span id="VALcreate_int_vec"><span class="keyword">val</span> create_int_vec</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('n, 'cnt) <a href="Slap_common.html#TYPEint_vec">int_vec</a></code></pre>
+<pre><span id="TYPEint32_vec"><span class="keyword">type</span> <code class="type">('n, 'cnt_or_dsc)</code> int32_vec</span> = <code class="type">('n, int32, Bigarray.int32_elt, 'cnt_or_dsc) <a href="Slap_vec.html#TYPEt">Slap_vec.t</a></code> </pre>
 
 
-<pre><span id="VALcreate_int32_vec"><span class="keyword">val</span> create_int32_vec</span> : <code class="type">'n <a href="Slap.Size.html#TYPEt">Slap.Size.t</a> -> ('n, 'cnt) <a href="Slap.Common.html#TYPEint32_vec">int32_vec</a></code></pre></body></html>
+<pre><span id="VALcreate_int32_vec"><span class="keyword">val</span> create_int32_vec</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('n, 'cnt) <a href="Slap_common.html#TYPEint32_vec">int32_vec</a></code></pre><br>
+<h2 id="2_Utilities">Utilities</h2><br>
+
+<pre><span id="VALget_transposed_dim"><span class="keyword">val</span> get_transposed_dim</span> : <code class="type">(('m, 'n, 'num, 'prec, 'a) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a> -> ('k, 'l, 'num, 'prec, 'b) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a>,<br>        'c)<br>       <a href="Slap_common.html#TYPEtrans">trans</a> -><br>       'm <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> 'k <a href="Slap_size.html#TYPEt">Slap_size.t</a> * 'l <a href="Slap_size.html#TYPEt">Slap_size.t</a></code></pre><div class="info ">
+<code class="code">get_transposed_dim trans m n</code> returns<ul>
+<li><code class="code">(m * n)</code> if <code class="code">trans</code> is <a href="Slap_common.html#VALnormal"><code class="code">Slap_common.normal</code></a>;</li>
+<li><code class="code">(n * m)</code> if <code class="code">trans</code> is <a href="Slap_common.html#VALtrans"><code class="code">Slap_common.trans</code></a> or <a href="Slap_common.html#VALconjtr"><code class="code">Slap_common.conjtr</code></a>.</li>
+</ul>
+<br>
+</div>
+
+<pre><span id="VALlacaml_trans2"><span class="keyword">val</span> lacaml_trans2</span> : <code class="type">('a, 'b) <a href="Slap_common.html#TYPEtrans">trans</a> -> Lacaml.Common.trans2</code></pre>
+<pre><span id="VALlacaml_trans3"><span class="keyword">val</span> lacaml_trans3</span> : <code class="type">('a, 'b) <a href="Slap_common.html#TYPEtrans">trans</a> -> [ `C | `N | `T ]</code></pre>
+<pre><span id="VALlacaml_side"><span class="keyword">val</span> lacaml_side</span> : <code class="type">('a, 'b, 'c) <a href="Slap_common.html#TYPEside">side</a> -> Lacaml.Common.side</code></pre>
+<pre><span id="VALlacaml_norm2"><span class="keyword">val</span> lacaml_norm2</span> : <code class="type">('a, 'b) <a href="Slap_common.html#TYPEnorm">norm</a> -> Lacaml.Common.norm2</code></pre>
+<pre><span id="VALlacaml_norm4"><span class="keyword">val</span> lacaml_norm4</span> : <code class="type">('a, 'b) <a href="Slap_common.html#TYPEnorm">norm</a> -> Lacaml.Common.norm4</code></pre>
+<pre><span id="VALlacaml_norm2_opt"><span class="keyword">val</span> lacaml_norm2_opt</span> : <code class="type">('a, 'b) <a href="Slap_common.html#TYPEnorm">norm</a> option -> Lacaml.Common.norm2 option</code></pre>
+<pre><span id="VALlacaml_norm4_opt"><span class="keyword">val</span> lacaml_norm4_opt</span> : <code class="type">('a, 'b) <a href="Slap_common.html#TYPEnorm">norm</a> option -> Lacaml.Common.norm4 option</code></pre>
+<pre><span id="VALlacaml_svd_job"><span class="keyword">val</span> lacaml_svd_job</span> : <code class="type">('a, 'b, 'c, 'd, 'e) <a href="Slap_common.html#TYPEsvd_job">svd_job</a> -> Lacaml.Common.svd_job</code></pre></body></html>

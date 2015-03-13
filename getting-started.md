@@ -41,7 +41,7 @@ open Slap.Io
 open Slap.D
 
 let () =
-  let x = Vec.init three (fun i -> float_of_int i) in (* Create a three-dimensional vector. *)
+  let x = [%vec [1.0; 2.0; 3.0]] in (* Create a three-dimensional vector. *)
   Format.printf "x = ( %a)@." pp_rfvec x (* Print the vector *)
 ```
 
@@ -51,13 +51,17 @@ We will explain the program after telling you how to compile it.
 You can byte-compile this program with a command like this:
 
 ```
-$ ocamlfind ocamlc -linkpkg -package slap example01.ml
+$ ocamlfind ocamlc -package slap -linkpkg -short-paths example01.ml
 ```
 
-Similarily, you can native-compile it as follows:
+`-short-paths` option makes type error messages more readable.
+
+Similarily, you can native-compile it as follows. We recommend to use
+native-compilation because byte-compiled programs are much slower than
+native-compiled ones.
 
 ```
-$ ocamlfind ocamlopt -linkpkg -package slap example01.ml
+$ ocamlfind ocamlopt -package slap -linkpkg -short-paths example01.ml
 ```
 
 When you run the compiled program, it shows the following output:
@@ -86,9 +90,9 @@ Let's try `example01.ml` on the toplevel environment.
 First, create the vector `x`:
 
 ```ocaml
-# let x = Vec.init three (fun i -> float_of_int i);;
-val x : (z s s s, 'a) vec = R1 R2 R3
-                             1  2  3
+# let x = [%vec [1.0; 2.0; 3.0]];;
+val x : (three, 'a) vec = R1 R2 R3
+                           1  2  3
 ```
 
 Next, print the vector:
@@ -116,15 +120,11 @@ In `example01.ml`, we open `Slap.D`, thus, elements in vectors (and matrices)
 are 64-bit real numbers. You can also use 32-bit or complex numbers by opening
 other corresponding modules.
 
-`Vec.init n f` creates a vector of the given dimension `n` and initializes
-the i-th element in the vector by calling `f i`.
-So `Vec.init three (fun i -> float_of_int i)` is the same as
-`(float_of_int 1, float_of_int 2, float_of_int 3)`, i.e., `(1.0, 2.0, 3.0)`
-where `(...)` is notation of a vector, not a tuple.
-`three` is a special value for dimensions of vectors and matrices.
-Sizes are provided by module `Slap.Size`.
+`[%vec [x1; x2; ...; xN]]` is the `N`-dimensional vector whose elements are
+`x1`, `x2`, ..., and `xN`. Thus `[%vec [1.0; 2.0; 3.0]]` is three-dimensional
+vector $(1.0, 2.0, 3.0)$.
 
-Last, `Slap.Io` is a module providing pretty printers for vectors and matrices,
+`Slap.Io` is a module providing pretty printers for vectors and matrices,
 e.g., `Slap.Io.pp_rfvec` is a pretty printer for real row vectors. When you
 print a vector (or a matrix), you use `%a` in a format string and pass a pretty
 printer and a vector:
@@ -139,7 +139,7 @@ http://akabe.github.com/slap/api/Slap.Io.html .
 
 ### Demonstration of static size checking
 
-Have you tried the [demonstration of static size checking](index.html#demo) on
-the home? If not so, we suggest you to try it because the most important feature
+Have you tried the [demonstration of static size checking](index.html#demo)?
+If not so, we suggest you to try it because the most important feature
 of SLAP is **static size checking** for vector and matrix operations.
-SLAP detects dimensional inconsistency at compile time and helps you debug.
+SLAP detects dimensional inconsistency at compile time and helps your debug.

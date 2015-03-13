@@ -12,17 +12,21 @@ Vector types
 Consider the type of the following vector `x`.
 
 ```ocaml
-# let x = Vec.init three (fun i -> float_of_int i);;
-val x : (z s s s, 'a) vec = R1 R2 R3
-                             1  2  3
+# #use "topfind";;
+# #require "slap.top";;
+# open Slap.Size;;
+# open Slap.D;;
+# let x = [%vec [1.0; 2.0; 3.0]];;
+val x : (three, 'a) vec = R1 R2 R3
+                           1  2  3
 ```
 
 The vector has a curious type:
 
 - The first type parameter of the vector type represents the dimension of a
-  vector. The types `z` and `'n s` correspond to zero and `'n + 1`,
-  respectively. Thereby, `z s s s` represents 0+1+1+1 = 3, thus
-  `(z s s s, 'a) vec` is the type of three-dimensional vectors. The size
+  vector. Type `three` = `Slap.Size.three` corresponds to natural number "3".
+  `three` is defined as `z s s s`: the types `z` and `'n s` correspond to zero
+  and `'n + 1`, respectively; thereby, `z s s s` represents 0+1+1+1 = 3. The size
   information of this type parameter is used for static size checking.
 - The second type parameter is a "contiguous or discrete" flag. For the time
   being, you do not need to consider it because we only use contiguous
@@ -45,33 +49,48 @@ size to `Vec.init` as a dimension instead of an integer.
 Creating vectors
 ----------------
 
-We have already explained `Vec.init`, which creates a vector initialized by a
-given function. SLAP supports other functions to create vectors. The simplest
-function is `Vec.create`. It creates an uninitialized vector. You need to
-initialize the elements of a returned vector by hand. It is effective when you
-allocate working or temporary memory because there is no overhead for
-initialization.
+You can create a vector by syntax `[%vec [x1; x2; ...; xN]]` as stated above:
 
-If you initialize all elements in a vector by the same value, `Vec.make` is
-useful:
+```ocaml
+# [%vec [1.0; 1.0; 2.0; 3.0; 5.0; 8.0]];;
+- : (six, 'a) vec = R1 R2 R3 R4 R5 R6
+                     1  1  2  3  5  8
+```
+
+Instead of the syntax, you can use functions to create a vector.
+For example, `Vec.make` returns a vector initialized by the given value.
 
 ```ocaml
 # Vec.make three 42.0;;
-- : (z s s s, 'a) vec = R1 R2 R3
-                        42 42 42
+- : (three, 'a) vec = R1 R2 R3
+                      42 42 42
 ```
 
-This is faster than `Vec.init` for large vectors. When the initial value is zero
-or one, you can use `Vec.make0` or `Vec.make1` instead of `Vec.make`. They
-correspond to `zeros` or `ones` in MatLab.
+When the initial value is zero or one, you can use `Vec.make0` or `Vec.make1`
+instead of `Vec.make`. They correspond to `zeros` or `ones` in MatLab.
 
 ```ocaml
 # Vec.make0 three;;
-- : (z s s s, 'a) vec = R1 R2 R3
-                         0  0  0
+- : (three, 'a) vec = R1 R2 R3
+                       0  0  0
 # Vec.make1 three;;
-- : (z s s s, 'a) vec = R1 R2 R3
-                         1  1  1
+- : (three, 'a) vec = R1 R2 R3
+                       1  1  1
+```
+
+`Vec.init n f` creates a vector of the given dimension `n` and initializes the
+`i`-th element in the vector by calling `f i`, i.e., `[%vec [f 1; f 2; ...; f n]]`:
+
+```ocaml
+# Vec.init three (fun i -> float_of_int i *. 2.0);;
+- : (three, 'a) vec = R1 R2 R3
+                       2  4  6
+```
+
+The above code is the same as the following one.
+
+```ocaml
+[%vec [float_of_int 1 *. 2.0; float_of_int 2 *. 2.0; float_of_int 3 *. 2.0]]
 ```
 
 You can create a randomly-initialized vector using `Vec.random`.
@@ -86,6 +105,19 @@ The elements of a created vector are in interval `[from, from + range]`.
 Arguments `from` and `range` are optional: if they are omitted, `-1.0` and `2.0`
 are passed, respectively.
 
+`three` (= `Slap.Size.three`), which is passed to above functions, is not an ordinary
+integer. See the type of `three`.
+
+```ocaml
+# three;;
+- : three t = 3
+```
+
+The value is three, but its type is `'n t` (= `'n Slap.Size.t`), not `int`. This is
+a special value to represent a size, i.e., a natural number as dimensions of vectors
+and matrices. The above type `three t` is the type of dimension "3" and terms (i.e.,
+expressions) evaluated to "3".
+
 Vector-vector operations
 ------------------------
 
@@ -95,15 +127,15 @@ We introduce several major element-wise operations like arithmetic operations in
 this section. Here is an example of `Vec.add` for element-wise addition.
 
 ```ocaml
-# let x = Vec.init three (fun i -> float_of_int (10 * i));;
-val x : (z s s s, 'a) vec = R1 R2 R3
-                            10 20 30
-# let y = Vec.make1 three;;
-val y : (z s s s, 'a) vec = R1 R2 R3
-                             1  1  1
+# let x = [%vec [10.0; 20.0; 30.0]];;
+val x : (three, 'a) vec = R1 R2 R3
+                          10 20 30
+# let y = [%vec [1.0; 1.0; 1.0]];;
+val y : (three, 'a) vec = R1 R2 R3
+                           1  1  1
 # Vec.add x y;;
-- : (z s s s, 'a) vec = R1 R2 R3
-                        11 21 31
+- : (three, 'a) vec = R1 R2 R3
+                      11 21 31
 ```
 
 This is addition of two vectors in linear algebra. In addition, element-wise
@@ -112,11 +144,11 @@ subtraction `Vec.sub`, multiplication `Vec.mul`, division `Vec.div`, square root
 
 ```ocaml
 # Vec.div y x;;
-- : (z s s s, 'a) vec =  R1   R2        R3
-                        0.1 0.05 0.0333333
+- : (three, 'a) vec =  R1   R2        R3
+                      0.1 0.05 0.0333333
 # Vec.log x;;
-- : (z s s s, 'a) vec =      R1      R2     R3
-                        2.30259 2.99573 3.4012
+- : (three, 'a) vec =      R1      R2     R3
+                      2.30259 2.99573 3.4012
 ...
 ```
 
@@ -130,8 +162,8 @@ a scalar value `alpha`, and vectors `x` and `y`.
 # axpy ~alpha:0.5 ~x y;;
 - : unit = ()
 # y;;
-- : (z s s s, 'a) vec = R1 R2 R3
-                         6 11 16
+- : (three, 'a) vec = R1 R2 R3
+                       6 11 16
 ```
 
 In this case, `x` is `(10, 20, 30)` and `y` is `(1, 1, 1)`.
@@ -153,8 +185,8 @@ of `Vec.map` and `Vec.iter`.
 
 ```ocaml
 # Vec.map (fun xi -> 2.0 *. xi) x;;
-- : (z s s s, 'a) vec = R1 R2 R3
-                        20 40 60
+- : (three, 'a) vec = R1 R2 R3
+                      20 40 60
 ```
 
 `Vec.iter` calls a given function for each element in a given vector repeatedly.
@@ -222,12 +254,12 @@ Detection of dimensional inconsistency
 Let's create a three- and a four-dimensional vectors as follows.
 
 ```ocaml
-# let x = Vec.init three (fun i -> float_of_int i);;
-val x : (z s s s, 'a) vec = R1 R2 R3
-                             1  2  3
-# let z = Vec.init four (fun i -> float_of_int i);;
-val z : (z s s s s, 'a) vec = R1 R2 R3 R4
-                               1  2  3  4
+# let x = [%vec [1.0; 2.0; 3.0]];;
+val x : (three, 'a) vec = R1 R2 R3
+                           1  2  3
+# let z = [%vec [1.0; 2.0; 3.0; 4.0]];;
+val z : (four, 'a) vec = R1 R2 R3 R4
+                          1  2  3  4
 ```
 
 The types of vectors `x` and `z` are different.
@@ -238,10 +270,11 @@ Such inconsistency of dimensions causes a type error like this:
 ```ocaml
 # Vec.add x z;;
 Error: This expression has type
-(z s s s s, 'a) vec = (z s s s s, float, rprec, 'a) Slap.Vec.t
-but an expression was expected of type
-(z s s s, 'b) vec = (z s s s, float, rprec, 'b) Slap.Vec.t
-Type z s is not compatible with type z
+         (four, 'a) vec = (four, float, rprec, 'a) Slap_vec.t
+       but an expression was expected of type
+         (three, 'b) vec = (three, float, rprec, 'b) Slap_vec.t
+       Type four = z s s s s is not compatible with type three = z s s s
+       Type z s is not compatible with type z
 ```
 
 We explain the meaning of this error message. `Vec.add` has the following type.
@@ -251,7 +284,8 @@ val Vec.add : ('n, _) vec -> ('n, _) vec -> ('n, _) vec
 ```
 
 This represents the function gets two `'n`-dimensional vectors and returns a
-`'n`-dimensional vector. However `x` has type `(z s s s, 'a) vec` and `z` has
-type `(z s s s s, 'a) vec`. OCaml says that type parameter `'n` is instantiated
-to `z s s s` and `z s s s s`, but they are incompatible (i.e., different).
-Dimensional inconsistency is detected as a type error at compile time like that.
+`'n`-dimensional vector. However `x` has type `(three, 'a) vec` =
+`(z s s s, 'a) vec` and `z` has type `(four, 'a) vec` = `(z s s s s, 'a) vec`.
+OCaml says that type parameter `'n` is instantiated to `z s s s` and `z s s s s`,
+but they are incompatible (i.e., different). Dimensional inconsistency is detected
+as a type error at compile time like that.

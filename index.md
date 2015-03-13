@@ -104,9 +104,10 @@ let jacobi a b =
   loop z x0
 
 let () =
-  let a = Mat.init four four (fun i j -> let p = float_of_int (i - j) in
-                                         exp (~-. p *. p)) in
-  let b = Vec.init four (fun i -> float_of_int i) in
+  let a = [%mat [5.0, 1.0, 0.0;
+                 1.0, 3.0, 1.0;
+                 0.0, 1.0, 4.0]] in
+  let b = [%vec [7.0; 10.0; 14.0]] in
   let x = jacobi a b in
   Format.printf "a = @[%a@]@.b = @[%a@]@." pp_fmat a pp_rfvec b;
   Format.printf "x = @[%a@]@." pp_rfvec x;
@@ -122,13 +123,12 @@ $ git clone https://github.com/akabe/slap
 $ cd slap/examples/linsys/
 $ ocamlfind ocamlc -linkpkg -package slap jacobi.ml
 $ ./a.out
-a =          1  0.367879 0.0183156 0.00012341
-      0.367879         1  0.367879  0.0183156
-     0.0183156  0.367879         1   0.367879
-    0.00012341 0.0183156  0.367879          1
-b = 1 2 3 4
-x = 0.496539 1.30705 1.21131 3.53038
-a*x = 0.999998 2 3 4
+a = 5 1 0
+    1 3 1
+    0 1 4
+b = 7 10 14
+x = 1 2 3
+a*x = 7 10 14
 ```
 
 OK, vector `x` is computed correctly (since `a*x = b` is satisfied).
@@ -148,18 +148,21 @@ e.g.,
 ...
 
 let () =
-  let a = Mat.init four five (fun i j -> ...
+  let a = ... in
+  let b = [%vec [7.0; 10.0]] in (* remove the last element `14.0' *)
   ...
 ```
 
 and compile the changed code. Then OCaml reports inconsistency of dimensions:
 
 ```ocaml
+File "jacobi.ml", line 31, characters 19-20:
 Error: This expression has type
-  (z s s s s, z s s s s s, 'a) mat = (z s s s s, z s s s s s, float, rprec, 'a) Slap.Mat.t
-but an expression was expected of type
-  (z s s s s, z s s s s, 'b) mat = (z s s s s, z s s s s, float, rprec, 'b) Slap.Mat.t
-Type z s is not compatible with type z
+         (two, 'a) vec = (two, float, rprec, 'a) Slap_vec.t
+       but an expression was expected of type
+         (three, 'b) vec = (three, float, rprec, 'b) Slap_vec.t
+       Type two = z s s is not compatible with type three = z s s s
+       Type z is not compatible with type z s
 ```
 
 By using SLAP, your mistake (i.e., a bug) is captured at **compile time**!
