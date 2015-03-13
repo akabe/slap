@@ -115,13 +115,14 @@ let calc_column_width str_tbl =
 let pp_print_table ppf ~pp_end_row ~pp_end_col ~pad
                    ~idx_m ~idx_n width str_tbl =
   let last_row = idx_m.(Array.length idx_m - 1) in
+  let last_col = idx_n.(Array.length idx_n - 1) in
   let pp_print_row i row =
     Array.iteri (fun j col ->
                  let s = str_tbl.(i).(j) in
                  let d = width.(j) - String.length s in
                  pp_print_string ppf (String.make d pad);
                  pp_print_string ppf s;
-                 pp_end_col ppf ~row ~col)
+                 if last_col <> col then pp_end_col ppf ~row ~col)
                 idx_n;
     if last_row <> row then pp_end_row ppf row
   in
@@ -139,7 +140,7 @@ let pp_table ?(pp_open = default_pp_open)
              ?(ellipsis = !Context.ellipsis_default)
              ?(vertical_context = !Context.vertical_default)
              ?(horizontal_context = !Context.horizontal_default)
-             ppf pp_el m n get_el =
+             pp_el ppf m n get_el =
   if m > 0 && n > 0 then
     begin
       let pp_el ppf i j = pp_el ppf (get_el i j) in
@@ -159,32 +160,32 @@ let pp_table ?(pp_open = default_pp_open)
 let pp_vec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
                ?pp_left ?pp_right ?pad ?ellipsis
                ?vertical_context ?horizontal_context
-               ppf pp_el x =
+               pp_el ppf x =
   pp_table ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
            ?pp_left ?pp_right ?pad ?ellipsis
            ?vertical_context ?horizontal_context
-           ppf pp_el
+           pp_el ppf
            (S.__expose (Slap_vec.dim x)) 1 (fun i _ -> Slap_vec.get_dyn x i)
 
 let pp_rvec_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
                 ?pp_left ?pp_right ?pad ?ellipsis
                 ?vertical_context ?horizontal_context
-                ppf pp_el x =
+                pp_el ppf x =
   pp_table ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
            ?pp_left ?pp_right ?pad ?ellipsis
            ?vertical_context ?horizontal_context
-           ppf pp_el
+           pp_el ppf
            1 (S.__expose (Slap_vec.dim x)) (fun _ j -> Slap_vec.get_dyn x j)
 
 let pp_mat_gen ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
                ?pp_left ?pp_right ?pad ?ellipsis
                ?vertical_context ?horizontal_context
-               ppf pp_el a =
+               pp_el ppf a =
   let m, n = Slap_mat.dim a in
   pp_table ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
            ?pp_left ?pp_right ?pad ?ellipsis
            ?vertical_context ?horizontal_context
-           ppf pp_el
+           pp_el ppf
            (S.__expose m) (S.__expose n) (Slap_mat.get_dyn a)
 
 (** {2 Default pretty-printers for elements of vectors or matrices} *)
@@ -203,20 +204,20 @@ let pp_int32_el_default = ref (fun ppf -> fprintf ppf "%ld")
 type ('n, 'num, 'prec, 'cnt_or_dsc) pp_vec =
   formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) Slap_vec.t -> unit
 
-let pp_fvec ppf x = pp_vec_gen ppf (!pp_float_el_default) x
-let pp_cvec ppf x = pp_vec_gen ppf (!pp_complex_el_default) x
-let pp_ivec ppf x = pp_vec_gen ppf (!pp_int32_el_default) x
+let pp_fvec ppf x = pp_vec_gen (!pp_float_el_default) ppf x
+let pp_cvec ppf x = pp_vec_gen (!pp_complex_el_default) ppf x
+let pp_ivec ppf x = pp_vec_gen (!pp_int32_el_default) ppf x
 
-let pp_rfvec ppf x = pp_rvec_gen ppf (!pp_float_el_default) x
-let pp_rcvec ppf x = pp_rvec_gen ppf (!pp_complex_el_default) x
-let pp_rivec ppf x = pp_rvec_gen ppf (!pp_int32_el_default) x
+let pp_rfvec ppf x = pp_rvec_gen (!pp_float_el_default) ppf x
+let pp_rcvec ppf x = pp_rvec_gen (!pp_complex_el_default) ppf x
+let pp_rivec ppf x = pp_rvec_gen (!pp_int32_el_default) ppf x
 
 type ('m, 'n, 'num, 'prec, 'cnt_or_dsc) pp_mat =
   formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Slap_mat.t -> unit
 
-let pp_fmat ppf a = pp_mat_gen ppf (!pp_float_el_default) a
-let pp_cmat ppf a = pp_mat_gen ppf (!pp_complex_el_default) a
-let pp_imat ppf a = pp_mat_gen ppf (!pp_int32_el_default) a
+let pp_fmat ppf a = pp_mat_gen (!pp_float_el_default) ppf a
+let pp_cmat ppf a = pp_mat_gen (!pp_complex_el_default) ppf a
+let pp_imat ppf a = pp_mat_gen (!pp_int32_el_default) ppf a
 
 (** {2 Toplevel pretty-printers} *)
 
@@ -230,26 +231,26 @@ module Toplevel =
 
     (* Vectors *)
 
-    let gen_pp_vec ppf pp_el x =
-      pp_vec_gen ~pp_left:pp_labeled_row ppf pp_el x
+    let gen_pp_vec pp_el ppf x =
+      pp_vec_gen ~pp_left:pp_labeled_row pp_el ppf x
 
-    let pp_fvec ppf x = gen_pp_vec ppf (!pp_float_el_default) x
-    let pp_cvec ppf x = gen_pp_vec ppf (!pp_complex_el_default) x
-    let pp_ivec ppf x = gen_pp_vec ppf (!pp_int32_el_default) x
+    let pp_fvec ppf x = gen_pp_vec (!pp_float_el_default) ppf x
+    let pp_cvec ppf x = gen_pp_vec (!pp_complex_el_default) ppf x
+    let pp_ivec ppf x = gen_pp_vec (!pp_int32_el_default) ppf x
 
-    let gen_pp_rvec ppf pp_el x =
-      pp_rvec_gen ~pp_head:pp_labeled_row ppf pp_el x
+    let gen_pp_rvec pp_el ppf x =
+      pp_rvec_gen ~pp_head:pp_labeled_row pp_el ppf x
 
-    let pp_rfvec ppf x = gen_pp_rvec ppf (!pp_float_el_default) x
-    let pp_rcvec ppf x = gen_pp_rvec ppf (!pp_complex_el_default) x
-    let pp_rivec ppf x = gen_pp_rvec ppf (!pp_int32_el_default) x
+    let pp_rfvec ppf x = gen_pp_rvec (!pp_float_el_default) ppf x
+    let pp_rcvec ppf x = gen_pp_rvec (!pp_complex_el_default) ppf x
+    let pp_rivec ppf x = gen_pp_rvec (!pp_int32_el_default) ppf x
 
     (* Matrices *)
 
-    let gen_pp_mat ppf pp_el a =
-      pp_mat_gen ~pp_head:pp_labeled_col ~pp_left:pp_labeled_row ppf pp_el a
+    let gen_pp_mat pp_el ppf a =
+      pp_mat_gen ~pp_head:pp_labeled_col ~pp_left:pp_labeled_row pp_el ppf a
 
-    let pp_fmat ppf a = gen_pp_mat ppf (!pp_float_el_default) a
-    let pp_cmat ppf a = gen_pp_mat ppf (!pp_complex_el_default) a
-    let pp_imat ppf a = gen_pp_mat ppf (!pp_int32_el_default) a
+    let pp_fmat ppf a = gen_pp_mat (!pp_float_el_default) ppf a
+    let pp_cmat ppf a = gen_pp_mat (!pp_complex_el_default) ppf a
+    let pp_imat ppf a = gen_pp_mat (!pp_int32_el_default) ppf a
   end
