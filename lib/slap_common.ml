@@ -140,6 +140,6 @@ let lacaml_svd_job = identity
 
 (** {2 Internal functions} *)
 
-let check_side_dim m n k = function
+let check_side_dim k m n = function
   | `L -> S.__expose m = S.__expose k
   | `R -> S.__expose n = S.__expose k
