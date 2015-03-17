@@ -39,7 +39,7 @@ let main () =
              |> NN.append_layer ~dropout:0.5 NN.Sigmoid N.value
              |> NN.append_layer ~dropout:0.2 NN.Sigmoid two in
   NN.init_weights nnet;
-  for i = 1 to 50000 do
+  for i = 1 to 10000 do
     NN.minibatch_train ~eta:0.5 ~check:false nnet 20 training_set;
     if i mod 1000 = 0
     then printf "Loop #%d: training error = %g, test error = %g@."

@@ -20,7 +20,7 @@ Homepage:               https://github.com/akabe/slap
 Plugins:                META (0.4), StdFiles (0.4), DevFiles (0.4)
 XStdFilesAUTHORS:       false
 XStdFilesREADME:        false
-BuildTools:             ocamlbuild,ocamldoc
+BuildTools:             ocamlbuild,ocamldoc,cppo
 
 PreBuildCommand:        ocaml gen_config.ml; \
                         cppo lib/slap_S.cppo.mli > lib/slap_S.mli; \

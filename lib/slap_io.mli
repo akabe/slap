@@ -72,14 +72,14 @@ val pp_table :
   ?ellipsis:string ->
   ?vertical_context:Context.t option ->
   ?horizontal_context:Context.t option ->
-  formatter ->
   (formatter -> 'el -> unit) ->
+  formatter ->
   int -> int ->
   (int -> int -> 'el) -> unit
 (** [pp_table
        ?pp_open ?pp_close ?pp_head ?pp_foot ?pp_end_row ?pp_end_col
        ?pp_left ?pp_right ?pad ?ellipsis ?vertical_context ?horizontal_context
-       ppf pp_el n_rows n_cols get_el]
+       pp_el ppf n_rows n_cols get_el]
 
     Generic printing of tables.
 
@@ -137,8 +137,8 @@ val pp_vec_gen :
   ?ellipsis:string ->
   ?vertical_context:Context.t option ->
   ?horizontal_context:Context.t option ->
-  formatter ->
   (formatter -> 'num -> unit) ->
+  formatter ->
   ('n, 'num, 'prec, 'cnt_or_dsc) Slap_vec.t -> unit
 (** A generator of pretty printers for (column) vectors. *)
 
@@ -155,8 +155,8 @@ val pp_rvec_gen :
   ?ellipsis:string ->
   ?vertical_context:int option ->
   ?horizontal_context:int option ->
-  formatter ->
   (formatter -> 'num -> unit) ->
+  formatter ->
   ('n, 'num, 'prec, 'cnt_or_dsc) Slap_vec.t -> unit
 (** A generator of pretty printers for row vectors. *)
 
@@ -173,8 +173,8 @@ val pp_mat_gen :
   ?ellipsis:string ->
   ?vertical_context:Context.t option ->
   ?horizontal_context:Context.t option ->
-  formatter ->
   (formatter -> 'num -> unit) ->
+  formatter ->
   ('m, 'n, 'num, 'prec, 'cnt_or_dsc) Slap_mat.t -> unit
 (** A generator of pretty printers for matrices. *)
 

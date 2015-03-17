@@ -19,9 +19,9 @@
 
 let pp_num = I.pp_num
 
-let pp_vec ppf x = Slap_io.pp_vec_gen ppf pp_num x
+let pp_vec ppf x = Slap_io.pp_vec_gen pp_num ppf x
 
-let pp_mat ppf a = Slap_io.pp_mat_gen ppf pp_num a
+let pp_mat ppf a = Slap_io.pp_mat_gen pp_num ppf a
 
 (** {2 BLAS interface} *)
 
