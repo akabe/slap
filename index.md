@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Sized Linear Algebra Library (SLAP)
+title: Sized Linear Algebra Package (SLAP)
 ---
 
 What's SLAP?
