@@ -22,7 +22,7 @@
 (** {3 Level 1} *)
 
 let dot ~x y =
-  Vec.wrap2 (fun ?n ?ofsx ?incx x -> I.dot ?n ?ofsx ?incx ~x) x y
+  Vec.wrap2 (fun ?n ?ofsx ?incx x -> I.dot ?n ?ofsx ?incx x) x y
 
 let asum x = Vec.wrap1 I.asum x
 

@@ -37,7 +37,7 @@ let copy ?y x = Vec.wrap2opt I.copy ?y x
 let nrm2 x = Vec.wrap1 I.nrm2 x
 
 let axpy ?alpha ~x y =
-  Vec.wrap2 (fun ?n ?ofsx ?incx x -> I.axpy ?alpha ?n ?ofsx ?incx ~x) x y
+  Vec.wrap2 (fun ?n ?ofsx ?incx x -> I.axpy ?alpha ?n ?ofsx ?incx x) x y
 
 let iamax x = Vec.wrap1 I.iamax x
 

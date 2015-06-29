@@ -282,7 +282,7 @@ let axpy ?alpha ~x y =
   let m, n, xr, xc, x = M.__expose x in
   let m', n', yr, yc, y = M.__expose y in
   assert(m = m' && n = n');
-  I.Mat.axpy ~m:(S.__expose m) ~n:(S.__expose n) ?alpha ~xr ~xc ~x ~yr ~yc y
+  I.Mat.axpy ~m:(S.__expose m) ~n:(S.__expose n) ?alpha ~xr ~xc x ~yr ~yc y
 
 let gemm_diag ?beta ?y ~transa ?alpha a ~transb b =
   let an, ak, ar, ac, a = M.__expose a in
