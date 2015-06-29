@@ -21,8 +21,8 @@
 
 (** {3 Level 1} *)
 
-val dot : x:('n, 'x_cd) vec -> ('n, 'y_cd) vec -> float
-(** [dot ~x y]
+val dot : ('n, 'x_cd) vec -> ('n, 'y_cd) vec -> float
+(** [dot x y]
     @return the inner product of the vectors [x] and [y].
  *)
 

@@ -84,8 +84,8 @@ let train eta w1 w2 b1 b2 x t =
   (* Update parameters *)
   ignore (ger ~alpha:(~-. eta) delta2 y w2); (* w2 := w2 - eta * delta2 * y^T *)
   ignore (ger ~alpha:(~-. eta) delta1 x w1); (* w1 := w1 - eta * delta1 * x^T *)
-  axpy ~alpha:(~-. eta) b2 ~x:delta2;        (* b2 := b2 - eta * delta2 *)
-  axpy ~alpha:(~-. eta) b1 ~x:delta1         (* b1 := b1 - eta * delta1 *)
+  axpy ~alpha:(~-. eta) delta2 b2;           (* b2 := b2 - eta * delta2 *)
+  axpy ~alpha:(~-. eta) delta1 b1            (* b1 := b1 - eta * delta1 *)
 
 let main () =
   Random.self_init (); (* Initialize a pseudorandom number generator *)

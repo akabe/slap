@@ -31,7 +31,7 @@ let lu_factorize a =
 
 let check_result a l u p =
   let a' = gemm p (gemm l u) in
-  Mat.axpy ~alpha:(-1.0) ~x:a a';
+  Mat.axpy ~alpha:(-1.0) a a';
   let diff_norm = lange ~norm:`F a' in
   diff_norm < 1e-6
 

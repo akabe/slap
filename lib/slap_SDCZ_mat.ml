@@ -278,7 +278,7 @@ let scal_rows x a =
   assert(m = m' && incx = 1);
   I.Mat.scal_rows ~m:(S.__expose m) ~n:(S.__expose n) ~ofs:ofsx x ~ar ~ac a
 
-let axpy ?alpha ~x y =
+let axpy ?alpha x y =
   let m, n, xr, xc, x = M.__expose x in
   let m', n', yr, yc, y = M.__expose y in
   assert(m = m' && n = n');

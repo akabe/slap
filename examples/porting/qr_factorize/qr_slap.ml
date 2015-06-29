@@ -17,7 +17,7 @@ let qr_factorize a =
 
 let check_result a q r =
   let a' = gemm ~transa:normal q ~transb:normal r in
-  Mat.axpy ~alpha:(-1.0) ~x:a a';
+  Mat.axpy ~alpha:(-1.0) a a';
   let diff_norm = lange ~norm:norm_frob a' in
   diff_norm < 1e-6
 

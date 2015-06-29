@@ -6,7 +6,7 @@ open Lacaml.Io
 
 let calc_meanvec n data =
   let mu = Vec.make0 n in
-  List.iter (fun x -> axpy ~x mu) data;
+  List.iter (fun x -> axpy x mu) data;
   scal (1.0 /. (float_of_int (List.length data))) mu;
   mu
 

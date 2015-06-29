@@ -9,8 +9,8 @@ open Slap.D
 let sigm a = 1.0 /. (1.0 +. exp (~-. a))
 
 let train eta w x t =
-  let y = sigm (dot ~x w) in
-  axpy ~alpha:(eta *. (t -. y)) ~x w
+  let y = sigm (dot x w) in
+  axpy ~alpha:(eta *. (t -. y)) x w
 
 let main () =
   let input_dim = three in
@@ -34,7 +34,7 @@ let main () =
   printf "w = @[[%a]@]@." pp_rfvec w;
   Array.iteri (fun i (x, t) ->
                printf "[%d] x = @[[%a]@], t = %g, y = %g@."
-                      i pp_rfvec x t (sigm (dot ~x w)))
+                      i pp_rfvec x t (sigm (dot x w)))
               samples
 
 let () = main ()

@@ -46,8 +46,8 @@ val copy : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
 val nrm2 : ('n, 'cd) vec -> float
 (** [nrm2 x] retruns the L2 norm of vector [x]: [||x||]. *)
 
-val axpy : ?alpha:num_type -> x:('n, 'x_cd) vec -> ('n, 'y_cd) vec -> unit
-(** [axpy ?alpha ~x y] executes [y := alpha * x + y] with scalar value [alpha],
+val axpy : ?alpha:num_type -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec -> unit
+(** [axpy ?alpha x y] executes [y := alpha * x + y] with scalar value [alpha],
     and vectors [x] and [y].
     @param alpha default = [1.0]
  *)

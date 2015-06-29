@@ -213,7 +213,7 @@ let init_dwmat nnet =
 
 let update_wmat nnet eta =
   let alpha = ~-. eta in
-  let update nnet () = Mat.axpy ~alpha ~x:nnet.dwmat nnet.wmat in
+  let update nnet () = Mat.axpy ~alpha nnet.dwmat nnet.wmat in
   fold nnet {fld=update} ()
 
 let online_train ?(eta=0.5) ?(check=true) nnet x t =

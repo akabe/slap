@@ -13,7 +13,7 @@ let update_weight w rho data =
     let y' = dot x w > 0.0 in
     if y = y' then flag
       else begin (* The current prediction y' is wrong. *)
-        axpy ~alpha:(if y then rho else ~-.rho) ~x w;
+        axpy ~alpha:(if y then rho else ~-.rho) x w;
         true
       end in
   List.fold_left update_w false data (* Returns true if w is modified. *)

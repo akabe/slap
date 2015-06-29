@@ -600,9 +600,9 @@ val scal_rows : ('m, cnt) vec -> ('m, 'n, 'cd) mat -> unit
 (** A row-wise [scal] function for matrices. *)
 
 val axpy : ?alpha:num_type ->
-           x:('m, 'n, 'x_cd) mat ->
-           ('m, 'n, 'y_cd) mat -> unit
-(** [axpy ?alpha ~x y] computes [y := alpha * x + y]. *)
+  ('m, 'n, 'x_cd) mat ->
+  ('m, 'n, 'y_cd) mat -> unit
+(** [axpy ?alpha x y] computes [y := alpha * x + y]. *)
 
 val gemm_diag :
   ?beta:num_type ->

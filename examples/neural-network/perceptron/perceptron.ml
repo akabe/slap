@@ -7,8 +7,8 @@ open Slap.Common
 open Slap.D
 
 let train w x t =
-  if t *. (dot ~x w) < 0.0
-  then axpy ~alpha:t ~x w
+  if t *. (dot x w) < 0.0
+  then axpy ~alpha:t x w
 
 let main () =
   let input_dim = three in
@@ -32,7 +32,7 @@ let main () =
   printf "w = @[[ %a]@]@." pp_rfvec w;
   Array.iteri (fun i (x, t) ->
                printf "[%d] x = @[[ %a]@], t = %b, y = %b@."
-                      i pp_rfvec x (t > 0.0) (dot ~x w > 0.0))
+                      i pp_rfvec x (t > 0.0) (dot x w > 0.0))
               samples
 
 let () = main ()
