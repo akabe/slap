@@ -16,3 +16,17 @@
    License along with this library; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
+
+(** {2 BLAS interface} *)
+
+(** {3 Level 1} *)
+
+val dotu : ('n, 'x_cd) vec -> ('n, 'y_cd) vec -> num_type
+(** [dotc x y] computes [x^T y].
+    @return an inner product of given two vectors.
+    @since 2.0.0 *)
+
+val dotc : ('n, 'x_cd) vec -> ('n, 'y_cd) vec -> num_type
+(** [dotc x y] computes [x^H y].
+    @return an inner product of a conjugated vector with another vector.
+    @since 2.0.0 *)
