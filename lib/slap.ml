@@ -50,7 +50,60 @@ open Slap.Z  (* 64-bit complex BLAS and LAPACK functions *)]}
     The man pages are also available on your machine if
     you installed {{:http://www.netlib.org/lapack/manpages.tgz}manpages.tgz} or
     the corresponding package provided by your distribution.
-*)
+
+    {1 Vector literals}
+
+    SLAP supports vector literal like [[%vec.kind [e1; e2; ...; eN]]] where
+    [e1] ... [eN] are elements and [kind] specifies the type and precision
+    of the elements. It corresponds to [Bigarray] kind:
+
+    - [float32], [S] or [s]: 32-bit real number ([Bigarray.float32])
+    - [float64], [D] or [d]: 64-bit real number ([Bigarray.float64])
+    - [complex32], [C] or [c]: 32-bit complex number ([Bigarray.complex32])
+    - [complex64], [Z] or [z]: 64-bit complex number ([Bigarray.complex64])
+    - [int8_signed] or [sint8]: 8-bit signed integer ([Bigarray.int8_signed])
+    - [int8_unsigned] or [uint8]: 8-bit unsigned integer
+      ([Bigarray.int8_unsigned])
+    - [int16_signed] or [sint16]: 16-bit signed integer
+      ([Bigarray.int16_signed])
+    - [int16_unsigned] or [uint16]: 16-bit unsigned integer
+      ([Bigarray.int16_unsigned])
+    - [int]: 31-bit integer ([Bigarray.int])
+    - [int32]: 32-bit integer ([Bigarray.int32])
+    - [int64]: 64-bit integer ([Bigarray.int64])
+    - [nativeint]: native integer ([Bigarray.nativeint])
+    - [char]: character ([Bigarray.char])
+
+    You can omit a kind if you open [Slap.[SDCZ]]:
+
+    - [[%vec [...]]] (referring [Slap.[SDCZ].prec] as [Bigarray] kind,
+      corresponding to an opened module)
+    - [[%rvec [...]]] (referring [Slap.[SDCZ].rprec] as [Bigarray] kind,
+      corresponding to an opened module)
+
+    For examples, [[%vec.float64 [42.0; 123.0; 456.0]]] is a three-dimensional
+    vector that has 64-bit real numbers [42.0], [123.0] and [456.0]. If you open
+    [Slap.D], the vector literal is the same as [[%vec [42.0; 123.0; 456.0]]].
+
+    {1 Matrix literals}
+
+    Matrix literals can be written as
+
+{[[%mat.kind [ [e11; e12; ...; e1N];
+             [e21; e22; ...; e2N];
+             [...; ...; ...; ...];
+             [eM1; eM2; ...; eMN] ]]]}
+
+    or
+
+{[[%mat.kind [ e11, e12, ..., e1N;
+             e21, e22, ..., e2N;
+             ..., ..., ..., ...;
+             eM1, eM2, ..., eMN ]]]}
+
+    where [kind] is one of the above-mentioned identifiers. You can also use
+    [[%mat ...]] and [[%rmat ...]] (referring [Slap.[SDCZ].prec] and
+    [Slap.[SDCZ].rprec] respectively) as similar to vector literals. *)
 
 (** Miscellaneous definitions. *)
 include Slap_misc
