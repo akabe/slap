@@ -33,6 +33,10 @@ PreBuildCommand:        ocaml gen_config.ml; \
                         cppo lib/slap_Z.cppo.ml > lib/slap_Z.ml
 PostCleanCommand:       rm -f lib/config.h lib/slap_[SDCZ].mli lib/slap_[SDCZ].ml
 
+Flag ppx
+  Default:              true
+  Description:          Build ppx_slap
+
 Library slap
   Path:                 lib
   FindlibName:          slap
@@ -74,7 +78,8 @@ Library slap_top
 Executable ppx_slap
   Path:                 ppx
   MainIs:               ppx_slap.ml
-  Install:              true
+  Install$:             flag(ppx)
+  Build$:               flag(ppx)
   BuildDepends:         compiler-libs.common
   CompiledObject:       best
 
