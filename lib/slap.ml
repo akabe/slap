@@ -67,6 +67,10 @@ module Mat = Slap_mat
 (** Pretty printers. *)
 module Io = Slap_io
 
+(** The version number of SLAP.
+    @since 2.0.0 *)
+module Version = Slap_version
+
 (** {2 Precision dependent modules} *)
 
 (** Types, flags and functions commonly used in precision dependent modules. *)

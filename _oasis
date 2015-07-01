@@ -22,7 +22,7 @@ XStdFilesAUTHORS:       false
 XStdFilesREADME:        false
 BuildTools:             ocamlbuild,ocamldoc,cppo
 
-PreBuildCommand:        ocaml gen_config.ml; \
+PreBuildCommand:        ocaml gen_files.ml; \
                         cppo lib/slap_S.cppo.mli > lib/slap_S.mli; \
                         cppo lib/slap_S.cppo.ml > lib/slap_S.ml; \
                         cppo lib/slap_D.cppo.mli > lib/slap_D.mli; \
@@ -31,7 +31,10 @@ PreBuildCommand:        ocaml gen_config.ml; \
                         cppo lib/slap_C.cppo.ml > lib/slap_C.ml; \
                         cppo lib/slap_Z.cppo.mli > lib/slap_Z.mli; \
                         cppo lib/slap_Z.cppo.ml > lib/slap_Z.ml
-PostCleanCommand:       rm -f lib/config.h lib/slap_[SDCZ].mli lib/slap_[SDCZ].ml
+PostCleanCommand:       rm -f \
+                        lib/config.h \
+                        lib/slap_[SDCZ].mli lib/slap_[SDCZ].ml \
+                        lib/slap_version.ml
 
 Library slap
   Path:                 lib
@@ -47,7 +50,8 @@ Library slap
                         Slap_S,
                         Slap_D,
                         Slap_C,
-                        Slap_Z
+                        Slap_Z,
+                        Slap_version
   CSources:             config.h,
                         slap_utils.h, slap_utils.c,
                         slap_vec_stubs.c,

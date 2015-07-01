@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 685c105786cea21e208af643b7d94f5a)
+# DO NOT EDIT (digest: 8c2eeb2188fff9db6ab5c79cc73c2263)
 Slap
 Slap_misc
 Slap_common
@@ -11,4 +11,5 @@ Slap_S
 Slap_D
 Slap_C
 Slap_Z
+Slap_version
 # OASIS_STOP
