@@ -49,8 +49,7 @@ open Slap.Z  (* 64-bit complex BLAS and LAPACK functions *)]}
 
     The man pages are also available on your machine if
     you installed {{:http://www.netlib.org/lapack/manpages.tgz}manpages.tgz} or
-    the corresponding package provided by your distribution.
-*)
+    the corresponding package provided by your distribution. *)
 
 (** Miscellaneous definitions. *)
 include Slap_misc

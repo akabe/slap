@@ -193,15 +193,15 @@ struct
       | Float64 -> "Bigarray.float64"
       | Int8_signed -> "Bigarray.int8_signed"
       | Int8_unsigned -> "Bigarray.int8_unsigned"
-      | Int16_signed -> "Bigarray.int16_signed_elt"
-      | Int16_unsigned -> "Bigarray.int16_unsigned_elt"
-      | Int -> "Bigarray.int_elt"
-      | Int32 -> "Bigarray.int32_elt"
-      | Int64 -> "Bigarray.int64_elt"
-      | Nativeint -> "Bigarray.nativeint_elt"
-      | Complex32 -> "Bigarray.complex32_elt"
-      | Complex64 -> "Bigarray.complex64_elt"
-      | Char -> "Bigarray.char_elt" in
+      | Int16_signed -> "Bigarray.int16_signed"
+      | Int16_unsigned -> "Bigarray.int16_unsigned"
+      | Int -> "Bigarray.int"
+      | Int32 -> "Bigarray.int32"
+      | Int64 -> "Bigarray.int64"
+      | Nativeint -> "Bigarray.nativeint"
+      | Complex32 -> "Bigarray.complex32"
+      | Complex64 -> "Bigarray.complex64"
+      | Char -> "Bigarray.char" in
     ident ?loc ?attrs name
 
   let bigarray_layout ?loc ?attrs () =

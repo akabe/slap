@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 637f091113f504b0b2b55dcac6ea275c)
+# DO NOT EDIT (digest: c320ad758f826c98beddd0b2166d5922)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -38,18 +38,34 @@ true: annot, bin_annot
 <lib/*.ml{,i,y}>: package(compiler-libs.toplevel)
 <lib/*.ml{,i,y}>: package(lacaml)
 <lib/*.ml{,i,y}>: use_slap
+# Library slap_ppx
+"ppx/slap_ppx.cmxs": use_slap_ppx
+<ppx/*.ml{,i,y}>: package(bigarray)
+<ppx/*.ml{,i,y}>: package(lacaml)
+<ppx/*.ml{,i,y}>: use_slap
 # Executable ppx_slap
 <ppx/ppx_slap.{native,byte}>: package(compiler-libs.common)
 <ppx/*.ml{,i,y}>: package(compiler-libs.common)
-# Executable test
-<test/test.{native,byte}>: package(bigarray)
-<test/test.{native,byte}>: package(lacaml)
-<test/test.{native,byte}>: package(oUnit)
-<test/test.{native,byte}>: use_slap
-<test/*.ml{,i,y}>: package(bigarray)
-<test/*.ml{,i,y}>: package(lacaml)
-<test/*.ml{,i,y}>: package(oUnit)
-<test/*.ml{,i,y}>: use_slap
+# Executable test_lib
+<test/lib/test.{native,byte}>: package(bigarray)
+<test/lib/test.{native,byte}>: package(lacaml)
+<test/lib/test.{native,byte}>: package(oUnit)
+<test/lib/test.{native,byte}>: use_slap
+<test/lib/*.ml{,i,y}>: package(bigarray)
+<test/lib/*.ml{,i,y}>: package(lacaml)
+<test/lib/*.ml{,i,y}>: package(oUnit)
+<test/lib/*.ml{,i,y}>: use_slap
+# Executable test_ppx
+<test/ppx/test.{native,byte}>: package(bigarray)
+<test/ppx/test.{native,byte}>: package(compiler-libs.common)
+<test/ppx/test.{native,byte}>: package(lacaml)
+<test/ppx/test.{native,byte}>: package(oUnit)
+<test/ppx/test.{native,byte}>: use_slap
+<test/ppx/*.ml{,i,y}>: package(bigarray)
+<test/ppx/*.ml{,i,y}>: package(compiler-libs.common)
+<test/ppx/*.ml{,i,y}>: package(lacaml)
+<test/ppx/*.ml{,i,y}>: package(oUnit)
+<test/ppx/*.ml{,i,y}>: use_slap
 # Executable gemv_gbmv
 <examples/mult/gemv_gbmv.{native,byte}>: package(bigarray)
 <examples/mult/gemv_gbmv.{native,byte}>: package(lacaml)
@@ -153,6 +169,8 @@ true: annot, bin_annot
 
 true: -traverse
 <{lib,examples}/**>: traverse
+
+<test/ppx/*>: ppx_slap
 
 <**/*.ml{,i}>: warn(Aer-44), strict_sequence, safe_string
 <**/*>: no_alias_deps

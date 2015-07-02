@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: d7c7a09990a8db3c3654de7e6844fc4f)
+# DO NOT EDIT (digest: 74010f71f54da3decd8cd5b7498c9e66)
 version = "1.0.0"
 description =
 "A linear algebra library with static size checking for matrix operations"
@@ -19,6 +19,16 @@ package "top" (
  archive(native, plugin) = "slap_top.cmxs"
  exists_if = "slap_top.cma"
 )
-# OASIS_STOP
 
-ppx = "ppx_slap"
+package "ppx" (
+ version = "1.0.0"
+ description = "Syntactic extensions for SLAP."
+ requires = "slap"
+ archive(byte) = "slap_ppx.cma"
+ archive(byte, plugin) = "slap_ppx.cma"
+ archive(native) = "slap_ppx.cmxa"
+ archive(native, plugin) = "slap_ppx.cmxs"
+ ppx = "ppx_slap"
+ exists_if = "slap_ppx.cma"
+)
+# OASIS_STOP

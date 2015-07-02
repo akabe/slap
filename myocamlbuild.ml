@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: bc9cfd77ae6523617fddcdd078b3ec1a) *)
+(* DO NOT EDIT (digest: cf7656b4386576f7ef4edfa4ef86ba02) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -608,7 +608,11 @@ open Ocamlbuild_plugin;;
 let package_default =
   {
      MyOCamlbuildBase.lib_ocaml =
-       [("slap", ["lib"], []); ("slap_top", ["lib"], [])];
+       [
+          ("slap", ["lib"], []);
+          ("slap_top", ["lib"], []);
+          ("slap_ppx", ["ppx"], [])
+       ];
      lib_c = [("slap", "lib", ["lib/config.h"; "lib/slap_utils.h"])];
      flags =
        [
@@ -707,7 +711,9 @@ let package_default =
        ];
      includes =
        [
-          ("test", ["lib"]);
+          ("test/ppx", ["lib"]);
+          ("test/lib", ["lib"]);
+          ("ppx", ["lib"]);
           ("examples/porting/qr_factorize", ["lib"]);
           ("examples/porting/perceptron", ["lib"]);
           ("examples/porting/pca", ["lib"]);
@@ -727,6 +733,17 @@ let conf = {MyOCamlbuildFindlib.no_automatic_syntax = false}
 
 let dispatch_default = MyOCamlbuildBase.dispatch_default conf package_default;;
 
-# 731 "myocamlbuild.ml"
+# 737 "myocamlbuild.ml"
 (* OASIS_STOP *)
-Ocamlbuild_plugin.dispatch dispatch_default;;
+open Ocamlbuild_plugin
+
+let () =
+  dispatch
+    (fun hook ->
+       dispatch_default hook;
+       match hook with
+       | After_rules ->
+         (* `ppx_slap' in `_tags' *)
+         flag ["ocaml"; "compile"; "ppx_slap"] &
+         S [A "-ppx"; A "ppx/ppx_slap.native"]
+       | _ -> ())
