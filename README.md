@@ -112,8 +112,13 @@ let () =
 
 `jacobi a b` solves a system of linear equations `a * x = b` where `a` is
 a n-by-n matrix, and `x` and `b` is a n-dimensional vectors. This code can
-be compiled by `ocamlfind ocamlopt -package slap -linkpkg -short-paths jacobi.ml`, and
-`a.out` outputs:
+be compiled by
+
+```bash
+ocamlfind ocamlopt -package slap,slap.ppx -linkpkg -short-paths jacobi.ml
+```
+
+and `a.out` outputs:
 
 ```ocaml
 a = 5 1 0
