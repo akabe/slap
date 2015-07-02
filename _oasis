@@ -43,7 +43,7 @@ Flag ppx
 Library slap
   Path:                 lib
   FindlibName:          slap
-  BuildDepends:         bigarray,lacaml
+  BuildDepends:         bigarray,lacaml (>= 7.2.3)
   Modules:              Slap,
                         Slap_misc,
                         Slap_common,
