@@ -5,4 +5,9 @@ os:
   - linux
 env:
   matrix:
-    - OCAML_VERSION=4.02.1 OPAM_VERSION=1.2.0
+    - OCAML_VERSION=4.02.0 OPAM_VERSION=1.2.0 CONFIG="--enable-ppx"
+    - OCAML_VERSION=4.02.0 OPAM_VERSION=1.2.0 CONFIG="--disable-ppx"
+    - OCAML_VERSION=4.02.1 OPAM_VERSION=1.2.0 CONFIG="--enable-ppx"
+    - OCAML_VERSION=4.02.1 OPAM_VERSION=1.2.0 CONFIG="--disable-ppx"
+    - OCAML_VERSION=4.02.2 OPAM_VERSION=1.2.0 CONFIG="--enable-ppx"
+    - OCAML_VERSION=4.02.2 OPAM_VERSION=1.2.0 CONFIG="--disable-ppx"
