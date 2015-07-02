@@ -105,6 +105,14 @@ Document slap
   XOCamlbuildPath:      lib
   XOCamlbuildLibraries: slap
 
+Document slap_ppx
+  Title:                SLAP PPX Documentation
+  Type:                 OCamlbuild (0.4)
+  BuildTools+:          ocamldoc
+  InstallDir:           $docdir/ppx
+  XOCamlbuildPath:      ppx
+  XOCamlbuildLibraries: slap.ppx
+
 # Tests
 
 Executable test_lib
