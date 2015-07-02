@@ -75,6 +75,18 @@ Library slap_top
   XMETADescription:     Toplevel module for SLAP.
   BuildDepends:         slap,compiler-libs.toplevel
 
+Library slap_ppx
+  Path:                 ppx
+  FindlibName:          ppx
+  FindlibParent:        slap
+  Install$:             flag(ppx)
+  Build$:               flag(ppx)
+  Modules:              Slap_ppx
+  BuildDepends:         slap
+  XMETARequires:        slap
+  XMETADescription:     Syntactic extensions for SLAP.
+  XMETAExtraLines:      ppx = "ppx_slap"
+
 Executable ppx_slap
   Path:                 ppx
   MainIs:               ppx_slap.ml
@@ -95,18 +107,32 @@ Document slap
 
 # Tests
 
-Executable test
-  Path:                 test
+Executable test_lib
+  Path:                 test/lib
   MainIs:               test.ml
   Build$:               flag(tests)
   Install:              false
   BuildDepends:         slap,oUnit
   CompiledObject:       best
 
-Test test
+Test test_lib
   Run$:                 flag(tests)
-  Command:              $test
-  WorkingDirectory:     test
+  Command:              $test_lib
+  WorkingDirectory:     test/lib
+
+Executable test_ppx
+  Path:                 test/ppx
+  MainIs:               test.ml
+  Build$:               flag(tests) && flag(ppx)
+  Install:              false
+  BuildTools:           ppx_slap
+  BuildDepends:         slap,oUnit
+  CompiledObject:       best
+
+Test test_ppx
+  Run$:                 flag(tests) && flag(ppx)
+  Command:              $test_ppx
+  WorkingDirectory:     test/ppx
 
 ##
 ## Examples

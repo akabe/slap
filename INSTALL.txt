@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: b5670990d8493c42616cc999ecbd71db) *)
+(* DO NOT EDIT (digest: 058031e3620d82779fbb8726f38812e5) *)
 
 This is the INSTALL file for the SLAP distribution.
 
@@ -11,13 +11,13 @@ Dependencies
 
 In order to compile this package, you will need:
 
-* ocaml (>= 4.02) for all, test test, doc slap
+* ocaml (>= 4.02) for all, test test_lib, test test_ppx, doc slap
 * findlib
 * lacaml for library slap, executable kmeans_lacaml, executable lu_lacaml,
   executable pca_lacaml, executable perceptron_lacaml, executable qr_lacaml
-* cppo for all, test test, doc slap
+* cppo for all, test test_lib, test test_ppx, doc slap
 * compiler-libs for library slap_top, executable ppx_slap
-* oUnit for executable test
+* oUnit for executable test_lib, executable test_ppx
 
 Installing
 ==========
