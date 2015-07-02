@@ -21,15 +21,8 @@
 <link title="Slap_S" rel="Chapter" href="Slap_S.html">
 <link title="Slap_D" rel="Chapter" href="Slap_D.html">
 <link title="Slap_C" rel="Chapter" href="Slap_C.html">
-<link title="Slap_Z" rel="Chapter" href="Slap_Z.html"><link title="Creation of matrices" rel="Section" href="#2_Creationofmatrices">
-<link title="Accessors" rel="Section" href="#2_Accessors">
-<link title="Basic operations" rel="Section" href="#2_Basicoperations">
-<link title="Matrix transformations" rel="Section" href="#2_Matrixtransformations">
-<link title="Iterators" rel="Section" href="#2_Iterators">
-<link title="Type conversion" rel="Section" href="#2_Typeconversion">
-<link title="Submatrices" rel="Section" href="#2_Submatrices">
-<link title="Utilities" rel="Section" href="#2_Utilities">
-<title>Slap_mat</title>
+<link title="Slap_Z" rel="Chapter" href="Slap_Z.html">
+<link title="Slap_version" rel="Chapter" href="Slap_version.html"><title>Slap_mat</title>
 </head>
 <body>
 <div class="navbar"><a class="pre" href="Slap_vec.html" title="Slap_vec">Previous</a>
@@ -55,8 +48,6 @@
 <pre><span id="VALcnt"><span class="keyword">val</span> cnt</span> : <code class="type">('m, 'n, 'num, 'prec, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_mat.html#TYPEt">t</a> -><br>       ('m, 'n, 'num, 'prec, 'cnt) <a href="Slap_mat.html#TYPEt">t</a></code></pre><div class="info ">
 Recover polymorphism of the fifth type parameter.<br>
 </div>
-<br>
-<h2 id="2_Creationofmatrices">Creation of matrices</h2><br>
 
 <pre><span id="VALcreate"><span class="keyword">val</span> create</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'm <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('m, 'n, 'num, 'prec, 'cnt) <a href="Slap_mat.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">create kind m n</code><br>
@@ -83,8 +74,6 @@ An alias of <code class="code">init_cols</code>.<br>
     the <code class="code">(i,j)</code> element is initialized by the result of calling <code class="code">f i j</code>.
     The elements are passed row-wise.<br>
 </div>
-<br>
-<h2 id="2_Accessors">Accessors</h2><br>
 
 <pre><span id="VALkind"><span class="keyword">val</span> kind</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">t</a> -> ('num, 'prec) Bigarray.kind</code></pre><div class="info ">
 <b>Returns</b> the kind of the given big array.<br>
@@ -152,8 +141,6 @@ Like <a href="Slap_mat.html#VALset_dyn"><code class="code">Slap_mat.set_dyn</cod
 <b>Returns</b> the vector containing all elements of the matrix in column-major
     order. The data are shared.<br>
 </div>
-<br>
-<h2 id="2_Basicoperations">Basic operations</h2><br>
 
 <pre><span id="VALfill"><span class="keyword">val</span> fill</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">t</a> -> 'num -> unit</code></pre><div class="info ">
 Fill the given matrix with the given value.<br>
@@ -164,8 +151,6 @@ Fill the given matrix with the given value.<br>
 <b>Returns</b> <code class="code">b</code>, which is overwritten.<br>
 </div>
 <div class="param_info"><code class="code">b</code> : default = a fresh matrix.</div>
-<br>
-<h2 id="2_Matrixtransformations">Matrix transformations</h2><br>
 
 <pre><span id="VALpacked"><span class="keyword">val</span> packed</span> : <code class="type">?up:bool -><br>       ?x:('n <a href="Slap_size.html#TYPEpacked">Slap_size.packed</a>, 'num, 'prec, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_vec.html#TYPEt">Slap_vec.t</a> -><br>       ('n, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">t</a> -><br>       ('n <a href="Slap_size.html#TYPEpacked">Slap_size.packed</a>, 'num, 'prec, 'cnt) <a href="Slap_vec.html#TYPEt">Slap_vec.t</a></code></pre><div class="info ">
 <code class="code">packed ?up ?x a</code> transforms triangular matrix <code class="code">a</code> into packed storage
@@ -279,8 +264,6 @@ Fill the given matrix with the given value.<br>
         initialized by <code class="code">c</code>.</li>
 </ul>
 </div>
-<br>
-<h2 id="2_Iterators">Iterators</h2><br>
 
 <pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">('b_num, 'b_prec) Bigarray.kind -><br>       ('a_num -> 'b_num) -><br>       ?b:('m, 'n, 'b_num, 'b_prec, 'b_cd) <a href="Slap_mat.html#TYPEt">t</a> -><br>       ('m, 'n, 'a_num, 'a_prec, 'a_cd) <a href="Slap_mat.html#TYPEt">t</a> -><br>       ('m, 'n, 'b_num, 'b_prec, 'b_cd) <a href="Slap_mat.html#TYPEt">t</a></code></pre>
 <pre><span id="VALmapi"><span class="keyword">val</span> mapi</span> : <code class="type">('b_num, 'b_prec) Bigarray.kind -><br>       (int -> int -> 'a_num -> 'b_num) -><br>       ?b:('m, 'n, 'b_num, 'b_prec, 'b_cd) <a href="Slap_mat.html#TYPEt">t</a> -><br>       ('m, 'n, 'a_num, 'a_prec, 'a_cd) <a href="Slap_mat.html#TYPEt">t</a> -><br>       ('m, 'n, 'b_num, 'b_prec, 'b_cd) <a href="Slap_mat.html#TYPEt">t</a></code></pre>
@@ -333,8 +316,6 @@ Fill the given matrix with the given value.<br>
 <code class="code">replace_all a f</code> modifies the matrix <code class="code">a</code> in place
     -- the <code class="code">(i,j)</code>-element <code class="code">aij</code> of <code class="code">a</code> will be set to <code class="code">f i j aij</code>.<br>
 </div>
-<br>
-<h2 id="2_Typeconversion">Type conversion</h2><br>
 
 <pre><span id="VALto_array"><span class="keyword">val</span> to_array</span> : <code class="type">('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">t</a> -> 'num array array</code></pre><div class="info ">
 <code class="code">to_array a</code><br>
@@ -387,8 +368,6 @@ Like <code class="code">of_list_dyn</code>, but size checking is not always perf
 Like <code class="code">of_bigarray_dyn</code>, but size checking is not always performed.<br>
 <b>Since</b> 1.0.0<br>
 </div>
-<br>
-<h2 id="2_Submatrices">Submatrices</h2><br>
 
 <pre><span id="VALsubmat_dyn"><span class="keyword">val</span> submat_dyn</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?ar:int -><br>       ?ac:int -><br>       ('a, 'b, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">t</a> -><br>       ('m, 'n, 'num, 'prec, <a href="Slap_misc.html#TYPEdsc">Slap_misc.dsc</a>) <a href="Slap_mat.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">submat_dyn m n ?ar ?ac a</code><br>
@@ -398,8 +377,6 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
 </div>
 <div class="param_info"><code class="code">ar</code> : default = 1</div>
 <div class="param_info"><code class="code">ac</code> : default = 1</div>
-<br>
-<h2 id="2_Utilities">Utilities</h2><br>
 
 <pre><span id="VALdim_array_array"><span class="keyword">val</span> dim_array_array</span> : <code class="type">'a array array -> (int * int) option</code></pre><div class="info ">
 <code class="code">dim_array_array aa</code> returns <code class="code">Some (n_rows, n_cols)</code> with the number of rows
@@ -414,4 +391,9 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
     <code class="code">(0, 0)</code> is returned if <code class="code">ll</code> is an empty list.
     <code class="code">None</code> is returned if <code class="code">ll</code> is not rectangular.<br>
 </div>
-</body></html>
+
+<pre><span id="VALcheck_cnt"><span class="keyword">val</span> check_cnt</span> : <code class="type">('m, 'n, 'num, 'prec, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_mat.html#TYPEt">t</a> -> bool</code></pre>
+<pre><span id="VALopt_mat"><span class="keyword">val</span> opt_mat</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">t</a> option -><br>       int option * int option *<br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array2.t option</code></pre>
+<pre><span id="VALopt_mat_alloc"><span class="keyword">val</span> opt_mat_alloc</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'm <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">t</a> option -><br>       int * int * ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array2.t</code></pre>
+<pre><span id="VAL__expose"><span class="keyword">val</span> __expose</span> : <code class="type">('m, 'n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap_mat.html#TYPEt">t</a> -><br>       'm <a href="Slap_size.html#TYPEt">Slap_size.t</a> * 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> * int * int *<br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array2.t</code></pre>
+<pre><span id="VAL__unexpose"><span class="keyword">val</span> __unexpose</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> * 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> * int * int *<br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array2.t -><br>       ('m, 'n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap_mat.html#TYPEt">t</a></code></pre></body></html>

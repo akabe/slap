@@ -20,14 +20,8 @@
 <link title="Slap_S" rel="Chapter" href="Slap_S.html">
 <link title="Slap_D" rel="Chapter" href="Slap_D.html">
 <link title="Slap_C" rel="Chapter" href="Slap_C.html">
-<link title="Slap_Z" rel="Chapter" href="Slap_Z.html"><link title="Constants" rel="Section" href="#2_Constants">
-<link title="Arithmetic operations" rel="Section" href="#2_Arithmeticoperations">
-<link title="Storage sizes for BLAS and LAPACK" rel="Section" href="#2_StoragesizesforBLASandLAPACK">
-<link title="Conversion between a size and an integer" rel="Section" href="#2_Conversionbetweenasizeandaninteger">
-<link title="Iterators on sizes" rel="Section" href="#2_Iteratorsonsizes">
-<link title="Iterators on integers" rel="Section" href="#2_Iteratorsonintegers">
-<link title="Checking" rel="Section" href="#2_Checking">
-<title>Slap.Size</title>
+<link title="Slap_Z" rel="Chapter" href="Slap_Z.html">
+<link title="Slap_version" rel="Chapter" href="Slap_version.html"><title>Slap.Size</title>
 </head>
 <body>
 <div class="navbar">&nbsp;<a class="up" href="Slap.html" title="Slap">Up</a>
@@ -52,8 +46,6 @@ A singleton type on sizes (i.e., dimensions of vectors and matrices).
     <b>only</b> the equality of sizes is verified statically.<br>
 </div>
 
-<br>
-<h2 id="2_Constants">Constants</h2><br>
 
 <pre><span id="TYPEz"><span class="keyword">type</span> <code class="type"></code>z</span> </pre>
 <div class="info ">
@@ -107,9 +99,7 @@ successor, i.e., <code class="code">'n s</code> corresponds to <code class="code
 <pre><span id="TYPEten"><span class="keyword">type</span> <code class="type"></code>ten</span> = <code class="type"><a href="Slap_size.html#TYPEz">z</a> <a href="Slap_size.html#TYPEs">s</a> <a href="Slap_size.html#TYPEs">s</a> <a href="Slap_size.html#TYPEs">s</a> <a href="Slap_size.html#TYPEs">s</a> <a href="Slap_size.html#TYPEs">s</a><br>       <a href="Slap_size.html#TYPEs">s</a> <a href="Slap_size.html#TYPEs">s</a> <a href="Slap_size.html#TYPEs">s</a> <a href="Slap_size.html#TYPEs">s</a> <a href="Slap_size.html#TYPEs">s</a></code> </pre>
 
 
-<pre><span id="VALten"><span class="keyword">val</span> ten</span> : <code class="type"><a href="Slap_size.html#TYPEten">ten</a> <a href="Slap_size.html#TYPEt">t</a></code></pre><br>
-<h2 id="2_Arithmeticoperations">Arithmetic operations</h2><br>
-
+<pre><span id="VALten"><span class="keyword">val</span> ten</span> : <code class="type"><a href="Slap_size.html#TYPEten">ten</a> <a href="Slap_size.html#TYPEt">t</a></code></pre>
 <pre><span id="VALsucc"><span class="keyword">val</span> succ</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">t</a> -> 'n <a href="Slap_size.html#TYPEs">s</a> <a href="Slap_size.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">succ n</code><br>
 <b>Returns</b> <code class="code">n</code> + <code class="code">1</code><br>
@@ -174,8 +164,6 @@ successor, i.e., <code class="code">'n s</code> corresponds to <code class="code
 <code class="code">max m n</code><br>
 <b>Returns</b> the maximum of <code class="code">m</code> and <code class="code">n</code><br>
 </div>
-<br>
-<h2 id="2_StoragesizesforBLASandLAPACK">Storage sizes for BLAS and LAPACK</h2><br>
 
 <pre><span id="TYPEpacked"><span class="keyword">type</span> <code class="type">'n</code> packed</span> </pre>
 <div class="info ">
@@ -252,8 +240,6 @@ Type <code class="code">'n packed</code> corresponds to the <i>packed storage</i
 <b>Since</b> 0.2.0<br>
 <b>Raises</b> <code>Invalid_argument</code> if <code class="code">m &gt;= kl</code> and <code class="code">n &gt;= ku</code>.<br>
 </div>
-<br>
-<h2 id="2_Conversionbetweenasizeandaninteger">Conversion between a size and an integer</h2><br>
 
 <pre><span class="keyword">module type</span> <a href="Slap_size.SIZE.html">SIZE</a> = <code class="code">sig</code> <a href="Slap_size.SIZE.html">..</a> <code class="code">end</code></pre><div class="info">
 The signature of modules as packages of types like <code class="code">exists n. n Size.t</code>.
@@ -279,12 +265,6 @@ Like <code class="code">of_int_dyn</code>, but dynamic size checking is not perf
 <pre><span id="VALvalue"><span class="keyword">val</span> value</span> : <code class="type">int</code></pre></div><code class="code">end</code><code class="code">) -&gt; </code><code class="type"><a href="Slap_size.SIZE.html">SIZE</a></code><code class="type"> </code></div></pre><div class="info">
 A functor version of <code class="code">of_int_dyn</code>.
 </div>
-<br>
-<h2 id="2_Iteratorsonsizes">Iterators on sizes</h2>
-<p>
-
-    The following functions are iterators over <code class="code">[1; 2; ...; n]</code> where <code class="code">n</code> is a
-    size.<br>
 
 <pre><span id="VALfold_left"><span class="keyword">val</span> fold_left</span> : <code class="type">('accum -> (module Slap_size.SIZE) -> 'accum) -><br>       'accum -> 'n <a href="Slap_size.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
 <code class="code">fold_left f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) n</code>.<br>
@@ -301,12 +281,6 @@ A functor version of <code class="code">of_int_dyn</code>.
 <pre><span id="VALriter"><span class="keyword">val</span> riter</span> : <code class="type">((module Slap_size.SIZE) -> unit) -> 'n <a href="Slap_size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
 <code class="code">riter f n</code> is <code class="code">f n; ...; f 2; f 1</code>.<br>
 </div>
-<br>
-<h2 id="2_Iteratorsonintegers">Iterators on integers</h2>
-<p>
-
-    The following functions are iterators over <code class="code">[1; 2; ...; to_int n]</code> where
-    <code class="code">n</code> is a size.<br>
 
 <pre><span id="VALfold_lefti"><span class="keyword">val</span> fold_lefti</span> : <code class="type">('accum -> int -> 'accum) -> 'accum -> 'n <a href="Slap_size.html#TYPEt">t</a> -> 'accum</code></pre><div class="info ">
 <code class="code">fold_lefti f init n</code> is <code class="code">f (... (f (f init 1) 2) ...) (to_int n)</code>.<br>
@@ -323,8 +297,6 @@ A functor version of <code class="code">of_int_dyn</code>.
 <pre><span id="VALriteri"><span class="keyword">val</span> riteri</span> : <code class="type">(int -> unit) -> 'n <a href="Slap_size.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
 <code class="code">riteri f n</code> is <code class="code">f (to_int n); ...; f 2; f 1</code>.<br>
 </div>
-<br>
-<h2 id="2_Checking">Checking</h2><br>
 
 <pre><span id="VALiszero"><span class="keyword">val</span> iszero</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">t</a> -> bool</code></pre><div class="info ">
 <code class="code">iszero n</code> returns <code class="code">true</code> if size <code class="code">n</code> is zero.<br>
@@ -335,4 +307,6 @@ A functor version of <code class="code">of_int_dyn</code>.
 <code class="code">nonzero n</code> returns <code class="code">true</code> if size <code class="code">n</code> is not zero.<br>
 <b>Since</b> 1.0.0<br>
 </div>
-</body></html>
+
+<pre><span id="VAL__expose"><span class="keyword">val</span> __expose</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">t</a> -> int</code></pre>
+<pre><span id="VAL__unexpose"><span class="keyword">val</span> __unexpose</span> : <code class="type">int -> 'n <a href="Slap_size.html#TYPEt">t</a></code></pre></body></html>

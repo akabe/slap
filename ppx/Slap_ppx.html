@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="Up" href="index.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Slap_ppx" rel="Chapter" href="Slap_ppx.html"><title>Slap_ppx</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;</div>
+<h1>Module <a href="type_Slap_ppx.html">Slap_ppx</a></h1>
+
+<pre><span class="keyword">module</span> Slap_ppx: <code class="code">sig</code> <a href="Slap_ppx.html">..</a> <code class="code">end</code></pre><div class="info module top">
+PPX syntactic extensions for SLAP. (This is a dummy module.)
+<p>
+
+    For use of the extensions, you need to pass <code class="code">-ppx ppx_slap</code> to the OCaml
+    compiler, or specify <code class="code">-package slap.ppx</code> to OCamlfind. You can also use by
+<p>
+
+<pre class="codepre"><code class="code">#use "topfind";;
+#require "slap.ppx";;</code></pre>
+<p>
+
+    on interactive mode.
+<p>
+
+    <h2 id="2_Literals">Literals</h2>
+<p>
+
+    <h3 id="3_Vectorliterals">Vector literals</h3>
+<p>
+
+    Vector literals like <code class="code">[%vec.kind [e1; e2; ...; eN]]</code> are supported where
+    <code class="code">e1</code> ... <code class="code">eN</code> are elements and <code class="code">kind</code> specifies the type and precision
+    of the elements. It corresponds to <code class="code">Bigarray</code> kind:
+<p>
+<ul>
+<li><code class="code">float32</code>, <code class="code">S</code> or <code class="code">s</code>: 32-bit real number (<code class="code">Bigarray.float32</code>)</li>
+<li><code class="code">float64</code>, <code class="code">D</code> or <code class="code">d</code>: 64-bit real number (<code class="code">Bigarray.float64</code>)</li>
+<li><code class="code">complex32</code>, <code class="code">C</code> or <code class="code">c</code>: 32-bit complex number (<code class="code">Bigarray.complex32</code>)</li>
+<li><code class="code">complex64</code>, <code class="code">Z</code> or <code class="code">z</code>: 64-bit complex number (<code class="code">Bigarray.complex64</code>)</li>
+<li><code class="code">int8_signed</code> or <code class="code">sint8</code>: 8-bit signed integer (<code class="code">Bigarray.int8_signed</code>)</li>
+<li><code class="code">int8_unsigned</code> or <code class="code">uint8</code>: 8-bit unsigned integer
+      (<code class="code">Bigarray.int8_unsigned</code>)</li>
+<li><code class="code">int16_signed</code> or <code class="code">sint16</code>: 16-bit signed integer
+      (<code class="code">Bigarray.int16_signed</code>)</li>
+<li><code class="code">int16_unsigned</code> or <code class="code">uint16</code>: 16-bit unsigned integer
+      (<code class="code">Bigarray.int16_unsigned</code>)</li>
+<li><code class="code">int</code>: 31-bit integer (<code class="code">Bigarray.int</code>)</li>
+<li><code class="code">int32</code>: 32-bit integer (<code class="code">Bigarray.int32</code>)</li>
+<li><code class="code">int64</code>: 64-bit integer (<code class="code">Bigarray.int64</code>)</li>
+<li><code class="code">nativeint</code>: native integer (<code class="code">Bigarray.nativeint</code>)</li>
+<li><code class="code">char</code>: character (<code class="code">Bigarray.char</code>)</li>
+</ul>
+
+    You can omit a kind if you open <code class="code">Slap.[SDCZ]</code>:
+<p>
+<ul>
+<li><code class="code">[%vec [...]]</code> (referring <code class="code">Slap.[SDCZ].prec</code> as <code class="code">Bigarray</code> kind,
+      corresponding to an opened module)</li>
+<li><code class="code">[%rvec [...]]</code> (referring <code class="code">Slap.[SDCZ].rprec</code> as <code class="code">Bigarray</code> kind,
+      corresponding to an opened module)</li>
+</ul>
+
+    For examples, <code class="code">[%vec.float64 [42.0; 123.0; 456.0]]</code> is a three-dimensional
+    vector that has 64-bit real numbers <code class="code">42.0</code>, <code class="code">123.0</code> and <code class="code">456.0</code>. If you open
+    <code class="code">Slap.D</code>, the vector literal is the same as <code class="code">[%vec [42.0; 123.0; 456.0]]</code>.
+<p>
+
+    <h3 id="3_Matrixliterals">Matrix literals</h3>
+<p>
+
+    Matrix literals can be written as
+<p>
+
+<pre class="codepre"><code class="code">[%mat.kind [ [e11; e12; ...; e1N];
+             [e21; e22; ...; e2N];
+             [...; ...; ...; ...];
+             [eM1; eM2; ...; eMN] ]]</code></pre>
+<p>
+
+    or
+<p>
+
+<pre class="codepre"><code class="code">[%mat.kind [ e11, e12, ..., e1N;
+             e21, e22, ..., e2N;
+             ..., ..., ..., ...;
+             eM1, eM2, ..., eMN ]]</code></pre>
+<p>
+
+    where <code class="code">kind</code> is one of the above-mentioned identifiers. You can also use
+    <code class="code">[%mat ...]</code> and <code class="code">[%rmat ...]</code> (referring <code class="code">Slap.[SDCZ].prec</code> and
+    <code class="code">Slap.[SDCZ].rprec</code> respectively) as similar to vector literals.<br>
+</div>
+<hr width="100%">
+</body></html>

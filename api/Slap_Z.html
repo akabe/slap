@@ -5,6 +5,7 @@
 <meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
 <link rel="Start" href="index.html">
 <link rel="previous" href="Slap_C.html">
+<link rel="next" href="Slap_version.html">
 <link rel="Up" href="index.html">
 <link title="Index of types" rel=Appendix href="index_types.html">
 <link title="Index of values" rel=Appendix href="index_values.html">
@@ -20,21 +21,14 @@
 <link title="Slap_S" rel="Chapter" href="Slap_S.html">
 <link title="Slap_D" rel="Chapter" href="Slap_D.html">
 <link title="Slap_C" rel="Chapter" href="Slap_C.html">
-<link title="Slap_Z" rel="Chapter" href="Slap_Z.html"><link title="BLAS interface" rel="Section" href="#2_BLASinterface">
-<link title="LAPACK interface" rel="Section" href="#2_LAPACKinterface">
-<link title="Level 1" rel="Subsection" href="#3_Level1">
-<link title="Level 2" rel="Subsection" href="#3_Level2">
-<link title="Level 3" rel="Subsection" href="#3_Level3">
-<link title="Auxiliary routines" rel="Subsection" href="#3_Auxiliaryroutines">
-<link title="Linear equations (computational routines)" rel="Subsection" href="#3_Linearequationscomputationalroutines">
-<link title="Linear equations (simple drivers)" rel="Subsection" href="#3_Linearequationssimpledrivers">
-<link title="Least squares (simple drivers)" rel="Subsection" href="#3_Leastsquaressimpledrivers">
-<title>Slap_Z</title>
+<link title="Slap_Z" rel="Chapter" href="Slap_Z.html">
+<link title="Slap_version" rel="Chapter" href="Slap_version.html"><title>Slap_Z</title>
 </head>
 <body>
 <div class="navbar"><a class="pre" href="Slap_C.html" title="Slap_C">Previous</a>
 &nbsp;<a class="up" href="index.html" title="Index">Up</a>
-&nbsp;</div>
+&nbsp;<a class="post" href="Slap_version.html" title="Slap_version">Next</a>
+</div>
 <h1>Module <a href="type_Slap_Z.html">Slap_Z</a></h1>
 
 <pre><span class="keyword">module</span> Slap_Z: <code class="code">sig</code> <a href="Slap_Z.html">..</a> <code class="code">end</code></pre><div class="info module top">
@@ -91,10 +85,6 @@ A pretty-printer for column vectors.<br>
 <pre><span id="VALpp_mat"><span class="keyword">val</span> pp_mat</span> : <code class="type">Format.formatter -> ('m, 'n, 'cnt_or_dsc) <a href="Slap_Z.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 A pretty-printer for matrices.<br>
 </div>
-<br>
-<h2 id="2_BLASinterface">BLAS interface</h2><br>
-<br>
-<h3 id="3_Level1">Level 1</h3><br>
 
 <pre><span id="VALswap"><span class="keyword">val</span> swap</span> : <code class="type">x:('n, 'x_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
 <code class="code">swap ~x y</code> swaps elements in <code class="code">x</code> and <code class="code">y</code>.<br>
@@ -114,8 +104,8 @@ A pretty-printer for matrices.<br>
 <code class="code">nrm2 x</code> retruns the L2 norm of vector <code class="code">x</code>: <code class="code">||x||</code>.<br>
 </div>
 
-<pre><span id="VALaxpy"><span class="keyword">val</span> axpy</span> : <code class="type">?alpha:<a href="Slap_Z.html#TYPEnum_type">num_type</a> -><br>       x:('n, 'x_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
-<code class="code">axpy ?alpha ~x y</code> executes <code class="code">y := alpha * x + y</code> with scalar value <code class="code">alpha</code>,
+<pre><span id="VALaxpy"><span class="keyword">val</span> axpy</span> : <code class="type">?alpha:<a href="Slap_Z.html#TYPEnum_type">num_type</a> -><br>       ('n, 'x_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
+<code class="code">axpy ?alpha x y</code> executes <code class="code">y := alpha * x + y</code> with scalar value <code class="code">alpha</code>,
     and vectors <code class="code">x</code> and <code class="code">y</code>.<br>
 </div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
@@ -127,8 +117,6 @@ A pretty-printer for matrices.<br>
 <pre><span id="VALamax"><span class="keyword">val</span> amax</span> : <code class="type">('n, 'cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> <a href="Slap_Z.html#TYPEnum_type">num_type</a></code></pre><div class="info ">
 <code class="code">amax x</code> finds the maximum value of all elements in <code class="code">x</code>.<br>
 </div>
-<br>
-<h3 id="3_Level2">Level 2</h3><br>
 
 <pre><span id="VALgemv"><span class="keyword">val</span> gemv</span> : <code class="type">?beta:<a href="Slap_Z.html#TYPEnum_type">num_type</a> -><br>       ?y:('m, 'y_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -><br>       trans:(('a_m, 'a_n, 'a_cd) <a href="Slap_Z.html#TYPEmat">mat</a> -> ('m, 'n, 'a_cd) <a href="Slap_Z.html#TYPEmat">mat</a>)<br>             <a href="Slap_Z.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap_Z.html#TYPEnum_type">num_type</a> -><br>       ('a_m, 'a_n, 'a_cd) <a href="Slap_Z.html#TYPEmat">mat</a> -><br>       ('n, 'x_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> ('m, 'y_cd) <a href="Slap_Z.html#TYPEvec">vec</a></code></pre><div class="info ">
 <code class="code">gemv ?beta ?y ~trans ?alpha a x</code> executes
@@ -262,8 +250,6 @@ A pretty-printer for matrices.<br>
 <li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
-<br>
-<h3 id="3_Level3">Level 3</h3><br>
 
 <pre><span id="VALgemm"><span class="keyword">val</span> gemm</span> : <code class="type">?beta:<a href="Slap_Z.html#TYPEnum_type">num_type</a> -><br>       ?c:('m, 'n, 'c_cd) <a href="Slap_Z.html#TYPEmat">mat</a> -><br>       transa:(('a_m, 'a_k, 'a_cd) <a href="Slap_Z.html#TYPEmat">mat</a> -> ('m, 'k, 'a_cd) <a href="Slap_Z.html#TYPEmat">mat</a>)<br>              <a href="Slap_Z.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap_Z.html#TYPEnum_type">num_type</a> -><br>       ('a_m, 'a_k, 'a_cd) <a href="Slap_Z.html#TYPEmat">mat</a> -><br>       transb:(('b_k, 'b_n, 'b_cd) <a href="Slap_Z.html#TYPEmat">mat</a> -> ('k, 'n, 'b_cd) <a href="Slap_Z.html#TYPEmat">mat</a>)<br>              <a href="Slap_Z.html#TYPEtrans3">trans3</a> -><br>       ('b_k, 'b_n, 'b_cd) <a href="Slap_Z.html#TYPEmat">mat</a> -> ('m, 'n, 'c_cd) <a href="Slap_Z.html#TYPEmat">mat</a></code></pre><div class="info ">
 <code class="code">gemm ?beta ?c ~transa ?alpha a ~transb b</code> executes
@@ -409,10 +395,6 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">beta</code> : default = <code class="code">0.0</code></div>
 <div class="param_info"><code class="code">trans</code> : the transpose flag for <code class="code">a</code></div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
-<br>
-<h2 id="2_LAPACKinterface">LAPACK interface</h2><br>
-<br>
-<h3 id="3_Auxiliaryroutines">Auxiliary routines</h3><br>
 
 <pre><span id="VALlacpy"><span class="keyword">val</span> lacpy</span> : <code class="type">?uplo:[ `L | `U ] -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap_Z.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap_Z.html#TYPEmat">mat</a> -> ('m, 'n, 'b_cd) <a href="Slap_Z.html#TYPEmat">mat</a></code></pre><div class="info ">
 <code class="code">lacpy ?uplo ?b a</code> copies the matrix <code class="code">a</code> into the matrix <code class="code">b</code>.<ul>
@@ -481,8 +463,6 @@ A pretty-printer for matrices.<br>
     The upper or lower triangular part is overwritten.<br>
 </div>
 <div class="param_info"><code class="code">up</code> : default = <code class="code">true</code>.</div>
-<br>
-<h3 id="3_Linearequationscomputationalroutines">Linear equations (computational routines)</h3><br>
 
 <pre><span id="VALgetrf"><span class="keyword">val</span> getrf</span> : <code class="type">?ipiv:(('m, 'n) <a href="Slap_size.html#TYPEmin">Slap_size.min</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('m, 'n, 'cd) <a href="Slap_Z.html#TYPEmat">mat</a> -><br>       (('m, 'n) <a href="Slap_size.html#TYPEmin">Slap_size.min</a>, 'cnt) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a></code></pre><div class="info ">
 <code class="code">getrf ?ipiv a</code> computes LU factorization of matrix <code class="code">a</code> using partial
@@ -759,8 +739,6 @@ A pretty-printer for matrices.<br>
 <b>Returns</b> vector <code class="code">tau</code>, which is overwritten.<br>
 </div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
-<br>
-<h3 id="3_Linearequationssimpledrivers">Linear equations (simple drivers)</h3><br>
 
 <pre><span id="VALgesv"><span class="keyword">val</span> gesv</span> : <code class="type">?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_Z.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_Z.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">gesv ?ipiv a b</code> solves a system of linear equations <code class="code">a * x = b</code> where <code class="code">a</code>
@@ -933,8 +911,6 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">ipiv</code> : a result of <code class="code">sytrf</code>. It is internally computed by <code class="code">sytrf</code> if
                 omitted.</div>
-<br>
-<h3 id="3_Leastsquaressimpledrivers">Least squares (simple drivers)</h3><br>
 
 <pre><span id="TYPEgels_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n, 'nrhs)</code> gels_min_lwork</span> </pre>
 
@@ -970,4 +946,16 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 <div class="param_info"><code class="code">trans</code> : the transpose flag for <code class="code">a</code>.</div>
+
+<pre><span id="VALdotu"><span class="keyword">val</span> dotu</span> : <code class="type">('n, 'x_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> <a href="Slap_Z.html#TYPEnum_type">num_type</a></code></pre><div class="info ">
+<code class="code">dotc x y</code> computes <code class="code">x^T y</code>.<br>
+<b>Since</b> 2.0.0<br>
+<b>Returns</b> an inner product of given two vectors.<br>
+</div>
+
+<pre><span id="VALdotc"><span class="keyword">val</span> dotc</span> : <code class="type">('n, 'x_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_Z.html#TYPEvec">vec</a> -> <a href="Slap_Z.html#TYPEnum_type">num_type</a></code></pre><div class="info ">
+<code class="code">dotc x y</code> computes <code class="code">x^H y</code>.<br>
+<b>Since</b> 2.0.0<br>
+<b>Returns</b> an inner product of a conjugated vector with another vector.<br>
+</div>
 </body></html>

@@ -20,18 +20,8 @@
 <link title="Slap_S" rel="Chapter" href="Slap_S.html">
 <link title="Slap_D" rel="Chapter" href="Slap_D.html">
 <link title="Slap_C" rel="Chapter" href="Slap_C.html">
-<link title="Slap_Z" rel="Chapter" href="Slap_Z.html"><link title="Creation of vectors" rel="Section" href="#2_Creationofvectors">
-<link title="Accessors" rel="Section" href="#2_Accessors">
-<link title="Basic operations" rel="Section" href="#2_Basicoperations">
-<link title="Type conversion" rel="Section" href="#2_Typeconversion">
-<link title="Iterators" rel="Section" href="#2_Iterators">
-<link title="Iterators on two vectors" rel="Section" href="#2_Iteratorsontwovectors">
-<link title="Iterators on three vectors" rel="Section" href="#2_Iteratorsonthreevectors">
-<link title="Scanning" rel="Section" href="#2_Scanning">
-<link title="Arithmetic operations" rel="Section" href="#2_Arithmeticoperations">
-<link title="Subvectors" rel="Section" href="#2_Subvectors">
-<link title="Creation of vectors" rel="Section" href="#2_Creationofvectors">
-<title>Slap_C.Vec</title>
+<link title="Slap_Z" rel="Chapter" href="Slap_Z.html">
+<link title="Slap_version" rel="Chapter" href="Slap_version.html"><title>Slap_C.Vec</title>
 </head>
 <body>
 <div class="navbar">&nbsp;<a class="up" href="Slap_C.html" title="Slap_C">Up</a>
@@ -52,8 +42,6 @@ The signature of modules containing dynamically-sized discrete vectors.
 <pre><span id="VALcnt"><span class="keyword">val</span> cnt</span> : <code class="type">('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> ('n, 'cnt) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a></code></pre><div class="info ">
 Recover polymorphism of the fourth type parameter.<br>
 </div>
-<br>
-<h2 id="2_Creationofvectors">Creation of vectors</h2><br>
 
 <pre><span id="VALempty"><span class="keyword">val</span> empty</span> : <code class="type">(<a href="Slap_size.html#TYPEz">Slap_size.z</a>, 'cnt) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a></code></pre><div class="info ">
 An empty vector.<br>
@@ -83,8 +71,6 @@ An empty vector.<br>
 <code class="code">init n f</code><br>
 <b>Returns</b> a fresh vector <code class="code">(f 1, ..., f n)</code> with <code class="code">n</code> elements.<br>
 </div>
-<br>
-<h2 id="2_Accessors">Accessors</h2><br>
 
 <pre><span id="VALdim"><span class="keyword">val</span> dim</span> : <code class="type">('n, 'cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a></code></pre><div class="info ">
 <code class="code">dim x</code><br>
@@ -111,8 +97,6 @@ Like <code class="code">set_dyn</code>, but size checking is not always performe
 <pre><span id="VALreplace_dyn"><span class="keyword">val</span> replace_dyn</span> : <code class="type">('n, 'cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> int -> (<a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a> -> <a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a>) -> unit</code></pre><div class="info ">
 <code class="code">replace_dyn v i f</code> is <code class="code">set_dyn v i (f (get_dyn v i))</code>.<br>
 </div>
-<br>
-<h2 id="2_Basicoperations">Basic operations</h2><br>
 
 <pre><span id="VALcopy"><span class="keyword">val</span> copy</span> : <code class="type">?y:('n, 'y_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> ('n, 'x_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> ('n, 'y_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a></code></pre><div class="info ">
 <code class="code">copy ?y x</code> copies the vector <code class="code">x</code> to the vector <code class="code">y</code> with the BLAS-1
@@ -138,8 +122,6 @@ Concatenate two vectors.<br>
 <code class="code">rev (x1, x2, ..., xn)</code><br>
 <b>Returns</b> reversed vector <code class="code">(xn, ..., x2, x1)</code>. The data are NOT shared.<br>
 </div>
-<br>
-<h2 id="2_Typeconversion">Type conversion</h2><br>
 
 <pre><span id="VALto_array"><span class="keyword">val</span> to_array</span> : <code class="type">('n, 'cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> <a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a> array</code></pre><div class="info ">
 <code class="code">to_array x</code><br>
@@ -231,8 +213,6 @@ A functor version of <code class="code">of_bigarray</code>.
 Like <code class="code">of_bigarray_dyn</code>, but size checking is not always performed.<br>
 <b>Since</b> 1.0.0<br>
 </div>
-<br>
-<h2 id="2_Iterators">Iterators</h2><br>
 
 <pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">(<a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a> -> <a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a>) -><br>       ?y:('n, 'y_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> ('n, 'x_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> ('n, 'y_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a></code></pre><div class="info ">
 <code class="code">map f ?y (x1, ..., xn)</code> is <code class="code">(f x1, ..., f xn)</code>.<br>
@@ -284,8 +264,6 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
 <pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">(int -> <a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a> -> unit) -> ('n, 'cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> unit</code></pre><div class="info ">
 <code class="code">iteri f (x1, x2, ..., xn)</code> is <code class="code">f 1 x1; f 2 x2; ...; f n xn</code>.<br>
 </div>
-<br>
-<h2 id="2_Iteratorsontwovectors">Iterators on two vectors</h2><br>
 
 <pre><span id="VALmap2"><span class="keyword">val</span> map2</span> : <code class="type">(<a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a> -> <a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a> -> <a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a>) -><br>       ?z:('n, 'z_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -><br>       ('n, 'x_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> ('n, 'y_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> ('n, 'z_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a></code></pre><div class="info ">
 <code class="code">map2 f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
@@ -332,8 +310,6 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
 <code class="code">iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
     <code class="code">f 1 x1 y1; f 2 x2 y2; ...; f n xn yn</code>.<br>
 </div>
-<br>
-<h2 id="2_Iteratorsonthreevectors">Iterators on three vectors</h2><br>
 
 <pre><span id="VALmap3"><span class="keyword">val</span> map3</span> : <code class="type">(<a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a> -> <a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a> -> <a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a> -> <a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a>) -><br>       ?w:('n, 'w_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -><br>       ('n, 'x_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -><br>       ('n, 'y_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> ('n, 'z_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> ('n, 'w_cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a></code></pre><div class="info ">
 <code class="code">map3 f ?w (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)</code> is
@@ -381,8 +357,6 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
 <code class="code">iteri3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)</code> is
     <code class="code">f 1 x1 y1 z1; f 2 x2 y2 z2; ...; f n xn yn zn</code>.<br>
 </div>
-<br>
-<h2 id="2_Scanning">Scanning</h2><br>
 
 <pre><span id="VALfor_all"><span class="keyword">val</span> for_all</span> : <code class="type">(<a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a> -> bool) -> ('n, 'cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> bool</code></pre><div class="info ">
 <code class="code">for_all p (x1, x2, ..., xn)</code> is <code class="code">(p x1) &amp;&amp; (p x2) &amp;&amp; ... &amp;&amp; (p xn)</code>.<br>
@@ -409,8 +383,6 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
 <b>Returns</b> <code class="code">true</code> if and only if at least one pair of elements of the given two
     vectors satisfies the predicate <code class="code">p</code>.<br>
 </div>
-<br>
-<h2 id="2_Arithmeticoperations">Arithmetic operations</h2><br>
 
 <pre><span id="VALmax"><span class="keyword">val</span> max</span> : <code class="type">('n, 'cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> <a href="Slap_C.html#TYPEnum_type">Slap_C.num_type</a></code></pre><div class="info ">
 <code class="code">max x</code><br>
@@ -539,8 +511,6 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
 <code class="code">ssqr_diff x y</code>returns the sum of squared differences of the elements of
     vectors <code class="code">x</code> and <code class="code">y</code>.<br>
 </div>
-<br>
-<h2 id="2_Subvectors">Subvectors</h2><br>
 
 <pre><span id="VALsubcntvec_dyn"><span class="keyword">val</span> subcntvec_dyn</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?ofsx:int -> ('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> ('m, 'cnt) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a></code></pre><div class="info ">
 <code class="code">subcntvec_dyn m ?ofsx x</code><br>
@@ -564,8 +534,6 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
 <pre><span id="VALsubvec_dyn"><span class="keyword">val</span> subvec_dyn</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?ofsx:int -><br>       ?incx:int -> ('n, 'cd) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a> -> ('m, <a href="Slap_misc.html#TYPEdsc">Slap_misc.dsc</a>) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a></code></pre><div class="info ">
 An alias of <code class="code">subdscvec_dyn</code>.<br>
 </div>
-<br>
-<h2 id="2_Creationofvectors">Creation of vectors</h2><br>
 
 <pre><span id="VALrandom"><span class="keyword">val</span> random</span> : <code class="type">?rnd_state:Random.State.t -><br>       ?re_from:float -><br>       ?re_range:float -><br>       ?im_from:float -> ?im_range:float -> 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('n, 'cnt) <a href="Slap_C.html#TYPEvec">Slap_C.vec</a></code></pre><div class="info ">
 <code class="code">random ?rnd_state ?from ?range n</code> creates a <code class="code">n</code>-dimensional vector randomly

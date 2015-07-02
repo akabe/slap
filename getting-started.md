@@ -26,7 +26,7 @@ $ sudo make install
 ```
 
 In the latter case, you need to install dependent packages
-[Lacaml](https://github.com/mmottl/lacaml) and
+[Lacaml](https://github.com/mmottl/lacaml) (version 7.2.3 or above) and
 [cppo](http://mjambon.com/cppo.html) before installation of SLAP.
 
 ### Compiling your program
@@ -51,7 +51,7 @@ We will explain the program after telling you how to compile it.
 You can byte-compile this program with a command like this:
 
 ```
-$ ocamlfind ocamlc -package slap -linkpkg -short-paths example01.ml
+$ ocamlfind ocamlc -package slap,slap.ppx -linkpkg -short-paths example01.ml
 ```
 
 `-short-paths` option makes type error messages more readable.
@@ -61,7 +61,7 @@ native-compilation because byte-compiled programs are much slower than
 native-compiled ones.
 
 ```
-$ ocamlfind ocamlopt -package slap -linkpkg -short-paths example01.ml
+$ ocamlfind ocamlopt -package slap,slap.ppx -linkpkg -short-paths example01.ml
 ```
 
 When you run the compiled program, it shows the following output:
@@ -81,6 +81,7 @@ Note that you require to load "topfind" at first:
 ```ocaml
 # #use "topfind";;
 # #require "slap.top";;
+# #require "slap.ppx";;
 # open Slap.Size;;
 # open Slap.Io;;
 # open Slap.D;;

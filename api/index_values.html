@@ -17,13 +17,27 @@
 <link title="Slap_S" rel="Chapter" href="Slap_S.html">
 <link title="Slap_D" rel="Chapter" href="Slap_D.html">
 <link title="Slap_C" rel="Chapter" href="Slap_C.html">
-<link title="Slap_Z" rel="Chapter" href="Slap_Z.html"><title>Index of values</title>
+<link title="Slap_Z" rel="Chapter" href="Slap_Z.html">
+<link title="Slap_version" rel="Chapter" href="Slap_version.html"><title>Index of values</title>
 </head>
 <body>
 <div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
 &nbsp;</div>
 <h1>Index of values</h1>
 <table>
+<tr><td align="left"><br></td></tr>
+<tr><td><a href="Slap_mat.html#VAL__expose">__expose</a> [<a href="Slap_mat.html">Slap_mat</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_vec.html#VAL__expose">__expose</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_size.html#VAL__expose">__expose</a> [<a href="Slap_size.html">Slap_size</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_mat.html#VAL__unexpose">__unexpose</a> [<a href="Slap_mat.html">Slap_mat</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_vec.html#VAL__unexpose">__unexpose</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_size.html#VAL__unexpose">__unexpose</a> [<a href="Slap_size.html">Slap_size</a>]</td>
+<td></td></tr>
 <tr><td align="left"><br>A</td></tr>
 <tr><td><a href="Slap_C.Vec.html#VALadd">add</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
 <td><div class="info">
@@ -176,49 +190,55 @@ Concatenate two vectors.
 </td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALaxpy">axpy</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
 <td><div class="info">
-<code class="code">axpy ?alpha ~x y</code> computes <code class="code">y := alpha * x + y</code>.
+<code class="code">axpy ?alpha x y</code> computes <code class="code">y := alpha * x + y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_C.html#VALaxpy">axpy</a> [<a href="Slap_C.html">Slap_C</a>]</td>
 <td><div class="info">
-<code class="code">axpy ?alpha ~x y</code> executes <code class="code">y := alpha * x + y</code> with scalar value <code class="code">alpha</code>,
+<code class="code">axpy ?alpha x y</code> executes <code class="code">y := alpha * x + y</code> with scalar value <code class="code">alpha</code>,
     and vectors <code class="code">x</code> and <code class="code">y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_Z.Mat.html#VALaxpy">axpy</a> [<a href="Slap_Z.Mat.html">Slap_Z.Mat</a>]</td>
 <td><div class="info">
-<code class="code">axpy ?alpha ~x y</code> computes <code class="code">y := alpha * x + y</code>.
+<code class="code">axpy ?alpha x y</code> computes <code class="code">y := alpha * x + y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_Z.html#VALaxpy">axpy</a> [<a href="Slap_Z.html">Slap_Z</a>]</td>
 <td><div class="info">
-<code class="code">axpy ?alpha ~x y</code> executes <code class="code">y := alpha * x + y</code> with scalar value <code class="code">alpha</code>,
+<code class="code">axpy ?alpha x y</code> executes <code class="code">y := alpha * x + y</code> with scalar value <code class="code">alpha</code>,
     and vectors <code class="code">x</code> and <code class="code">y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_S.Mat.html#VALaxpy">axpy</a> [<a href="Slap_S.Mat.html">Slap_S.Mat</a>]</td>
 <td><div class="info">
-<code class="code">axpy ?alpha ~x y</code> computes <code class="code">y := alpha * x + y</code>.
+<code class="code">axpy ?alpha x y</code> computes <code class="code">y := alpha * x + y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_S.html#VALaxpy">axpy</a> [<a href="Slap_S.html">Slap_S</a>]</td>
 <td><div class="info">
-<code class="code">axpy ?alpha ~x y</code> executes <code class="code">y := alpha * x + y</code> with scalar value <code class="code">alpha</code>,
+<code class="code">axpy ?alpha x y</code> executes <code class="code">y := alpha * x + y</code> with scalar value <code class="code">alpha</code>,
     and vectors <code class="code">x</code> and <code class="code">y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_D.Mat.html#VALaxpy">axpy</a> [<a href="Slap_D.Mat.html">Slap_D.Mat</a>]</td>
 <td><div class="info">
-<code class="code">axpy ?alpha ~x y</code> computes <code class="code">y := alpha * x + y</code>.
+<code class="code">axpy ?alpha x y</code> computes <code class="code">y := alpha * x + y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_D.html#VALaxpy">axpy</a> [<a href="Slap_D.html">Slap_D</a>]</td>
 <td><div class="info">
-<code class="code">axpy ?alpha ~x y</code> executes <code class="code">y := alpha * x + y</code> with scalar value <code class="code">alpha</code>,
+<code class="code">axpy ?alpha x y</code> executes <code class="code">y := alpha * x + y</code> with scalar value <code class="code">alpha</code>,
     and vectors <code class="code">x</code> and <code class="code">y</code>.
 </div>
 </td></tr>
 <tr><td align="left"><br>C</td></tr>
+<tr><td><a href="Slap_mat.html#VALcheck_cnt">check_cnt</a> [<a href="Slap_mat.html">Slap_mat</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_vec.html#VALcheck_cnt">check_cnt</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_common.html#VALcheck_side_dim">check_side_dim</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALcnt">cnt</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
 <td><div class="info">
 Recover polymorphism of the fifth type parameter.
@@ -721,12 +741,32 @@ Conjugate transpose of a matrix.
 </td></tr>
 <tr><td><a href="Slap_S.html#VALdot">dot</a> [<a href="Slap_S.html">Slap_S</a>]</td>
 <td><div class="info">
-<code class="code">dot ~x y</code>
+<code class="code">dot x y</code>
 </div>
 </td></tr>
 <tr><td><a href="Slap_D.html#VALdot">dot</a> [<a href="Slap_D.html">Slap_D</a>]</td>
 <td><div class="info">
-<code class="code">dot ~x y</code>
+<code class="code">dot x y</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.html#VALdotc">dotc</a> [<a href="Slap_C.html">Slap_C</a>]</td>
+<td><div class="info">
+<code class="code">dotc x y</code> computes <code class="code">x^H y</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.html#VALdotc">dotc</a> [<a href="Slap_Z.html">Slap_Z</a>]</td>
+<td><div class="info">
+<code class="code">dotc x y</code> computes <code class="code">x^H y</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.html#VALdotu">dotu</a> [<a href="Slap_C.html">Slap_C</a>]</td>
+<td><div class="info">
+<code class="code">dotc x y</code> computes <code class="code">x^T y</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.html#VALdotu">dotu</a> [<a href="Slap_Z.html">Slap_Z</a>]</td>
+<td><div class="info">
+<code class="code">dotc x y</code> computes <code class="code">x^T y</code>.
 </div>
 </td></tr>
 <tr><td align="left"><br>E</td></tr>
@@ -3036,6 +3076,11 @@ An alias of <code class="code">ssc</code> for compatibility with Lacaml.
 </div>
 </td></tr>
 <tr><td align="left"><br>M</td></tr>
+<tr><td><a href="Slap_version.html#VALmajor">major</a> [<a href="Slap_version.html">Slap_version</a>]</td>
+<td><div class="info">
+The major version of SLAP.
+</div>
+</td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALmake">make</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
 <td><div class="info">
 <code class="code">make m n x</code>
@@ -3396,6 +3441,11 @@ An alias of <code class="code">ssc</code> for compatibility with Lacaml.
 <code class="code">mem ?equal a v</code>
 </div>
 </td></tr>
+<tr><td><a href="Slap_version.html#VALmicro">micro</a> [<a href="Slap_version.html">Slap_version</a>]</td>
+<td><div class="info">
+The micro version of SLAP.
+</div>
+</td></tr>
 <tr><td><a href="Slap_C.Vec.html#VALmin">min</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
 <td><div class="info">
 <code class="code">min x</code>
@@ -3419,6 +3469,11 @@ An alias of <code class="code">ssc</code> for compatibility with Lacaml.
 <tr><td><a href="Slap_size.html#VALmin">min</a> [<a href="Slap_size.html">Slap_size</a>]</td>
 <td><div class="info">
 <code class="code">min m n</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_version.html#VALminor">minor</a> [<a href="Slap_version.html">Slap_version</a>]</td>
+<td><div class="info">
+The minor version of SLAP.
 </div>
 </td></tr>
 <tr><td><a href="Slap_C.Vec.html#VALmul">mul</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
@@ -3808,6 +3863,20 @@ Build a matrix initialized from the given list of lists.
 </div>
 </td></tr>
 <tr><td><a href="Slap_size.html#VALone">one</a> [<a href="Slap_size.html">Slap_size</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_vec.html#VALopt_cnt_vec">opt_cnt_vec</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_vec.html#VALopt_cnt_vec_alloc">opt_cnt_vec_alloc</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_mat.html#VALopt_mat">opt_mat</a> [<a href="Slap_mat.html">Slap_mat</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_mat.html#VALopt_mat_alloc">opt_mat_alloc</a> [<a href="Slap_mat.html">Slap_mat</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_vec.html#VALopt_vec">opt_vec</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_vec.html#VALopt_vec_alloc">opt_vec_alloc</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_vec.html#VALopt_work">opt_work</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap_S.html#VALorgqr_dyn">orgqr_dyn</a> [<a href="Slap_S.html">Slap_S</a>]</td>
 <td><div class="info">
@@ -6768,6 +6837,11 @@ A dynamically-sized contiguous vector with type like
 <td><div class="info">
 A dynamically-decided size with type like
         <code class="code">exists n. n Size.t</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap_version.html#VALversion">version</a> [<a href="Slap_version.html">Slap_version</a>]</td>
+<td><div class="info">
+The version number of SLAP: <code class="code">"major.minor.micro"</code>
 </div>
 </td></tr>
 <tr><td><a href="Slap_io.Context.html#VALvertical_default">vertical_default</a> [<a href="Slap_io.Context.html">Slap_io.Context</a>]</td>
