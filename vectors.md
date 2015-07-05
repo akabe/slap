@@ -14,6 +14,7 @@ Consider the type of the following vector `x`.
 ```ocaml
 # #use "topfind";;
 # #require "slap.top";;
+# #require "slap.ppx";;
 # open Slap.Size;;
 # open Slap.D;;
 # let x = [%vec [1.0; 2.0; 3.0]];;
