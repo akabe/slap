@@ -337,7 +337,7 @@ let transform loc transformer kind payload =
     e'
   | _ ->
     errorf loc "Syntax Error: \
-                @[This expression should be a list syntaxtically@]" ()
+                @[This expression should be a list syntactically@]" ()
 
 let slap_mapper =
   let super = default_mapper in
