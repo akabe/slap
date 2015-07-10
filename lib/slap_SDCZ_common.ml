@@ -33,3 +33,5 @@ let rprec = CONCAT(float, SLAP_SDCZ_BITS)
 
 let invalid_argf fmt =
   Printf.kprintf (fun s () -> invalid_arg ("Slap." ^ module_name ^ "." ^ s)) fmt
+
+let (|>) x f = f x (* for OCaml 4.00 or below *)

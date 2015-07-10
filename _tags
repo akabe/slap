@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: c320ad758f826c98beddd0b2166d5922)
+# DO NOT EDIT (digest: fd8218cc43492ab4f5f9a0b2b48861b3)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -26,144 +26,144 @@ true: annot, bin_annot
 "lib/libslap_stubs.a": oasis_library_slap_cclib
 "lib/dllslap_stubs.so": oasis_library_slap_cclib
 <lib/slap.{cma,cmxa}>: use_libslap_stubs
-"lib/slap_utils.c": package(bigarray)
-"lib/slap_utils.c": package(lacaml)
-"lib/slap_vec_stubs.c": package(bigarray)
-"lib/slap_vec_stubs.c": package(lacaml)
-"lib/slap_mat_stubs.c": package(bigarray)
-"lib/slap_mat_stubs.c": package(lacaml)
+"lib/slap_utils.c": pkg_bigarray
+"lib/slap_utils.c": pkg_lacaml
+"lib/slap_vec_stubs.c": pkg_bigarray
+"lib/slap_vec_stubs.c": pkg_lacaml
+"lib/slap_mat_stubs.c": pkg_bigarray
+"lib/slap_mat_stubs.c": pkg_lacaml
 # Library slap_top
 "lib/slap_top.cmxs": use_slap_top
-<lib/*.ml{,i,y}>: package(bigarray)
-<lib/*.ml{,i,y}>: package(compiler-libs.toplevel)
-<lib/*.ml{,i,y}>: package(lacaml)
+<lib/*.ml{,i,y}>: pkg_bigarray
+<lib/*.ml{,i,y}>: pkg_compiler-libs.toplevel
+<lib/*.ml{,i,y}>: pkg_lacaml
 <lib/*.ml{,i,y}>: use_slap
 # Library slap_ppx
 "ppx/slap_ppx.cmxs": use_slap_ppx
-<ppx/*.ml{,i,y}>: package(bigarray)
-<ppx/*.ml{,i,y}>: package(lacaml)
+<ppx/*.ml{,i,y}>: pkg_bigarray
+<ppx/*.ml{,i,y}>: pkg_lacaml
 <ppx/*.ml{,i,y}>: use_slap
 # Executable ppx_slap
-<ppx/ppx_slap.{native,byte}>: package(compiler-libs.common)
-<ppx/*.ml{,i,y}>: package(compiler-libs.common)
+<ppx/ppx_slap.{native,byte}>: pkg_compiler-libs.common
+<ppx/*.ml{,i,y}>: pkg_compiler-libs.common
 # Executable test_lib
-<test/lib/test.{native,byte}>: package(bigarray)
-<test/lib/test.{native,byte}>: package(lacaml)
-<test/lib/test.{native,byte}>: package(oUnit)
+<test/lib/test.{native,byte}>: pkg_bigarray
+<test/lib/test.{native,byte}>: pkg_lacaml
+<test/lib/test.{native,byte}>: pkg_oUnit
 <test/lib/test.{native,byte}>: use_slap
-<test/lib/*.ml{,i,y}>: package(bigarray)
-<test/lib/*.ml{,i,y}>: package(lacaml)
-<test/lib/*.ml{,i,y}>: package(oUnit)
+<test/lib/*.ml{,i,y}>: pkg_bigarray
+<test/lib/*.ml{,i,y}>: pkg_lacaml
+<test/lib/*.ml{,i,y}>: pkg_oUnit
 <test/lib/*.ml{,i,y}>: use_slap
 # Executable test_ppx
-<test/ppx/test.{native,byte}>: package(bigarray)
-<test/ppx/test.{native,byte}>: package(compiler-libs.common)
-<test/ppx/test.{native,byte}>: package(lacaml)
-<test/ppx/test.{native,byte}>: package(oUnit)
+<test/ppx/test.{native,byte}>: pkg_bigarray
+<test/ppx/test.{native,byte}>: pkg_compiler-libs.common
+<test/ppx/test.{native,byte}>: pkg_lacaml
+<test/ppx/test.{native,byte}>: pkg_oUnit
 <test/ppx/test.{native,byte}>: use_slap
-<test/ppx/*.ml{,i,y}>: package(bigarray)
-<test/ppx/*.ml{,i,y}>: package(compiler-libs.common)
-<test/ppx/*.ml{,i,y}>: package(lacaml)
-<test/ppx/*.ml{,i,y}>: package(oUnit)
+<test/ppx/*.ml{,i,y}>: pkg_bigarray
+<test/ppx/*.ml{,i,y}>: pkg_compiler-libs.common
+<test/ppx/*.ml{,i,y}>: pkg_lacaml
+<test/ppx/*.ml{,i,y}>: pkg_oUnit
 <test/ppx/*.ml{,i,y}>: use_slap
 # Executable gemv_gbmv
-<examples/mult/gemv_gbmv.{native,byte}>: package(bigarray)
-<examples/mult/gemv_gbmv.{native,byte}>: package(lacaml)
+<examples/mult/gemv_gbmv.{native,byte}>: pkg_bigarray
+<examples/mult/gemv_gbmv.{native,byte}>: pkg_lacaml
 <examples/mult/gemv_gbmv.{native,byte}>: use_slap
 # Executable symv_sbmv
-<examples/mult/symv_sbmv.{native,byte}>: package(bigarray)
-<examples/mult/symv_sbmv.{native,byte}>: package(lacaml)
+<examples/mult/symv_sbmv.{native,byte}>: pkg_bigarray
+<examples/mult/symv_sbmv.{native,byte}>: pkg_lacaml
 <examples/mult/symv_sbmv.{native,byte}>: use_slap
-<examples/mult/*.ml{,i,y}>: package(bigarray)
-<examples/mult/*.ml{,i,y}>: package(lacaml)
+<examples/mult/*.ml{,i,y}>: pkg_bigarray
+<examples/mult/*.ml{,i,y}>: pkg_lacaml
 <examples/mult/*.ml{,i,y}>: use_slap
 # Executable gesv_gbsv
-<examples/linsys/gesv_gbsv.{native,byte}>: package(bigarray)
-<examples/linsys/gesv_gbsv.{native,byte}>: package(lacaml)
+<examples/linsys/gesv_gbsv.{native,byte}>: pkg_bigarray
+<examples/linsys/gesv_gbsv.{native,byte}>: pkg_lacaml
 <examples/linsys/gesv_gbsv.{native,byte}>: use_slap
 # Executable trsv_tpsv
-<examples/linsys/trsv_tpsv.{native,byte}>: package(bigarray)
-<examples/linsys/trsv_tpsv.{native,byte}>: package(lacaml)
+<examples/linsys/trsv_tpsv.{native,byte}>: pkg_bigarray
+<examples/linsys/trsv_tpsv.{native,byte}>: pkg_lacaml
 <examples/linsys/trsv_tpsv.{native,byte}>: use_slap
 # Executable posv_ppsv_pbsv
-<examples/linsys/posv_ppsv_pbsv.{native,byte}>: package(bigarray)
-<examples/linsys/posv_ppsv_pbsv.{native,byte}>: package(lacaml)
+<examples/linsys/posv_ppsv_pbsv.{native,byte}>: pkg_bigarray
+<examples/linsys/posv_ppsv_pbsv.{native,byte}>: pkg_lacaml
 <examples/linsys/posv_ppsv_pbsv.{native,byte}>: use_slap
-<examples/linsys/*.ml{,i,y}>: package(bigarray)
-<examples/linsys/*.ml{,i,y}>: package(lacaml)
+<examples/linsys/*.ml{,i,y}>: pkg_bigarray
+<examples/linsys/*.ml{,i,y}>: pkg_lacaml
 <examples/linsys/*.ml{,i,y}>: use_slap
 # Executable perceptron
-<examples/neural-network/perceptron/perceptron.{native,byte}>: package(bigarray)
-<examples/neural-network/perceptron/perceptron.{native,byte}>: package(lacaml)
+<examples/neural-network/perceptron/perceptron.{native,byte}>: pkg_bigarray
+<examples/neural-network/perceptron/perceptron.{native,byte}>: pkg_lacaml
 <examples/neural-network/perceptron/perceptron.{native,byte}>: use_slap
-<examples/neural-network/perceptron/*.ml{,i,y}>: package(bigarray)
-<examples/neural-network/perceptron/*.ml{,i,y}>: package(lacaml)
+<examples/neural-network/perceptron/*.ml{,i,y}>: pkg_bigarray
+<examples/neural-network/perceptron/*.ml{,i,y}>: pkg_lacaml
 <examples/neural-network/perceptron/*.ml{,i,y}>: use_slap
 # Executable logistic_regression
-<examples/neural-network/logistic-regression/logistic_regression.{native,byte}>: package(bigarray)
-<examples/neural-network/logistic-regression/logistic_regression.{native,byte}>: package(lacaml)
+<examples/neural-network/logistic-regression/logistic_regression.{native,byte}>: pkg_bigarray
+<examples/neural-network/logistic-regression/logistic_regression.{native,byte}>: pkg_lacaml
 <examples/neural-network/logistic-regression/logistic_regression.{native,byte}>: use_slap
-<examples/neural-network/logistic-regression/*.ml{,i,y}>: package(bigarray)
-<examples/neural-network/logistic-regression/*.ml{,i,y}>: package(lacaml)
+<examples/neural-network/logistic-regression/*.ml{,i,y}>: pkg_bigarray
+<examples/neural-network/logistic-regression/*.ml{,i,y}>: pkg_lacaml
 <examples/neural-network/logistic-regression/*.ml{,i,y}>: use_slap
 # Executable two_layer_neural_network
-<examples/neural-network/two-layer/two_layer_neural_network.{native,byte}>: package(bigarray)
-<examples/neural-network/two-layer/two_layer_neural_network.{native,byte}>: package(lacaml)
+<examples/neural-network/two-layer/two_layer_neural_network.{native,byte}>: pkg_bigarray
+<examples/neural-network/two-layer/two_layer_neural_network.{native,byte}>: pkg_lacaml
 <examples/neural-network/two-layer/two_layer_neural_network.{native,byte}>: use_slap
-<examples/neural-network/two-layer/*.ml{,i,y}>: package(bigarray)
-<examples/neural-network/two-layer/*.ml{,i,y}>: package(lacaml)
+<examples/neural-network/two-layer/*.ml{,i,y}>: pkg_bigarray
+<examples/neural-network/two-layer/*.ml{,i,y}>: pkg_lacaml
 <examples/neural-network/two-layer/*.ml{,i,y}>: use_slap
 # Executable multilayer_neural_network
-<examples/neural-network/multilayer/multilayer_neural_network.{native,byte}>: package(bigarray)
-<examples/neural-network/multilayer/multilayer_neural_network.{native,byte}>: package(lacaml)
+<examples/neural-network/multilayer/multilayer_neural_network.{native,byte}>: pkg_bigarray
+<examples/neural-network/multilayer/multilayer_neural_network.{native,byte}>: pkg_lacaml
 <examples/neural-network/multilayer/multilayer_neural_network.{native,byte}>: use_slap
-<examples/neural-network/multilayer/*.ml{,i,y}>: package(bigarray)
-<examples/neural-network/multilayer/*.ml{,i,y}>: package(lacaml)
+<examples/neural-network/multilayer/*.ml{,i,y}>: pkg_bigarray
+<examples/neural-network/multilayer/*.ml{,i,y}>: pkg_lacaml
 <examples/neural-network/multilayer/*.ml{,i,y}>: use_slap
 # Executable qr_lacaml
-<examples/porting/qr_factorize/qr_lacaml.{native,byte}>: package(lacaml)
+<examples/porting/qr_factorize/qr_lacaml.{native,byte}>: pkg_lacaml
 # Executable qr_slap
-<examples/porting/qr_factorize/qr_slap.{native,byte}>: package(bigarray)
-<examples/porting/qr_factorize/qr_slap.{native,byte}>: package(lacaml)
+<examples/porting/qr_factorize/qr_slap.{native,byte}>: pkg_bigarray
+<examples/porting/qr_factorize/qr_slap.{native,byte}>: pkg_lacaml
 <examples/porting/qr_factorize/qr_slap.{native,byte}>: use_slap
-<examples/porting/qr_factorize/*.ml{,i,y}>: package(bigarray)
-<examples/porting/qr_factorize/*.ml{,i,y}>: package(lacaml)
+<examples/porting/qr_factorize/*.ml{,i,y}>: pkg_bigarray
+<examples/porting/qr_factorize/*.ml{,i,y}>: pkg_lacaml
 <examples/porting/qr_factorize/*.ml{,i,y}>: use_slap
 # Executable lu_lacaml
-<examples/porting/lu_factorize/lu_lacaml.{native,byte}>: package(lacaml)
+<examples/porting/lu_factorize/lu_lacaml.{native,byte}>: pkg_lacaml
 # Executable lu_slap
-<examples/porting/lu_factorize/lu_slap.{native,byte}>: package(bigarray)
-<examples/porting/lu_factorize/lu_slap.{native,byte}>: package(lacaml)
+<examples/porting/lu_factorize/lu_slap.{native,byte}>: pkg_bigarray
+<examples/porting/lu_factorize/lu_slap.{native,byte}>: pkg_lacaml
 <examples/porting/lu_factorize/lu_slap.{native,byte}>: use_slap
-<examples/porting/lu_factorize/*.ml{,i,y}>: package(bigarray)
-<examples/porting/lu_factorize/*.ml{,i,y}>: package(lacaml)
+<examples/porting/lu_factorize/*.ml{,i,y}>: pkg_bigarray
+<examples/porting/lu_factorize/*.ml{,i,y}>: pkg_lacaml
 <examples/porting/lu_factorize/*.ml{,i,y}>: use_slap
 # Executable perceptron_lacaml
-<examples/porting/perceptron/perceptron_lacaml.{native,byte}>: package(lacaml)
+<examples/porting/perceptron/perceptron_lacaml.{native,byte}>: pkg_lacaml
 # Executable perceptron_slap
-<examples/porting/perceptron/perceptron_slap.{native,byte}>: package(bigarray)
-<examples/porting/perceptron/perceptron_slap.{native,byte}>: package(lacaml)
+<examples/porting/perceptron/perceptron_slap.{native,byte}>: pkg_bigarray
+<examples/porting/perceptron/perceptron_slap.{native,byte}>: pkg_lacaml
 <examples/porting/perceptron/perceptron_slap.{native,byte}>: use_slap
-<examples/porting/perceptron/*.ml{,i,y}>: package(bigarray)
-<examples/porting/perceptron/*.ml{,i,y}>: package(lacaml)
+<examples/porting/perceptron/*.ml{,i,y}>: pkg_bigarray
+<examples/porting/perceptron/*.ml{,i,y}>: pkg_lacaml
 <examples/porting/perceptron/*.ml{,i,y}>: use_slap
 # Executable kmeans_lacaml
-<examples/porting/k-means/kmeans_lacaml.{native,byte}>: package(lacaml)
+<examples/porting/k-means/kmeans_lacaml.{native,byte}>: pkg_lacaml
 # Executable kmeans_slap
-<examples/porting/k-means/kmeans_slap.{native,byte}>: package(bigarray)
-<examples/porting/k-means/kmeans_slap.{native,byte}>: package(lacaml)
+<examples/porting/k-means/kmeans_slap.{native,byte}>: pkg_bigarray
+<examples/porting/k-means/kmeans_slap.{native,byte}>: pkg_lacaml
 <examples/porting/k-means/kmeans_slap.{native,byte}>: use_slap
-<examples/porting/k-means/*.ml{,i,y}>: package(bigarray)
-<examples/porting/k-means/*.ml{,i,y}>: package(lacaml)
+<examples/porting/k-means/*.ml{,i,y}>: pkg_bigarray
+<examples/porting/k-means/*.ml{,i,y}>: pkg_lacaml
 <examples/porting/k-means/*.ml{,i,y}>: use_slap
 # Executable pca_lacaml
-<examples/porting/pca/pca_lacaml.{native,byte}>: package(lacaml)
+<examples/porting/pca/pca_lacaml.{native,byte}>: pkg_lacaml
 # Executable pca_slap
-<examples/porting/pca/pca_slap.{native,byte}>: package(bigarray)
-<examples/porting/pca/pca_slap.{native,byte}>: package(lacaml)
+<examples/porting/pca/pca_slap.{native,byte}>: pkg_bigarray
+<examples/porting/pca/pca_slap.{native,byte}>: pkg_lacaml
 <examples/porting/pca/pca_slap.{native,byte}>: use_slap
-<examples/porting/pca/*.ml{,i,y}>: package(bigarray)
-<examples/porting/pca/*.ml{,i,y}>: package(lacaml)
+<examples/porting/pca/*.ml{,i,y}>: pkg_bigarray
+<examples/porting/pca/*.ml{,i,y}>: pkg_lacaml
 <examples/porting/pca/*.ml{,i,y}>: use_slap
 # OASIS_STOP
 

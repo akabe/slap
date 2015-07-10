@@ -21,6 +21,8 @@ open Format
 
 module S = Slap_size
 
+let (|>) x f = f x (* for OCaml 4.00 or below *)
+
 module Context =
   struct
     type t = int

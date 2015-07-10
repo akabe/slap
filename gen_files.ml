@@ -5,6 +5,8 @@
 open Format
 open Str
 
+let (|>) x f = f x (* for OCaml 4.00 or below *)
+
 (** [gprintf filename fmt ...] generates a file and prints [printf]-style
     formatted string. *)
 let gprintf filename fmt =
