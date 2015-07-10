@@ -1,6 +1,8 @@
 Sized Linear Algebra Package (SLAP)
 ===================================
 
+[![Build Status](https://travis-ci.org/akabe/slap.svg?branch=master)](https://travis-ci.org/akabe/slap)
+
 SLAP is a linear algebra library in [OCaml](http://ocaml.org/) with type-based
 static size checking for matrix operations.
 
