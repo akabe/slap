@@ -1,8 +1,7 @@
 # Dependencies
 # (Lacaml 7.2.5 or below cannot pass tests because they have a bug in the complex version of Vec.ssqr_diff)
 APT_DEPENDS="opam liblapack-dev"
-# OPAM_DEPENDS="ocamlfind cppo lacaml>=7.2.6 ounit"
-OPAM_DEPENDS="ocamlfind cppo ounit"
+OPAM_DEPENDS="ocamlfind cppo lacaml>=7.2.6 ounit"
 
 # Select PPA
 case "$OCAML_VERSION,$OPAM_VERSION" in
@@ -36,15 +35,6 @@ opam --git-version
 
 # Install $OPAM_DEPENDS
 opam install ${OPAM_DEPENDS}
-
-# Install Lacaml
-wget https://github.com/mmottl/lacaml/releases/download/v7.2.6/lacaml-7.2.6.tar.gz
-tar zxvf lacaml-7.2.6.tar.gz
-cd lacaml-7.2.6
-./configure
-make
-make install
-cd ..
 
 # Test
 ./configure $CONFIG --enable-tests --enable-examples
