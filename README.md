@@ -410,7 +410,7 @@ val y : (X.n, 'a) vec = R1 R2 R3 R4 R5
                      7  9 11 13 15
 ```
 
-`Vec.of_list` raises an **exception** (at runtime) if the given size is not
+`Vec.of_list_dyn` raises an **exception** (at runtime) if the given size is not
 equal to the length, i.e., the lengths of `lst1` and `lst2`
 are different in the above case. This dynamic check is unavoidable because the
 equality of sizes of two vectors loaded from different files cannot be
