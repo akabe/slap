@@ -1,6 +1,16 @@
 language: c
-script: bash -e .travis-ci.sh
+sudo: false
 cache: apt
+
+# required APT packages
+addons:
+  apt:
+    packages:
+    - libblas-dev
+    - liblapack-dev
+
+script: bash -ue .travis-ci.sh
+
 os:
   - linux
 env:

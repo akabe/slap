@@ -1,40 +1,31 @@
 # Dependencies
 # (Lacaml 7.2.5 or below cannot pass tests because they have a bug in the complex version of Vec.ssqr_diff)
-APT_DEPENDS="opam liblapack-dev"
-OPAM_DEPENDS="ocamlfind cppo lacaml>=7.2.6 ounit"
+OPAM_DEPS="ocamlfind cppo lacaml>=7.2.6 ounit"
 
-# Select PPA
-case "$OCAML_VERSION,$OPAM_VERSION" in
-  3.12.1,1.2.0) ppa=avsm/ocaml312+opam12 ;;
-  4.00.1,1.2.0) ppa=avsm/ocaml40+opam12 ;;
-  4.01.0,1.2.0) ppa=avsm/ocaml41+opam12 ;;
-  4.02.0,1.2.0) ppa=avsm/ocaml42+opam12 ;;
-  4.02.1,1.2.0) ppa=avsm/ocaml42+opam12 ;;
-  4.02.2,1.2.0) ppa=avsm/ocaml42+opam12 ;;
-  *) echo Unknown $OCAML_VERSION,$OPAM_VERSION; exit 1 ;;
-esac
+export PREFIX="./usr"
+export BINDIR="$PREFIX/bin"
+export LIBDIR="$PREFIX/lib"
+export PATH="$BINDIR:$PATH"
 
-# Install OPAM and $APT_DEPENDS
-echo "yes" | sudo add-apt-repository ppa:$ppa
-sudo apt-get update -qq
-sudo apt-get install -qq ${APT_DEPENDS}
+mkdir -p $PREFIX
+
+# Download and install OPAM and OCaml
+wget -q -O opam_installer.sh "https://raw.github.com/ocaml/opam/master/shell/opam_installer.sh"
+if [ -n "${OPAM_VERSION:-}" ]; then
+    sed -i "s/^VERSION=.*$/VERSION='$OPAM_VERSION'/" opam_installer.sh
+fi
+echo y | sh opam_installer.sh $BINDIR $OCAML_VERSION
 
 # Install OCaml
 export OPAMYES=1
 export OPAMVERBOSE=1
 opam init
-opam switch $OCAML_VERSION
 eval `opam config env`
 
-# Show OCaml and OPAM versions
-echo OCaml version
-ocaml -version
-echo OPAM versions
-opam --version
-opam --git-version
-
-# Install $OPAM_DEPENDS
-opam install ${OPAM_DEPENDS}
+# Install OPAM packages
+if [ -n "${OPAM_DEPS:-}" ]; then
+    opam install $OPAM_DEPS
+fi
 
 # Test
 ./configure $CONFIG --enable-tests --enable-examples
