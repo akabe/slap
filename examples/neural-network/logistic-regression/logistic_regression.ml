@@ -25,7 +25,7 @@ let main () =
   (* Create a weight vector *)
   let w = Vec.random input_dim in
   (* training *)
-  for _ = 1 to 1000 do
+  for i = 1 to 1000 do
     let k = Random.int (Array.length samples) in
     let (x, t) = samples.(k) in
     train 0.5 w x t

@@ -237,7 +237,7 @@ let batch_train ?(eta=0.5) ?(check=true) nnet samples =
 let minibatch_train ?(eta=0.5) ?(check=true) nnet n samples =
   init_mask nnet;
   init_dwmat nnet;
-  for _ = 1 to n do
+  for i = 1 to n do
     let (x, t) = samples.(Random.int (Array.length samples)) in
     ignore (nnet.exec nnet true x); (* feed forward *)
     nnet.feedback nnet x t; (* feed back *)
