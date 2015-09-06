@@ -287,11 +287,11 @@ end
 
 let get_exprs_list e0 =
   let rec list acc = function
-    | { pexp_desc = Pexp_construct ({ txt = Lident "[]" }, None) } ->
+    | { pexp_desc = Pexp_construct ({ txt = Lident "[]"; _ }, None); _ } ->
       List.rev acc
     | { pexp_desc = Pexp_construct
-            ({ txt = Lident "::" },
-             Some ({ pexp_desc = Pexp_tuple ([elm; rest]) })) } ->
+            ({ txt = Lident "::"; _ },
+             Some ({ pexp_desc = Pexp_tuple ([elm; rest]); _ })); _ } ->
       list (elm :: acc) rest
     | e ->
       errorf e.pexp_loc
@@ -300,7 +300,7 @@ let get_exprs_list e0 =
   list [] e0
 
 let get_exprs_list_or_tuple = function
-  | { pexp_desc = Pexp_tuple el } -> el
+  | { pexp_desc = Pexp_tuple el; _ } -> el
   | e0 -> try get_exprs_list e0 with Error _ -> [e0]
 
 let get_exprs_matrix e =
@@ -329,7 +329,7 @@ let transform_mat kind e =
 
 let transform loc transformer kind payload =
   match payload with
-  | PStr [{ pstr_desc = Pstr_eval (e, _) }] ->
+  | PStr [{ pstr_desc = Pstr_eval (e, _); _ }] ->
     let old_loc = !default_loc in
     default_loc := e.pexp_loc;
     let e' = transformer kind e in
@@ -342,7 +342,7 @@ let transform loc transformer kind payload =
 let slap_mapper =
   let super = default_mapper in
   let expr self e = match e with
-    | { pexp_desc = Pexp_extension ({txt}, payload) } ->
+    | { pexp_desc = Pexp_extension ({txt; _}, payload); _ } ->
       let loc = e.pexp_loc in
       begin
         try

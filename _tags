@@ -168,9 +168,10 @@ true: annot, bin_annot
 # OASIS_STOP
 
 true: -traverse
-<{lib,examples}/**>: traverse
+<{lib,ppx,test,examples}/**>: traverse
 
 <test/ppx/*>: ppx_slap
 
-<**/*.ml{,i}>: warn(Aer-44), strict_sequence, safe_string
+<{lib,ppx,test}/*.ml{,i}>: warn(A-4-33-41-42-43-34-44-50), safe_string, strict_sequence, strict_formats
+<examples/*.ml{,i}>: warn(A-4-33-41-42-43-34-44-48), safe_string, strict_sequence, strict_formats
 <**/*>: no_alias_deps

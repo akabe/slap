@@ -18,7 +18,7 @@ let p_of_ipiv m ipiv =
   let p = Mat.identity m in
   for i = 1 to Slap.Size.to_int k do
     let j = Int32.to_int (Slap.Vec.get_dyn ipiv i) in
-    if i != j then swap (Mat.col_dyn p i) (Mat.col_dyn p j)
+    if i != j then swap ~x:(Mat.col_dyn p i) (Mat.col_dyn p j)
   done;
   p
 
