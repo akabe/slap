@@ -22,7 +22,11 @@
 <link title="Slap_D" rel="Chapter" href="Slap_D.html">
 <link title="Slap_C" rel="Chapter" href="Slap_C.html">
 <link title="Slap_Z" rel="Chapter" href="Slap_Z.html">
-<link title="Slap_version" rel="Chapter" href="Slap_version.html"><title>Slap.Io</title>
+<link title="Slap_version" rel="Chapter" href="Slap_version.html"><link title="General pretty printers" rel="Section" href="#2_Generalprettyprinters">
+<link title="Default pretty printers for elements of vectors or matrices" rel="Section" href="#2_Defaultprettyprintersforelementsofvectorsormatrices">
+<link title="Pretty-printing in standard style" rel="Section" href="#2_Prettyprintinginstandardstyle">
+<link title="Toplevel pretty-printers" rel="Section" href="#2_Toplevelprettyprinters">
+<title>Slap.Io</title>
 </head>
 <body>
 <div class="navbar"><a class="pre" href="Slap.Mat.html" title="Slap.Mat">Previous</a>
@@ -36,7 +40,9 @@ Pretty printers.<br>
 </div>
 <hr width="100%">
 
-<pre><span class="keyword">module</span> <a href="Slap_io.Context.html">Context</a>: <code class="code">sig</code> <a href="Slap_io.Context.html">..</a> <code class="code">end</code></pre>
+<pre><span class="keyword">module</span> <a href="Slap_io.Context.html">Context</a>: <code class="code">sig</code> <a href="Slap_io.Context.html">..</a> <code class="code">end</code></pre><br>
+<h2 id="2_Generalprettyprinters">General pretty printers</h2><br>
+
 <pre><code><span id="TYPEindex"><span class="keyword">type</span> <code class="type"></code>index</span> = </code></pre><table class="typetable">
 <tr>
 <td align="left" valign="top" >
@@ -133,6 +139,8 @@ A generator of pretty printers for row vectors.<br>
 <pre><span id="VALpp_mat_gen"><span class="keyword">val</span> pp_mat_gen</span> : <code class="type">?pp_open:(Format.formatter -> unit) -><br>       ?pp_close:(Format.formatter -> unit) -><br>       ?pp_head:(Format.formatter -> int -> unit) -><br>       ?pp_foot:(Format.formatter -> int -> unit) -><br>       ?pp_end_row:(Format.formatter -> <a href="Slap_io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_end_col:(Format.formatter -><br>                    row:<a href="Slap_io.html#TYPEindex">index</a> -> col:<a href="Slap_io.html#TYPEindex">index</a> -> unit) -><br>       ?pp_left:(Format.formatter -> int -> unit) -><br>       ?pp_right:(Format.formatter -> int -> unit) -><br>       ?pad:char -><br>       ?ellipsis:string -><br>       ?vertical_context:<a href="Slap_io.Context.html#TYPEt">Context.t</a> option -><br>       ?horizontal_context:<a href="Slap_io.Context.html#TYPEt">Context.t</a> option -><br>       (Format.formatter -> 'num -> unit) -><br>       Format.formatter -> ('m, 'n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a> -> unit</code></pre><div class="info ">
 A generator of pretty printers for matrices.<br>
 </div>
+<br>
+<h2 id="2_Defaultprettyprintersforelementsofvectorsormatrices">Default pretty printers for elements of vectors or matrices</h2><br>
 
 <pre><span id="TYPEpp_el_default"><span class="keyword">type</span> <code class="type">'el</code> pp_el_default</span> = <code class="type">(Format.formatter -> 'el -> unit) Pervasives.ref</code> </pre>
 
@@ -148,6 +156,8 @@ A generator of pretty printers for matrices.<br>
 <pre><span id="VALpp_int32_el_default"><span class="keyword">val</span> pp_int32_el_default</span> : <code class="type">int32 <a href="Slap_io.html#TYPEpp_el_default">pp_el_default</a></code></pre><div class="info ">
 <code class="code">fprintf ppf "%ld" x</code><br>
 </div>
+<br>
+<h2 id="2_Prettyprintinginstandardstyle">Pretty-printing in standard style</h2><br>
 
 <pre><span id="TYPEpp_vec"><span class="keyword">type</span> <code class="type">('n, 'num, 'prec, 'cnt_or_dsc)</code> pp_vec</span> = <code class="type">Format.formatter -> ('n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap_vec.html#TYPEt">Slap_vec.t</a> -> unit</code> </pre>
 <div class="info ">
@@ -169,5 +179,7 @@ A type of standard pretty printers for matrices.<br>
 
 <pre><span id="VALpp_fmat"><span class="keyword">val</span> pp_fmat</span> : <code class="type">('m, 'n, float, 'prec, 'cnt_or_dsc) <a href="Slap_io.html#TYPEpp_mat">pp_mat</a></code></pre>
 <pre><span id="VALpp_cmat"><span class="keyword">val</span> pp_cmat</span> : <code class="type">('m, 'n, Complex.t, 'prec, 'cnt_or_dsc) <a href="Slap_io.html#TYPEpp_mat">pp_mat</a></code></pre>
-<pre><span id="VALpp_imat"><span class="keyword">val</span> pp_imat</span> : <code class="type">('m, 'n, int32, 'prec, 'cnt_or_dsc) <a href="Slap_io.html#TYPEpp_mat">pp_mat</a></code></pre>
-<pre><span class="keyword">module</span> <a href="Slap_io.Toplevel.html">Toplevel</a>: <code class="code">sig</code> <a href="Slap_io.Toplevel.html">..</a> <code class="code">end</code></pre></body></html>
+<pre><span id="VALpp_imat"><span class="keyword">val</span> pp_imat</span> : <code class="type">('m, 'n, int32, 'prec, 'cnt_or_dsc) <a href="Slap_io.html#TYPEpp_mat">pp_mat</a></code></pre><br>
+<h2 id="2_Toplevelprettyprinters">Toplevel pretty-printers</h2><br>
+
+<pre><span class="keyword">module</span> <a href="Slap_io.Toplevel.html">Toplevel</a>: <code class="code">sig</code> <a href="Slap_io.Toplevel.html">..</a> <code class="code">end</code></pre><script type="text/javascript" src="../google-analytics.js"></script></body></html>

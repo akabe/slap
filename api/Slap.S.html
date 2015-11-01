@@ -22,7 +22,43 @@
 <link title="Slap_D" rel="Chapter" href="Slap_D.html">
 <link title="Slap_C" rel="Chapter" href="Slap_C.html">
 <link title="Slap_Z" rel="Chapter" href="Slap_Z.html">
-<link title="Slap_version" rel="Chapter" href="Slap_version.html"><title>Slap.S</title>
+<link title="Slap_version" rel="Chapter" href="Slap_version.html"><link title="BLAS interface" rel="Section" href="#2_BLASinterface">
+<link title="BLAS interface" rel="Section" href="#2_BLASinterface">
+<link title="LAPACK interface" rel="Section" href="#2_LAPACKinterface">
+<link title="LAPACK interface" rel="Section" href="#2_LAPACKinterface">
+<link title="BLAS interface" rel="Section" href="#2_BLASinterface">
+<link title="BLAS interface" rel="Section" href="#2_BLASinterface">
+<link title="LAPACK interface" rel="Section" href="#2_LAPACKinterface">
+<link title="LAPACK interface" rel="Section" href="#2_LAPACKinterface">
+<link title="LAPACK interface" rel="Section" href="#2_LAPACKinterface">
+<link title="Level 1" rel="Subsection" href="#3_Level1">
+<link title="Level 2" rel="Subsection" href="#3_Level2">
+<link title="Level 3" rel="Subsection" href="#3_Level3">
+<link title="Auxiliary routines" rel="Subsection" href="#3_Auxiliaryroutines">
+<link title="Linear equations (computational routines)" rel="Subsection" href="#3_Linearequationscomputationalroutines">
+<link title="Linear equations (simple drivers)" rel="Subsection" href="#3_Linearequationssimpledrivers">
+<link title="Least squares (simple drivers)" rel="Subsection" href="#3_Leastsquaressimpledrivers">
+<link title="Level 1" rel="Subsection" href="#3_Level1">
+<link title="Level 2" rel="Subsection" href="#3_Level2">
+<link title="Auxiliary routines" rel="Subsection" href="#3_Auxiliaryroutines">
+<link title="Auxiliary routines" rel="Subsection" href="#3_Auxiliaryroutines">
+<link title="Linear equations (computational routines)" rel="Subsection" href="#3_Linearequationscomputationalroutines">
+<link title="Linear equations (computational routines)" rel="Subsection" href="#3_Linearequationscomputationalroutines">
+<link title="Least squares (expert drivers)" rel="Subsection" href="#3_Leastsquaresexpertdrivers">
+<link title="Least squares (expert drivers)" rel="Subsection" href="#3_Leastsquaresexpertdrivers">
+<link title="General SVD routines" rel="Subsection" href="#3_GeneralSVDroutines">
+<link title="General SVD routines" rel="Subsection" href="#3_GeneralSVDroutines">
+<link title="General eigenvalue problem (simple drivers)" rel="Subsection" href="#3_Generaleigenvalueproblemsimpledrivers">
+<link title="General eigenvalue problem (simple drivers)" rel="Subsection" href="#3_Generaleigenvalueproblemsimpledrivers">
+<link title="Symmetric-matrix eigenvalue and singular value problems
+         (simple drivers)" rel="Subsection" href="#3_Symmetricmatrixeigenvalueandsingularvalueproblemssimpledrivers">
+<link title="Symmetric-matrix eigenvalue and singular value problems
+         (simple drivers)" rel="Subsection" href="#3_Symmetricmatrixeigenvalueandsingularvalueproblemssimpledrivers">
+<link title="Symmetric-matrix eigenvalue and singular value problems
+       (expert & RRR drivers)" rel="Subsection" href="#3_SymmetricmatrixeigenvalueandsingularvalueproblemsexpertRRRdrivers">
+<link title="Symmetric-matrix eigenvalue and singular value problems
+       (expert & RRR drivers)" rel="Subsection" href="#3_SymmetricmatrixeigenvalueandsingularvalueproblemsexpertRRRdrivers">
+<title>Slap.S</title>
 </head>
 <body>
 <div class="navbar"><a class="pre" href="Slap.D.html" title="Slap.D">Previous</a>
@@ -86,6 +122,12 @@ A pretty-printer for column vectors.<br>
 <pre><span id="VALpp_mat"><span class="keyword">val</span> pp_mat</span> : <code class="type">Format.formatter -> ('m, 'n, 'cnt_or_dsc) <a href="Slap_S.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 A pretty-printer for matrices.<br>
 </div>
+<br>
+<h2 id="2_BLASinterface">BLAS interface</h2><br>
+<br>
+<h2 id="2_BLASinterface">BLAS interface</h2><br>
+<br>
+<h3 id="3_Level1">Level 1</h3><br>
 
 <pre><span id="VALswap"><span class="keyword">val</span> swap</span> : <code class="type">x:('n, 'x_cd) <a href="Slap_S.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_S.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
 <code class="code">swap ~x y</code> swaps elements in <code class="code">x</code> and <code class="code">y</code>.<br>
@@ -118,6 +160,8 @@ A pretty-printer for matrices.<br>
 <pre><span id="VALamax"><span class="keyword">val</span> amax</span> : <code class="type">('n, 'cd) <a href="Slap_S.html#TYPEvec">vec</a> -> <a href="Slap_S.html#TYPEnum_type">num_type</a></code></pre><div class="info ">
 <code class="code">amax x</code> finds the maximum value of all elements in <code class="code">x</code>.<br>
 </div>
+<br>
+<h3 id="3_Level2">Level 2</h3><br>
 
 <pre><span id="VALgemv"><span class="keyword">val</span> gemv</span> : <code class="type">?beta:<a href="Slap_S.html#TYPEnum_type">num_type</a> -><br>       ?y:('m, 'y_cd) <a href="Slap_S.html#TYPEvec">vec</a> -><br>       trans:(('a_m, 'a_n, 'a_cd) <a href="Slap_S.html#TYPEmat">mat</a> -> ('m, 'n, 'a_cd) <a href="Slap_S.html#TYPEmat">mat</a>)<br>             <a href="Slap_S.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap_S.html#TYPEnum_type">num_type</a> -><br>       ('a_m, 'a_n, 'a_cd) <a href="Slap_S.html#TYPEmat">mat</a> -><br>       ('n, 'x_cd) <a href="Slap_S.html#TYPEvec">vec</a> -> ('m, 'y_cd) <a href="Slap_S.html#TYPEvec">vec</a></code></pre><div class="info ">
 <code class="code">gemv ?beta ?y ~trans ?alpha a x</code> executes
@@ -251,6 +295,8 @@ A pretty-printer for matrices.<br>
 <li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
+<br>
+<h3 id="3_Level3">Level 3</h3><br>
 
 <pre><span id="VALgemm"><span class="keyword">val</span> gemm</span> : <code class="type">?beta:<a href="Slap_S.html#TYPEnum_type">num_type</a> -><br>       ?c:('m, 'n, 'c_cd) <a href="Slap_S.html#TYPEmat">mat</a> -><br>       transa:(('a_m, 'a_k, 'a_cd) <a href="Slap_S.html#TYPEmat">mat</a> -> ('m, 'k, 'a_cd) <a href="Slap_S.html#TYPEmat">mat</a>)<br>              <a href="Slap_S.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap_S.html#TYPEnum_type">num_type</a> -><br>       ('a_m, 'a_k, 'a_cd) <a href="Slap_S.html#TYPEmat">mat</a> -><br>       transb:(('b_k, 'b_n, 'b_cd) <a href="Slap_S.html#TYPEmat">mat</a> -> ('k, 'n, 'b_cd) <a href="Slap_S.html#TYPEmat">mat</a>)<br>              <a href="Slap_S.html#TYPEtrans3">trans3</a> -><br>       ('b_k, 'b_n, 'b_cd) <a href="Slap_S.html#TYPEmat">mat</a> -> ('m, 'n, 'c_cd) <a href="Slap_S.html#TYPEmat">mat</a></code></pre><div class="info ">
 <code class="code">gemm ?beta ?c ~transa ?alpha a ~transb b</code> executes
@@ -396,6 +442,12 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">beta</code> : default = <code class="code">0.0</code></div>
 <div class="param_info"><code class="code">trans</code> : the transpose flag for <code class="code">a</code></div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
+<br>
+<h2 id="2_LAPACKinterface">LAPACK interface</h2><br>
+<br>
+<h2 id="2_LAPACKinterface">LAPACK interface</h2><br>
+<br>
+<h3 id="3_Auxiliaryroutines">Auxiliary routines</h3><br>
 
 <pre><span id="VALlacpy"><span class="keyword">val</span> lacpy</span> : <code class="type">?uplo:[ `L | `U ] -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap_S.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap_S.html#TYPEmat">mat</a> -> ('m, 'n, 'b_cd) <a href="Slap_S.html#TYPEmat">mat</a></code></pre><div class="info ">
 <code class="code">lacpy ?uplo ?b a</code> copies the matrix <code class="code">a</code> into the matrix <code class="code">b</code>.<ul>
@@ -464,6 +516,8 @@ A pretty-printer for matrices.<br>
     The upper or lower triangular part is overwritten.<br>
 </div>
 <div class="param_info"><code class="code">up</code> : default = <code class="code">true</code>.</div>
+<br>
+<h3 id="3_Linearequationscomputationalroutines">Linear equations (computational routines)</h3><br>
 
 <pre><span id="VALgetrf"><span class="keyword">val</span> getrf</span> : <code class="type">?ipiv:(('m, 'n) <a href="Slap_size.html#TYPEmin">Slap_size.min</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('m, 'n, 'cd) <a href="Slap_S.html#TYPEmat">mat</a> -><br>       (('m, 'n) <a href="Slap_size.html#TYPEmin">Slap_size.min</a>, 'cnt) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a></code></pre><div class="info ">
 <code class="code">getrf ?ipiv a</code> computes LU factorization of matrix <code class="code">a</code> using partial
@@ -740,6 +794,8 @@ A pretty-printer for matrices.<br>
 <b>Returns</b> vector <code class="code">tau</code>, which is overwritten.<br>
 </div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
+<br>
+<h3 id="3_Linearequationssimpledrivers">Linear equations (simple drivers)</h3><br>
 
 <pre><span id="VALgesv"><span class="keyword">val</span> gesv</span> : <code class="type">?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_S.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_S.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">gesv ?ipiv a b</code> solves a system of linear equations <code class="code">a * x = b</code> where <code class="code">a</code>
@@ -912,6 +968,8 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">ipiv</code> : a result of <code class="code">sytrf</code>. It is internally computed by <code class="code">sytrf</code> if
                 omitted.</div>
+<br>
+<h3 id="3_Leastsquaressimpledrivers">Least squares (simple drivers)</h3><br>
 
 <pre><span id="TYPEgels_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n, 'nrhs)</code> gels_min_lwork</span> </pre>
 
@@ -947,6 +1005,12 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 <div class="param_info"><code class="code">trans</code> : the transpose flag for <code class="code">a</code>.</div>
+<br>
+<h2 id="2_BLASinterface">BLAS interface</h2><br>
+<br>
+<h2 id="2_BLASinterface">BLAS interface</h2><br>
+<br>
+<h3 id="3_Level1">Level 1</h3><br>
 
 <pre><span id="VALdot"><span class="keyword">val</span> dot</span> : <code class="type">('n, 'x_cd) <a href="Slap_S.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_S.html#TYPEvec">vec</a> -> float</code></pre><div class="info ">
 <code class="code">dot x y</code><br>
@@ -957,6 +1021,8 @@ A pretty-printer for matrices.<br>
 <code class="code">asum x</code><br>
 <b>Returns</b> the sum of absolute values of elements in the vector <code class="code">x</code>.<br>
 </div>
+<br>
+<h3 id="3_Level2">Level 2</h3><br>
 
 <pre><span id="VALsbmv"><span class="keyword">val</span> sbmv</span> : <code class="type">k:'k <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?y:('n, 'y_cd) <a href="Slap_S.html#TYPEvec">vec</a> -><br>       (('n, 'k) <a href="Slap_size.html#TYPEsyband">Slap_size.syband</a>, 'n, 'a_cd) <a href="Slap_S.html#TYPEmat">mat</a> -><br>       ?up:bool -><br>       ?alpha:float -><br>       ?beta:float -> ('n, 'x_cd) <a href="Slap_S.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_S.html#TYPEvec">vec</a></code></pre><div class="info ">
 <code class="code">sbmv ~k ?y a ?up ?alpha ?beta x</code> computes <code class="code">y := alpha * a * x + beta * y</code>
@@ -991,6 +1057,18 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
 <div class="param_info"><code class="code">up</code> : default = <code class="code">true</code>, i.e., the upper triangular part of <code class="code">a</code> is
                  supplied.</div>
+<br>
+<h2 id="2_LAPACKinterface">LAPACK interface</h2><br>
+<br>
+<h2 id="2_LAPACKinterface">LAPACK interface</h2><br>
+<br>
+<h3 id="3_Auxiliaryroutines">Auxiliary routines</h3><br>
+<br>
+<h2 id="2_LAPACKinterface">LAPACK interface</h2><br>
+<br>
+<h3 id="3_Auxiliaryroutines">Auxiliary routines</h3><br>
+<br>
+<h4 id="4_lansy">lansy</h4><br>
 
 <pre><span id="TYPElansy_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'a)</code> lansy_min_lwork</span> </pre>
 
@@ -1015,10 +1093,18 @@ A pretty-printer for matrices.<br>
 </ul>
 </div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
+<br>
+<h4 id="4_lamch">lamch</h4><br>
 
 <pre><span id="VALlamch"><span class="keyword">val</span> lamch</span> : <code class="type">[ `B | `E | `L | `M | `N | `O | `P | `R | `S | `U ] -> float</code></pre><div class="info ">
 <code class="code">lamch cmach</code> see LAPACK documentation.<br>
 </div>
+<br>
+<h3 id="3_Linearequationscomputationalroutines">Linear equations (computational routines)</h3><br>
+<br>
+<h3 id="3_Linearequationscomputationalroutines">Linear equations (computational routines)</h3><br>
+<br>
+<h4 id="4_orgqr">orgqr</h4><br>
 
 <pre><span id="TYPEorgqr_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> orgqr_min_lwork</span> </pre>
 
@@ -1042,6 +1128,8 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector</div>
 <div class="param_info"><code class="code">tau</code> : a result of <code class="code">geqrf</code></div>
+<br>
+<h4 id="4_ormqr">ormqr</h4><br>
 
 <pre><span id="TYPEormqr_min_lwork"><span class="keyword">type</span> <code class="type">('r, 'm, 'n)</code> ormqr_min_lwork</span> </pre>
 
@@ -1088,6 +1176,8 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">trans</code> : the transpose flag for orthogonal matrix <code class="code">Q</code>.</div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 <div class="param_info"><code class="code">tau</code> : a result of <code class="code">geqrf</code>.</div>
+<br>
+<h4 id="4_gecon">gecon</h4><br>
 
 <pre><span id="TYPEgecon_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> gecon_min_lwork</span> </pre>
 
@@ -1117,6 +1207,8 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">anorm</code> : default = the norm of matrix <code class="code">a</code> as returned by <code class="code">lange</code>.</div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 <div class="param_info"><code class="code">iwork</code> : default = an optimum-length vector.</div>
+<br>
+<h4 id="4_sycon">sycon</h4><br>
 
 <pre><span id="TYPEsycon_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> sycon_min_lwork</span> </pre>
 
@@ -1149,6 +1241,8 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">anorm</code> : default = the norm of matrix <code class="code">a</code> as returned by <code class="code">lange</code>.</div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 <div class="param_info"><code class="code">iwork</code> : default = an optimum-length vector.</div>
+<br>
+<h4 id="4_pocon">pocon</h4><br>
 
 <pre><span id="TYPEpocon_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> pocon_min_lwork</span> </pre>
 
@@ -1179,6 +1273,12 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">anorm</code> : default = the norm of matrix <code class="code">a</code> as returned by <code class="code">lange</code>.</div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 <div class="param_info"><code class="code">iwork</code> : default = an optimum-length vector.</div>
+<br>
+<h3 id="3_Leastsquaresexpertdrivers">Least squares (expert drivers)</h3><br>
+<br>
+<h3 id="3_Leastsquaresexpertdrivers">Least squares (expert drivers)</h3><br>
+<br>
+<h4 id="4_gelsy">gelsy</h4><br>
 
 <pre><span id="TYPEgelsy_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n, 'nrhs)</code> gelsy_min_lwork</span> </pre>
 
@@ -1205,6 +1305,8 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">rcond</code> : default = <code class="code">-1.0</code> (machine precision)</div>
 <div class="param_info"><code class="code">jpvt</code> : default = a <code class="code">'n</code>-dimensional vector.</div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
+<br>
+<h4 id="4_gelsd">gelsd</h4><br>
 
 <pre><span id="TYPEgelsd_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n, 'nrhs)</code> gelsd_min_lwork</span> </pre>
 
@@ -1242,6 +1344,8 @@ A pretty-printer for matrices.<br>
                  They are implicitly computed if omitted.</div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 <div class="param_info"><code class="code">iwork</code> : default = an optimum-length vector.</div>
+<br>
+<h4 id="4_gelss">gelss</h4><br>
 
 <pre><span id="TYPEgelss_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n, 'nrhs)</code> gelss_min_lwork</span> </pre>
 
@@ -1270,6 +1374,12 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">s</code> : the singular values of <code class="code">a</code> in decreasing order.
                  They are implicitly computed if omitted.</div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
+<br>
+<h3 id="3_GeneralSVDroutines">General SVD routines</h3><br>
+<br>
+<h3 id="3_GeneralSVDroutines">General SVD routines</h3><br>
+<br>
+<h4 id="4_gesvd">gesvd</h4><br>
 
 <pre><span id="TYPEgesvd_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'n)</code> gesvd_min_lwork</span> </pre>
 
@@ -1342,6 +1452,8 @@ A pretty-printer for matrices.<br>
 <p>
 
     (<b>Note</b>: <code class="code">jobu</code> and <code class="code">jobvt</code> cannot both be <a href="Slap_common.html#VALsvd_overwrite"><code class="code">Slap_common.svd_overwrite</code></a>.)</div>
+<br>
+<h4 id="4_gesdd">gesdd</h4><br>
 
 <pre><span id="TYPEgesdd_liwork"><span class="keyword">type</span> <code class="type">('m, 'n)</code> gesdd_liwork</span> </pre>
 
@@ -1426,6 +1538,12 @@ A pretty-printer for matrices.<br>
                  (default = an implicitly allocated matrix.)</div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 <div class="param_info"><code class="code">iwork</code> : default = an optimum-length vector.</div>
+<br>
+<h3 id="3_Generaleigenvalueproblemsimpledrivers">General eigenvalue problem (simple drivers)</h3><br>
+<br>
+<h3 id="3_Generaleigenvalueproblemsimpledrivers">General eigenvalue problem (simple drivers)</h3><br>
+<br>
+<h4 id="4_geev">geev</h4><br>
 
 <pre><span id="VALgeev_min_lwork"><span class="keyword">val</span> geev_min_lwork</span> : <code class="type">?vectors:bool -> 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> (module Slap_size.SIZE)</code></pre><div class="info ">
 <code class="code">geev_min_lwork ?vectors n</code> computes the minimum length of workspace for
@@ -1491,6 +1609,14 @@ A pretty-printer for matrices.<br>
                 (default = an implicitly allocated vector.)</div>
 <div class="param_info"><code class="code">wi</code> : a return location for imaginary parts of eigenvalues.
                 (default = an implicitly allocated vector.)</div>
+<br>
+<h3 id="3_Symmetricmatrixeigenvalueandsingularvalueproblemssimpledrivers">Symmetric-matrix eigenvalue and singular value problems
+         (simple drivers)</h3><br>
+<br>
+<h3 id="3_Symmetricmatrixeigenvalueandsingularvalueproblemssimpledrivers">Symmetric-matrix eigenvalue and singular value problems
+         (simple drivers)</h3><br>
+<br>
+<h4 id="4_syev">syev</h4><br>
 
 <pre><span id="TYPEsyev_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> syev_min_lwork</span> </pre>
 
@@ -1536,6 +1662,8 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 <div class="param_info"><code class="code">w</code> : a return location for eigenvalues.
              (default = an implicitly allocated vector.)</div>
+<br>
+<h4 id="4_syevd">syevd</h4><br>
 
 <pre><span id="VALsyevd_min_lwork"><span class="keyword">val</span> syevd_min_lwork</span> : <code class="type">vectors:bool -> 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> (module Slap_size.SIZE)</code></pre><div class="info ">
 <code class="code">syevd_min_lwork ?vectors n</code> computes the minimum length of workspace <code class="code">work</code>
@@ -1597,6 +1725,8 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">iwork</code> : default = an optimum-length vector.</div>
 <div class="param_info"><code class="code">w</code> : a return location for eigenvalues.
              (default = an implicitly allocated vector.)</div>
+<br>
+<h4 id="4_sbev">sbev</h4><br>
 
 <pre><span id="TYPEsbev_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> sbev_min_lwork</span> </pre>
 
@@ -1625,6 +1755,14 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">work</code> : workspace for <code class="code">sbev</code></div>
 <div class="param_info"><code class="code">w</code> : <code class="code">w</code> is replaced by eigenvalues if it is given, or newly
                 allocated if omitted.</div>
+<br>
+<h3 id="3_SymmetricmatrixeigenvalueandsingularvalueproblemsexpertRRRdrivers">Symmetric-matrix eigenvalue and singular value problems
+       (expert &amp; RRR drivers)</h3><br>
+<br>
+<h3 id="3_SymmetricmatrixeigenvalueandsingularvalueproblemsexpertRRRdrivers">Symmetric-matrix eigenvalue and singular value problems
+       (expert &amp; RRR drivers)</h3><br>
+<br>
+<h4 id="4_syevr">syevr</h4><br>
 
 <pre><span id="TYPEsyevr_min_lwork"><span class="keyword">type</span> <code class="type">'n</code> syevr_min_lwork</span> </pre>
 
@@ -1734,6 +1872,8 @@ The signature of returned modules of <code class="code">syevr_dyn</code>.
                   elements in <code class="code">z</code>.
                   (default = an implicitly allocated matrix of the minimum
                   required dimension.)</div>
+<br>
+<h4 id="4_sygv">sygv</h4><br>
 
 <pre><span id="VALsygv_opt_lwork"><span class="keyword">val</span> sygv_opt_lwork</span> : <code class="type">?vectors:bool -><br>       ?up:bool -><br>       ?itype:[ `AB | `A_B | `BA ] -><br>       ('n, 'n, 'a_cd) <a href="Slap_S.html#TYPEmat">mat</a> -><br>       ('n, 'n, 'b_cd) <a href="Slap_S.html#TYPEmat">mat</a> -> (module Slap_size.SIZE)</code></pre><div class="info ">
 <code class="code">sygv_opt_lwork ?vectors ?up ?itype a b</code> computes the optimum length of
@@ -1776,6 +1916,8 @@ The signature of returned modules of <code class="code">syevr_dyn</code>.
 <div class="param_info"><code class="code">w</code> : a return location for eigenvalues.
                  (default = an implicitly allocated vector.)</div>
 <div class="param_info"><code class="code">itype</code> : the behavior of this routine.</div>
+<br>
+<h4 id="4_sbgv">sbgv</h4><br>
 
 <pre><span id="VALsbgv"><span class="keyword">val</span> sbgv</span> : <code class="type">ka:'ka <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       kb:'kb <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?z:('n, 'n, 'z_cd) <a href="Slap_S.html#TYPEmat">mat</a> -><br>       ?up:bool -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_S.html#TYPEvec">vec</a> -><br>       ?w:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_S.html#TYPEvec">vec</a> -><br>       (('n, 'ka) <a href="Slap_size.html#TYPEsyband">Slap_size.syband</a>, 'n, 'ab_cd) <a href="Slap_S.html#TYPEmat">mat</a> -><br>       (('n, 'kb) <a href="Slap_size.html#TYPEsyband">Slap_size.syband</a>, 'n, 'bb_cd) <a href="Slap_S.html#TYPEmat">mat</a> -> ('n, 'cnt) <a href="Slap_S.html#TYPEvec">vec</a></code></pre><div class="info ">
 <code class="code">sbgv ~ka ~kb ?z ?up ?work ?w ab bb</code> solves a general eigenvalue problem
@@ -1799,4 +1941,4 @@ The signature of returned modules of <code class="code">syevr_dyn</code>.
 <div class="param_info"><code class="code">work</code> : workspace for <code class="code">sbgv</code></div>
 <div class="param_info"><code class="code">w</code> : <code class="code">w</code> is replaced by eigenvalues if it is given, or newly
                 allocated if omitted.</div>
-</body></html>
+<script type="text/javascript" src="../google-analytics.js"></script></body></html>

@@ -22,7 +22,15 @@
 <link title="Slap_D" rel="Chapter" href="Slap_D.html">
 <link title="Slap_C" rel="Chapter" href="Slap_C.html">
 <link title="Slap_Z" rel="Chapter" href="Slap_Z.html">
-<link title="Slap_version" rel="Chapter" href="Slap_version.html"><title>Slap_common</title>
+<link title="Slap_version" rel="Chapter" href="Slap_version.html"><link title="Flags" rel="Section" href="#2_Flags">
+<link title="Integer vectors" rel="Section" href="#2_Integervectors">
+<link title="Utilities" rel="Section" href="#2_Utilities">
+<link title="Internal functions" rel="Section" href="#2_Internalfunctions">
+<link title="Transpose flags" rel="Subsection" href="#3_Transposeflags">
+<link title="Direction of matrix multiplication" rel="Subsection" href="#3_Directionofmatrixmultiplication">
+<link title="Slap_Mat.Trix norms" rel="Subsection" href="#3_SlapMatTrixnorms">
+<link title="SVD computation flags" rel="Subsection" href="#3_SVDcomputationflags">
+<title>Slap_common</title>
 </head>
 <body>
 <div class="navbar"><a class="pre" href="Slap_misc.html" title="Slap_misc">Previous</a>
@@ -35,9 +43,13 @@
 <a href="Slap.Common.html"><code class="code">Slap.Common</code></a> contains definitions independent of the precision.<br>
 </div>
 <hr width="100%">
+<br>
+<h2 id="2_Flags">Flags</h2><br>
 
 <pre><span id="TYPEdiag"><span class="keyword">type</span> <code class="type"></code>diag</span> = <code class="type">[ `N | `U ]</code> </pre>
 
+<br>
+<h3 id="3_Transposeflags">Transpose flags</h3><br>
 
 <pre><span id="TYPEtrans"><span class="keyword">type</span> <code class="type">(+'a, +'tag)</code> trans</span> </pre>
 
@@ -82,6 +94,8 @@ Transpose of a matrix.<br>
 <pre><span id="VALconjtr"><span class="keyword">val</span> conjtr</span> : <code class="type">(('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a> -><br>        ('n, 'm, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a>)<br>       <a href="Slap_common.html#TYPEtrans3">trans3</a></code></pre><div class="info ">
 Conjugate transpose of a matrix.<br>
 </div>
+<br>
+<h3 id="3_Directionofmatrixmultiplication">Direction of matrix multiplication</h3><br>
 
 <pre><span id="TYPEside"><span class="keyword">type</span> <code class="type">(+'k, +'m, +'n)</code> side</span> </pre>
 <div class="info ">
@@ -100,7 +114,9 @@ Conjugate transpose of a matrix.<br>
 
 
 <pre><span id="VALleft"><span class="keyword">val</span> left</span> : <code class="type">('m, 'm, 'n) <a href="Slap_common.html#TYPEside">side</a></code></pre>
-<pre><span id="VALright"><span class="keyword">val</span> right</span> : <code class="type">('n, 'm, 'n) <a href="Slap_common.html#TYPEside">side</a></code></pre>
+<pre><span id="VALright"><span class="keyword">val</span> right</span> : <code class="type">('n, 'm, 'n) <a href="Slap_common.html#TYPEside">side</a></code></pre><br>
+<h3 id="3_SlapMatTrixnorms">Slap_Mat.Trix norms</h3><br>
+
 <pre><span id="TYPEnorm"><span class="keyword">type</span> <code class="type">(+'a, +'tag)</code> norm</span> </pre>
 
 
@@ -155,6 +171,8 @@ Largest absolute value of a matrix. (not a matrix norm)<br>
 <pre><span id="VALnorm_frob"><span class="keyword">val</span> norm_frob</span> : <code class="type">(<a href="Slap_common.html#TYPEnorm_frob">norm_frob</a>, <a href="Slap_common.html#TYPEnorm4_tag">norm4_tag</a>) <a href="Slap_common.html#TYPEnorm">norm</a></code></pre><div class="info ">
 Frobenius norm of a matrix.<br>
 </div>
+<br>
+<h3 id="3_SVDcomputationflags">SVD computation flags</h3><br>
 
 <pre><span id="TYPEsvd_job"><span class="keyword">type</span> <code class="type">(+'a, +'b, +'c, +'d, +'e)</code> svd_job</span> </pre>
 
@@ -162,7 +180,9 @@ Frobenius norm of a matrix.<br>
 <pre><span id="VALsvd_all"><span class="keyword">val</span> svd_all</span> : <code class="type">('a, 'a, 'b, 'c, 'd) <a href="Slap_common.html#TYPEsvd_job">svd_job</a></code></pre>
 <pre><span id="VALsvd_top"><span class="keyword">val</span> svd_top</span> : <code class="type">('b, 'a, 'b, 'c, 'd) <a href="Slap_common.html#TYPEsvd_job">svd_job</a></code></pre>
 <pre><span id="VALsvd_overwrite"><span class="keyword">val</span> svd_overwrite</span> : <code class="type">('c, 'a, 'b, 'c, 'd) <a href="Slap_common.html#TYPEsvd_job">svd_job</a></code></pre>
-<pre><span id="VALsvd_no"><span class="keyword">val</span> svd_no</span> : <code class="type">('d, 'a, 'b, 'c, 'd) <a href="Slap_common.html#TYPEsvd_job">svd_job</a></code></pre>
+<pre><span id="VALsvd_no"><span class="keyword">val</span> svd_no</span> : <code class="type">('d, 'a, 'b, 'c, 'd) <a href="Slap_common.html#TYPEsvd_job">svd_job</a></code></pre><br>
+<h2 id="2_Integervectors">Integer vectors</h2><br>
+
 <pre><span id="TYPEint_vec"><span class="keyword">type</span> <code class="type">('n, 'cnt_or_dsc)</code> int_vec</span> = <code class="type">('n, int, Bigarray.int_elt, 'cnt_or_dsc) <a href="Slap_vec.html#TYPEt">Slap_vec.t</a></code> </pre>
 
 
@@ -170,7 +190,9 @@ Frobenius norm of a matrix.<br>
 <pre><span id="TYPEint32_vec"><span class="keyword">type</span> <code class="type">('n, 'cnt_or_dsc)</code> int32_vec</span> = <code class="type">('n, int32, Bigarray.int32_elt, 'cnt_or_dsc) <a href="Slap_vec.html#TYPEt">Slap_vec.t</a></code> </pre>
 
 
-<pre><span id="VALcreate_int32_vec"><span class="keyword">val</span> create_int32_vec</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('n, 'cnt) <a href="Slap_common.html#TYPEint32_vec">int32_vec</a></code></pre>
+<pre><span id="VALcreate_int32_vec"><span class="keyword">val</span> create_int32_vec</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('n, 'cnt) <a href="Slap_common.html#TYPEint32_vec">int32_vec</a></code></pre><br>
+<h2 id="2_Utilities">Utilities</h2><br>
+
 <pre><span id="VALget_transposed_dim"><span class="keyword">val</span> get_transposed_dim</span> : <code class="type">(('m, 'n, 'num, 'prec, 'a) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a> -> ('k, 'l, 'num, 'prec, 'b) <a href="Slap_mat.html#TYPEt">Slap_mat.t</a>,<br>        'c)<br>       <a href="Slap_common.html#TYPEtrans">trans</a> -><br>       'm <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> 'k <a href="Slap_size.html#TYPEt">Slap_size.t</a> * 'l <a href="Slap_size.html#TYPEt">Slap_size.t</a></code></pre><div class="info ">
 <code class="code">get_transposed_dim trans m n</code> returns<ul>
 <li><code class="code">(m * n)</code> if <code class="code">trans</code> is <a href="Slap_common.html#VALnormal"><code class="code">Slap_common.normal</code></a>;</li>
@@ -186,5 +208,7 @@ Frobenius norm of a matrix.<br>
 <pre><span id="VALlacaml_norm4"><span class="keyword">val</span> lacaml_norm4</span> : <code class="type">('a, 'b) <a href="Slap_common.html#TYPEnorm">norm</a> -> Lacaml.Common.norm4</code></pre>
 <pre><span id="VALlacaml_norm2_opt"><span class="keyword">val</span> lacaml_norm2_opt</span> : <code class="type">('a, 'b) <a href="Slap_common.html#TYPEnorm">norm</a> option -> Lacaml.Common.norm2 option</code></pre>
 <pre><span id="VALlacaml_norm4_opt"><span class="keyword">val</span> lacaml_norm4_opt</span> : <code class="type">('a, 'b) <a href="Slap_common.html#TYPEnorm">norm</a> option -> Lacaml.Common.norm4 option</code></pre>
-<pre><span id="VALlacaml_svd_job"><span class="keyword">val</span> lacaml_svd_job</span> : <code class="type">('a, 'b, 'c, 'd, 'e) <a href="Slap_common.html#TYPEsvd_job">svd_job</a> -> Lacaml.Common.svd_job</code></pre>
-<pre><span id="VALcheck_side_dim"><span class="keyword">val</span> check_side_dim</span> : <code class="type">'k <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'm <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('k, 'm, 'n) <a href="Slap_common.html#TYPEside">side</a> -> bool</code></pre></body></html>
+<pre><span id="VALlacaml_svd_job"><span class="keyword">val</span> lacaml_svd_job</span> : <code class="type">('a, 'b, 'c, 'd, 'e) <a href="Slap_common.html#TYPEsvd_job">svd_job</a> -> Lacaml.Common.svd_job</code></pre><br>
+<h2 id="2_Internalfunctions">Internal functions</h2><br>
+
+<pre><span id="VALcheck_side_dim"><span class="keyword">val</span> check_side_dim</span> : <code class="type">'k <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'm <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('k, 'm, 'n) <a href="Slap_common.html#TYPEside">side</a> -> bool</code></pre><script type="text/javascript" src="../google-analytics.js"></script></body></html>

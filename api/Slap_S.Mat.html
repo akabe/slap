@@ -21,7 +21,16 @@
 <link title="Slap_D" rel="Chapter" href="Slap_D.html">
 <link title="Slap_C" rel="Chapter" href="Slap_C.html">
 <link title="Slap_Z" rel="Chapter" href="Slap_Z.html">
-<link title="Slap_version" rel="Chapter" href="Slap_version.html"><title>Slap_S.Mat</title>
+<link title="Slap_version" rel="Chapter" href="Slap_version.html"><link title="Creation of matrices" rel="Section" href="#2_Creationofmatrices">
+<link title="Accessors" rel="Section" href="#2_Accessors">
+<link title="Basic operations" rel="Section" href="#2_Basicoperations">
+<link title="Type conversion" rel="Section" href="#2_Typeconversion">
+<link title="Iterators" rel="Section" href="#2_Iterators">
+<link title="Matrix transformations" rel="Section" href="#2_Matrixtransformations">
+<link title="Arithmetic operations" rel="Section" href="#2_Arithmeticoperations">
+<link title="Submatrices" rel="Section" href="#2_Submatrices">
+<link title="Creation of matrices" rel="Section" href="#2_Creationofmatrices">
+<title>Slap_S.Mat</title>
 </head>
 <body>
 <div class="navbar"><a class="pre" href="Slap_S.Vec.html" title="Slap_S.Vec">Previous</a>
@@ -42,6 +51,8 @@ The signature of modules containing dynamically-sized discrete matrices.
 <pre><span id="VALcnt"><span class="keyword">val</span> cnt</span> : <code class="type">('m, 'n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -> ('m, 'n, 'cnt) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a></code></pre><div class="info ">
 Recover polymorphism of the fifth type parameter.<br>
 </div>
+<br>
+<h2 id="2_Creationofmatrices">Creation of matrices</h2><br>
 
 <pre><span id="VALempty"><span class="keyword">val</span> empty</span> : <code class="type">(<a href="Slap_size.html#TYPEz">Slap_size.z</a>, <a href="Slap_size.html#TYPEz">Slap_size.z</a>, 'cnt) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a></code></pre><div class="info ">
 An empty matrix.<br>
@@ -87,6 +98,8 @@ An alias of <code class="code">init_cols</code>.<br>
     the <code class="code">(i,j)</code> element is initialized by the result of calling <code class="code">f i j</code>.
     The elements are passed row-wise.<br>
 </div>
+<br>
+<h2 id="2_Accessors">Accessors</h2><br>
 
 <pre><span id="VALdim"><span class="keyword">val</span> dim</span> : <code class="type">('m, 'n, 'cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -> 'm <a href="Slap_size.html#TYPEt">Slap_size.t</a> * 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a></code></pre><div class="info ">
 <code class="code">dim a</code> is <code class="code">(dim1 a, dim2 a)</code>.<br>
@@ -159,6 +172,8 @@ Like <code class="code">set_dyn</code>, but size checking is not always performe
 <b>Returns</b> the vector containing all elements of the matrix in column-major
     order. The data are shared.<br>
 </div>
+<br>
+<h2 id="2_Basicoperations">Basic operations</h2><br>
 
 <pre><span id="VALfill"><span class="keyword">val</span> fill</span> : <code class="type">('m, 'n, 'cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -> <a href="Slap_S.html#TYPEnum_type">Slap_S.num_type</a> -> unit</code></pre><div class="info ">
 Fill the given matrix with the given value.<br>
@@ -178,7 +193,9 @@ Fill the given matrix with the given value.<br>
 <div class="param_info"><code class="code">uplo</code> : default = all elements in <code class="code">a</code> is copied.</div>
 <div class="param_info"><code class="code">b</code> : default = a fresh matrix.</div>
 
-<pre><span id="VALof_col_vecs_dyn"><span class="keyword">val</span> of_col_vecs_dyn</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ('m, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> array -> ('m, 'n, 'cnt) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a></code></pre>
+<pre><span id="VALof_col_vecs_dyn"><span class="keyword">val</span> of_col_vecs_dyn</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ('m, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> array -> ('m, 'n, 'cnt) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a></code></pre><br>
+<h2 id="2_Typeconversion">Type conversion</h2><br>
+
 <pre><span id="VALto_array"><span class="keyword">val</span> to_array</span> : <code class="type">('m, 'n, 'cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -> <a href="Slap_S.html#TYPEnum_type">Slap_S.num_type</a> array array</code></pre><div class="info ">
 <code class="code">to_array a</code><br>
 <b>Returns</b> the array of arrays of all the elements of <code class="code">a</code>.<br>
@@ -273,6 +290,8 @@ A functor vesion of <code class="code">of_bigarray</code>.
 Like <code class="code">of_bigarray_dyn</code>, but size checking is not always performed.<br>
 <b>Since</b> 1.0.0<br>
 </div>
+<br>
+<h2 id="2_Iterators">Iterators</h2><br>
 
 <pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">(<a href="Slap_S.html#TYPEnum_type">Slap_S.num_type</a> -> <a href="Slap_S.html#TYPEnum_type">Slap_S.num_type</a>) -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -> ('m, 'n, 'b_cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a></code></pre>
 <pre><span id="VALmapi"><span class="keyword">val</span> mapi</span> : <code class="type">(int -> int -> <a href="Slap_S.html#TYPEnum_type">Slap_S.num_type</a> -> <a href="Slap_S.html#TYPEnum_type">Slap_S.num_type</a>) -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -> ('m, 'n, 'b_cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a></code></pre>
@@ -325,6 +344,8 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
 <code class="code">replace_all a f</code> modifies the matrix <code class="code">a</code> in place
     -- the <code class="code">(i,j)</code>-element <code class="code">aij</code> of <code class="code">a</code> will be set to <code class="code">f i j aij</code>.<br>
 </div>
+<br>
+<h2 id="2_Matrixtransformations">Matrix transformations</h2><br>
 
 <pre><span id="VALtranspose_copy"><span class="keyword">val</span> transpose_copy</span> : <code class="type">('m, 'n, 'a_cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -> ('n, 'm, 'b_cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -> unit</code></pre><div class="info ">
 <code class="code">transpose_copy a b</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.<br>
@@ -450,6 +471,8 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
         initialized by <code class="code">c</code>.</li>
 </ul>
 </div>
+<br>
+<h2 id="2_Arithmeticoperations">Arithmetic operations</h2><br>
 
 <pre><span id="VALadd_const"><span class="keyword">val</span> add_const</span> : <code class="type"><a href="Slap_S.html#TYPEnum_type">Slap_S.num_type</a> -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -> ('m, 'n, 'b_cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a></code></pre><div class="info ">
 <code class="code">add_const c ?b a</code> adds constant value <code class="code">c</code> to all elements in <code class="code">a</code>.<br>
@@ -560,6 +583,8 @@ A row-wise <code class="code">scal</code> function for matrices.<br>
 <li>If <code class="code">upb</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">b</code> is used.</li>
 </ul>
 </div>
+<br>
+<h2 id="2_Submatrices">Submatrices</h2><br>
 
 <pre><span id="VALsubmat_dyn"><span class="keyword">val</span> submat_dyn</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?ar:int -><br>       ?ac:int -> ('a, 'b, 'cd) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a> -> ('m, 'n, <a href="Slap_misc.html#TYPEdsc">Slap_misc.dsc</a>) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a></code></pre><div class="info ">
 <code class="code">submat_dyn m n ?ar ?ac a</code><br>
@@ -569,6 +594,8 @@ A row-wise <code class="code">scal</code> function for matrices.<br>
 </div>
 <div class="param_info"><code class="code">ar</code> : default = 1</div>
 <div class="param_info"><code class="code">ac</code> : default = 1</div>
+<br>
+<h2 id="2_Creationofmatrices">Creation of matrices</h2><br>
 
 <pre><span id="VALrandom"><span class="keyword">val</span> random</span> : <code class="type">?rnd_state:Random.State.t -><br>       ?from:float -><br>       ?range:float -> 'm <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('m, 'n, 'cnt) <a href="Slap_S.html#TYPEmat">Slap_S.mat</a></code></pre><div class="info ">
 <code class="code">random ?rnd_state ?from ?range m n</code> creates a <code class="code">m</code>-by-<code class="code">n</code> matrix randomly
@@ -577,4 +604,4 @@ A row-wise <code class="code">scal</code> function for matrices.<br>
 <div class="param_info"><code class="code">rnd_state</code> : default = <code class="code">Random.get_state ()</code>.</div>
 <div class="param_info"><code class="code">from</code> : default = <code class="code">-1.0</code>.</div>
 <div class="param_info"><code class="code">range</code> : default = <code class="code">2.0</code>.</div>
-</body></html>
+<script type="text/javascript" src="../google-analytics.js"></script></body></html>

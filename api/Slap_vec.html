@@ -22,7 +22,17 @@
 <link title="Slap_D" rel="Chapter" href="Slap_D.html">
 <link title="Slap_C" rel="Chapter" href="Slap_C.html">
 <link title="Slap_Z" rel="Chapter" href="Slap_Z.html">
-<link title="Slap_version" rel="Chapter" href="Slap_version.html"><title>Slap_vec</title>
+<link title="Slap_version" rel="Chapter" href="Slap_version.html"><link title="Creation of vectors" rel="Section" href="#2_Creationofvectors">
+<link title="Accessors" rel="Section" href="#2_Accessors">
+<link title="Iterators" rel="Section" href="#2_Iterators">
+<link title="Iterators on two vectors" rel="Section" href="#2_Iteratorsontwovectors">
+<link title="Iterators on three vectors" rel="Section" href="#2_Iteratorsonthreevectors">
+<link title="Scanning" rel="Section" href="#2_Scanning">
+<link title="Basic operations" rel="Section" href="#2_Basicoperations">
+<link title="Conversion" rel="Section" href="#2_Conversion">
+<link title="Subvectors" rel="Section" href="#2_Subvectors">
+<link title="Internal functions" rel="Section" href="#2_Internalfunctions">
+<title>Slap_vec</title>
 </head>
 <body>
 <div class="navbar"><a class="pre" href="Slap_size.html" title="Slap_size">Previous</a>
@@ -48,6 +58,8 @@
 <pre><span id="VALcnt"><span class="keyword">val</span> cnt</span> : <code class="type">('n, 'num, 'prec, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('n, 'num, 'prec, 'cnt) <a href="Slap_vec.html#TYPEt">t</a></code></pre><div class="info ">
 Recover polymorphism of the fourth type parameter.<br>
 </div>
+<br>
+<h2 id="2_Creationofvectors">Creation of vectors</h2><br>
 
 <pre><span id="VALcreate"><span class="keyword">val</span> create</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('n, 'num, 'prec, 'cnt) <a href="Slap_vec.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">create kind n</code><br>
@@ -63,6 +75,8 @@ Recover polymorphism of the fourth type parameter.<br>
 <code class="code">init kind n f</code><br>
 <b>Returns</b> a fresh vector <code class="code">(f 1, ..., f n)</code> with <code class="code">n</code> elements.<br>
 </div>
+<br>
+<h2 id="2_Accessors">Accessors</h2><br>
 
 <pre><span id="VALkind"><span class="keyword">val</span> kind</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap_vec.html#TYPEt">t</a> -> ('num, 'prec) Bigarray.kind</code></pre><div class="info ">
 <b>Returns</b> the kind of the given big array.<br>
@@ -93,6 +107,8 @@ Like <a href="Slap_vec.html#VALset_dyn"><code class="code">Slap_vec.set_dyn</cod
 <pre><span id="VALreplace_dyn"><span class="keyword">val</span> replace_dyn</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap_vec.html#TYPEt">t</a> -> int -> ('num -> 'num) -> unit</code></pre><div class="info ">
 <code class="code">replace_dyn v i f</code> is <code class="code">set_dyn v i (f (get_dyn v i))</code>.<br>
 </div>
+<br>
+<h2 id="2_Iterators">Iterators</h2><br>
 
 <pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">('y_num, 'y_prec) Bigarray.kind -><br>       ('x_num -> 'y_num) -><br>       ?y:('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap_vec.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">map kind f ?y (x1, ..., xn)</code> is <code class="code">(f x1, ..., f xn)</code>.<br>
@@ -144,6 +160,8 @@ Like <a href="Slap_vec.html#VALset_dyn"><code class="code">Slap_vec.set_dyn</cod
 <pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">(int -> 'num -> unit) -> ('n, 'num, 'prec, 'cd) <a href="Slap_vec.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
 <code class="code">iteri f (x1, x2, ..., xn)</code> is <code class="code">f 1 x1; f 2 x2; ...; f n xn</code>.<br>
 </div>
+<br>
+<h2 id="2_Iteratorsontwovectors">Iterators on two vectors</h2><br>
 
 <pre><span id="VALmap2"><span class="keyword">val</span> map2</span> : <code class="type">('z_num, 'z_prec) Bigarray.kind -><br>       ('x_num -> 'y_num -> 'z_num) -><br>       ?z:('n, 'z_num, 'z_prec, 'z_cd) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('n, 'z_num, 'z_prec, 'z_cd) <a href="Slap_vec.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">map2 kind f ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
@@ -190,6 +208,8 @@ Like <a href="Slap_vec.html#VALset_dyn"><code class="code">Slap_vec.set_dyn</cod
 <code class="code">iteri2 f (x1, x2, ..., xn) (y1, y2, ..., yn)</code> is
     <code class="code">f 1 x1 y1; f 2 x2 y2; ...; f n xn yn</code>.<br>
 </div>
+<br>
+<h2 id="2_Iteratorsonthreevectors">Iterators on three vectors</h2><br>
 
 <pre><span id="VALmap3"><span class="keyword">val</span> map3</span> : <code class="type">('w_num, 'w_prec) Bigarray.kind -><br>       ('x_num -> 'y_num -> 'z_num -> 'w_num) -><br>       ?w:('n, 'w_num, 'w_prec, 'w_cd) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('n, 'x_num, 'x_prec, 'x_cd) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('n, 'y_num, 'y_prec, 'y_cd) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('n, 'z_num, 'z_prec, 'z_cd) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('n, 'w_num, 'w_prec, 'w_cd) <a href="Slap_vec.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">map3 kind f ?w (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)</code> is
@@ -237,6 +257,8 @@ Like <a href="Slap_vec.html#VALset_dyn"><code class="code">Slap_vec.set_dyn</cod
 <code class="code">iteri3 f (x1, x2, ..., xn) (y1, y2, ..., yn) (z1, z2, ..., zn)</code> is
     <code class="code">f 1 x1 y1 z1; f 2 x2 y2 z2; ...; f n xn yn zn</code>.<br>
 </div>
+<br>
+<h2 id="2_Scanning">Scanning</h2><br>
 
 <pre><span id="VALfor_all"><span class="keyword">val</span> for_all</span> : <code class="type">('num -> bool) -> ('n, 'num, 'prec, 'cd) <a href="Slap_vec.html#TYPEt">t</a> -> bool</code></pre><div class="info ">
 <code class="code">for_all p (x1, x2, ..., xn)</code> is <code class="code">(p x1) &amp;&amp; (p x2) &amp;&amp; ... &amp;&amp; (p xn)</code>.<br>
@@ -269,6 +291,8 @@ Like <a href="Slap_vec.html#VALset_dyn"><code class="code">Slap_vec.set_dyn</cod
 <b>Returns</b> <code class="code">true</code> if and only if <code class="code">a</code> is equal to an element of <code class="code">v</code>.<br>
 </div>
 <div class="param_info"><code class="code">equal</code> : default = <code class="code">(=)</code> (polymorphic compare)</div>
+<br>
+<h2 id="2_Basicoperations">Basic operations</h2><br>
 
 <pre><span id="VALcopy"><span class="keyword">val</span> copy</span> : <code class="type">?y:('n, 'num, 'prec, 'y_cd) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('n, 'num, 'prec, 'x_cd) <a href="Slap_vec.html#TYPEt">t</a> -> ('n, 'num, 'prec, 'y_cd) <a href="Slap_vec.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">copy ?y x</code> copies the vector <code class="code">x</code> to the vector <code class="code">y</code>.<br>
@@ -293,6 +317,8 @@ Concatenate two vectors.<br>
 <code class="code">rev (x1, x2, ..., xn)</code><br>
 <b>Returns</b> reversed vector <code class="code">(xn, ..., x2, x1)</code>. The data are NOT shared.<br>
 </div>
+<br>
+<h2 id="2_Conversion">Conversion</h2><br>
 
 <pre><span id="VALto_array"><span class="keyword">val</span> to_array</span> : <code class="type">('n, 'num, 'prec, 'cd) <a href="Slap_vec.html#TYPEt">t</a> -> 'num array</code></pre><div class="info ">
 <code class="code">to_array x</code><br>
@@ -343,6 +369,8 @@ Like <code class="code">of_list_dyn</code>, but size checking is not always perf
 Like <code class="code">unsafe_of_bigarray</code>, but size checking is not always performed.<br>
 <b>Since</b> 1.0.0<br>
 </div>
+<br>
+<h2 id="2_Subvectors">Subvectors</h2><br>
 
 <pre><span id="VALsubcntvec_dyn"><span class="keyword">val</span> subcntvec_dyn</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?ofsx:int -><br>       ('n, 'num, 'prec, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('m, 'num, 'prec, 'cnt) <a href="Slap_vec.html#TYPEt">t</a></code></pre><div class="info ">
 <code class="code">subcntvec_dyn m ?ofsx x</code><br>
@@ -366,6 +394,8 @@ Like <code class="code">unsafe_of_bigarray</code>, but size checking is not alwa
 <pre><span id="VALsubvec_dyn"><span class="keyword">val</span> subvec_dyn</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?ofsx:int -><br>       ?incx:int -><br>       ('n, 'num, 'prec, 'cd) <a href="Slap_vec.html#TYPEt">t</a> -><br>       ('m, 'num, 'prec, <a href="Slap_misc.html#TYPEdsc">Slap_misc.dsc</a>) <a href="Slap_vec.html#TYPEt">t</a></code></pre><div class="info ">
 An alias of <code class="code">subdscvec_dyn</code>.<br>
 </div>
+<br>
+<h2 id="2_Internalfunctions">Internal functions</h2><br>
 
 <pre><span id="VALcheck_cnt"><span class="keyword">val</span> check_cnt</span> : <code class="type">('n, 'num, 'prec, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_vec.html#TYPEt">t</a> -> bool</code></pre>
 <pre><span id="VALopt_work"><span class="keyword">val</span> opt_work</span> : <code class="type">('n, 'num, 'prec, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_vec.html#TYPEt">t</a> option -><br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array1.t option</code></pre>
@@ -374,4 +404,4 @@ An alias of <code class="code">subdscvec_dyn</code>.<br>
 <pre><span id="VALopt_vec"><span class="keyword">val</span> opt_vec</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ('n, 'num, 'prec, 'cd) <a href="Slap_vec.html#TYPEt">t</a> option -><br>       int option * int option *<br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array1.t option</code></pre>
 <pre><span id="VALopt_vec_alloc"><span class="keyword">val</span> opt_vec_alloc</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ('n, 'num, 'prec, 'cd) <a href="Slap_vec.html#TYPEt">t</a> option -><br>       int * int * ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array1.t</code></pre>
 <pre><span id="VAL__expose"><span class="keyword">val</span> __expose</span> : <code class="type">('n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap_vec.html#TYPEt">t</a> -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> * int * int *<br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array1.t</code></pre>
-<pre><span id="VAL__unexpose"><span class="keyword">val</span> __unexpose</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> * int * int *<br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array1.t -><br>       ('n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap_vec.html#TYPEt">t</a></code></pre></body></html>
+<pre><span id="VAL__unexpose"><span class="keyword">val</span> __unexpose</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> * int * int *<br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array1.t -><br>       ('n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap_vec.html#TYPEt">t</a></code></pre><script type="text/javascript" src="../google-analytics.js"></script></body></html>
