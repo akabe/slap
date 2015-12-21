@@ -198,30 +198,31 @@ We can find a learning rate satisfying the conditions by
 [bisection search](https://en.wikipedia.org/wiki/Bisection_method):
 
 ```OCaml
-# let wolfe_search ?(c1=1e-4) ?(c2=0.9) ?(init=1.0) ?(upper=100.0) df f p x =
-    let middle lo hi = 0.5 *. (lo +. hi) in
+# let middle lo hi = 0.5 *. (lo +. hi) in
+    let upper alpha = function (* Compute a new upper bound *)
+      | None -> 2.0 *. alpha
+      | Some hi -> middle alpha hi in
     let q = dot p (df x) in
     let y = f x in
     let xap = Vec.create (Vec.dim x) in
     let rec aux lo hi alpha =
       ignore (copy ~y:xap x); (* xap := x *)
       axpy ~alpha p xap; (* xap := xap + alpha * p *)
-      if f xap > y +. c1 *. alpha *. q then aux lo alpha (middle lo alpha)
-      else if dot p (df xap) < c2 *. q then aux alpha hi (middle alpha hi)
-      else alpha
+      if f xap > y +. c1 *. alpha *. q then aux lo (Some alpha) (middle lo alpha)
+      else if dot p (df xap) < c2 *. q then aux alpha hi (upper alpha hi)
+      else alpha (* Both of two conditions are satisfied. *)
     in
-    aux 0.0 upper init;;
+    aux 0.0 None init;;
 val wolfe_search :
-  ?c1:float -> ?c2:float -> ?init:float -> ?upper:float ->
+  ?c1:float -> ?c2:float -> ?init:float ->
   (('a, 'b) vec -> ('a, 'c) vec) ->
   (('a, 'b) vec -> float) -> ('a, 'd) vec -> ('a, 'b) vec -> float = <fun>
 ```
 
-`wolfe_search ?c1 ?c2 ?init ?upper df f p x` returns a learning rate
-satisfying Wolfe conditions. Optional arguments `init` and `upper`
-indicate the initial value and the upper bound of bisection search.
-Execution of this function becomes faster by passing suitable values
-to `init` and `upper`. However, if computation cost of a target function
+`wolfe_search ?c1 ?c2 ?init df f p x` returns a learning rate
+satisfying Wolfe conditions. Optional argument `init`
+indicates the initial value of bisection search.
+If computation cost of a target function
 and its derivative is quite large, `wolfe_search` is inefficient.
 
 The following code implements steepest descent method with automatic search
@@ -248,8 +249,8 @@ val steepest_descent_wolfe :
 Loop 1: f x = -0.83552, x = -0.0778801 1.23364
 Loop 2: f x = -0.877268, x = -0.135404 1.43875
 ...
-Loop 59: f x = -1, x = 0.998372 2.99915
-Loop 60: f x = -1, x = 0.999408 2.99925
+Loop 59: f x = -1, x = 0.999683 2.9998
+Loop 60: f x = -1, x = 0.999731 2.99983
 ```
 
 <figure>
@@ -257,10 +258,9 @@ Loop 60: f x = -1, x = 0.999408 2.99925
 <figcaption>Fig 3. Convergence of steepest descent + Wolfe conditions (60 steps)</figcaption>
 </figure>
 
-The steps of naive steepest descent (described at the previous section)
-gradually gets small during the iteration (see Fig 2),
-but large steps appear in Fig 3 because large learning rates are sometimes chosen.
-They accelerate convergence.
+The convergence of Fig 3 is similar to that of Fig 2
+(naive steepest descent described at the previous section),
+but the former is faster than the latter.
 
 Newton method
 -------------
