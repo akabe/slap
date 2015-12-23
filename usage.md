@@ -47,11 +47,14 @@ Demonstration
 -------------
 
 We show how to use SLAP during simple examples of numerical computation.
-Small programs appeared in the following sections are distributed under **open license**.
+Small programs appeared in the following sections are **public domain**.
 
-- [Gradient-based optimization](demo-gradopt.html)
-  - [Preliminary](demo-gradopt.html#preliminary) (containing definition of a target function)
-  - [Steepest descent method](demo-gradopt.html#steepest-descent-method)
-    * [Bisection search of learning rate by Wolfe conditions](demo-gradopt.html#bisection-search-of-learning-rate-by-wolfe-conditions)
-  - [Newton method](demo-gradopt.html#newton-method)
-  - [Quasi-Newton method](demo-gradopt.html#quasi-newton-method)
+### [Gradient-based optimization](demo-gradopt.html)
+
+Sample programs:  [examples/optimization/](https://github.com/akabe/slap/blob/master/examples/optimization/)
+
+- [Preliminary](demo-gradopt.html#preliminary) (containing the definition of a target function)
+- [Steepest descent method](demo-gradopt.html#steepest-descent-method)
+- [Bisection search of learning rate by Wolfe conditions](demo-gradopt.html#bisection-search-of-learning-rate-by-wolfe-conditions)
+- [Newton method](demo-gradopt.html#newton-method)
+- [Quasi-Newton method](demo-gradopt.html#quasi-newton-method)

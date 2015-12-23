@@ -122,6 +122,8 @@ your program possibly has a bug.
 Steepest descent method
 --------------------------
 
+Sample program: [examples/optimization/steepest_descent.ml](https://github.com/akabe/slap/blob/master/examples/optimization/steepest_descent.ml)
+
 _Steepest descent_ (a.k.a., gradient descent) is a kind of iterative methods:
 we choose an initial value $\\bm{x}^{(0)}$, and generate points
 $\\bm{x}^{(1)},\\bm{x}^{(2)},\\bm{x}^{(3)},\\dots$ by
@@ -178,6 +180,8 @@ You can control speed of convergence by changing a value of the learning rate.
 
 ### Bisection search of learning rate by Wolfe conditions
 
+Sample program: [examples/optimization/steepest_descent_wolfe.ml](https://github.com/akabe/slap/blob/master/examples/optimization/steepest_descent_wolfe.ml)
+
 Using too large learning rates may go through a minimal point (zigzag convergence),
 but quite small learning rates slowly reach a solution.
 In this section, we introduce an approach to find
@@ -198,10 +202,12 @@ We can find a learning rate satisfying the conditions by
 [bisection search](https://en.wikipedia.org/wiki/Bisection_method):
 
 ```OCaml
-# let middle lo hi = 0.5 *. (lo +. hi) in
+# let wolfe_search ?(c1=1e-4) ?(c2=0.9) ?(init=1.0) df f p x =
+    let middle lo hi = 0.5 *. (lo +. hi) in
     let upper alpha = function (* Compute a new upper bound *)
       | None -> 2.0 *. alpha
-      | Some hi -> middle alpha hi in
+      | Some hi -> middle alpha hi
+    in
     let q = dot p (df x) in
     let y = f x in
     let xap = Vec.create (Vec.dim x) in
@@ -212,7 +218,8 @@ We can find a learning rate satisfying the conditions by
       else if dot p (df xap) < c2 *. q then aux alpha hi (upper alpha hi)
       else alpha (* Both of two conditions are satisfied. *)
     in
-    aux 0.0 None init;;
+    aux 0.0 None init
+  ;;
 val wolfe_search :
   ?c1:float -> ?c2:float -> ?init:float ->
   (('a, 'b) vec -> ('a, 'c) vec) ->
@@ -264,6 +271,8 @@ but the former is faster than the latter.
 
 Newton method
 -------------
+
+Sample program: [examples/optimization/newton.ml](https://github.com/akabe/slap/blob/master/examples/optimization/newton.ml)
 
 Newton method (a.k.a., Newton-Raphson method) is also a kind of iterative approach using
 the second derivative of a target function addition to the first:
@@ -346,6 +355,8 @@ Newton method finds a minimal fast, while the approach has two problems:
 
 Quasi-Newton method
 -------------------
+
+Sample program: [examples/optimization/quasi_newton.ml](https://github.com/akabe/slap/blob/master/examples/optimization/quasi_newton.ml)
 
 _Quasi-Newton method_ is like Newton method, but an approximated inverse
 Hessian matrix is used. Several approximation approaches has been proposed,
