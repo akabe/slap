@@ -306,6 +306,38 @@ Executable pca_slap
   Install:        false
   CompiledObject: best
 
+Executable steepest_descent
+  Path:           examples/optimization
+  MainIs:         steepest_descent.ml
+  Build$:         flag(examples) && flag(ppx)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
+Executable steepest_descent_wolfe
+  Path:           examples/optimization
+  MainIs:         steepest_descent_wolfe.ml
+  Build$:         flag(examples) && flag(ppx)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
+Executable newton
+  Path:           examples/optimization
+  MainIs:         newton.ml
+  Build$:         flag(examples) && flag(ppx)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
+Executable quasi_newton
+  Path:           examples/optimization
+  MainIs:         quasi_newton.ml
+  Build$:         flag(examples) && flag(ppx)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
 SourceRepository head
   Type:           git
   Location:       https://github.com/akabe/slap.git

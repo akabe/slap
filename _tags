@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: fd8218cc43492ab4f5f9a0b2b48861b3)
+# DO NOT EDIT (digest: f8e7413f0cf31a5403a393b27f28eab7)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -165,11 +165,31 @@ true: annot, bin_annot
 <examples/porting/pca/*.ml{,i,y}>: pkg_bigarray
 <examples/porting/pca/*.ml{,i,y}>: pkg_lacaml
 <examples/porting/pca/*.ml{,i,y}>: use_slap
+# Executable steepest_descent
+<examples/optimization/steepest_descent.{native,byte}>: pkg_bigarray
+<examples/optimization/steepest_descent.{native,byte}>: pkg_lacaml
+<examples/optimization/steepest_descent.{native,byte}>: use_slap
+# Executable steepest_descent_wolfe
+<examples/optimization/steepest_descent_wolfe.{native,byte}>: pkg_bigarray
+<examples/optimization/steepest_descent_wolfe.{native,byte}>: pkg_lacaml
+<examples/optimization/steepest_descent_wolfe.{native,byte}>: use_slap
+# Executable newton
+<examples/optimization/newton.{native,byte}>: pkg_bigarray
+<examples/optimization/newton.{native,byte}>: pkg_lacaml
+<examples/optimization/newton.{native,byte}>: use_slap
+# Executable quasi_newton
+<examples/optimization/quasi_newton.{native,byte}>: pkg_bigarray
+<examples/optimization/quasi_newton.{native,byte}>: pkg_lacaml
+<examples/optimization/quasi_newton.{native,byte}>: use_slap
+<examples/optimization/*.ml{,i,y}>: pkg_bigarray
+<examples/optimization/*.ml{,i,y}>: pkg_lacaml
+<examples/optimization/*.ml{,i,y}>: use_slap
 # OASIS_STOP
 
 true: -traverse
 <{lib,ppx,test,examples}/**>: traverse
 
+<examples/**>: ppx_slap
 <test/ppx/*>: ppx_slap
 
 <{lib,ppx,test}/*.ml{,i}>: warn(A-4-33-41-42-43-34-44-50), safe_string, strict_sequence, strict_formats
