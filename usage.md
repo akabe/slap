@@ -58,3 +58,4 @@ Sample programs:  [examples/optimization/](https://github.com/akabe/slap/blob/ma
 - [Bisection search of learning rate by Wolfe conditions](demo-gradopt.html#bisection-search-of-learning-rate-by-wolfe-conditions)
 - [Newton method](demo-gradopt.html#newton-method)
 - [Quasi-Newton method](demo-gradopt.html#quasi-newton-method)
+- [Visualization tips](demo-gradopt.html#visualization-tips)

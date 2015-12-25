@@ -442,3 +442,198 @@ The search direction at early steps of Quasi-Newton is wrong
 because $\bm{H}\_t$ does not converge yet.
 However, after some steps, $\bm{H}\_t$ approximates an inverse Hessian well,
 and convergence gets faster.
+
+Visualization tips
+------------------
+
+Sample program: [examples/optimization/visualization.ml](https://github.com/akabe/slap/blob/master/examples/optimization/visualization.ml)
+
+Figures in this article are plotted by [gnuplot](http://www.gnuplot.info/),
+an awesome graphing tool. In this section, we introduce how to draw figures
+like Fig 2, 3, 4, and 5 (i.e., visualization of convergence) by SLAP and
+gnuplot. SLAP provides no interface to gnuplot, but the visualization is
+not difficult.
+
+Note: an OCaml library,
+[Gnuplot-OCaml](https://bitbucket.org/ogu/gnuplot-ocaml),
+is an interface to gnuplot from OCaml,
+while it does not support 3D graphs.
+Thus we don't use this library in this section.
+
+### Using gnuplot from OCaml
+
+Gnuplot is usually used on console (or called from a shell script):
+
+```
+$ gnuplot
+gnuplot> plot sin(x)  # Plot a sine curve
+```
+
+The above command shows a figure of a sine curve on a window.
+You can use gnuplot from OCaml by using pipes:
+
+```OCaml
+# let gnuplot f =
+    let oc = Unix.open_process_out "gnuplot" in (* Open a pipe to gnuplot *)
+    let ppf = formatter_of_out_channel oc in (* For fprintf *)
+    f ppf; (* Send gnuplot commands *)
+    pp_print_flush ppf (); (* Flush an output buffer. *)
+    print_endline "Press Enter to exit gnuplot";
+    ignore (read_line ()); (* Prevent gnuplot from immediately exiting *)
+    ignore (Unix.close_process_out oc) (* Exit gnuplot *)
+  ;;
+val gnuplot : (formatter -> unit) -> unit = <fun>
+
+# gnuplot (fun ppf -> fprintf ppf "plot sin(x)\n");; (* Plot a sine curve *)
+```
+
+Note: if you pass command-line option `-perisist` to gnuplot
+(i.e., `"gnuplot -persist"` instead of `"gnuplot"`) at the second line,
+a window is kept after gnuplot exited.
+
+### 3D graph
+
+`plot` command (in the previous section) plots 2D graphs,
+and `splot` command draws 3D graphs.
+The following example draws a 3D graph like Fig 1 (without contour):
+
+```OCaml
+# gnuplot (fun ppf ->
+    fprintf ppf "set hidden3d\n\
+                 set isosamples 30\n\
+                 splot -exp((-0.1*(x-1)**2 - 0.2*(y-3)**2 + 0.2*(x-1)*(y-3)) / 2.0)\n");;
+```
+
+The drawn function `-exp((-0.1*(x-1)**2 - 0.2*(y-3)**2 + 0.2*(x-1)*(y-3)) / 2.0)` is
+the same as the target function in this article.
+However we want to directly plot function `gauss` (defined in OCaml) for simplicity and
+maintainability of code. The key idea to draw an OCaml function is to pass data points
+to `splot` command: `splot` can plot not only functions defined in gnuplot
+but also data points like:
+
+```
+gnuplot> splot '-' with lines  # Plot data points given from stdin
+# x y z
+  1 1 1
+  1 2 2
+  1 3 3
+
+  2 1 2
+  2 2 4
+  2 3 6
+
+  3 1 3
+  3 2 6
+  3 3 9
+end
+```
+
+We can plot OCaml functions by conversion into data points:
+
+```OCaml
+# let splot_fun
+      ?(option = "") ?(n = 10)
+      ?(x1 = -10.0) ?(x2 = 10.0) ?(y1 = -10.0) ?(y2 = 10.0) ppf f =
+    let cx = (x2 -. x1) /. float n in
+    let cy = (y2 -. y1) /. float n in
+    fprintf ppf "splot '-' %s@\n" option;
+    for i = 0 to n do
+      for j = 0 to n do
+        let x = cx *. float i +. x1 in
+        let y = cy *. float j +. y1 in
+        let z = f [%vec [x; y]] in
+        fprintf ppf "%g %g %g@\n" x y z;
+      done;
+      fprintf ppf "@\n"
+    done;
+    fprintf ppf "end@\n"
+  ;;
+val splot_fun :
+  ?option:bytes ->
+  ?n:int ->
+  ?x1:float ->
+  ?x2:float ->
+  ?y1:float ->
+  ?y2:float -> formatter -> ((Slap.Size.two, 'a) vec -> float) -> unit =
+  <fun>
+```
+
+`splot_fun ?option ?n ?x1 ?x2 ?y1 ?y2 ppf f` draws the 3D graph of OCaml function `f` where
+
+- `?option` is a string of options for `splot` command,
+- `?n` is the number of points,
+- `?x1` and `?x2` specify the range of x coordinates, and
+- `?y1` and `?y2` specify the range of y coordinates.
+
+Using `splot`, `gauss` can be plotted as follows:
+
+```OCaml
+# gnuplot (fun ppf ->
+      fprintf ppf "set hidden3d\n";
+      splot_fun ~option:"with lines" ~n:30 ppf (gauss a b));;
+```
+
+### Plotting contour
+
+You can plot contour by `set contour` command.
+
+```OCaml
+# gnuplot (fun ppf ->
+      fprintf ppf "set contour             # Plot contour\n\
+                   set view 0,0            # Fix a view\n\
+                   unset surface           # Don't show a 3D surface\n\
+                   set cntrparam levels 15 # Levels of contour\n";
+      splot_fun ~option:"with lines" ~n:50 ppf (gauss a b));;
+```
+
+### Plotting a line graph of convergence
+
+Line graphs of convergence (like Fig 2, 3, 4, and 5) are 2D,
+but we draw them as 3D graphs because we will overlay a line graph
+on a contour graph.
+
+```OCaml
+# let steepest_descent ppf ~loops ~eta df f x =
+    fprintf ppf "splot '-' with linespoints linetype 2 title ''@\n\
+                 %a 0@\n" pp_rfvec x;
+    for i = 1 to loops do
+      axpy ~alpha:(~-. eta) (df x) x; (* x := x - eta * (df x) *)
+      fprintf ppf "%a 0@\n" pp_rfvec x (* z coordinate = 0 *)
+    done;
+    fprintf ppf "end@\n"
+  ;;
+val steepest_descent :
+  formatter ->
+  loops:int ->
+  eta:float -> (('a, 'b) vec -> ('a, 'c) vec) -> 'd -> ('a, 'b) vec -> unit =
+  <fun>
+
+# gnuplot (fun ppf ->
+      fprintf ppf "set view 0,0 # Fix a view@\n\
+                   set xrange [-2:3]@\n\
+                   set yrange [0:5]@\n";
+      steepest_descent ppf
+        ~loops:100 ~eta:2.0 (dgauss a b) (gauss a b) [%vec [0.0; 1.0]]);;
+```
+
+### Overlaying a line graph on a contour graph
+
+Overlaying two graphs is achieved by `set multiplot`.
+The following code displays a graph similar to Fig 2, while
+we used additional a few commands for improvement of visualization.
+Sample program  [examples/optimization/visualization.ml](https://github.com/akabe/slap/blob/master/examples/optimization/visualization.ml) contains the commands,
+and shows the same graph as Fig 2.
+
+```OCaml
+# gnuplot (fun ppf ->
+      fprintf ppf "set multiplot\n\
+                   set view 0,0 # Fix a view\n\
+                   set xrange [-2:3]@\n\
+                   set yrange [0:5]@\n";
+      steepest_descent ppf
+        ~loops:100 ~eta:2.0 (dgauss a b) (gauss a b) [%vec [0.0; 1.0]];
+      fprintf ppf "set contour             # Plot contour\n\
+                   unset surface           # Don't show a 3D surface\n\
+                   set cntrparam levels 15 # Levels of contour\n";
+      splot_fun ~option:"with lines" ~n:50 ppf (gauss a b));;
+```
