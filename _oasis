@@ -338,6 +338,14 @@ Executable quasi_newton
   Install:        false
   CompiledObject: best
 
+Executable optimization_visualization
+  Path:           examples/optimization
+  MainIs:         visualization.ml
+  Build$:         flag(examples) && flag(ppx)
+  BuildDepends:   slap
+  Install:        false
+  CompiledObject: best
+
 SourceRepository head
   Type:           git
   Location:       https://github.com/akabe/slap.git
