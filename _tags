@@ -193,7 +193,7 @@ true: annot, bin_annot
 true: -traverse
 <{lib,ppx,test,examples}/**>: traverse
 
-<examples/**>: ppx_slap
+<examples/optimization/**>: ppx_slap
 <test/ppx/*>: ppx_slap
 
 <{lib,ppx,test}/*.ml{,i}>: warn(A-4-33-41-42-43-34-44-50), safe_string, strict_sequence, strict_formats
