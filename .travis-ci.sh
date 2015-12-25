@@ -34,7 +34,7 @@ make test
 
 # Execute examples
 for file in *.native; do
-    if [ "$file" != "ppx_slap.native" ] && [ "$file" != "test.native" ]; then
+    if [ "$file" != "ppx_slap.native" ] && [ "$file" != "test.native" ] && [ "$file" != "visualization.native" ]; then
         echo "Execute ./$file";
         ./$file
     fi
