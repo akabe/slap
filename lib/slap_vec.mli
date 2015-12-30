@@ -26,8 +26,7 @@ type (+'n, 'num, 'prec, +'cnt_or_dsc) t
 (** [('n, 'num, 'prec, 'cnt_or_dsc) vec] is the type of ['n]-dimensional vector
     whose elements have OCaml type ['num], representation kind ['prec] and
     memory contiguity flag ['cnt_or_dsc].
-    The internal implementation is fortran-style one-dimensional big array.
-*)
+    The internal implementation is fortran-style one-dimensional big array. *)
 
 val cnt : ('n, 'num, 'prec, cnt) t -> ('n, 'num, 'prec, 'cnt) t
 (** Recover polymorphism of the fourth type parameter. *)
@@ -549,7 +548,6 @@ val opt_vec_alloc :
 val __expose :
   ('n, 'num, 'prec, 'cnt_or_dsc) t ->
   'n Slap_size.t * int * int * ('num, 'prec, fortran_layout) Array1.t
-
 
 val __unexpose :
   'n Slap_size.t * int * int * ('num, 'prec, fortran_layout) Array1.t ->

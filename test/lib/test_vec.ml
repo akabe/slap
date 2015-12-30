@@ -20,7 +20,7 @@ let sv_dfe = subdscvec_dyn four ~ofsx:1 ~incx:2 v_ord
 (* a discrete subvector containing the last element in the original vector *)
 let sv_dle = subdscvec_dyn four ~ofsx:4 ~incx:2 v_ord
 (* a discrete subvector with a negetive incrementation *)
-let sv_dng = subdscvec_dyn four ~ofsx:10 ~incx:(-3) v_ord
+let sv_dng = subdscvec_dyn four ~ofsx:1 ~incx:(-3) v_ord
 
 (* Functions to generate a destination vector *)
 let duplicate x = (x, x)
@@ -34,7 +34,7 @@ let make0_sv f () =
   (x, y)
 
 let make0_sv_dle = make0_sv (subdscvec_dyn four ~ofsx:4 ~incx:2)
-let make0_sv_dng = make0_sv (subdscvec_dyn four ~ofsx:10 ~incx:(-3))
+let make0_sv_dng = make0_sv (subdscvec_dyn four ~ofsx:1 ~incx:(-3))
 
 (* test of Slap.Vec.to_array *)
 let test_to_array () =

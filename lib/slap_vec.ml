@@ -24,102 +24,106 @@ module S = Slap_size
 
 type (+'n, 'num, 'prec, +'cnt_or_dsc) t =
   'n S.t (* the number of elements in a vector (>= 0) *)
-  * int (* an offset (>= 1) *)
   * int (* an incrementation *)
   * ('num, 'prec, fortran_layout) Array1.t
 
 let cnt = identity
 
-let shared_rev (n, ofsx, incx, x) =
-  let ofsx' = (S.__expose n - 1) * incx + ofsx in
-  (n, ofsx', -incx, x)
+let shared_rev (n, incx, x) = (n, -incx, x)
 
 external create_array1 :
   ('a, 'b) kind -> 'n S.t -> ('a, 'b, fortran_layout) Array1.t
   = "slap_vec_create_array1"
 
-let check_cnt (n, ofsx, incx, x) =
-  S.__expose n = Array1.dim x && ofsx = 1 && incx = 1
+let check_cnt (n, incx, x) =
+  S.__expose n = Array1.dim x && incx = 1
 
 let opt_work = function
   | None -> None
-  | Some ((_, _, _, x) as v) ->
+  | Some ((_, _, x) as v) ->
     assert(check_cnt v);
     Some x
 
 let opt_cnt_vec n = function
   | None -> None
-  | Some ((n', _, _, x) as v) ->
+  | Some ((n', _, x) as v) ->
     assert(n = n' && check_cnt v);
     Some x
 
 let opt_cnt_vec_alloc kind n = function
   | None -> create_array1 kind n
-  | Some ((n', _, _, x) as v) ->
+  | Some ((n', _, x) as v) ->
     assert(n = n' && check_cnt v);
     x
 
 let opt_vec n = function
-  | None ->
-     None, None, None
-  | Some (n', ofsx, incx, x) ->
+  | None -> None, None
+  | Some (n', incx, x) ->
     assert(n = n');
-    Some ofsx, Some incx, Some x
+    (Some incx, Some x)
 
 let opt_vec_alloc kind n = function
-  | None -> 1, 1, create_array1 kind n
-  | Some (n', ofsx, incx, x) ->
+  | None -> 1, create_array1 kind n
+  | Some (n', incx, x) ->
     assert(n = n');
-    ofsx, incx, x
+    (incx, x)
 
-let __expose = identity
+let __expose (n, incx, x) = (n, 1, incx, x)
 
-let __unexpose = identity
+let __unexpose (n, ofsx, incx, x) =
+  if S.__expose n = 0 then (n, incx, x)
+  else (n, incx, Array1.sub x ofsx ((S.__expose n - 1) * abs incx + 1))
 
 (** {2 Creation of vectors} *)
 
 let create kind n =
-  (n, 1, 1, create_array1 kind n)
+  (n, 1, create_array1 kind n)
 
 let make kind n a =
   let x = create_array1 kind n in
   Array1.fill x a ;
-  (n, 1, 1, x)
+  (n, 1, x)
 
 let init kind n f =
   let x = create_array1 kind n in
   S.iteri (fun i -> Array1.unsafe_set x i (f i)) n;
-  (n, 1, 1, x)
+  (n, 1, x)
 
 (** {2 Accessors} *)
 
-let kind (_, _, _, x) = Array1.kind x
+let kind (_, _, x) = Array1.kind x
 
-let dim (n, _, _, _) = n
+let dim (n, _, _) = n
 
-let get_dyn (n, ofsx, incx, x) i =
+let index n incx i =
+  let j = if incx > 0 then 1 else S.__expose n in
+  (i - j) * incx + 1
+
+let get_dyn (n, incx, x) i =
   if i < 1 || i > S.__expose n then invalid_arg "Slap.Vec.get_dyn";
-  Array1.get x (ofsx + (i - 1) * incx)
+  Array1.get x (index n incx i)
 
-let set_dyn (n, ofsx, incx, x) i a =
+let set_dyn (n, incx, x) i a =
   if i < 1 || i > S.__expose n then invalid_arg "Slap.Vec.set_dyn";
-  Array1.set x (ofsx + (i - 1) * incx) a
+  Array1.set x (index n incx i) a
 
-let unsafe_get (_, ofsx, incx, x) i =
-  Array1.unsafe_get x (ofsx + (i - 1) * incx)
+let unsafe_get (n, incx, x) i =
+  Array1.unsafe_get x (index n incx i)
 
-let unsafe_set (_, ofsx, incx, x) i a =
-  Array1.unsafe_set x (ofsx + (i - 1) * incx) a
+let unsafe_set (n, incx, x) i a =
+  Array1.unsafe_set x (index n incx i) a
 
-let replace_dyn (n, ofsx, incx, x) i f =
+let replace_dyn (n, incx, x) i f =
   if i < 1 || i > S.__expose n then invalid_arg "Slap.Vec.replace_dyn";
-  let j = ofsx + (i - 1) * incx in
+  let j = index n incx i in
   Array1.unsafe_set x j (f (Array1.unsafe_get x j))
 
 (** {2 Iterators} *)
 
-let mapi kind f ?y (n, ofsx, incx, x) =
-  let ofsy, incy, y = opt_vec_alloc kind n y in
+let index_hd n incx = if incx > 0 then 1 else (1 - S.__expose n) * incx + 1
+
+let mapi kind f ?y (n, incx, x) =
+  let incy, y = opt_vec_alloc kind n y in
   let rec loop count ix iy =
     if count <= S.__expose n then
       begin
@@ -128,12 +132,12 @@ let mapi kind f ?y (n, ofsx, incx, x) =
         loop (count + 1) (ix + incx) (iy + incy)
       end
   in
-  loop 1 ofsx ofsy;
-  (n, ofsy, incy, y)
+  loop 1 (index_hd n incx) (index_hd n incy);
+  (n, incy, y)
 
 let map kind f = mapi kind (fun _ -> f)
 
-let fold_lefti f init (n, ofsx, incx, x) =
+let fold_lefti f init (n, incx, x) =
   let rec loop count i acc =
     if count > S.__expose n then acc else
       begin
@@ -141,7 +145,7 @@ let fold_lefti f init (n, ofsx, incx, x) =
         loop (count + 1) (i + incx) (f count acc xi)
       end
   in
-  loop 1 ofsx init
+  loop 1 (index_hd n incx) init
 
 let fold_left f = fold_lefti (fun _ -> f)
 
@@ -162,9 +166,9 @@ let iter f = iteri (fun _ -> f)
 
 (** {2 Iterators on two vectors} *)
 
-let mapi2 kind f ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
+let mapi2 kind f ?z (n, incx, x) (n', incy, y) =
   assert(n = n');
-  let ofsz, incz, z = opt_vec_alloc kind n z in
+  let incz, z = opt_vec_alloc kind n z in
   let rec loop count ix iy iz =
     if count <= S.__expose n then
       begin
@@ -174,12 +178,12 @@ let mapi2 kind f ?z (n, ofsx, incx, x) (n', ofsy, incy, y) =
         loop (count + 1) (ix + incx) (iy + incy) (iz + incz)
       end
   in
-  loop 1 ofsx ofsy ofsz;
-  (n, ofsz, incz, z)
+  loop 1 (index_hd n incx) (index_hd n incy) (index_hd n incz);
+  (n, incz, z)
 
 let map2 kind f = mapi2 kind (fun _ -> f)
 
-let fold_lefti2 f init (n, ofsx, incx, x) (n', ofsy, incy, y) =
+let fold_lefti2 f init (n, incx, x) (n', incy, y) =
   assert(n = n');
   let rec loop count ix iy acc =
     if count > S.__expose n then acc else
@@ -189,7 +193,7 @@ let fold_lefti2 f init (n, ofsx, incx, x) (n', ofsy, incy, y) =
         loop (count + 1) (ix + incx) (iy + incy) (f count acc xi yi)
       end
   in
-  loop 1 ofsx ofsy init
+  loop 1 (index_hd n incx) (index_hd n incy) init
 
 let fold_left2 f = fold_lefti2 (fun _ -> f)
 
@@ -206,10 +210,9 @@ let iter2 f = iteri2 (fun _ -> f)
 
 (** {2 Iterators on three vectors} *)
 
-let mapi3 kind f ?w
-    (n, ofsx, incx, x) (n', ofsy, incy, y) (n'', ofsz, incz, z) =
+let mapi3 kind f ?w (n, incx, x) (n', incy, y) (n'', incz, z) =
   assert(n = n' && n = n'');
-  let ofsw, incw, w = opt_vec_alloc kind n w in
+  let incw, w = opt_vec_alloc kind n w in
   let rec loop count ix iy iz iw =
     if count <= S.__expose n then
       begin
@@ -220,13 +223,13 @@ let mapi3 kind f ?w
         loop (count + 1) (ix + incx) (iy + incy) (iz + incz) (iw + incw)
       end
   in
-  loop 1 ofsx ofsy ofsz ofsw;
-  (n, ofsw, incw, w)
+  loop 1 (index_hd n incx) (index_hd n incy)
+    (index_hd n incz) (index_hd n incw);
+  (n, incw, w)
 
 let map3 kind f = mapi3 kind (fun _ -> f)
 
-let fold_lefti3 f init
-    (n, ofsx, incx, x) (n', ofsy, incy, y) (n'', ofsz, incz, z) =
+let fold_lefti3 f init (n, incx, x) (n', incy, y) (n'', incz, z) =
   assert(n = n' && n = n'');
   let rec loop count ix iy iz acc =
     if count > S.__expose n then acc else
@@ -238,7 +241,7 @@ let fold_lefti3 f init
              (f count acc xi yi zi)
       end
   in
-  loop 1 ofsx ofsy ofsz init
+  loop 1 (index_hd n incx) (index_hd n incy) (index_hd n incz) init
 
 let fold_left3 f = fold_lefti3 (fun _ -> f)
 
@@ -255,18 +258,18 @@ let iter3 f = iteri3 (fun _ -> f)
 
 (** {2 Scanning} *)
 
-let for_all p (n, ofsx, incx, x) =
+let for_all p (n, incx, x) =
   let rec loop count i =
     if count > S.__expose n then true else
       if p (Array1.unsafe_get x i)
       then loop (count + 1) (i + incx)
       else false
   in
-  loop 1 ofsx
+  loop 1 (index_hd n incx)
 
 let exists p vx = not (for_all (fun xi -> not (p xi)) vx)
 
-let for_all2 p (n, ofsx, incx, x) (n', ofsy, incy, y) =
+let for_all2 p (n, incx, x) (n', incy, y) =
   assert(n = n');
   let rec loop count ix iy =
     if count > S.__expose n then true else
@@ -274,7 +277,7 @@ let for_all2 p (n, ofsx, incx, x) (n', ofsy, incy, y) =
       then loop (count + 1) (ix + incx) (iy + incy)
       else false
   in
-  loop 1 ofsx ofsy
+  loop 1(index_hd n incx) (index_hd n incy)
 
 let exists2 p vx vy = not (for_all2 (fun xi yi -> not (p xi yi)) vx vy)
 
@@ -282,44 +285,47 @@ let mem ?(equal=(=)) a = exists (equal a)
 
 (** {2 Basic operations} *)
 
-external copy_stub : n:'n S.t ->
-                     ofsx:int -> incx:int ->
-                     ('num, 'prec, fortran_layout) Array1.t ->
-                     ofsy:int -> incy:int ->
-                     ('num, 'prec, fortran_layout) Array1.t -> unit
+external copy_stub :
+  n:'n S.t ->
+  ofsx:int -> incx:int ->
+  ('num, 'prec, fortran_layout) Array1.t ->
+  ofsy:int -> incy:int ->
+  ('num, 'prec, fortran_layout) Array1.t -> unit
   = "slap_vec_copy_stub_bc" "slap_vec_copy_stub"
 
-let copy ?y (n, ofsx, incx, x) =
-  let ofsy, incy, y = opt_vec_alloc (Array1.kind x) n y in
-  copy_stub ~n ~ofsx ~incx x ~ofsy ~incy y;
-  (n, ofsy, incy, y)
+let copy ?y (n, incx, x) =
+  let incy, y = opt_vec_alloc (Array1.kind x) n y in
+  copy_stub ~n ~ofsx:1 ~incx x ~ofsy:1 ~incy y;
+  (n, incy, y)
 
-external fill_stub : n:'n S.t ->
-                     ofsx:int -> incx:int ->
-                     ('num, 'prec, fortran_layout) Array1.t ->
-                     'num -> unit
+external fill_stub :
+  n:'n S.t ->
+  ofsx:int -> incx:int ->
+  ('num, 'prec, fortran_layout) Array1.t ->
+  'num -> unit
   = "slap_vec_fill_stub"
 
-let fill (n, ofsx, incx, x) c =
-  fill_stub ~n ~ofsx ~incx x c
+let fill (n, incx, x) c =
+  fill_stub ~n ~ofsx:1 ~incx x c
 
-let append (m, ofsx, incx, x) (n, ofsy, incy, y) =
+let append (m, incx, x) (n, incy, y) =
   let k = S.add m n in
   let z = create_array1 (Array1.kind x) k in
-  copy_stub ~n:m ~ofsx ~incx x ~ofsy:1 ~incy:1 z;
-  copy_stub ~n ~ofsx:ofsy ~incx:incy y ~ofsy:(S.__expose m + 1) ~incy:1 z;
-  (k, 1, 1, z)
+  copy_stub ~n:m ~ofsx:1 ~incx x ~ofsy:1 ~incy:1 z;
+  copy_stub ~n ~ofsx:1 ~incx:incy y ~ofsy:(S.__expose m + 1) ~incy:1 z;
+  (k, 1, z)
 
 let rev vx = copy (shared_rev vx)
 
 (** {2 Conversion} *)
 
-let to_array (n, ofsx, incx, x) =
+let to_array (n, incx, x) =
+  let ofsx = index_hd n incx in
   Array.init (S.__expose n) (fun i -> x.{incx * i + ofsx})
 
 let unsafe_of_array kind n arr =
   let x = Array1.of_array kind fortran_layout arr in
-  (n, 1, 1, x)
+  (n, 1, x)
 
 let of_array_dyn kind n arr =
   if S.__expose n <> Array.length arr then invalid_arg "Slap.Vec.of_array_dyn";
@@ -334,7 +340,7 @@ let unsafe_of_list kind n lst =
     Array1.unsafe_set x i xi;
     i + 1 in
   ignore (List.fold_left f 1 lst);
-  (n, 1, 1, x)
+  (n, 1, x)
 
 let of_list_dyn kind n lst =
   if S.__expose n <> List.length lst then invalid_arg "Slap.Vec.of_list_dyn";
@@ -352,7 +358,7 @@ let unsafe_of_bigarray ?(share=false) n ba =
         Array1.blit ba ba';
         ba'
       end in
-  (n, 1, 1, ba')
+  (n, 1, ba')
 
 let of_bigarray_dyn ?(share=false) n ba =
   if S.__expose n <> Array1.dim ba then invalid_arg "Slap.Vec.of_bigarray_dyn";
@@ -360,23 +366,31 @@ let of_bigarray_dyn ?(share=false) n ba =
 
 (** {2 Subvectors} *)
 
-let internal_subvec_dyn loc n ofsx incx vx =
-  let n', ofsx', incx', x = vx in
-  let n' = S.__expose n' in
-  (* check the first index *)
-  let i1 = ofsx in
-  if i1 < 1 || i1 > n' then invalid_arg loc;
-  (* check the last index *)
-  let iN = ofsx + (S.__expose n - 1) * incx in
-  if S.__expose n <> 0 && (iN < 1 || iN > n') then invalid_arg loc;
-  (n, ofsx' + (ofsx - 1) * incx', incx * incx', x)
-
-let subcntvec_dyn n ?(ofsx = 1) ((n', _, _, x) as vx) =
+let subcntvec_dyn n ?(ofsx = 1) ((n', _, x) as vx) =
   assert(S.__expose n' >= S.__expose n && check_cnt vx);
-  (n, 1, 1, Array1.sub x ofsx (S.__expose n))
+  (n, 1, Array1.sub x ofsx (S.__expose n))
 
-let subdscvec_dyn n ?(ofsx = 1) ?(incx = 1) vx =
-  internal_subvec_dyn "Slap.Vec.subdscvec_dyn" n ofsx incx vx
+let subdscvec_dyn nx ?(ofsx = 1) ?(incx = 1) (ny, incy, y) =
+  if S.__expose nx = 0 then (nx, 1, y)
+  else begin
+    let incz = incx * incy in
+    let ofsz = index ny incy ofsx in
+    let (i, j) = (ofsz, ofsz + abs incz * (S.__expose nx - 1)) in
+    if (i < 1 || i > Array1.dim y) || (j < 1 || j > Array1.dim y)
+    then failwith "Slap.Vec.subdscvec_dyn";
+    (nx, incz, Array1.sub y ofsz ((S.__expose nx - 1) * abs incz + 1))
+  end
 
-let subvec_dyn n ?(ofsx = 1) ?(incx = 1) vx =
-  internal_subvec_dyn "Slap.Vec.subvec_dyn" n ofsx incx vx
+let subvec_dyn = subdscvec_dyn
+
+let opt_vec n = function
+  | None -> None, None, None
+  | Some (n', incx, x) ->
+    assert(n = n');
+    (Some 1, Some incx, Some x)
+
+let opt_vec_alloc kind n = function
+  | None -> 1, 1, create_array1 kind n
+  | Some (n', incx, x) ->
+    assert(n = n');
+    (1, incx, x)

@@ -30,6 +30,8 @@ extern void zcopy_ (int *n, double *x, int *incx, double *y, int *incy);
 #define COPY(type) do {                                                 \
     type *x = (type *) xdata, *y = (type *) ydata;                      \
     int i;                                                              \
+    if (incx < 0) x += (1 - n) * incx;                                  \
+    if (incy < 0) y += (1 - n) * incy;                                  \
     for (i = 0; i < n; ++i, x += incx, y += incy) *y = *x;              \
   } while(0)
 
@@ -99,9 +101,10 @@ slap_vec_copy_stub_bc (value * argv, int argn)
 
 #define FILL(type, init_value) {                     \
     type init = init_value;                          \
-    type *p = xdata;                                 \
+    type *x = xdata;                                 \
     int i;                                           \
-    for (i = 0; i < n; ++i, p += incx) *p = init;    \
+    if (incx < 0) x += (1 - n) * incx;               \
+    for (i = 0; i < n; ++i, x += incx) *x = init;    \
   }
 
 void
