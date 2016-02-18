@@ -619,30 +619,22 @@ val div :
  *)
 
 val zpxy :
-  ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
+  ('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
   ('n, 'y_cd) vec -> ('n, 'z_cd) vec
-(** [zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
-
-    - [(z1 + x1 * y1, z2 + x2 * y2, ..., zn + xn * yn)]
-      if [z] (= [(z1, z2, ..., zn)]) is given;
-    - otherwise [(x1 * y1, x2 * y2, ..., xn * yn)].
-
+(** [zpxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)]
+    returns [(z1 + x1 * y1, z2 + x2 * y2, ..., zn + xn * yn)].
+    This function is useful for convolutions.
     @return the vector [z], which is overwritten.
-    @since 0.1.0
- *)
+    @since 0.1.0 *)
 
 val zmxy :
-  ?z:('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
+  ('n, 'z_cd) vec -> ('n, 'x_cd) vec ->
   ('n, 'y_cd) vec -> ('n, 'z_cd) vec
-(** [zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)] returns
-
-    - [(z1 - x1 * y1, z2 - x2 * y2, ..., zn - xn * yn)]
-      if [z] (= [(z1, z2, ..., zn)]) is given;
-    - otherwise [(-x1 * y1, -x2 * y2, ..., -xn * yn)].
-
+(** [zmxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)]
+    returns [(z1 - x1 * y1, z2 - x2 * y2, ..., zn - xn * yn)].
+    This function is useful for convolutions.
     @return the vector [z], which is overwritten.
-    @since 0.1.0
- *)
+    @since 0.1.0 *)
 
 val ssqr_diff : ('n, 'x_cd) vec -> ('n, 'y_cd) vec -> num_type
 (** [ssqr_diff x y]returns the sum of squared differences of the elements of

@@ -17,7 +17,7 @@ let p_of_ipiv m ipiv =
   let p = Mat.identity m in
   for i = 1 to k do
     let j = Int32.to_int ipiv.{i} in
-    if i != j then swap ~x:(Mat.col p i) (Mat.col p j)
+    if i != j then swap (Mat.col p i) (Mat.col p j)
   done;
   p
 

@@ -402,15 +402,11 @@ val replace_alli :
 
 (** {2 Matrix transformations} *)
 
-val transpose_copy : ('m, 'n, 'a_cd) mat -> ('n, 'm, 'b_cd) mat -> unit
-(** [transpose_copy a b] copies the transpose of [a] into [b].
-    @since 0.1.0
- *)
-
-val transpose : ('m, 'n, 'cd) mat -> ('n, 'm, 'cnt) mat
-(** [transpose a] returns the transpose of [a].
-    @since 0.1.0
- *)
+val transpose_copy : ?b:('n, 'm, 'b_cd) mat -> ('m, 'n, 'a_cd) mat ->
+  ('n, 'm, 'b_cd) mat
+(** [transpose_copy ?b a] copies the transpose of [a] into [b].
+    @return the matrix [b], which is overwritten.
+    @since 0.1.0 *)
 
 val detri : ?up:bool -> ('n, 'n, 'cd) mat -> unit
 (** [detri ?up a] converts triangular matrix [a] to a symmetric matrix, i.e.,

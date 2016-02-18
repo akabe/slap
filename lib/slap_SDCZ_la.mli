@@ -30,8 +30,8 @@ val pp_mat : Format.formatter -> ('m, 'n, 'cnt_or_dsc) mat -> unit
 
 (** {3 Level 1} *)
 
-val swap : x:('n, 'x_cd) vec -> ('n, 'y_cd) vec -> unit
-(** [swap ~x y] swaps elements in [x] and [y]. *)
+val swap : ('n, 'x_cd) vec -> ('n, 'y_cd) vec -> unit
+(** [swap x y] swaps elements in [x] and [y]. *)
 
 val scal : num_type -> ('n, 'cd) vec -> unit
 (** [scal c x] multiplies all elements in [x] by scalar value [c],

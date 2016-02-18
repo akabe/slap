@@ -203,16 +203,11 @@ let replace_alli = Slap_mat.replace_alli
 
 (** {2 Matrix transformations} *)
 
-let transpose_copy a b =
+let transpose_copy ?b a =
   let m, n, ar, ac, a = M.__expose a in
-  let n', m', br, bc, b = M.__expose b in
-  assert(m = m' && n = n');
-  I.Mat.transpose_copy ~m:(S.__expose m) ~n:(S.__expose n)
-    ~ar ~ac a ~br ~bc b
-
-let transpose a =
-  let m, n, ar, ac, a = M.__expose a in
-  let b = I.Mat.transpose ~m:(S.__expose m) ~n:(S.__expose n) ~ar ~ac a in
+  let br, bc, b = M.opt_mat_alloc prec n m b in
+  ignore (I.Mat.transpose_copy ~m:(S.__expose m) ~n:(S.__expose n)
+            ~ar ~ac a ~br ~bc ~b);
   M.__unexpose (n, m, 1, 1, b)
 
 let detri ?up a =

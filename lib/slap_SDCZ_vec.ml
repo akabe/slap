@@ -43,6 +43,19 @@ let wrap2opt
   ignore (f ~n:(S.__expose n) ~ofsy ~incy ~y ~ofsx ~incx x);
   V.__unexpose (n, ofsy, incy, y)
 
+let wrap3
+    (f : ?n:int ->
+     ?ofsz:int -> ?incz:int -> I.vec ->
+     ?ofsx:int -> ?incx:int -> I.vec ->
+     ?ofsy:int -> ?incy:int -> I.vec -> 'a)
+    z x y =
+  let n, ofsx, incx, x = V.__expose x in
+  let n', ofsy, incy, y = V.__expose y in
+  let n'', ofsz, incz, z = V.__expose z in
+  assert(n = n' && n = n'');
+  ignore (f ~n:(S.__expose n) ~ofsz ~incz z ~ofsx ~incx x ~ofsy ~incy y);
+  V.__unexpose (n, ofsz, incz, z)
+
 let wrap3opt
     (f : ?n:int ->
      ?ofsz:int -> ?incz:int -> ?z:I.vec ->
@@ -273,9 +286,9 @@ let mul ?z x y = wrap3opt I.Vec.mul ?z x y
 
 let div ?z x y = wrap3opt I.Vec.div ?z x y
 
-let zpxy ?z x y = wrap3opt I.Vec.zpxy ?z x y
+let zpxy z x y = wrap3 I.Vec.zpxy z x y
 
-let zmxy ?z x y = wrap3opt I.Vec.zmxy ?z x y
+let zmxy z x y = wrap3 I.Vec.zmxy z x y
 
 let ssqr_diff x y = wrap2 I.Vec.ssqr_diff x y
 

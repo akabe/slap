@@ -541,6 +541,10 @@ val dim_list_list : 'a list list -> (int * int) option
 
 val check_cnt : ('m, 'n, 'num, 'prec, cnt) t -> bool
 
+val create_array2 :
+  ('a, 'b) kind -> 'm Slap_size.t -> 'n Slap_size.t ->
+  ('a, 'b, fortran_layout) Array2.t
+
 val opt_mat :
   'm Slap_size.t -> 'n Slap_size.t ->
   ('m, 'n, 'num, 'prec, 'cd) t option ->

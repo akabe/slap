@@ -27,8 +27,8 @@ let pp_mat ppf a = Slap_io.pp_mat_gen pp_num ppf a
 
 (** {3 Level 1} *)
 
-let swap ~x y =
-  Vec.wrap2 (fun ?n ?ofsx ?incx x -> I.swap ?n ?ofsx ?incx ~x) x y
+let swap x y =
+  Vec.wrap2 (fun ?n ?ofsx ?incx x -> I.swap ?n ?ofsx ?incx x) x y
 
 let scal alpha x = Vec.wrap1 (fun ?n -> I.scal alpha ?n) x
 
