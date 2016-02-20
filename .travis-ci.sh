@@ -13,13 +13,14 @@ wget -q -O opam_installer.sh "https://raw.github.com/ocaml/opam/master/shell/opa
 if [ -n "${OPAM_VERSION:-}" ]; then
     sed -i "s/^VERSION=.*$/VERSION='$OPAM_VERSION'/" opam_installer.sh
 fi
-echo y | sh opam_installer.sh $BINDIR $OCAML_VERSION
+echo y | sh opam_installer.sh $BINDIR
 
 # Install OCaml
 export OPAMYES=1
 export OPAMVERBOSE=1
 opam init
 eval `opam config env`
+opam switch $OCAML_VERSION
 
 # Install OPAM packages
 if [ -n "${OPAM_DEPS:-}" ]; then
