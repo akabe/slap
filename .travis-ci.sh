@@ -1,5 +1,5 @@
 # Dependencies
-OPAM_DEPS="ocamlfind cppo lacaml>=8.0.0 ounit"
+OPAM_DEPS="ocamlbuild ocamlfind cppo lacaml>=8.0.0 ounit"
 
 export PREFIX="./usr"
 export BINDIR="$PREFIX/bin"
