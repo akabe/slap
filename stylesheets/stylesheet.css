@@ -449,12 +449,8 @@ Small Device Styles
 Original
 *******************************************************************************/
 
-figure > * {
+.centerfig > * {
   margin: 0 auto 0.55em;
   display: block;
   text-align: center;
-}
-
-figure.highlight {
-  text-align: left;
 }
