@@ -511,28 +511,18 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
 <b>Returns</b> the vector <code class="code">z</code>, which is overwritten.<br>
 </div>
 
-<pre><span id="VALzpxy"><span class="keyword">val</span> zpxy</span> : <code class="type">?z:('n, 'z_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -><br>       ('n, 'x_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -> ('n, 'y_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -> ('n, 'z_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a></code></pre><div class="info ">
-<code class="code">zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
-<p>
-<ul>
-<li><code class="code">(z1 + x1 * y1, z2 + x2 * y2, ..., zn + xn * yn)</code>
-      if <code class="code">z</code> (= <code class="code">(z1, z2, ..., zn)</code>) is given;</li>
-<li>otherwise <code class="code">(x1 * y1, x2 * y2, ..., xn * yn)</code>.</li>
-</ul>
-<br>
+<pre><span id="VALzpxy"><span class="keyword">val</span> zpxy</span> : <code class="type">('n, 'z_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -><br>       ('n, 'x_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -> ('n, 'y_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -> ('n, 'z_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a></code></pre><div class="info ">
+<code class="code">zpxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)</code>
+    returns <code class="code">(z1 + x1 * y1, z2 + x2 * y2, ..., zn + xn * yn)</code>.
+    This function is useful for convolutions.<br>
 <b>Since</b> 0.1.0<br>
 <b>Returns</b> the vector <code class="code">z</code>, which is overwritten.<br>
 </div>
 
-<pre><span id="VALzmxy"><span class="keyword">val</span> zmxy</span> : <code class="type">?z:('n, 'z_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -><br>       ('n, 'x_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -> ('n, 'y_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -> ('n, 'z_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a></code></pre><div class="info ">
-<code class="code">zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
-<p>
-<ul>
-<li><code class="code">(z1 - x1 * y1, z2 - x2 * y2, ..., zn - xn * yn)</code>
-      if <code class="code">z</code> (= <code class="code">(z1, z2, ..., zn)</code>) is given;</li>
-<li>otherwise <code class="code">(-x1 * y1, -x2 * y2, ..., -xn * yn)</code>.</li>
-</ul>
-<br>
+<pre><span id="VALzmxy"><span class="keyword">val</span> zmxy</span> : <code class="type">('n, 'z_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -><br>       ('n, 'x_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -> ('n, 'y_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a> -> ('n, 'z_cd) <a href="Slap_S.html#TYPEvec">Slap_S.vec</a></code></pre><div class="info ">
+<code class="code">zmxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)</code>
+    returns <code class="code">(z1 - x1 * y1, z2 - x2 * y2, ..., zn - xn * yn)</code>.
+    This function is useful for convolutions.<br>
 <b>Since</b> 0.1.0<br>
 <b>Returns</b> the vector <code class="code">z</code>, which is overwritten.<br>
 </div>
@@ -612,4 +602,4 @@ An alias of <code class="code">subdscvec_dyn</code>.<br>
 <b>Since</b> 0.1.0<br>
 <b>Returns</b> the vector <code class="code">y</code>, which is overwritten.<br>
 </div>
-<script type="text/javascript" src="../google-analytics.js"></script></body></html>
+</body></html>

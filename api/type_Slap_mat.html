@@ -226,6 +226,10 @@
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;dim_array_array&nbsp;:&nbsp;<span class="keywordsign">'</span>a&nbsp;array&nbsp;array&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(int&nbsp;*&nbsp;int)&nbsp;option<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;dim_list_list&nbsp;:&nbsp;<span class="keywordsign">'</span>a&nbsp;list&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(int&nbsp;*&nbsp;int)&nbsp;option<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;check_cnt&nbsp;:&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="constructor">Slap_misc</span>.cnt)&nbsp;<span class="constructor">Slap_mat</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;create_array2&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>a,&nbsp;<span class="keywordsign">'</span>b)&nbsp;<span class="constructor">Bigarray</span>.kind&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>m&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>a,&nbsp;<span class="keywordsign">'</span>b,&nbsp;<span class="constructor">Bigarray</span>.fortran_layout)&nbsp;<span class="constructor">Bigarray</span>.<span class="constructor">Array2</span>.t<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;opt_mat&nbsp;:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>m&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
@@ -246,4 +250,4 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>m&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;*&nbsp;<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;*&nbsp;int&nbsp;*&nbsp;int&nbsp;*<br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="constructor">Bigarray</span>.fortran_layout)&nbsp;<span class="constructor">Bigarray</span>.<span class="constructor">Array2</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;<span class="constructor">Slap_mat</span>.t<br>
-<span class="keyword">end</span></code><script type="text/javascript" src="../google-analytics.js"></script></body></html>
+<span class="keyword">end</span></code></body></html>

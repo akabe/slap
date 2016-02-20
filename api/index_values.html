@@ -519,6 +519,8 @@ Conjugate transpose of a matrix.
 <code class="code">create kind n</code>
 </div>
 </td></tr>
+<tr><td><a href="Slap_mat.html#VALcreate_array2">create_array2</a> [<a href="Slap_mat.html">Slap_mat</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap_common.html#VALcreate_int32_vec">create_int32_vec</a> [<a href="Slap_common.html">Slap_common</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap_common.html#VALcreate_int_vec">create_int_vec</a> [<a href="Slap_common.html">Slap_common</a>]</td>
@@ -5269,22 +5271,22 @@ An alias of <code class="code">subdscvec_dyn</code>.
 <td></td></tr>
 <tr><td><a href="Slap_C.html#VALswap">swap</a> [<a href="Slap_C.html">Slap_C</a>]</td>
 <td><div class="info">
-<code class="code">swap ~x y</code> swaps elements in <code class="code">x</code> and <code class="code">y</code>.
+<code class="code">swap x y</code> swaps elements in <code class="code">x</code> and <code class="code">y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_Z.html#VALswap">swap</a> [<a href="Slap_Z.html">Slap_Z</a>]</td>
 <td><div class="info">
-<code class="code">swap ~x y</code> swaps elements in <code class="code">x</code> and <code class="code">y</code>.
+<code class="code">swap x y</code> swaps elements in <code class="code">x</code> and <code class="code">y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_S.html#VALswap">swap</a> [<a href="Slap_S.html">Slap_S</a>]</td>
 <td><div class="info">
-<code class="code">swap ~x y</code> swaps elements in <code class="code">x</code> and <code class="code">y</code>.
+<code class="code">swap x y</code> swaps elements in <code class="code">x</code> and <code class="code">y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_D.html#VALswap">swap</a> [<a href="Slap_D.html">Slap_D</a>]</td>
 <td><div class="info">
-<code class="code">swap ~x y</code> swaps elements in <code class="code">x</code> and <code class="code">y</code>.
+<code class="code">swap x y</code> swaps elements in <code class="code">x</code> and <code class="code">y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALsyband_dyn">syband_dyn</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
@@ -6168,44 +6170,24 @@ Return the integer correponding to the given size.
 Transpose of a matrix.
 </div>
 </td></tr>
-<tr><td><a href="Slap_C.Mat.html#VALtranspose">transpose</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
-<td><div class="info">
-<code class="code">transpose a</code> returns the transpose of <code class="code">a</code>.
-</div>
-</td></tr>
-<tr><td><a href="Slap_Z.Mat.html#VALtranspose">transpose</a> [<a href="Slap_Z.Mat.html">Slap_Z.Mat</a>]</td>
-<td><div class="info">
-<code class="code">transpose a</code> returns the transpose of <code class="code">a</code>.
-</div>
-</td></tr>
-<tr><td><a href="Slap_S.Mat.html#VALtranspose">transpose</a> [<a href="Slap_S.Mat.html">Slap_S.Mat</a>]</td>
-<td><div class="info">
-<code class="code">transpose a</code> returns the transpose of <code class="code">a</code>.
-</div>
-</td></tr>
-<tr><td><a href="Slap_D.Mat.html#VALtranspose">transpose</a> [<a href="Slap_D.Mat.html">Slap_D.Mat</a>]</td>
-<td><div class="info">
-<code class="code">transpose a</code> returns the transpose of <code class="code">a</code>.
-</div>
-</td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALtranspose_copy">transpose_copy</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
 <td><div class="info">
-<code class="code">transpose_copy a b</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
+<code class="code">transpose_copy ?b a</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_Z.Mat.html#VALtranspose_copy">transpose_copy</a> [<a href="Slap_Z.Mat.html">Slap_Z.Mat</a>]</td>
 <td><div class="info">
-<code class="code">transpose_copy a b</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
+<code class="code">transpose_copy ?b a</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_S.Mat.html#VALtranspose_copy">transpose_copy</a> [<a href="Slap_S.Mat.html">Slap_S.Mat</a>]</td>
 <td><div class="info">
-<code class="code">transpose_copy a b</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
+<code class="code">transpose_copy ?b a</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_D.Mat.html#VALtranspose_copy">transpose_copy</a> [<a href="Slap_D.Mat.html">Slap_D.Mat</a>]</td>
 <td><div class="info">
-<code class="code">transpose_copy a b</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
+<code class="code">transpose_copy ?b a</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_C.html#VALtrmm">trmm</a> [<a href="Slap_C.html">Slap_C</a>]</td>
@@ -6855,44 +6837,52 @@ The version number of SLAP: <code class="code">"major.minor.micro"</code>
 <td></td></tr>
 <tr><td><a href="Slap_C.Vec.html#VALzmxy">zmxy</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
 <td><div class="info">
-<code class="code">zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+<code class="code">zmxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)</code>
+    returns <code class="code">(z1 - x1 * y1, z2 - x2 * y2, ..., zn - xn * yn)</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_Z.Vec.html#VALzmxy">zmxy</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
 <td><div class="info">
-<code class="code">zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+<code class="code">zmxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)</code>
+    returns <code class="code">(z1 - x1 * y1, z2 - x2 * y2, ..., zn - xn * yn)</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_S.Vec.html#VALzmxy">zmxy</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
 <td><div class="info">
-<code class="code">zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+<code class="code">zmxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)</code>
+    returns <code class="code">(z1 - x1 * y1, z2 - x2 * y2, ..., zn - xn * yn)</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_D.Vec.html#VALzmxy">zmxy</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
 <td><div class="info">
-<code class="code">zmxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+<code class="code">zmxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)</code>
+    returns <code class="code">(z1 - x1 * y1, z2 - x2 * y2, ..., zn - xn * yn)</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_C.Vec.html#VALzpxy">zpxy</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
 <td><div class="info">
-<code class="code">zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+<code class="code">zpxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)</code>
+    returns <code class="code">(z1 + x1 * y1, z2 + x2 * y2, ..., zn + xn * yn)</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_Z.Vec.html#VALzpxy">zpxy</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
 <td><div class="info">
-<code class="code">zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+<code class="code">zpxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)</code>
+    returns <code class="code">(z1 + x1 * y1, z2 + x2 * y2, ..., zn + xn * yn)</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_S.Vec.html#VALzpxy">zpxy</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
 <td><div class="info">
-<code class="code">zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+<code class="code">zpxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)</code>
+    returns <code class="code">(z1 + x1 * y1, z2 + x2 * y2, ..., zn + xn * yn)</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_D.Vec.html#VALzpxy">zpxy</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
 <td><div class="info">
-<code class="code">zpxy ?z (x1, x2, ..., xn) (y1, y2, ..., yn)</code> returns
+<code class="code">zpxy (z1, z2, ..., zn) (x1, x2, ..., xn) (y1, y2, ..., yn)</code>
+    returns <code class="code">(z1 + x1 * y1, z2 + x2 * y2, ..., zn + xn * yn)</code>.
 </div>
 </td></tr>
 </table>
-<script type="text/javascript" src="../google-analytics.js"></script></body>
+</body>
 </html>

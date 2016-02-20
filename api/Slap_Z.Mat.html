@@ -347,14 +347,10 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
 <br>
 <h2 id="2_Matrixtransformations">Matrix transformations</h2><br>
 
-<pre><span id="VALtranspose_copy"><span class="keyword">val</span> transpose_copy</span> : <code class="type">('m, 'n, 'a_cd) <a href="Slap_Z.html#TYPEmat">Slap_Z.mat</a> -> ('n, 'm, 'b_cd) <a href="Slap_Z.html#TYPEmat">Slap_Z.mat</a> -> unit</code></pre><div class="info ">
-<code class="code">transpose_copy a b</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.<br>
+<pre><span id="VALtranspose_copy"><span class="keyword">val</span> transpose_copy</span> : <code class="type">?b:('n, 'm, 'b_cd) <a href="Slap_Z.html#TYPEmat">Slap_Z.mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap_Z.html#TYPEmat">Slap_Z.mat</a> -> ('n, 'm, 'b_cd) <a href="Slap_Z.html#TYPEmat">Slap_Z.mat</a></code></pre><div class="info ">
+<code class="code">transpose_copy ?b a</code> copies the transpose of <code class="code">a</code> into <code class="code">b</code>.<br>
 <b>Since</b> 0.1.0<br>
-</div>
-
-<pre><span id="VALtranspose"><span class="keyword">val</span> transpose</span> : <code class="type">('m, 'n, 'cd) <a href="Slap_Z.html#TYPEmat">Slap_Z.mat</a> -> ('n, 'm, 'cnt) <a href="Slap_Z.html#TYPEmat">Slap_Z.mat</a></code></pre><div class="info ">
-<code class="code">transpose a</code> returns the transpose of <code class="code">a</code>.<br>
-<b>Since</b> 0.1.0<br>
+<b>Returns</b> the matrix <code class="code">b</code>, which is overwritten.<br>
 </div>
 
 <pre><span id="VALdetri"><span class="keyword">val</span> detri</span> : <code class="type">?up:bool -> ('n, 'n, 'cd) <a href="Slap_Z.html#TYPEmat">Slap_Z.mat</a> -> unit</code></pre><div class="info ">
@@ -609,4 +605,4 @@ A row-wise <code class="code">scal</code> function for matrices.<br>
 <div class="param_info"><code class="code">re_range</code> : default = <code class="code">2.0</code>.</div>
 <div class="param_info"><code class="code">im_from</code> : default = <code class="code">-1.0</code>.</div>
 <div class="param_info"><code class="code">im_range</code> : default = <code class="code">2.0</code>.</div>
-<script type="text/javascript" src="../google-analytics.js"></script></body></html>
+</body></html>
