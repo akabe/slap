@@ -90,7 +90,7 @@ is simple demonstration for static size checking of SLAP. It is implementation
 of [Jacobi method](http://en.wikipedia.org/wiki/Jacobi_method) (to solve a
 system of linear equations). You do not need to understand the implementation.
 
-```ocaml
+{% highlight ocaml %}
 open Slap.Io
 open Slap.D
 open Slap.Size
@@ -119,7 +119,7 @@ let () =
   Format.printf "a = @[%a@]@.b = @[%a@]@." pp_fmat a pp_rfvec b;
   Format.printf "x = @[%a@]@." pp_rfvec x;
   Format.printf "a*x = @[%a@]@." pp_rfvec (gemv ~trans:normal a x)
-```
+{% endhighlight %}
 
 `jacobi a b` solves a system of linear equations `a * x = b` where `a` is
 a n-by-n matrix, and `x` and `b` is a n-dimensional vectors.
@@ -141,9 +141,9 @@ a*x = 7 10 14
 OK, vector `x` is computed correctly (since `a*x = b` is satisfied).
 `jacobi` has the following type:
 
-```ocaml
+{% highlight ocaml %}
 val jacobi : ('n, 'n, _) mat -> ('n, _) vec -> ('n, _) vec
-```
+{% endhighlight %}
 
 This means "`jacobi` gets a `'n`-by-`'n` matrix and a `'n`-dimensional vector,
 and returns a `'n`-dimensional vector." If you pass arguments that do not
@@ -151,18 +151,18 @@ satisfy the condition, a type error happens and the compilation fails.
 Try to modify any one of the dimensions of `a`, `b` and `x` in the above code,
 e.g.,
 
-```ocaml
+{% highlight ocaml %}
 ...
 
 let () =
   let a = ... in
   let b = [%vec [7.0; 10.0]] in (* remove the last element `14.0' *)
   ...
-```
+{% endhighlight %}
 
 and compile the changed code. Then OCaml reports inconsistency of dimensions:
 
-```ocaml
+{% highlight ocaml %}
 File "jacobi.ml", line 31, characters 19-20:
 Error: This expression has type
          (two, 'a) vec = (two, float, rprec, 'a) Slap_vec.t
@@ -170,6 +170,6 @@ Error: This expression has type
          (three, 'b) vec = (three, float, rprec, 'b) Slap_vec.t
        Type two = z s s is not compatible with type three = z s s s
        Type z is not compatible with type z s
-```
+{% endhighlight %}
 
 By using SLAP, your mistake (i.e., a bug) is captured at **compile time**!

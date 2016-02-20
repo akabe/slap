@@ -36,7 +36,7 @@ Preliminary
 First, load SLAP on OCaml REPL or [utop](https://github.com/diml/utop)
 (`#` at the head of each line is prompt):
 
-```OCaml
+{% highlight OCaml %}
 # #use "topfind";;
 # #require "slap";;
 # #require "slap.top";;
@@ -44,7 +44,7 @@ First, load SLAP on OCaml REPL or [utop](https://github.com/diml/utop)
 # open Format;;
 # open Slap.D;;
 # open Slap.Io;;
-```
+{% endhighlight %}
 
 Second, define target function $f$ you want to minimize.
 In this article, we choose a Gaussian function as a target:
@@ -62,12 +62,12 @@ Note that $\bm{A}$ is symmetric, and the minimum is -1 at (1, 3).
 
 The Gaussian function is implemented as follows:
 
-```OCaml
+{% highlight OCaml %}
 # let gauss a b x =
     let xb = Vec.sub x b in
     ~-. (exp (dot xb (symv a xb) /. 2.0));;
 val gauss : ('a, 'a, 'b) mat -> ('a, 'c) vec -> ('a, 'd) vec -> float = <fun>
-```
+{% endhighlight %}
 
 where [dot]({{ site.baseurl }}/slap/api/Slap_D.html#VALdot) is
 a Level-1 BLAS function
@@ -82,7 +82,7 @@ The type of `gauss` means
 
 You can execute `gauss` by passing $\bm{A}$, $\bm{b}$ and $\bm{x}$:
 
-```OCaml
+{% highlight OCaml %}
 # let a = [%mat [-0.1, 0.1;
                  0.1, -0.2]];;
 val a : (Slap.Size.two, Slap.Size.two, 'a) mat =
@@ -96,12 +96,12 @@ val b : (Slap.Size.two, 'a) vec = R1 R2
 
 # gauss a b [%vec [0.0; 0.0]];;
 - : float = -0.522045776761015934
-```
+{% endhighlight %}
 
 However you cannot give vectors and matrices that have sizes inconsistent
 with the type of `gauss` as follows:
 
-```OCaml
+{% highlight OCaml %}
 gauss a b [%vec [0.0; 0.0; 0.0]];;
 Error: This expression has type
          (Slap.Size.three, 'a) vec =
@@ -113,7 +113,7 @@ Error: This expression has type
        is not compatible with type
          Slap.Size.two = Slap_size.z Slap_size.s Slap_size.s
        Type Slap_size.z Slap_size.s is not compatible with type Slap_size.z
-```
+{% endhighlight %}
 
 The static size checking of SLAP protects you against dimensional
 inconsistency. If you get an error message like the above output,
@@ -131,13 +131,13 @@ $$\\bm{x}^{(t+1)} = \\bm{x}^{(t)} - \\eta \bm{\nabla}f(\bm{x}^{(t)})$$
 where $\\eta$ is a learning rate (a parameter for controlling convergence).
 The above update formula is easily implemented as follows:
 
-```OCaml
+{% highlight OCaml %}
 # let steepest_descent ~loops ~eta df f x =
     for i = 1 to loops do
       axpy ~alpha:(~-. eta) (df x) x; (* Steepest descent: x := x - eta * (df x) *)
       printf "Loop %d: f = %g, x = @[%a@]@." i (f x) pp_rfvec x
     done
-```
+{% endhighlight %}
 
 Above code uses Level-1 BLAS function [axpy]({{ site.baseurl }}/slap/api/Slap_D.html#VALaxpy).
 
@@ -150,18 +150,18 @@ The gradient of the target function is given by
 \bm{A}(\bm{x}-\bm{b}).
 \end{align*}
 
-```OCaml
+{% highlight OCaml %}
 # let dgauss a b x = symv ~alpha:(gauss a b x) a (Vec.sub x b);;
 val dgauss : ('a, 'a, 'b) mat -> ('a, 'c) vec -> ('a, 'd) vec -> ('a, 'e) vec =
   <fun>
-```
+{% endhighlight %}
 
 `dgauss` has a type like `gauss`,
 but `dgauss` returns a `'a`-dimensional vector.
 
 Run steepest descent method as follows:
 
-```OCaml
+{% highlight OCaml %}
 # steepest_descent ~loops:100 ~eta:2. (dgauss a b) (gauss a b) [%vec [0.; 1.]];;
 Loop 1: f x = -0.88288, x = -0.15576 1.46728
 Loop 2: f x = -0.930997, x = -0.222322 1.80448
@@ -169,7 +169,7 @@ Loop 2: f x = -0.930997, x = -0.222322 1.80448
 Loop 99: f x = -1, x = 0.999342 2.99959
 Loop 100: f x = -1, x = 0.999392 2.99962
 - : unit = ()
-```
+{% endhighlight %}
 
 Our program successfully found the minimum point (exact solution = (1, 3)).
 You can control speed of convergence by changing a value of the learning rate.
@@ -201,7 +201,7 @@ learning rate $\alpha$.
 We can find a learning rate satisfying the conditions by
 [bisection search](https://en.wikipedia.org/wiki/Bisection_method):
 
-```OCaml
+{% highlight OCaml %}
 # let wolfe_search ?(c1=1e-4) ?(c2=0.9) ?(init=1.0) df f p x =
     let middle lo hi = 0.5 *. (lo +. hi) in
     let upper alpha = function (* Compute a new upper bound *)
@@ -224,7 +224,7 @@ val wolfe_search :
   ?c1:float -> ?c2:float -> ?init:float ->
   (('a, 'b) vec -> ('a, 'c) vec) ->
   (('a, 'b) vec -> float) -> ('a, 'd) vec -> ('a, 'b) vec -> float = <fun>
-```
+{% endhighlight %}
 
 `wolfe_search ?c1 ?c2 ?init df f p x` returns a learning rate
 satisfying Wolfe conditions. Optional argument `init`
@@ -235,7 +235,7 @@ and its derivative is quite large, `wolfe_search` is inefficient.
 The following code implements steepest descent method with automatic search
 of learning rates by Wolfe conditions:
 
-```OCaml
+{% highlight OCaml %}
 # let steepest_descent_wolfe ~loops df f x =
     for i = 1 to loops do
       let p = Vec.neg (df x) in
@@ -247,18 +247,18 @@ val steepest_descent_wolfe :
   loops:int ->
   (('a, 'b) vec -> ('a, 'c) vec) ->
   (('a, 'b) vec -> float) -> ('a, 'b) vec -> unit = <fun>
-```
+{% endhighlight %}
 
 `steep_descent_wolfe` achieves faster convergence as follows:
 
-```OCaml
+{% highlight OCaml %}
 # steepest_descent_wolfe ~loops:60 (dgauss a b) (gauss a b) [%vec [0.; 1.]];;
 Loop 1: f x = -0.83552, x = -0.0778801 1.23364
 Loop 2: f x = -0.877268, x = -0.135404 1.43875
 ...
 Loop 59: f x = -1, x = 0.999683 2.9998
 Loop 60: f x = -1, x = 0.999731 2.99983
-```
+{% endhighlight %}
 
 <figure>
 <img src="images/steepest-descent-wolfe.png" alt="Convergence of steepest descent + Wolfe conditions">
@@ -288,7 +288,7 @@ $$\bm{\nabla}^2 f = \\begin{pmatrix}
 Newton method is implemented by using [sytri]({{ site.baseurl }}/slap/api/Slap_D.html#VALsytri)
 and [symv]({{ site.baseurl }}/slap/api/Slap_D.html#VALsymv) as follows:
 
-```OCaml
+{% highlight OCaml %}
 # let newton ~loops ~eta ddf df f x =
     for i = 1 to loops do
       let h = ddf x in
@@ -301,14 +301,14 @@ val newton :
   (('a, 'b) vec -> ('a, 'a, 'c) mat) ->
   (('a, 'b) vec -> ('a, 'd) vec) ->
   (('a, 'b) vec -> float) -> ('a, 'b) vec -> unit = <fun>
-```
+{% endhighlight %}
 
 The Hessian matrix of the Gaussian function is given as
 $$\bm{\nabla}^2f(\bm{x})=
 -\exp\left(\frac{1}{2}(\bm{x}-\bm{b})^\top\bm{A}(\bm{x}-\bm{b})\right)
 \left(\bm{A}(\bm{x}-\bm{b})(\bm{x}-\bm{b})^\top\bm{A}^\top+\bm{A}\right).$$
 
-```OCaml
+{% highlight OCaml %}
 # let ddgauss a b x =
     let a' = Mat.copy a in
     ignore (syr (symv a (Vec.sub x b)) a'); (* a' := a' + a * (x-b) * (x-b)^T * a^T *)
@@ -317,7 +317,7 @@ $$\bm{\nabla}^2f(\bm{x})=
 val ddgauss :
   ('a, 'a, 'b) mat -> ('a, 'c) vec -> ('a, 'd) vec -> ('a, 'a, 'e) mat =
   <fun>
-```
+{% endhighlight %}
 
 where [syr]({{ site.baseurl }}/slap/api/Slap_D.html#VALsyr) and
 [Mat.scal]({{ site.baseurl }}/slap/api/Slap_D.Mat.html#VALscal) are
@@ -325,7 +325,7 @@ BLAS functions.
 
 Try `newton`:
 
-```OCaml
+{% highlight OCaml %}
 # newton ~loops:20 ~eta:0.4 (ddgauss a b) (dgauss a b) (gauss a b) [%vec [0.; 1.]];;
 Loop 1: f = -0.99005, x = 0.8 2.6
 Loop 2: f = -0.996503, x = 0.881633 2.76327
@@ -333,7 +333,7 @@ Loop 2: f = -0.996503, x = 0.881633 2.76327
 Loop 19: f = -1, x = 0.99998 2.99996
 Loop 20: f = -1, x = 0.999988 2.99998
 - : unit = ()
-```
+{% endhighlight %}
 
 <figure>
 <img src="images/newton.png" alt="Convergence of Newton method">
@@ -380,7 +380,7 @@ The following function `update_h` takes $\bm{H}\_t$, $\bm{y}\_t$ and $\bm{s}\_t$
 and destructively assigns $\bm{H}\_{t+1}$ into the memory of argument $\bm{H}\_t$
 (parameter `?up` specifies using upper or lower triangular of $\bm{H}\_t$).
 
-```OCaml
+{% highlight OCaml %}
 # let update_h ?up h y s =
     let rho = 1. /. dot y s in
     let hy = symv ?up h y in
@@ -390,11 +390,11 @@ and destructively assigns $\bm{H}\_{t+1}$ into the memory of argument $\bm{H}\_t
   ;;
 val update_h :
   ?up:bool -> ('a, 'a, 'b) mat -> ('a, 'c) vec -> ('a, 'd) vec -> unit = <fun>
-```
+{% endhighlight %}
 
 Using `update_h`, Quasi-Newton method is implemented as follows:
 
-```OCaml
+{% highlight OCaml %}
 # let quasi_newton ~loops df f x0 =
     let h = Mat.identity (Vec.dim x0) in (* an approximated inverse Hessian *)
     let rec aux i x df_dx =
@@ -417,11 +417,11 @@ val quasi_newton :
   loops:int ->
   (('a, 'b) vec -> ('a, 'c) vec) ->
   (('a, 'b) vec -> float) -> ('a, 'b) vec -> unit = <fun>
-```
+{% endhighlight %}
 
 Quasi-Newton method converges by iteration of only 7 steps:
 
-```OCaml
+{% highlight OCaml %}
 # quasi_newton ~loops:10 (dgauss a b) (gauss a b) [%vec [0.0; 1.0]];;
 Loop 1: f x = -0.83552, x = -0.0778801 1.23364
 Loop 2: f x = -0.919791, x = -0.508032 2.76323
@@ -431,7 +431,7 @@ Loop 5: f x = -0.999928, x = 0.968443 3.00589
 Loop 6: f x = -1, x = 1.00043 3
 Loop 7: f x = -1, x = 0.999999 3
 - : unit = ()
-```
+{% endhighlight %}
 
 <figure>
 <img src="images/quasi-newton.png" alt="Convergence of Quasi-Newton method">
@@ -472,7 +472,7 @@ gnuplot> plot sin(x)  # Plot a sine curve
 The above command shows a figure of a sine curve on a window.
 You can use gnuplot from OCaml by using pipes:
 
-```OCaml
+{% highlight OCaml %}
 # let gnuplot f =
     let oc = Unix.open_process_out "gnuplot" in (* Open a pipe to gnuplot *)
     let ppf = formatter_of_out_channel oc in (* For fprintf *)
@@ -485,7 +485,7 @@ You can use gnuplot from OCaml by using pipes:
 val gnuplot : (formatter -> unit) -> unit = <fun>
 
 # gnuplot (fun ppf -> fprintf ppf "plot sin(x)\n");; (* Plot a sine curve *)
-```
+{% endhighlight %}
 
 Note: if you pass command-line option `-perisist` to gnuplot
 (i.e., `"gnuplot -persist"` instead of `"gnuplot"`) at the second line,
@@ -497,12 +497,12 @@ a window is kept after gnuplot exited.
 and `splot` command draws 3D graphs.
 The following example draws a 3D graph like Fig 1 (without contour):
 
-```OCaml
+{% highlight OCaml %}
 # gnuplot (fun ppf ->
     fprintf ppf "set hidden3d\n\
                  set isosamples 30\n\
                  splot -exp((-0.1*(x-1)**2 - 0.2*(y-3)**2 + 0.2*(x-1)*(y-3)) / 2.0)\n");;
-```
+{% endhighlight %}
 
 The drawn function `-exp((-0.1*(x-1)**2 - 0.2*(y-3)**2 + 0.2*(x-1)*(y-3)) / 2.0)` is
 the same as the target function in this article.
@@ -530,7 +530,7 @@ end
 
 We can plot OCaml functions by conversion into data points:
 
-```OCaml
+{% highlight OCaml %}
 # let splot_fun
       ?(option = "") ?(n = 10)
       ?(x1 = -10.0) ?(x2 = 10.0) ?(y1 = -10.0) ?(y2 = 10.0) ppf f =
@@ -556,7 +556,7 @@ val splot_fun :
   ?y1:float ->
   ?y2:float -> formatter -> ((Slap.Size.two, 'a) vec -> float) -> unit =
   <fun>
-```
+{% endhighlight %}
 
 `splot_fun ?option ?n ?x1 ?x2 ?y1 ?y2 ppf f` draws the 3D graph of OCaml function `f` where
 
@@ -567,24 +567,24 @@ val splot_fun :
 
 Using `splot`, `gauss` can be plotted as follows:
 
-```OCaml
+{% highlight OCaml %}
 # gnuplot (fun ppf ->
       fprintf ppf "set hidden3d\n";
       splot_fun ~option:"with lines" ~n:30 ppf (gauss a b));;
-```
+{% endhighlight %}
 
 ### Plotting contour
 
 You can plot contour by `set contour` command.
 
-```OCaml
+{% highlight OCaml %}
 # gnuplot (fun ppf ->
       fprintf ppf "set contour             # Plot contour\n\
                    set view 0,0            # Fix a view\n\
                    unset surface           # Don't show a 3D surface\n\
                    set cntrparam levels 15 # Levels of contour\n";
       splot_fun ~option:"with lines" ~n:50 ppf (gauss a b));;
-```
+{% endhighlight %}
 
 ### Plotting a line graph of convergence
 
@@ -592,7 +592,7 @@ Line graphs of convergence (like Fig 2, 3, 4, and 5) are 2D,
 but we draw them as 3D graphs because we will overlay a line graph
 on a contour graph.
 
-```OCaml
+{% highlight OCaml %}
 # let steepest_descent ppf ~loops ~eta df f x =
     fprintf ppf "splot '-' with linespoints linetype 2 title ''@\n\
                  %a 0@\n" pp_rfvec x;
@@ -614,7 +614,7 @@ val steepest_descent :
                    set yrange [0:5]@\n";
       steepest_descent ppf
         ~loops:100 ~eta:2.0 (dgauss a b) (gauss a b) [%vec [0.0; 1.0]]);;
-```
+{% endhighlight %}
 
 ### Overlaying a line graph on a contour graph
 
@@ -624,7 +624,7 @@ we used additional a few commands for improvement of visualization.
 Sample program  [examples/optimization/visualization.ml](https://github.com/akabe/slap/blob/master/examples/optimization/visualization.ml) contains the commands,
 and shows the same graph as Fig 2.
 
-```OCaml
+{% highlight OCaml %}
 # gnuplot (fun ppf ->
       fprintf ppf "set multiplot\n\
                    set view 0,0 # Fix a view\n\
@@ -636,4 +636,4 @@ and shows the same graph as Fig 2.
                    unset surface           # Don't show a 3D surface\n\
                    set cntrparam levels 15 # Levels of contour\n";
       splot_fun ~option:"with lines" ~n:50 ppf (gauss a b));;
-```
+{% endhighlight %}

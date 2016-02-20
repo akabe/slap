@@ -34,7 +34,7 @@ In the latter case, you need to install dependent packages
 Here is a very simple program to get you started.
 We assume that the name of this file is `example01.ml`.
 
-```ocaml
+{% highlight ocaml %}
 (* File: example01.ml *)
 open Slap.Size
 open Slap.Io
@@ -43,7 +43,7 @@ open Slap.D
 let () =
   let x = [%vec [1.0; 2.0; 3.0]] in (* Create a three-dimensional vector. *)
   Format.printf "x = ( %a)@." pp_rfvec x (* Print the vector *)
-```
+{% endhighlight %}
 
 We will explain the program after telling you how to compile it.
 
@@ -78,31 +78,31 @@ REPL (Read-Eval-and-Print Loop). The default REPL of OCaml is inconvenient,
 so that we recommend you to use UTop or OCaml REPL on Emacs.
 Note that you require to load "topfind" at first:
 
-```ocaml
+{% highlight ocaml %}
 # #use "topfind";;
 # #require "slap.top";;
 # #require "slap.ppx";;
 # open Slap.Size;;
 # open Slap.Io;;
 # open Slap.D;;
-```
+{% endhighlight %}
 
 Let's try `example01.ml` on the toplevel environment.
 First, create the vector `x`:
 
-```ocaml
+{% highlight ocaml %}
 # let x = [%vec [1.0; 2.0; 3.0]];;
 val x : (three, 'a) vec = R1 R2 R3
                            1  2  3
-```
+{% endhighlight %}
 
 Next, print the vector:
 
-```ocaml
+{% highlight ocaml %}
 # Format.printf "x = ( %a)@." pp_rfvec x;;
 x = ( 1 2 3 )
 - : unit = ()
-```
+{% endhighlight %}
 
 Hereafter we show example programs and response from REPL for convenience.
 You can byte- or native-compile the examples as well.
@@ -130,9 +130,9 @@ e.g., `Slap.Io.pp_rfvec` is a pretty printer for real row vectors. When you
 print a vector (or a matrix), you use `%a` in a format string and pass a pretty
 printer and a vector:
 
-```ocaml
+{% highlight ocaml %}
 Format.printf "%a" pretty_printer vector
-```
+{% endhighlight %}
 
 In `example01.ml`, `pretty_printer` = `pp_rfvec` and `vector` = `x`.
 Other pretty printers are described in
