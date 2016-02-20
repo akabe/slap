@@ -69,9 +69,9 @@ The Gaussian function is implemented as follows:
 val gauss : ('a, 'a, 'b) mat -> ('a, 'c) vec -> ('a, 'd) vec -> float = <fun>
 ```
 
-where [dot]({{ site.baseurl }}/api/Slap_D.html#VALdot) is
+where [dot]({{ site.baseurl }}/slap/api/Slap_D.html#VALdot) is
 a Level-1 BLAS function
-and [symv]({{ site.baseurl }}/api/Slap_D.html#VALsymv) is
+and [symv]({{ site.baseurl }}/slap/api/Slap_D.html#VALsymv) is
 a Level-2 BLAS function.
 The type of `gauss` means
 
@@ -139,7 +139,7 @@ The above update formula is easily implemented as follows:
     done
 ```
 
-Above code uses Level-1 BLAS function [axpy]({{ site.baseurl }}/api/Slap_D.html#VALaxpy).
+Above code uses Level-1 BLAS function [axpy]({{ site.baseurl }}/slap/api/Slap_D.html#VALaxpy).
 
 The gradient of the target function is given by
 \begin{align*}
@@ -285,8 +285,8 @@ $$\bm{\nabla}^2 f = \\begin{pmatrix}
 \\displaystyle\\frac{\partial f}{\partial x\_n\partial x\_1}&\\cdots&
 \\displaystyle\\frac{\partial f}{\partial x\_n\partial x\_n}\\\\
 \\end{pmatrix}.$$
-Newton method is implemented by using [sytri]({{ site.baseurl }}/api/Slap_D.html#VALsytri)
-and [symv]({{ site.baseurl }}/api/Slap_D.html#VALsymv) as follows:
+Newton method is implemented by using [sytri]({{ site.baseurl }}/slap/api/Slap_D.html#VALsytri)
+and [symv]({{ site.baseurl }}/slap/api/Slap_D.html#VALsymv) as follows:
 
 ```OCaml
 # let newton ~loops ~eta ddf df f x =
@@ -319,8 +319,8 @@ val ddgauss :
   <fun>
 ```
 
-where [syr]({{ site.baseurl }}/api/Slap_D.html#VALsyr) and
-[Mat.scal]({{ site.baseurl }}/api/Slap_D.Mat.html#VALscal) are
+where [syr]({{ site.baseurl }}/slap/api/Slap_D.html#VALsyr) and
+[Mat.scal]({{ site.baseurl }}/slap/api/Slap_D.Mat.html#VALscal) are
 BLAS functions.
 
 Try `newton`:
