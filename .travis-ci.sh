@@ -1,6 +1,5 @@
 # Dependencies
-# (Lacaml 7.2.5 or below cannot pass tests because they have a bug in the complex version of Vec.ssqr_diff)
-OPAM_DEPS="ocamlfind cppo lacaml>=7.2.6 ounit"
+OPAM_DEPS="ocamlfind cppo lacaml>=8.0.0 ounit"
 
 export PREFIX="./usr"
 export BINDIR="$PREFIX/bin"

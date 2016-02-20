@@ -1,7 +1,7 @@
 OASISFormat:            0.4
 OCamlVersion:           >= 3.12
 Name:                   SLAP
-Version:                2.0.1
+Version:                3.0.1
 Synopsis:               A linear algebra library with static size checking for
                         matrix operations
 Description:            Sized Linear Algebra Package (SLAP) is a wrapper of
@@ -30,7 +30,8 @@ PreBuildCommand:        ocaml gen_files.ml; \
                         cppo lib/slap_C.cppo.mli > lib/slap_C.mli; \
                         cppo lib/slap_C.cppo.ml > lib/slap_C.ml; \
                         cppo lib/slap_Z.cppo.mli > lib/slap_Z.mli; \
-                        cppo lib/slap_Z.cppo.ml > lib/slap_Z.ml
+                        cppo lib/slap_Z.cppo.ml > lib/slap_Z.ml; \
+                        cppo -V OCAML:`ocaml -vnum` ppx/compat.cppo.ml > ppx/compat.ml
 PostCleanCommand:       rm -f \
                         lib/config.h \
                         lib/slap_[SDCZ].mli lib/slap_[SDCZ].ml \
@@ -43,7 +44,7 @@ Flag ppx
 Library slap
   Path:                 lib
   FindlibName:          slap
-  BuildDepends:         bigarray,lacaml (>= 7.2.3)
+  BuildDepends:         bigarray,lacaml (>= 8.0.0)
   Modules:              Slap,
                         Slap_misc,
                         Slap_common,
