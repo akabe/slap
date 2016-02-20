@@ -1,7 +1,9 @@
 open Asttypes
 open Parsetree
 
-#if OCAML_VERSION >= (4, 03, 0) (* OCaml 4.03.0 or above *)
+#if OCAML_VERSION >= (4, 03, 0)
+
+(* OCaml 4.03.0 or above *)
 
 let nolabel = Nolabel (* Asttypes.arg_label for 4.03 only *)
 
@@ -11,7 +13,9 @@ struct
   let string ?quot s = PConst_string (s, quot)
 end
 
-#else (* OCaml 4.00.0 .. 4.02.3 *)
+#else
+
+(* OCaml 4.00.0 .. 4.02.3 *)
 
 let nolabel = ""
 
