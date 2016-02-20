@@ -1,4 +1,5 @@
 title: Sized Linear Algebra Package (SLAP)
 description: BLAS and LAPACK binding in OCaml with type-based static size checking for matrix operations
-
+url: http://akabe.github.io
+baseurl: /slap
 markdown: kramdown

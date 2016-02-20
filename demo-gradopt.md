@@ -78,9 +78,9 @@ The Gaussian function is implemented as follows:
 val gauss : ('a, 'a, 'b) mat -> ('a, 'c) vec -> ('a, 'd) vec -> float = <fun>
 {% endhighlight %}
 
-where [dot]({{ site.baseurl }}/slap/api/Slap_D.html#VALdot) is
+where [dot]({{ site.baseurl }}/api/Slap_D.html#VALdot) is
 a Level-1 BLAS function
-and [symv]({{ site.baseurl }}/slap/api/Slap_D.html#VALsymv) is
+and [symv]({{ site.baseurl }}/api/Slap_D.html#VALsymv) is
 a Level-2 BLAS function.
 The type of `gauss` means
 
@@ -150,7 +150,7 @@ The above update formula is easily implemented as follows:
     done
 {% endhighlight %}
 
-Above code uses Level-1 BLAS function [axpy]({{ site.baseurl }}/slap/api/Slap_D.html#VALaxpy).
+Above code uses Level-1 BLAS function [axpy]({{ site.baseurl }}/api/Slap_D.html#VALaxpy).
 
 The gradient of the target function is given by
 
@@ -297,15 +297,15 @@ $$\bm{x}^{(t+1)} = \bm{x}^{(t)} - \eta\Bigl(\bm{\nabla}^2 f(\bm{x}^{(t)})\Bigr)^
 The second derivative (often called _Hessian matrix_) is defined by
 
 $$\bm{\nabla}^2 f = \begin{pmatrix}
-\displaystyle\frac{\partial f}{\partial x\_1\partial x\_1}&\cdots&
-\displaystyle\frac{\partial f}{\partial x\_1\partial x\_n}\\
+\displaystyle\frac{\partial f}{\partial x_1\partial x_1}&\cdots&
+\displaystyle\frac{\partial f}{\partial x_1\partial x_n}\\
 \vdots&\ddots&\vdots\\
-\displaystyle\frac{\partial f}{\partial x\_n\partial x\_1}&\cdots&
-\displaystyle\frac{\partial f}{\partial x\_n\partial x\_n}\\
+\displaystyle\frac{\partial f}{\partial x_n\partial x_1}&\cdots&
+\displaystyle\frac{\partial f}{\partial x_n\partial x_n}\\
 \end{pmatrix}.$$
 
-Newton method is implemented by using [sytri]({{ site.baseurl }}/slap/api/Slap_D.html#VALsytri)
-and [symv]({{ site.baseurl }}/slap/api/Slap_D.html#VALsymv) as follows:
+Newton method is implemented by using [sytri]({{ site.baseurl }}/api/Slap_D.html#VALsytri)
+and [symv]({{ site.baseurl }}/api/Slap_D.html#VALsymv) as follows:
 
 {% highlight OCaml %}
 # let newton ~loops ~eta ddf df f x =
@@ -339,8 +339,8 @@ val ddgauss :
   <fun>
 {% endhighlight %}
 
-where [syr]({{ site.baseurl }}/slap/api/Slap_D.html#VALsyr) and
-[Mat.scal]({{ site.baseurl }}/slap/api/Slap_D.Mat.html#VALscal) are
+where [syr]({{ site.baseurl }}/api/Slap_D.html#VALsyr) and
+[Mat.scal]({{ site.baseurl }}/api/Slap_D.Mat.html#VALscal) are
 BLAS functions.
 
 Try `newton`:
@@ -386,14 +386,14 @@ while we only introduce [BFGS](https://en.wikipedia.org/wiki/Broyden%E2%80%93Fle
 Let $\bm{H}\_t$ be an approximated inverse Hessian matrix at time step $t$,
 then the iteration of Quasi-Newton method is defined as
 
-$$\bm{x}\_{t+1}=\bm{x}\_t-\eta\_t\bm{H}\_t\bm{\nabla}\bm{f}(\bm{x}\_t).$$
+$$\bm{x}_{t+1}=\bm{x}_t-\eta_t\bm{H}_t\bm{\nabla}\bm{f}(\bm{x}_t).$$
 
 The inverse Hessian approximated BFGS is computed by
 
-$$\bm{H}\_{t+1}=\bm{H}\_t
-+\left(1+\frac{\bm{y}\_t^\top\bm{H}\_t\bm{y}\_t}{\bm{y}\_t^\top\bm{s}\_t}\right)
-\frac{\bm{s}\_t\bm{s}\_t^\top}{\bm{y}\_t^\top\bm{s}\_t}
--\frac{\bm{H}\_t\bm{y}\_t\bm{s}\_t^\top+\bm{s}\_t\bm{y}\_t^\top\bm{H}\_t^\top}{\bm{y}\_t^\top\bm{s}\_t}$$
+$$\bm{H}_{t+1}=\bm{H}_t
++\left(1+\frac{\bm{y}_t^\top\bm{H}_t\bm{y}_t}{\bm{y}_t^\top\bm{s}_t}\right)
+\frac{\bm{s}_t\bm{s}_t^\top}{\bm{y}_t^\top\bm{s}_t}
+-\frac{\bm{H}_t\bm{y}_t\bm{s}_t^\top+\bm{s}_t\bm{y}_t^\top\bm{H}_t^\top}{\bm{y}_t^\top\bm{s}_t}$$
 
 where $\bm{s}\_t=\bm{x}\_{t+1}-\bm{x}\_t$ and $\bm{y}\_t=\bm{\nabla}\bm{f}(\bm{x}\_{t+1})-\bm{\nabla}\bm{f}(\bm{x}\_t)$.
 $\bm{H}\_0$ is an identity matrix.
