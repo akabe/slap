@@ -19,15 +19,19 @@ problems and how to implement them by
 You can implement the methods as easy as other linear algebra libraries.
 
 In this article, we consider minimization problem defined as
-$$y = \\min\_{\\bm{x}\\in\\R^n} f(\\bm{x})$$
-where $f : \\R^n\\to\\R$ is a target function.
+
+$$y = \min_{\bm{x}\in\R^n} f(\bm{x})$$
+
+where $f : \R^n\to\R$ is a target function.
 Minimization problem can be converted into maximization problem by replacing
-$f(\\bm{x})$ with $-f(\\bm{x})$.
+$f(\bm{x})$ with $-f(\bm{x})$.
 A target function can be non-convex, but must be differentiable.
 We compute a _minimal_ point instead of an exact minimum point of a target
 function since the latter is hard.
 Gradient-based approaches use the _gradient_ of a target function for minimization:
-$$\\bm{\\nabla}f = \\left(\\frac{\\partial f}{\\partial x_1},\\dots,\\frac{\\partial f}{\\partial x_n}\\right)^\\top.$$
+
+$$\bm{\nabla}f = \left(\frac{\partial f}{\partial x_1},\dots,\frac{\partial f}{\partial x_n}\right)^\top.$$
+
 Thus we need to compute $\hat{\bm{x}}$ such that $\bm{\nabla} f(\hat{\bm{x}}) = \bm{0}$.
 
 Preliminary
@@ -48,14 +52,19 @@ First, load SLAP on OCaml REPL or [utop](https://github.com/diml/utop)
 
 Second, define target function $f$ you want to minimize.
 In this article, we choose a Gaussian function as a target:
+
 $$f(\bm{x})=-\exp\left(\frac{1}{2}(\bm{x}-\bm{b})^\top\bm{A}(\bm{x}-\bm{b})\right)$$
+
 where
+
 $$\bm{A}=\begin{pmatrix}
--0.1&0.1\\\\0.1&-0.2\\\\
+-0.1&0.1\\0.1&-0.2\\
 \end{pmatrix},\quad
 \bm{b}=(1.0,3.0)^\top.$$
+
 Note that $\bm{A}$ is symmetric, and the minimum is -1 at (1, 3).
-<figure>
+
+<figure markdown="1" class="centerfig">
 ![The target is a Gaussian function](images/gaussian.png)
 <figcaption>Fig 1. The target function in this demonstration</figcaption>
 </figure>
@@ -125,10 +134,12 @@ Steepest descent method
 Sample program: [examples/optimization/steepest_descent.ml](https://github.com/akabe/slap/blob/master/examples/optimization/steepest_descent.ml)
 
 _Steepest descent_ (a.k.a., gradient descent) is a kind of iterative methods:
-we choose an initial value $\\bm{x}^{(0)}$, and generate points
-$\\bm{x}^{(1)},\\bm{x}^{(2)},\\bm{x}^{(3)},\\dots$ by
-$$\\bm{x}^{(t+1)} = \\bm{x}^{(t)} - \\eta \bm{\nabla}f(\bm{x}^{(t)})$$
-where $\\eta$ is a learning rate (a parameter for controlling convergence).
+we choose an initial value $\bm{x}^{(0)}$, and generate points
+$\bm{x}^{(1)},\bm{x}^{(2)},\bm{x}^{(3)},\dots$ by
+
+$$\bm{x}^{(t+1)} = \bm{x}^{(t)} - \eta \bm{\nabla}f(\bm{x}^{(t)})$$
+
+where $\eta$ is a learning rate (a parameter for controlling convergence).
 The above update formula is easily implemented as follows:
 
 {% highlight OCaml %}
@@ -142,13 +153,16 @@ The above update formula is easily implemented as follows:
 Above code uses Level-1 BLAS function [axpy]({{ site.baseurl }}/slap/api/Slap_D.html#VALaxpy).
 
 The gradient of the target function is given by
+
+$$
 \begin{align*}
 \bm{\nabla}f(\bm{x})
 &=-\exp\left(\frac{1}{2}(\bm{x}-\bm{b})^\top\bm{A}(\bm{x}-\bm{b})\right)
-\frac{1}{2}(\bm{A}+\bm{A}^\top)(\bm{x}-\bm{b})\\\\
+\frac{1}{2}(\bm{A}+\bm{A}^\top)(\bm{x}-\bm{b})\\
 &=-\exp\left(\frac{1}{2}(\bm{x}-\bm{b})^\top\bm{A}(\bm{x}-\bm{b})\right)
 \bm{A}(\bm{x}-\bm{b}).
 \end{align*}
+$$
 
 {% highlight OCaml %}
 # let dgauss a b x = symv ~alpha:(gauss a b x) a (Vec.sub x b);;
@@ -173,7 +187,8 @@ Loop 100: f x = -1, x = 0.999392 2.99962
 
 Our program successfully found the minimum point (exact solution = (1, 3)).
 You can control speed of convergence by changing a value of the learning rate.
-<figure>
+
+<figure markdown="1" class="centerfig">
 ![Convergence of steepest descent](images/steepest-descent.png)
 <figcaption>Fig 2. Convergence of steepest descent (100 steps)</figcaption>
 </figure>
@@ -260,7 +275,7 @@ Loop 59: f x = -1, x = 0.999683 2.9998
 Loop 60: f x = -1, x = 0.999731 2.99983
 {% endhighlight %}
 
-<figure>
+<figure markdown="1" class="centerfig">
 <img src="images/steepest-descent-wolfe.png" alt="Convergence of steepest descent + Wolfe conditions">
 <figcaption>Fig 3. Convergence of steepest descent + Wolfe conditions (60 steps)</figcaption>
 </figure>
@@ -276,15 +291,19 @@ Sample program: [examples/optimization/newton.ml](https://github.com/akabe/slap/
 
 Newton method (a.k.a., Newton-Raphson method) is also a kind of iterative approach using
 the second derivative of a target function addition to the first:
+
 $$\bm{x}^{(t+1)} = \bm{x}^{(t)} - \eta\Bigl(\bm{\nabla}^2 f(\bm{x}^{(t)})\Bigr)^{-1} \bm{\nabla} f(\bm{x}^{(t)}).$$
+
 The second derivative (often called _Hessian matrix_) is defined by
-$$\bm{\nabla}^2 f = \\begin{pmatrix}
-\\displaystyle\\frac{\partial f}{\partial x\_1\partial x\_1}&\\cdots&
-\\displaystyle\\frac{\partial f}{\partial x\_1\partial x\_n}\\\\
-\\vdots&\\ddots&\\vdots\\\\
-\\displaystyle\\frac{\partial f}{\partial x\_n\partial x\_1}&\\cdots&
-\\displaystyle\\frac{\partial f}{\partial x\_n\partial x\_n}\\\\
-\\end{pmatrix}.$$
+
+$$\bm{\nabla}^2 f = \begin{pmatrix}
+\displaystyle\frac{\partial f}{\partial x\_1\partial x\_1}&\cdots&
+\displaystyle\frac{\partial f}{\partial x\_1\partial x\_n}\\
+\vdots&\ddots&\vdots\\
+\displaystyle\frac{\partial f}{\partial x\_n\partial x\_1}&\cdots&
+\displaystyle\frac{\partial f}{\partial x\_n\partial x\_n}\\
+\end{pmatrix}.$$
+
 Newton method is implemented by using [sytri]({{ site.baseurl }}/slap/api/Slap_D.html#VALsytri)
 and [symv]({{ site.baseurl }}/slap/api/Slap_D.html#VALsymv) as follows:
 
@@ -304,6 +323,7 @@ val newton :
 {% endhighlight %}
 
 The Hessian matrix of the Gaussian function is given as
+
 $$\bm{\nabla}^2f(\bm{x})=
 -\exp\left(\frac{1}{2}(\bm{x}-\bm{b})^\top\bm{A}(\bm{x}-\bm{b})\right)
 \left(\bm{A}(\bm{x}-\bm{b})(\bm{x}-\bm{b})^\top\bm{A}^\top+\bm{A}\right).$$
@@ -335,7 +355,7 @@ Loop 20: f = -1, x = 0.999988 2.99998
 - : unit = ()
 {% endhighlight %}
 
-<figure>
+<figure markdown="1" class="centerfig">
 <img src="images/newton.png" alt="Convergence of Newton method">
 <figcaption>Fig 4. Convergence of Newton method (20 steps)</figcaption>
 </figure>
@@ -365,12 +385,16 @@ while we only introduce [BFGS](https://en.wikipedia.org/wiki/Broyden%E2%80%93Fle
 
 Let $\bm{H}\_t$ be an approximated inverse Hessian matrix at time step $t$,
 then the iteration of Quasi-Newton method is defined as
+
 $$\bm{x}\_{t+1}=\bm{x}\_t-\eta\_t\bm{H}\_t\bm{\nabla}\bm{f}(\bm{x}\_t).$$
+
 The inverse Hessian approximated BFGS is computed by
+
 $$\bm{H}\_{t+1}=\bm{H}\_t
 +\left(1+\frac{\bm{y}\_t^\top\bm{H}\_t\bm{y}\_t}{\bm{y}\_t^\top\bm{s}\_t}\right)
 \frac{\bm{s}\_t\bm{s}\_t^\top}{\bm{y}\_t^\top\bm{s}\_t}
 -\frac{\bm{H}\_t\bm{y}\_t\bm{s}\_t^\top+\bm{s}\_t\bm{y}\_t^\top\bm{H}\_t^\top}{\bm{y}\_t^\top\bm{s}\_t}$$
+
 where $\bm{s}\_t=\bm{x}\_{t+1}-\bm{x}\_t$ and $\bm{y}\_t=\bm{\nabla}\bm{f}(\bm{x}\_{t+1})-\bm{\nabla}\bm{f}(\bm{x}\_t)$.
 $\bm{H}\_0$ is an identity matrix.
 A learning rate at each time step is chosen by Wolfe conditions for keeping
@@ -433,7 +457,7 @@ Loop 7: f x = -1, x = 0.999999 3
 - : unit = ()
 {% endhighlight %}
 
-<figure>
+<figure markdown="1" class="centerfig">
 <img src="images/quasi-newton.png" alt="Convergence of Quasi-Newton method">
 <figcaption>Fig 5. Convergence of Quasi-Newton method (7 steps)</figcaption>
 </figure>
@@ -464,10 +488,10 @@ Thus we don't use this library in this section.
 
 Gnuplot is usually used on console (or called from a shell script):
 
-```
+~~~
 $ gnuplot
 gnuplot> plot sin(x)  # Plot a sine curve
-```
+~~~
 
 The above command shows a figure of a sine curve on a window.
 You can use gnuplot from OCaml by using pipes:
@@ -511,7 +535,7 @@ maintainability of code. The key idea to draw an OCaml function is to pass data 
 to `splot` command: `splot` can plot not only functions defined in gnuplot
 but also data points like:
 
-```
+~~~
 gnuplot> splot '-' with lines  # Plot data points given from stdin
 # x y z
   1 1 1
@@ -525,8 +549,7 @@ gnuplot> splot '-' with lines  # Plot data points given from stdin
   3 1 3
   3 2 6
   3 3 9
-end
-```
+~~~
 
 We can plot OCaml functions by conversion into data points:
 

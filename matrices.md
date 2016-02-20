@@ -143,18 +143,18 @@ val a : (three, five, 'a) mat =
 The above example calculates
 
 $$
-  \\bm{A} \\bm{x} =
-  \\begin{pmatrix}
-    1 & 2 & 3 & 4 & 5 \\\\
-    2 & 4 & 6 & 8 & 10 \\\\
-    3 & 6 & 9 & 12 & 15
-  \\end{pmatrix}
-  \\begin{pmatrix}
-    1 \\\\ 2 \\\\ 3 \\\\ 4 \\\\ 5
-  \\end{pmatrix} =
-  \\begin{pmatrix}
-    55 \\\\ 110 \\\\ 165
-  \\end{pmatrix}.
+\bm{A} \bm{x} =
+\begin{pmatrix}
+  1 & 2 & 3 & 4 & 5 \\
+  2 & 4 & 6 & 8 & 10 \\
+  3 & 6 & 9 & 12 & 15
+\end{pmatrix}
+\begin{pmatrix}
+  1 \\ 2 \\ 3 \\ 4 \\ 5
+\end{pmatrix} =
+\begin{pmatrix}
+  55 \\ 110 \\ 165
+\end{pmatrix}.
 $$
 
 The parameter `trans` indicates whether matrix `a` is transposed, or not:
@@ -174,18 +174,18 @@ val x' : (three, 'a) vec = R1 R2 R3
 The latter example computes
 
 $$
-  \\bm{A}^\top \\bm{x}' =
-  \\begin{pmatrix}
-    1 & 2 & 3 & 4 & 5 \\\\
-    2 & 4 & 6 & 8 & 10 \\\\
+  \bm{A}^\top \bm{x}' =
+  \begin{pmatrix}
+    1 & 2 & 3 & 4 & 5 \\
+    2 & 4 & 6 & 8 & 10 \\
     3 & 6 & 9 & 12 & 15
-  \\end{pmatrix}^\top
-  \\begin{pmatrix}
-    1 \\\\ 2 \\\\ 3
-  \\end{pmatrix} =
-  \\begin{pmatrix}
-    14 \\\\ 28 \\\\ 42 \\\\ 56 \\\\ 70
-  \\end{pmatrix}.
+  \end{pmatrix}^\top
+  \begin{pmatrix}
+    1 \\ 2 \\ 3
+  \end{pmatrix} =
+  \begin{pmatrix}
+    14 \\ 28 \\ 42 \\ 56 \\ 70
+  \end{pmatrix}.
 $$
 
 For example, you can use `gemv` for affine transformation.
@@ -229,21 +229,21 @@ val b : (four, three, 'a) mat =
 The above code computes
 
 $$
-  \\bm{A} \\bm{B} =
-  \\begin{pmatrix}
-    1 & 2 & 3 & 4 \\\\
+  \bm{A} \bm{B} =
+  \begin{pmatrix}
+    1 & 2 & 3 & 4 \\
     2 & 4 & 6 & 8
-  \\end{pmatrix}
-  \\begin{pmatrix}
-    2 & 3 & 4 \\\\
-    3 & 4 & 5 \\\\
-    4 & 5 & 6 \\\\
+  \end{pmatrix}
+  \begin{pmatrix}
+    2 & 3 & 4 \\
+    3 & 4 & 5 \\
+    4 & 5 & 6 \\
     5 & 6 & 7
-  \\end{pmatrix} =
-  \\begin{pmatrix}
-    40 & 50 & 60 \\\\
+  \end{pmatrix} =
+  \begin{pmatrix}
+    40 & 50 & 60 \\
     80 & 100 & 120
-  \\end{pmatrix}.
+  \end{pmatrix}.
 $$
 
 The parameters `transa` and `transb` indicate whether matrices `a` and `b` are
@@ -264,7 +264,7 @@ R4 20 40 60 80
 {% endhighlight %}
 
 In this case, a four-by-four matrix is returned because
-$\\bm{A}^\\top \\bm{A}$ is executed. Similarly, you can specify
+$\bm{A}^\top \bm{A}$ is executed. Similarly, you can specify
 whether `b` is transposed, or not though `transb`:
 
 {% highlight ocaml %}
@@ -274,7 +274,7 @@ whether `b` is transposed, or not though `transb`:
                          R2 60 120
 {% endhighlight %}
 
-The above example calculates $\\bm{A} \\bm{A}^\\top$.
+The above example calculates $\bm{A} \bm{A}^\top$.
 Nothing to say, both `a` and `b` can be transposed at the same time.
 
 ### symm: multiplication of a symmetric matrix and a general matrix
@@ -320,22 +320,22 @@ val b : (three, two, 'a) mat =    C1 C2
 It computes
 
 $$
-  \\bm{A} \\bm{B} =
-  \\begin{pmatrix}
-    1 & 2 & 3 \\\\
-    2 & 4 & 6 \\\\
+  \bm{A} \bm{B} =
+  \begin{pmatrix}
+    1 & 2 & 3 \\
+    2 & 4 & 6 \\
     3 & 6 & 9
-  \\end{pmatrix}
-  \\begin{pmatrix}
-    11 & 12 \\\\
-    21 & 22 \\\\
+  \end{pmatrix}
+  \begin{pmatrix}
+    11 & 12 \\
+    21 & 22 \\
     31 & 32
-  \\end{pmatrix} =
-  \\begin{pmatrix}
-    146 & 152 \\\\
-    292 & 304 \\\\
+  \end{pmatrix} =
+  \begin{pmatrix}
+    146 & 152 \\
+    292 & 304 \\
     438 & 456
-  \\end{pmatrix}.
+  \end{pmatrix}.
 $$
 
 You can also right-multiply `a` by `b'`:
@@ -355,20 +355,20 @@ val b' : (two, three, 'a) mat =    C1 C2 C3
 The latter example computes
 
 $$
-  \\bm{B}' \\bm{A} =
-  \\begin{pmatrix}
-    11 & 12 & 13 \\\\
+  \bm{B}' \bm{A} =
+  \begin{pmatrix}
+    11 & 12 & 13 \\
     21 & 22 & 23
-  \\end{pmatrix}
-  \\begin{pmatrix}
-    1 & 2 & 3 \\\\
-    2 & 4 & 6 \\\\
+  \end{pmatrix}
+  \begin{pmatrix}
+    1 & 2 & 3 \\
+    2 & 4 & 6 \\
     3 & 6 & 9
-  \\end{pmatrix} =
-  \\begin{pmatrix}
-     74 & 148 & 222 \\\\
+  \end{pmatrix} =
+  \begin{pmatrix}
+     74 & 148 & 222 \\
     134 & 268 & 402
-  \\end{pmatrix}.
+  \end{pmatrix}.
 $$
 
 Optional argument `up` of `symm` specifies whether the upper or lower part of
