@@ -454,3 +454,7 @@ figure > * {
   display: block;
   text-align: center;
 }
+
+figure.highlight {
+  text-align: left;
+}
