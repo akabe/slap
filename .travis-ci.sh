@@ -19,8 +19,8 @@ echo y | sh opam_installer.sh $BINDIR
 export OPAMYES=1
 export OPAMVERBOSE=1
 opam init
-eval `opam config env`
 opam switch $OCAML_VERSION
+eval `opam config env`
 
 # Install OPAM packages
 if [ -n "${OPAM_DEPS:-}" ]; then
