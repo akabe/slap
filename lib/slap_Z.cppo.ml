@@ -18,7 +18,9 @@
 *)
 
 #define SLAP_SDCZ_BITS 64
+#define SLAP_SDCZ      Z
 
 #include "slap_CZ.ml"
 
 #undef SLAP_SDCZ_BITS
+#undef SLAP_SDCZ

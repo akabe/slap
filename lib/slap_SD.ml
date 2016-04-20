@@ -29,14 +29,6 @@ let zero = 0.0
 let one = 1.0
 let lacaml_trans3 = Slap_common.lacaml_trans2
 
-#if SLAP_SDCZ_BITS = 32
-module I = Lacaml.S
-let module_name = "Slap.S"
-#else
-module I = Lacaml.D
-let module_name = "Slap.D"
-#endif
-
 #include "slap_SDCZ_common.ml"
 
 module Vec =

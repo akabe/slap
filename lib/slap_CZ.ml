@@ -29,14 +29,6 @@ let zero = Complex.zero
 let one = Complex.one
 let lacaml_trans3 = lacaml_trans3
 
-#if SLAP_SDCZ_BITS = 32
-module I = Lacaml.C
-let module_name = "Slap.C"
-#else
-module I = Lacaml.Z
-let module_name = "Slap.Z"
-#endif
-
 #include "slap_SDCZ_common.ml"
 
 module Vec =

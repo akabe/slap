@@ -17,6 +17,10 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
+module I = Lacaml.SLAP_SDCZ
+
+let module_name = "Slap." ^ STRINGIFY(SLAP_SDCZ)
+
 module S = Slap_size
 module V = Slap_vec
 module M = Slap_mat
