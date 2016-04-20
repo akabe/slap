@@ -1,7 +1,7 @@
 OASISFormat:            0.4
 OCamlVersion:           >= 3.12
 Name:                   SLAP
-Version:                2.0.1
+Version:                4.0.0
 Synopsis:               A linear algebra library with static size checking for
                         matrix operations
 Description:            Sized Linear Algebra Package (SLAP) is a wrapper of
