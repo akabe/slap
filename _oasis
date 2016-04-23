@@ -23,14 +23,14 @@ XStdFilesREADME:        false
 BuildTools:             ocamlbuild,ocamldoc,cppo
 
 PreBuildCommand:        ocaml gen_files.ml; \
-                        cppo lib/slap_S.cppo.mli > lib/slap_S.mli; \
-                        cppo lib/slap_S.cppo.ml > lib/slap_S.ml; \
-                        cppo lib/slap_D.cppo.mli > lib/slap_D.mli; \
-                        cppo lib/slap_D.cppo.ml > lib/slap_D.ml; \
-                        cppo lib/slap_C.cppo.mli > lib/slap_C.mli; \
-                        cppo lib/slap_C.cppo.ml > lib/slap_C.ml; \
-                        cppo lib/slap_Z.cppo.mli > lib/slap_Z.mli; \
-                        cppo lib/slap_Z.cppo.ml > lib/slap_Z.ml
+                        cppo lib/slap_SD.mli | sed 's/XSDCZ/S/g;s/XBITS/32/g' > lib/slap_S.mli; \
+                        cppo lib/slap_SD.ml  | sed 's/XSDCZ/S/g;s/XBITS/32/g' > lib/slap_S.ml; \
+                        cppo lib/slap_SD.mli | sed 's/XSDCZ/D/g;s/XBITS/64/g' > lib/slap_D.mli; \
+                        cppo lib/slap_SD.ml  | sed 's/XSDCZ/D/g;s/XBITS/64/g' > lib/slap_D.ml; \
+                        cppo lib/slap_CZ.mli | sed 's/XSDCZ/C/g;s/XBITS/32/g' > lib/slap_C.mli; \
+                        cppo lib/slap_CZ.ml  | sed 's/XSDCZ/C/g;s/XBITS/32/g' > lib/slap_C.ml; \
+                        cppo lib/slap_CZ.mli | sed 's/XSDCZ/Z/g;s/XBITS/64/g' > lib/slap_Z.mli; \
+                        cppo lib/slap_CZ.ml  | sed 's/XSDCZ/Z/g;s/XBITS/64/g' > lib/slap_Z.ml
 PostCleanCommand:       rm -f \
                         lib/config.h \
                         lib/slap_[SDCZ].mli lib/slap_[SDCZ].ml \

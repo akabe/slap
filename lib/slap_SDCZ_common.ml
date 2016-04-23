@@ -17,9 +17,9 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
-module I = Lacaml.SLAP_SDCZ
+module I = Lacaml.XSDCZ
 
-let module_name = "Slap." ^ STRINGIFY(SLAP_SDCZ)
+let module_name = "Slap.XSDCZ"
 
 module S = Slap_size
 module V = Slap_vec
@@ -29,13 +29,13 @@ type (+'n, +'cnt_or_dsc) vec = ('n, num_type, prec, 'cnt_or_dsc) V.t
 
 type (+'m, +'n, +'cnt_or_dsc) mat = ('m, 'n, num_type, prec, 'cnt_or_dsc) M.t
 
-type rprec = CONCAT(CONCAT(float, SLAP_SDCZ_BITS), _elt)
+type rprec = floatXBITS_elt
 
 type (+'n, +'cnt_or_dsc) rvec = ('n, float, rprec, 'cnt_or_dsc) V.t
 
-let rprec = CONCAT(float, SLAP_SDCZ_BITS)
+let rprec = floatXBITS
 
 let invalid_argf fmt =
-  Printf.kprintf (fun s () -> invalid_arg ("Slap." ^ module_name ^ "." ^ s)) fmt
+  Printf.kprintf (fun s () -> invalid_arg ("Slap.XSDCZ." ^ s)) fmt
 
 let (|>) x f = f x (* for OCaml 4.00 or below *)

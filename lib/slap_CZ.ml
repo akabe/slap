@@ -21,10 +21,10 @@ open Bigarray
 open Slap_misc
 open Slap_common
 
-type prec = CONCAT(CONCAT(complex, SLAP_SDCZ_BITS), _elt)
+type prec = complexXBITS_elt
 type num_type = Complex.t
 type 'a trans3 = 'a Slap_common.trans3
-let prec = CONCAT(complex, SLAP_SDCZ_BITS)
+let prec = complexXBITS
 let zero = Complex.zero
 let one = Complex.one
 let lacaml_trans3 = lacaml_trans3

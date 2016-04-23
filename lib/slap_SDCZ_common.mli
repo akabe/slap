@@ -25,7 +25,7 @@ type (+'m, +'n, +'cnt_or_dsc) mat =
   ('m, 'n, num_type, prec, 'cnt_or_dsc) Slap_mat.t
 (** Matrices. *)
 
-type rprec = CONCAT(CONCAT(float, SLAP_SDCZ_BITS), _elt)
+type rprec = floatXBITS_elt
 
 type (+'n, +'cnt_or_dsc) rvec = ('n, float, rprec, 'cnt_or_dsc) Slap_vec.t
 (** Real vectors. (In {!Slap.S} and {!Slap.D}, [rvec] is equal to [vec].) *)
