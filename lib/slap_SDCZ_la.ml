@@ -47,78 +47,78 @@ let amax x = Vec.wrap1 I.amax x
 
 let gemv ?beta ?y ~trans ?alpha a x =
   let am, an, ar, ac, a = M.__expose a in
-  let n', ofsx, incx, x = V.__expose x in
+  let n', incx, x = V.__expose x in
   let m, n = Slap_common.get_transposed_dim trans am an in
   assert(n = n');
-  let ofsy, incy, y = Slap_vec.opt_vec_alloc prec m y in
-  let vy = V.__unexpose (m, ofsy, incy, y) in
+  let incy, y = Slap_vec.opt_vec_alloc prec m y in
+  let vy = V.__unexpose m incy y in
   if Slap_size.nonzero m && Slap_size.nonzero n
   then ignore (I.gemv ~m:(S.__expose am) ~n:(S.__expose an)
-                 ?beta ~ofsy ~incy ~y ~trans:(lacaml_trans3 trans)
-                 ?alpha ~ar ~ac a ~ofsx ~incx x)
+                 ?beta ~ofsy:1 ~incy ~y ~trans:(lacaml_trans3 trans)
+                 ?alpha ~ar ~ac a ~ofsx:1 ~incx x)
   else Slap_vec.fill vy zero;
   vy
 
 let gbmv ~m:am ?beta ?y ~trans ?alpha a kl ku x =
   let gbs, an, ar, ac, a = M.__expose a in
-  let n', ofsx, incx, x = V.__expose x in
+  let n', incx, x = V.__expose x in
   let m, n = Slap_common.get_transposed_dim trans am an in
   assert(gbs = Slap_size.geband_dyn am an kl ku && n = n');
-  let ofsy, incy, y = Slap_vec.opt_vec_alloc prec m y in
-  let vy = V.__unexpose (m, ofsy, incy, y) in
+  let incy, y = Slap_vec.opt_vec_alloc prec m y in
+  let vy = V.__unexpose m incy y in
   if Slap_size.nonzero m && Slap_size.nonzero n
   then ignore (I.gbmv ~m:(S.__expose am) ~n:(S.__expose an)
-                 ?beta ~ofsy ~incy ~y ~trans:(lacaml_trans3 trans)
+                 ?beta ~ofsy:1 ~incy ~y ~trans:(lacaml_trans3 trans)
                  ?alpha ~ar ~ac a (S.__expose kl) (S.__expose ku)
-                 ~ofsx ~incx x)
+                 ~ofsx:1 ~incx x)
   else Slap_vec.fill vy zero;
   vy
 
 let symv ?beta ?y ?up ?alpha a x =
   let n, n', ar, ac, a = M.__expose a in
-  let n'', ofsx, incx, x = V.__expose x in
+  let n'', incx, x = V.__expose x in
   assert(n = n' && n = n'');
-  let ofsy, incy, y = Slap_vec.opt_vec_alloc prec n y in
-  let vy = V.__unexpose (n, ofsy, incy, y) in
+  let incy, y = Slap_vec.opt_vec_alloc prec n y in
+  let vy = V.__unexpose n incy y in
   if Slap_size.nonzero n
-  then ignore (I.symv ~n:(S.__expose n) ?up ?beta ~ofsy ~incy ~y
-                 ?alpha ~ar ~ac a ~ofsx ~incx x)
+  then ignore (I.symv ~n:(S.__expose n) ?up ?beta ~ofsy:1 ~incy ~y
+                 ?alpha ~ar ~ac a ~ofsx:1 ~incx x)
   else Slap_vec.fill vy zero;
   vy
 
 let trmv ~trans ?diag ?up a x =
   let n, n', ar, ac, a = M.__expose a in
-  let n'', ofsx, incx, x = V.__expose x in
+  let n'', incx, x = V.__expose x in
   assert(n = n' && n = n'');
   if S.__expose n <> 0
   then I.trmv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ?diag ?up ~ar ~ac a ~ofsx ~incx x
+      ?diag ?up ~ar ~ac a ~ofsx:1 ~incx x
 
 let trsv ~trans ?diag ?up a x =
   let n, n', ar, ac, a = M.__expose a in
-  let n'', ofsx, incx, x = V.__expose x in
+  let n'', incx, x = V.__expose x in
   assert(n = n' && n = n'');
   if S.__expose n <> 0
   then I.trsv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ?diag ?up ~ar ~ac a ~ofsx ~incx x
+      ?diag ?up ~ar ~ac a ~ofsx:1 ~incx x
 
 let tpmv ~trans ?diag ?up ap x =
   assert(Slap_vec.check_cnt ap);
-  let k, ofsap, _, ap = V.__expose ap in
-  let n, ofsx, incx, x = V.__expose x in
+  let k, _, ap = V.__expose ap in
+  let n, incx, x = V.__expose x in
   assert(k = Slap_size.packed n);
   if S.__expose n <> 0
   then I.tpmv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ?diag ?up ~ofsap ap ~ofsx ~incx x
+      ?diag ?up ~ofsap:1 ap ~ofsx:1 ~incx x
 
 let tpsv ~trans ?diag ?up ap x =
   assert(Slap_vec.check_cnt ap);
-  let k, ofsap, _, ap = V.__expose ap in
-  let n, ofsx, incx, x = V.__expose x in
+  let k, _, ap = V.__expose ap in
+  let n, incx, x = V.__expose x in
   assert(k = Slap_size.packed n);
   if S.__expose n <> 0
   then I.tpsv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ?diag ?up ~ofsap ap ~ofsx ~incx x
+      ?diag ?up ~ofsap:1 ap ~ofsx:1 ~incx x
 
 (** {3 Level 3} *)
 
@@ -213,10 +213,10 @@ type larnv_liseed = Slap_size.four
 
 let larnv ?idist ?iseed ~x () =
   assert(Slap_vec.check_cnt x);
-  let n, _, _, x = V.__expose x in
+  let n, _, x = V.__expose x in
   ignore (I.larnv ?idist ?iseed:(Slap_vec.opt_cnt_vec Slap_size.four iseed)
             ~n:(S.__expose n) ~x ());
-  V.__unexpose (n, 1, 1, x)
+  V.__unexpose n 1 x
 
 type ('m, 'a) lange_min_lwork
 
@@ -243,7 +243,7 @@ let getrf ?ipiv a =
   let ipiv = Slap_vec.opt_cnt_vec_alloc int32 k ipiv in
   if Slap_size.nonzero m && Slap_size.nonzero n
   then ignore (I.getrf ~m:(S.__expose m) ~n:(S.__expose n) ~ipiv ~ar ~ac a);
-  V.__unexpose (k, 1, 1, ipiv)
+  V.__unexpose k 1 ipiv
 
 let getrs ?ipiv ~trans a b =
   let n, n', ar, ac, a = M.__expose a in
@@ -290,7 +290,7 @@ let sytrf ?up ?ipiv ?work a =
   if Slap_size.nonzero n
   then ignore (I.sytrf ~n:(S.__expose n) ?up ~ipiv
                  ?work:(Slap_vec.opt_work work) ~ar ~ac a);
-  V.__unexpose (n, 1, 1, ipiv)
+  V.__unexpose n 1 ipiv
 
 let sytrs ?up ?ipiv a b =
   let n, n', ar, ac, a = M.__expose a in
@@ -370,7 +370,7 @@ let geqrf ?work ?tau a =
   if Slap_size.nonzero m && Slap_size.nonzero n
   then ignore (I.geqrf ~m:(S.__expose m) ~n:(S.__expose n)
                  ?work:(Slap_vec.opt_work work) ~tau ~ar ~ac a);
-  V.__unexpose (k, 1, 1, tau)
+  V.__unexpose k 1 tau
 
 (** {3 Linear equations (simple drivers)} *)
 
@@ -401,11 +401,11 @@ let posv ?up a b =
 
 let ppsv ?up ap b =
   assert(Slap_vec.check_cnt ap);
-  let k, ofsap, _, ap = V.__expose ap in
+  let k, _, ap = V.__expose ap in
   let n, nrhs, br, bc, b = M.__expose b in
   assert(k = Slap_size.packed n);
   if Slap_size.nonzero n && Slap_size.nonzero nrhs
-  then I.ppsv ~n:(S.__expose n) ?up ~ofsap ap
+  then I.ppsv ~n:(S.__expose n) ?up ~ofsap:1 ap
       ~nrhs:(S.__expose nrhs) ~br ~bc b
 
 let pbsv ?up ~kd ab b =
@@ -418,12 +418,12 @@ let pbsv ?up ~kd ab b =
 
 let ptsv d e b =
   assert(Slap_vec.check_cnt d && Slap_vec.check_cnt e);
-  let n, ofsd, _, d = V.__expose d in
-  let np, ofse, _, e = V.__expose e in
+  let n, _, d = V.__expose d in
+  let np, _, e = V.__expose e in
   let n', nrhs, br, bc, b = M.__expose b in
   assert(n = n' && Slap_size.pred_dyn n = np);
   if Slap_size.nonzero n && Slap_size.nonzero nrhs
-  then I.ptsv ~n:(S.__expose n) ~ofsd d ~ofse e
+  then I.ptsv ~n:(S.__expose n) ~ofsd:1 d ~ofse:1 e
       ~nrhs:(S.__expose nrhs) ~br ~bc b
 
 let sysv_opt_lwork ?up a b =
@@ -443,11 +443,11 @@ let sysv ?up ?ipiv ?work a b =
 
 let spsv ?up ?ipiv ap b =
   assert(Slap_vec.check_cnt ap);
-  let k, ofsap, _, ap = V.__expose ap in
+  let k, _, ap = V.__expose ap in
   let n, nrhs, br, bc, b = M.__expose b in
   assert(k = Slap_size.packed n);
   I.spsv ~n:(S.__expose n) ?up ?ipiv:(Slap_vec.opt_cnt_vec n ipiv)
-    ~ofsap ap ~nrhs:(S.__expose nrhs) ~br ~bc b
+    ~ofsap:1 ap ~nrhs:(S.__expose nrhs) ~br ~bc b
 
 (** {3 Least squares (simple drivers)} *)
 

@@ -20,28 +20,28 @@
 let wrap1
     (f : ?n:int -> ?ofsx:int -> ?incx:int -> I.vec -> 'a)
     x =
-  let n, ofsx, incx, x = V.__expose x in
-  f ~n:(S.__expose n) ~ofsx ~incx x
+  let n, incx, x = V.__expose x in
+  f ~n:(S.__expose n) ~ofsx:1 ~incx x
 
 let wrap2
     (f : ?n:int ->
      ?ofsx:int -> ?incx:int -> I.vec ->
      ?ofsy:int -> ?incy:int -> I.vec -> 'a)
     x y =
-  let n, ofsx, incx, x = V.__expose x in
-  let n', ofsy, incy, y = V.__expose y in
+  let n, incx, x = V.__expose x in
+  let n', incy, y = V.__expose y in
   assert(n = n');
-  f ~n:(S.__expose n) ~ofsx ~incx x ~ofsy ~incy y
+  f ~n:(S.__expose n) ~ofsx:1 ~incx x ~ofsy:1 ~incy y
 
 let wrap2opt
     (f : ?n:int ->
      ?ofsy:int -> ?incy:int -> ?y:I.vec ->
      ?ofsx:int -> ?incx:int -> I.vec -> 'a)
     ?y x =
-  let n, ofsx, incx, x = V.__expose x in
-  let ofsy, incy, y = Slap_vec.opt_vec_alloc prec n y in
-  ignore (f ~n:(S.__expose n) ~ofsy ~incy ~y ~ofsx ~incx x);
-  V.__unexpose (n, ofsy, incy, y)
+  let n, incx, x = V.__expose x in
+  let incy, y = Slap_vec.opt_vec_alloc prec n y in
+  ignore (f ~n:(S.__expose n) ~ofsy:1 ~incy ~y ~ofsx:1 ~incx x);
+  V.__unexpose n incy y
 
 let wrap3
     (f : ?n:int ->
@@ -49,12 +49,12 @@ let wrap3
      ?ofsx:int -> ?incx:int -> I.vec ->
      ?ofsy:int -> ?incy:int -> I.vec -> 'a)
     z x y =
-  let n, ofsx, incx, x = V.__expose x in
-  let n', ofsy, incy, y = V.__expose y in
-  let n'', ofsz, incz, z = V.__expose z in
+  let n, incx, x = V.__expose x in
+  let n', incy, y = V.__expose y in
+  let n'', incz, z = V.__expose z in
   assert(n = n' && n = n'');
-  ignore (f ~n:(S.__expose n) ~ofsz ~incz z ~ofsx ~incx x ~ofsy ~incy y);
-  V.__unexpose (n, ofsz, incz, z)
+  ignore (f ~n:(S.__expose n) ~ofsz:1 ~incz z ~ofsx:1 ~incx x ~ofsy:1 ~incy y);
+  V.__unexpose n incz z
 
 let wrap3opt
     (f : ?n:int ->
@@ -62,12 +62,12 @@ let wrap3opt
      ?ofsx:int -> ?incx:int -> I.vec ->
      ?ofsy:int -> ?incy:int -> I.vec -> 'a)
     ?z x y =
-  let n, ofsx, incx, x = V.__expose x in
-  let n', ofsy, incy, y = V.__expose y in
+  let n, incx, x = V.__expose x in
+  let n', incy, y = V.__expose y in
   assert(n = n');
-  let ofsz, incz, z = Slap_vec.opt_vec_alloc prec n z in
-  ignore (f ~n:(S.__expose n) ~ofsz ~incz ~z ~ofsx ~incx x ~ofsy ~incy y);
-  V.__unexpose (n, ofsz, incz, z)
+  let incz, z = Slap_vec.opt_vec_alloc prec n z in
+  ignore (f ~n:(S.__expose n) ~ofsz:1 ~incz ~z ~ofsx:1 ~incx x ~ofsy:1 ~incy y);
+  V.__unexpose n incz z
 
 module type CNTVEC =
   sig
@@ -265,14 +265,14 @@ let sqr_nrm2 ?stable x = wrap1 (I.Vec.sqr_nrm2 ?stable) x
 let ssqr ?c x = wrap1 (I.Vec.ssqr ?c) x
 
 let sort ?cmp ?decr ?p x =
-  let n, ofsx, incx, x = V.__expose x in
+  let n, incx, x = V.__expose x in
   match p with
   | None ->
-     I.Vec.sort ?cmp ?decr ~n:(S.__expose n) ~ofsx ~incx x
+     I.Vec.sort ?cmp ?decr ~n:(S.__expose n) ~ofsx:1 ~incx x
   | Some p ->
-    let n', ofsp, incp, p = V.__expose p in
+    let n', incp, p = V.__expose p in
     assert(n = n');
-    I.Vec.sort ?cmp ?decr ~n:(S.__expose n) ~ofsp ~incp ~p ~ofsx ~incx x
+    I.Vec.sort ?cmp ?decr ~n:(S.__expose n) ~ofsp:1 ~incp ~p ~ofsx:1 ~incx x
 
 let neg ?y x = wrap2opt I.Vec.neg ?y x
 

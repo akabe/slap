@@ -537,18 +537,27 @@ val opt_cnt_vec_alloc :
 val opt_vec :
   'n Slap_size.t ->
   ('n, 'num, 'prec, 'cd) t option ->
-  int option * int option * ('num, 'prec, fortran_layout) Array1.t option
+  int option * ('num, 'prec, fortran_layout) Array1.t option
 
 val opt_vec_alloc :
   ('num, 'prec) kind ->
   'n Slap_size.t ->
   ('n, 'num, 'prec, 'cd) t option ->
-  int * int * ('num, 'prec, fortran_layout) Array1.t
+  int * ('num, 'prec, fortran_layout) Array1.t
 
 val __expose :
   ('n, 'num, 'prec, 'cnt_or_dsc) t ->
-  'n Slap_size.t * int * int * ('num, 'prec, fortran_layout) Array1.t
+  'n Slap_size.t * int * ('num, 'prec, fortran_layout) Array1.t
 
 val __unexpose :
-  'n Slap_size.t * int * int * ('num, 'prec, fortran_layout) Array1.t ->
+  'n Slap_size.t ->
+  int ->
+  ('num, 'prec, fortran_layout) Array1.t ->
+  ('n, 'num, 'prec, 'cnt_or_dsc) t
+
+val __unexpose_with_ofs :
+  'n Slap_size.t ->
+  int ->
+  int ->
+  ('num, 'prec, fortran_layout) Array1.t ->
   ('n, 'num, 'prec, 'cnt_or_dsc) t

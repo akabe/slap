@@ -21,7 +21,7 @@
 
 let random ?rnd_state ?from ?range n =
   let x = I.Vec.random ?rnd_state ?from ?range (S.__expose n) in
-  V.__unexpose (n, 1, 1, x)
+  V.__unexpose n 1 x
 
 (** {2 Arithmetic operations} *)
 

@@ -35,6 +35,9 @@ external create_array1 :
   ('a, 'b) kind -> 'n S.t -> ('a, 'b, fortran_layout) Array1.t
   = "slap_vec_create_array1"
 
+let check_vec (n, incx, x) =
+  (Slap_size.__expose n - 1) * abs incx + 1 <= Array1.dim x
+
 let check_cnt (n, incx, x) =
   S.__expose n = Array1.dim x && incx = 1
 
@@ -68,11 +71,20 @@ let opt_vec_alloc kind n = function
     assert(n = n');
     (incx, x)
 
-let __expose (n, incx, x) = (n, 1, incx, x)
+let __expose x =
+  assert(check_vec x);
+  x
 
-let __unexpose (n, ofsx, incx, x) =
-  if S.__expose n = 0 then (n, incx, x)
-  else (n, incx, Array1.sub x ofsx ((S.__expose n - 1) * abs incx + 1))
+let __unexpose n incx x =
+  let v = (n, incx, x) in
+  assert(check_vec v);
+  v
+
+let __unexpose_with_ofs n ofsx incx x =
+  let x =
+    if Slap_size.iszero n then x
+    else Array1.sub x ofsx ((Slap_size.__expose n - 1) * abs incx + 1) in
+  __unexpose n incx x
 
 (** {2 Creation of vectors} *)
 
@@ -382,15 +394,3 @@ let subdscvec_dyn nx ?(ofsx = 1) ?(incx = 1) (ny, incy, y) =
   end
 
 let subvec_dyn = subdscvec_dyn
-
-let opt_vec n = function
-  | None -> None, None, None
-  | Some (n', incx, x) ->
-    assert(n = n');
-    (Some 1, Some incx, Some x)
-
-let opt_vec_alloc kind n = function
-  | None -> 1, 1, create_array1 kind n
-  | Some (n', incx, x) ->
-    assert(n = n');
-    (1, incx, x)

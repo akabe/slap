@@ -22,4 +22,4 @@
 let random ?rnd_state ?re_from ?re_range ?im_from ?im_range n =
   let x = I.Vec.random ?rnd_state ?re_from ?re_range ?im_from ?im_range
       (S.__expose n) in
-  V.__unexpose (n, 1, 1, x)
+  V.__unexpose n 1 x

@@ -30,27 +30,27 @@ let asum x = Vec.wrap1 I.asum x
 
 let sbmv ~k ?y a ?up ?alpha ?beta x =
   let sbs, n, ar, ac, a = M.__expose a in
-  let n', ofsx, incx, x = V.__expose x in
+  let n', incx, x = V.__expose x in
   assert(n = n' && sbs = Slap_size.syband_dyn n k);
-  let ofsy, incy, y = Slap_vec.opt_vec_alloc prec n y in
+  let incy, y = Slap_vec.opt_vec_alloc prec n y in
   ignore (I.sbmv ~n:(S.__expose n) ~k:(S.__expose k)
-            ~ofsy ~incy ~y ~ar ~ac a ?up ?alpha ?beta ~ofsx ~incx x);
-  V.__unexpose (n, ofsy, incy, y)
+            ~ofsy:1 ~incy ~y ~ar ~ac a ?up ?alpha ?beta ~ofsx:1 ~incx x);
+  V.__unexpose n incy y
 
 let ger ?(alpha = 1.0) x y a =
-  let m, ofsx, incx, x = V.__expose x in
-  let n, ofsy, incy, y = V.__expose y in
+  let m, incx, x = V.__expose x in
+  let n, incy, y = V.__expose y in
   let m', n', ar, ac, a = M.__expose a in
   assert(m = m' && n = n');
   ignore (I.ger ~m:(S.__expose m) ~n:(S.__expose n)
-              ~alpha ~ofsx ~incx x ~ofsy ~incy y ~ar ~ac a);
+              ~alpha ~ofsx:1 ~incx x ~ofsy:1 ~incy y ~ar ~ac a);
   M.__unexpose (m, n, ar, ac, a)
 
 let syr ?(alpha = 1.0) ?(up = true) x a =
-  let n, ofsx, incx, x = V.__expose x in
+  let n, incx, x = V.__expose x in
   let n', n'', ar, ac, a = M.__expose a in
   assert(n = n' && n = n'');
-  ignore(I.syr ~n:(S.__expose n) ~alpha ~up ~ofsx ~incx x ~ar ~ac a);
+  ignore(I.syr ~n:(S.__expose n) ~alpha ~up ~ofsx:1 ~incx x ~ar ~ac a);
   M.__unexpose (n, n, ar, ac, a)
 
 (** {2 LAPACK interface} *)
@@ -85,7 +85,7 @@ let orgqr_min_lwork ~n =
 
 let orgqr_opt_lwork ~tau a =
   assert(Slap_vec.check_cnt tau);
-  let k, _, _, tau = V.__expose tau in
+  let k, _, tau = V.__expose tau in
   let m, n, ar, ac, a = M.__expose a in
   check_orgqr_args "orgqr_opt_lwork" k m n;
   I.orgqr_opt_lwork
@@ -95,7 +95,7 @@ let orgqr_opt_lwork ~tau a =
 
 let orgqr_dyn ?work ~tau a =
   assert(Slap_vec.check_cnt tau);
-  let k, _, _, tau = V.__expose tau in
+  let k, _, tau = V.__expose tau in
   let m, n, ar, ac, a = M.__expose a in
   check_orgqr_args "orgqr_dyn" k m n;
   I.orgqr ~m:(S.__expose m) ~n:(S.__expose n) ~k:(S.__expose k)
@@ -125,7 +125,7 @@ let ormqr_min_lwork ~side ~m ~n =
 
 let ormqr_opt_lwork ~side ~trans ~tau a c =
   assert(Slap_vec.check_cnt tau);
-  let k, _, _, tau = V.__expose tau in
+  let k, _, tau = V.__expose tau in
   let r, k', ar, ac, a = M.__expose a in
   let m, n, cr, cc, c = M.__expose c in
   check_ormqr ~loc:"ormqr_opt_lwork" ~side ~r ~m ~n ~k ~k';
@@ -136,7 +136,7 @@ let ormqr_opt_lwork ~side ~trans ~tau a c =
 
 let ormqr_dyn ~side ~trans ?work ~tau a c =
   assert(Slap_vec.check_cnt tau);
-  let k, _, _, tau = V.__expose tau in
+  let k, _, tau = V.__expose tau in
   let r, k', ar, ac, a = M.__expose a in
   let m, n, cr, cc, c = M.__expose c in
   check_ormqr ~loc:"ormqr_dyn" ~side ~r ~m ~n ~k ~k';
@@ -320,7 +320,7 @@ let gesvd ~jobu ~jobvt ?s ?u ?vt ?work a =
       ~jobu:(lacaml_svd_job jobu) ~jobvt:(lacaml_svd_job jobvt)
       ?s:(Slap_vec.opt_cnt_vec min_mn s) ~ur ~uc ~u ~vtr ~vtc ~vt
       ?work:(Slap_vec.opt_work work) ~ar ~ac a in
-  (V.__unexpose (min_mn, 1, 1, s),
+  (V.__unexpose min_mn 1 s,
    M.__unexpose (m, u_cols, ur, uc, u),
    M.__unexpose (vt_rows, n, vtr, vtc, vt))
 
@@ -367,7 +367,7 @@ let gesdd ~jobz ?s ?u ?vt ?work ?iwork a =
       ?iwork:(Slap_vec.opt_work iwork) ?ur ?uc ?u ?vtr ?vtc ?vt ~ar ~ac a
   in
   let opt_mat_alloc m n a = Slap_mat.opt_mat_alloc prec m n a in
-  let mks s = V.__unexpose (min_mn, 1, 1, s) in
+  let mks s = V.__unexpose min_mn 1 s in
   let mku u_cols ur uc u =
     Some (M.__unexpose (m, S.__unexpose u_cols, ur, uc, u)) in
   let mkvt vt_rows vtr vtc vt =
@@ -437,8 +437,8 @@ let geev ?work ?vl ?vr ?wr ?wi a =
       ~ar ~ac a in
   let vl = conv_vl vl in
   let vr = conv_vr vr in
-  let wr = V.__unexpose (n, 1, 1, wr) in
-  let wi = V.__unexpose (n, 1, 1, wi) in
+  let wr = V.__unexpose n 1 wr in
+  let wi = V.__unexpose n 1 wi in
   (vl, wr, wi, vr)
 
 (** {3 Symmetric-matrix eigenvalue and singular value problems
@@ -462,7 +462,7 @@ let syev ?vectors ?up ?work ?w a =
   let w = Slap_vec.opt_cnt_vec_alloc prec n w in
   ignore (I.syev ~n:(S.__expose n) ?vectors ?up
             ?work:(Slap_vec.opt_work work) ~w ~ar ~ac a);
-  V.__unexpose (n, 1, 1, w)
+  V.__unexpose n 1 w
 
 (** {4 syevd} *)
 
@@ -492,7 +492,7 @@ let syevd ?vectors ?up ?work ?iwork ?w a =
   let w = I.syevd ~n:(S.__expose n) ?vectors ?up
       ?work:(Slap_vec.opt_work work) ?iwork:(Slap_vec.opt_work iwork)
       ?w:(Slap_vec.opt_cnt_vec n w) ~ar ~ac a in
-  V.__unexpose (n, 1, 1, w)
+  V.__unexpose n 1 w
 
 (** {4 sbev} *)
 
@@ -508,7 +508,7 @@ let sbev ~kd ?z ?up ?work ?w ab =
   let w = I.sbev ~n:(S.__expose n) ~kd:(S.__expose kd) ~zr ~zc ~z ?up
       ?work:(Slap_vec.opt_work work) ?w:(Slap_vec.opt_cnt_vec n w)
       ~abr ~abc ab in
-  V.__unexpose (n, 1, 1, w)
+  V.__unexpose n 1 w
 
 (** {3 Symmetric-matrix eigenvalue and singular value problems
        (expert & RRR drivers)} *)
@@ -567,15 +567,15 @@ let syevr_dyn (type nn) ?vectors ?range ?up ?abstol ?work ?iwork ?w ?z ?isuppz
       then invalid_argf "syevr_dyn: m (= %d) should be smaller than k (= %d)"
           m (S.__expose k) ();
       (S.__unexpose m,
-       V.__unexpose (n, 1, 1, w),
+       V.__unexpose n 1 w,
        M.__unexpose (n, S.__unexpose m, zr, zc, z),
-       V.__unexpose (S.__unexpose (2 * m), 1, 1, isuppz))
+       V.__unexpose (S.__unexpose (2 * m)) 1 isuppz)
     | None ->
       let (m, w, z, isuppz) = syevr (S.__unexpose (S.__expose n)) ar ac a in
       (S.__unexpose m,
-       V.__unexpose (n, 1, 1, w),
+       V.__unexpose n 1 w,
        M.__unexpose (n, S.__unexpose (Array2.dim2 z), 1, 1, z),
-       V.__unexpose (S.__unexpose (Array1.dim isuppz), 1, 1, isuppz)) in
+       V.__unexpose (S.__unexpose (Array1.dim isuppz)) 1 isuppz) in
   let module R =
     struct
       type n = nn
@@ -599,7 +599,7 @@ let sygv ?vectors ?up ?work ?w ?itype a b =
   assert(n = n' && n = n'' && n = n''');
   let w = I.sygv ~n:(S.__expose n) ?vectors ?up ?work:(Slap_vec.opt_work work)
                  ?w:(Slap_vec.opt_cnt_vec n w) ?itype ~ar ~ac a ~br ~bc b in
-  V.__unexpose (n, 1, 1, w)
+  V.__unexpose n 1 w
 
 (** {4 sbgv} *)
 
@@ -613,4 +613,4 @@ let sbgv ~ka ~kb ?z ?up ?work ?w ab bb =
   let w = I.sbgv ~n:(S.__expose n) ~ka:(S.__expose ka) ~kb:(S.__expose kb)
       ~zr ~zc ~z ?up ?work:(Slap_vec.opt_work work)
       ?w:(Slap_vec.opt_cnt_vec n w) ~ar:abr ~ac:abc ab ~br:bbr ~bc:bbc bb in
-  V.__unexpose (n, 1, 1, w)
+  V.__unexpose n 1 w

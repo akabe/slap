@@ -254,11 +254,11 @@ struct
     let n = List.length el in
     let items = List.mapi (fun i e -> ([i+1], e)) el in
     let e_ba = bigarray kind [n] items in
-    let e_tuple = tuple [size n; (* dimension *)
-                         constant (Const_int 1); (* offset *)
-                         constant (Const_int 1); (* incrementation *)
-                         e_ba] in
-    let e_vec = apply (ident "Slap.Vec.__unexpose") ["", e_tuple] in
+    let e_vec =
+      apply (ident "Slap.Vec.__unexpose")
+        ["", size n; (* dimension *)
+         "", constant (Const_int 1); (* incrementation *)
+         "", e_ba] in
     constraint_ e_vec (Typ.vec kind)
 
   let mat kind ell =

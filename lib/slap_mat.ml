@@ -145,25 +145,25 @@ let reshape a =
 let col_dyn (m, n, ar, ac, a) i =
   if i < 1 || i > S.__expose n then invalid_arg "Slap.Mat.col_dyn";
   let lda = Array2.dim1 a in
-  V.__unexpose (m, lda * (i + ac - 2) + ar, 1, reshape a)
+  V.__unexpose_with_ofs m (lda * (i + ac - 2) + ar) 1 (reshape a)
 
 let row_dyn (m, n, ar, ac, a) i =
   if i < 1 || i > S.__expose m then invalid_arg "Slap.Mat.row_dyn";
   let lda = Array2.dim1 a in
-  V.__unexpose (n, lda * (ac - 1) + ar + i - 1, lda, reshape a)
+  V.__unexpose_with_ofs n (lda * (ac - 1) + ar + i - 1) lda (reshape a)
 
 let diag (n, n', ar, ac, a) =
   assert(n = n');
   let lda = Array2.dim1 a in
-  V.__unexpose (n, lda * (ac - 1) + ar, lda + 1, reshape a)
+  V.__unexpose_with_ofs n (lda * (ac - 1) + ar) (lda + 1) (reshape a)
 
 let diag_rect (m, n, ar, ac, a) =
   let lda = Array2.dim1 a in
-  V.__unexpose (S.min m n, lda * (ac - 1) + ar, lda + 1, reshape a)
+  V.__unexpose_with_ofs (S.min m n) (lda * (ac - 1) + ar) (lda + 1) (reshape a)
 
 let as_vec ((m, n, _, _, a) as ma) =
   assert(check_cnt ma);
-  V.__unexpose (S.mul m n, 1, 1, reshape a)
+  V.__unexpose (S.mul m n) 1 (reshape a)
 
 (** {2 Basic operations} *)
 
@@ -201,7 +201,7 @@ let packed ?(up = true) ?x (n, n', ar, ac, a) =
   let k = S.packed n in
   let x = Slap_vec.opt_cnt_vec_alloc (Array2.kind a) k x in
   packed_stub ~up ~n x ~ar ~ac a;
-  V.__unexpose (k, 1, 1, x)
+  V.__unexpose k 1 x
 
 external unpacked_stub : n:'n S.t -> up:bool ->
                          fill_num:'num option ->
@@ -212,7 +212,7 @@ external unpacked_stub : n:'n S.t -> up:bool ->
 
 let unpacked ?(up = true) ?(fill_num = None) ?a x =
   assert(Slap_vec.check_cnt x);
-  let k, _, _, x = V.__expose x in
+  let k, _, x = V.__expose x in
   let n = S.unpacked k in
   let ar, ac, a = opt_mat_alloc (Array1.kind x) n n a in
   unpacked_stub ~n ~up ~fill_num x ~ar ~ac a;
@@ -298,7 +298,7 @@ let fold_lefti f init (m, n, ar, ac, a) =
   let rec loop j acc =
     if j > S.__expose n then acc else
       begin
-        let colvec = V.__unexpose (m, ofs + j * lda, 1, v) in
+        let colvec = V.__unexpose_with_ofs m (ofs + j * lda) 1 v in
         loop (j + 1) (f j acc colvec)
       end
   in
@@ -313,7 +313,7 @@ let fold_righti f (m, n, ar, ac, a) init =
   let rec loop j acc =
     if j = 0 then acc else
       begin
-        let colvec = V.__unexpose (m, ofs + j * lda, 1, v) in
+        let colvec = V.__unexpose_with_ofs m (ofs + j * lda) 1 v in
         loop (j - 1) (f j colvec acc)
       end
   in
@@ -328,7 +328,7 @@ let fold_topi f init (m, n, ar, ac, a) =
   let rec loop i acc =
     if i > S.__expose m then acc else
       begin
-        let rowvec = V.__unexpose (n, ofs + i, lda, v) in
+        let rowvec = V.__unexpose_with_ofs n (ofs + i) lda v in
         loop (i + 1) (f i acc rowvec)
       end
   in
@@ -343,7 +343,7 @@ let fold_bottomi f (m, n, ar, ac, a) init =
   let rec loop i acc =
     if i = 0 then acc else
       begin
-        let rowvec = V.__unexpose (n, ofs + i, lda, v) in
+        let rowvec = V.__unexpose_with_ofs n (ofs + i) lda v in
         loop (i - 1) (f i rowvec acc)
       end
   in

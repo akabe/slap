@@ -100,7 +100,7 @@ let copy ?uplo ?b a =
 let of_col_vecs_dyn m n vec_array =
   let convert x =
     assert(Slap_vec.check_cnt x);
-    let m', _, _, x = V.__expose x in
+    let m', _, x = V.__expose x in
     assert(m = m');
     x
   in
@@ -263,15 +263,15 @@ let scal alpha a =
 
 let scal_cols a x =
   let m, n', ar, ac, a = M.__expose a in
-  let n, ofsx, incx, x = V.__expose x in
+  let n, incx, x = V.__expose x in
   assert(n = n' && incx = 1);
-  I.Mat.scal_cols ~m:(S.__expose m) ~n:(S.__expose n) ~ar ~ac a ~ofs:ofsx x
+  I.Mat.scal_cols ~m:(S.__expose m) ~n:(S.__expose n) ~ar ~ac a ~ofs:1 x
 
 let scal_rows x a =
-  let m, ofsx, incx, x = V.__expose x in
+  let m, incx, x = V.__expose x in
   let m', n, ar, ac, a = M.__expose a in
   assert(m = m' && incx = 1);
-  I.Mat.scal_rows ~m:(S.__expose m) ~n:(S.__expose n) ~ofs:ofsx x ~ar ~ac a
+  I.Mat.scal_rows ~m:(S.__expose m) ~n:(S.__expose n) ~ofs:1 x ~ar ~ac a
 
 let axpy ?alpha x y =
   let m, n, xr, xc, x = M.__expose x in
@@ -288,7 +288,7 @@ let gemm_diag ?beta ?y ~transa ?alpha a ~transb b =
   ignore (I.Mat.gemm_diag ~n:(S.__expose n) ~k:(S.__expose k) ?beta ~y
                           ~transa:(lacaml_trans3 transa) ?alpha ~ar ~ac a
                           ~transb:(lacaml_trans3 transb) ~br ~bc b);
-  V.__unexpose (n, 1, 1, y)
+  V.__unexpose n 1 y
 
 let syrk_diag ?beta ?y ~trans ?alpha a =
   let an, ak, ar, ac, a = M.__expose a in
@@ -297,7 +297,7 @@ let syrk_diag ?beta ?y ~trans ?alpha a =
   ignore (I.Mat.syrk_diag ~n:(S.__expose n) ~k:(S.__expose k) ?beta ~y
                           ~trans:(Slap_common.lacaml_trans2 trans)
                           ?alpha ~ar ~ac a);
-  V.__unexpose (n, 1, 1, y)
+  V.__unexpose n 1 y
 
 let gemm_trace ~transa a ~transb b =
   let an, ak, ar, ac, a = M.__expose a in
