@@ -28,7 +28,7 @@ type diag = [ `N | `U ]
 
 (** {3 Transpose flags} *)
 
-type (+'a, +'tag) trans = [ `N | `T | `C ]
+type (+'a, +'tag) trans = char
 
 type transNT
 
@@ -38,11 +38,11 @@ type transNTC
 
 type +'a trans3 = ('a, transNTC) trans
 
-let normal = `N
+let normal = 'N'
 
-let trans = `T
+let trans = 'T'
 
-let conjtr = `C
+let conjtr = 'C'
 
 (** {3 Direction of multiplication of matrices} *)
 
@@ -109,14 +109,19 @@ let create_int32_vec n = Slap_vec.create int32 n
 let get_transposed_dim t m n =
   let retype n = S.__unexpose (S.__expose n) in
   match t with
-  | `N -> (retype m, retype n)
+  | 'N' -> (retype m, retype n)
   | _ -> (retype n, retype m)
 
 let lacaml_trans2 = function
-  | `N -> `N
-  | `T | `C -> `T
+  | 'N' -> `N
+  | 'T' | 'C' -> `T
+  | _ -> assert false
 
-let lacaml_trans3 = identity
+let lacaml_trans3 = function
+  | 'N' -> `N
+  | 'T' -> `T
+  | 'C' -> `C
+  | _ -> assert false
 
 let lacaml_side = identity
 
