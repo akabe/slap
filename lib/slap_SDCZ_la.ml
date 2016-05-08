@@ -27,21 +27,109 @@ let pp_mat ppf a = Slap_io.pp_mat_gen pp_num ppf a
 
 (** {3 Level 1} *)
 
+(* SWAP *)
+
+external direct_swap :
+  n : _ Slap_size.t ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZswap_stub_bc" "lacaml_XSDCZswap_stub"
+
 let swap x y =
-  Vec.wrap2 (fun ?n ?ofsx ?incx x -> I.swap ?n ?ofsx ?incx x) x y
+  let n, incx, x = Slap_vec.__expose x in
+  let n', incy, y = Slap_vec.__expose y in
+  assert(n = n');
+  direct_swap ~n ~ofsx:1 ~incx ~x ~ofsy:1 ~incy ~y
 
-let scal alpha x = Vec.wrap1 (fun ?n -> I.scal alpha ?n) x
 
-let copy ?y x = Vec.wrap2opt I.copy ?y x
+(* SCAL *)
 
-let nrm2 x = Vec.wrap1 I.nrm2 x
+external direct_scal :
+  n : _ Slap_size.t ->
+  alpha : 'a ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZscal_stub"
 
-let axpy ?alpha x y =
-  Vec.wrap2 (fun ?n ?ofsx ?incx x -> I.axpy ?alpha ?n ?ofsx ?incx x) x y
+let scal alpha x =
+  let n, incx, x = Slap_vec.__expose x in
+  direct_scal ~n ~alpha ~ofsx:1 ~incx ~x
 
-let iamax x = Vec.wrap1 I.iamax x
 
-let amax x = Vec.wrap1 I.amax x
+(* COPY *)
+
+external direct_copy :
+  n : _ Slap_size.t ->
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZcopy_stub_bc" "lacaml_XSDCZcopy_stub"
+
+let copy ?y x =
+  let n, incx, x = Slap_vec.__expose x in
+  let incy, y = Slap_vec.opt_vec_alloc prec n y in
+  direct_copy ~n ~ofsy:1 ~incy ~y ~ofsx:1 ~incx ~x;
+  Slap_vec.__unexpose n incy y
+
+
+(* NRM2 *)
+
+external direct_nrm2 :
+  n : _ Slap_size.t ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  float = "lacaml_XSDCZnrm2_stub"
+
+let nrm2 x =
+  let n, incx, x = Slap_vec.__expose x in
+  direct_nrm2 ~n ~ofsx:1 ~incx ~x
+
+
+(* AXPY *)
+
+external direct_axpy :
+  alpha : 'a ->
+  n : _ Slap_size.t ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZaxpy_stub_bc" "lacaml_XSDCZaxpy_stub"
+
+let axpy ?(alpha = one) x y =
+  let n, incx, x = Slap_vec.__expose x in
+  let n', incy, y = Slap_vec.__expose y in
+  assert(n = n');
+  direct_axpy ~alpha ~n ~ofsx:1 ~incx ~x ~ofsy:1 ~incy ~y
+
+
+(* IAMAX/AMAX *)
+
+external direct_iamax :
+  n : _ Slap_size.t ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  int = "lacaml_XSDCZiamax_stub"
+
+let iamax x =
+  let n, incx, x = Slap_vec.__expose x in
+  direct_iamax ~n ~ofsx:1 ~incx ~x
+
+let amax x =
+  let n, incx, x = Slap_vec.__expose x in
+  x.{direct_iamax ~n ~ofsx:1 ~incx ~x}
 
 (** {3 Level 2} *)
 
