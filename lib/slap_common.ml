@@ -54,7 +54,7 @@ let right = 'R'
 
 (** {3 Matrix norms} *)
 
-type (+'a, +'tag) norm = [ `O | `I | `M | `F ]
+type (+'a, +'tag) norm = char
 
 type norm2_tag
 
@@ -66,19 +66,19 @@ type +'a norm4 = ('a, norm4_tag) norm
 
 type norm_1
 
-let norm_1 = `O
+let norm_1 = 'O'
 
 type norm_inf
 
-let norm_inf = `I
+let norm_inf = 'I'
 
 type norm_amax
 
-let norm_amax = `M
+let norm_amax = 'M'
 
 type norm_frob
 
-let norm_frob = `F
+let norm_frob = 'F'
 
 (** {3 SVD computation flags} *)
 
@@ -129,11 +129,17 @@ let lacaml_side = function
 
 let lacaml_norm2 v : Lacaml.Common.norm2 =
   match v with
-  | `O -> `O
-  | `I -> `I
+  | 'O' -> `O
+  | 'I' -> `I
   | _ -> assert(false)
 
-let lacaml_norm4 = identity
+let lacaml_norm4 v : Lacaml.Common.norm4 =
+  match v with
+  | 'O' -> `O
+  | 'I' -> `I
+  | 'M' -> `M
+  | 'F' -> `F
+  | _ -> assert(false)
 
 let lacaml_norm2_opt = function
   | None -> None
