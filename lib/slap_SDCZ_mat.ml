@@ -35,7 +35,7 @@ let cnt = Slap_mat.cnt
 
 (** {2 Creation of matrices} *)
 
-let empty = M.__unexpose (Slap_size.zero, Slap_size.zero, 1, 1, I.Mat.empty)
+let empty = M.__unexpose Slap_size.zero Slap_size.zero 1 1 I.Mat.empty
 
 let create m n = Slap_mat.create prec m n
 
@@ -45,7 +45,7 @@ let make0 m n = make m n zero
 
 let make1 m n = make m n one
 
-let identity n = M.__unexpose (n, n, 1, 1, I.Mat.identity (S.__expose n))
+let identity n = M.__unexpose n n 1 1 (I.Mat.identity (S.__expose n))
 
 let init_cols m n f = Slap_mat.init_cols prec m n f
 
@@ -95,7 +95,7 @@ let copy ?uplo ?b a =
   if S.__expose m <> 0 && S.__expose n <> 0
   then ignore (I.lacpy ?uplo ~m:(S.__expose m) ~n:(S.__expose n)
                  ~br ~bc ~b ~ar ~ac a);
-  M.__unexpose (m, n, br, bc, b)
+  M.__unexpose m n br bc b
 
 let of_col_vecs_dyn m n vec_array =
   let convert x =
@@ -107,7 +107,7 @@ let of_col_vecs_dyn m n vec_array =
   if S.__expose n <> Array.length vec_array
   then invalid_argf "Mat.of_col_vecs_dyn" ();
   let mat = I.Mat.of_col_vecs (Array.map convert vec_array) in
-  M.__unexpose (m, n, 1, 1, mat)
+  M.__unexpose m n 1 1 mat
 
 (** {2 Type conversion} *)
 
@@ -208,7 +208,7 @@ let transpose_copy ?b a =
   let br, bc, b = M.opt_mat_alloc prec n m b in
   ignore (I.Mat.transpose_copy ~m:(S.__expose m) ~n:(S.__expose n)
             ~ar ~ac a ~br ~bc ~b);
-  M.__unexpose (n, m, 1, 1, b)
+  M.__unexpose n m 1 1 b
 
 let detri ?up a =
   let n, n', ar, ac, a = M.__expose a in
@@ -250,7 +250,7 @@ let wrap2
   let m, n, ar, ac, a = M.__expose a in
   let br, bc, b = Slap_mat.opt_mat_alloc prec m n b in
   ignore (f ~m:(S.__expose m) ~n:(S.__expose n) ~br ~bc ~b ~ar ~ac a);
-  M.__unexpose (m, n, br, bc, b)
+  M.__unexpose m n br bc b
 
 let add_const (c:I.num_type) ?b a = wrap2 (I.Mat.add_const c) ?b a
 

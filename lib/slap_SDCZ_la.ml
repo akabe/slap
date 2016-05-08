@@ -129,7 +129,7 @@ let gemm ?beta ?c ~transa ?alpha a ~transb b =
   let k', n = Slap_common.get_transposed_dim transb bk bn in
   assert(k = k');
   let cr, cc, c = Slap_mat.opt_mat_alloc prec m n c in
-  let mc = M.__unexpose (m, n, cr, cc, c) in
+  let mc = M.__unexpose m n cr cc c in
   if S.__expose m <> 0 && S.__expose n <> 0 && S.__expose k <> 0
   then ignore (I.gemm ~m:(S.__expose m) ~n:(S.__expose n) ~k:(S.__expose k)
                  ?beta ~cr ~cc ~c
@@ -143,7 +143,7 @@ let symm ~side ?up ?beta ?c ?alpha a b =
   let m, n, br, bc, b = M.__expose b in
   assert(k = k' && check_side_dim k m n side);
   let cr, cc, c = Slap_mat.opt_mat_alloc prec m n c in
-  let mc = M.__unexpose (m, n, cr, cc, c) in
+  let mc = M.__unexpose m n cr cc c in
   if Slap_size.nonzero m && Slap_size.nonzero n
   then ignore (I.symm ~m:(S.__expose m) ~n:(S.__expose n)
                  ~side:(lacaml_side side)
@@ -173,7 +173,7 @@ let syrk ?up ?beta ?c ~trans ?alpha a =
   let an, ak, ar, ac, a = M.__expose a in
   let n, k = get_transposed_dim trans an ak in
   let cr, cc, c = Slap_mat.opt_mat_alloc prec n n c in
-  let mc = M.__unexpose (n, n, cr, cc, c) in
+  let mc = M.__unexpose n n cr cc c in
   if Slap_size.nonzero k
   then ignore (I.syrk ~n:(S.__expose n) ~k:(S.__expose k)
                  ?up ?beta ~cr ~cc ~c ~trans:(lacaml_trans2 trans)
@@ -187,7 +187,7 @@ let syr2k ?up ?beta ?c ~trans ?alpha a b =
   assert(am = bm && an = bn);
   let n, k = get_transposed_dim trans am an in
   let cr, cc, c = Slap_mat.opt_mat_alloc prec n n c in
-  let mc = M.__unexpose (n, n, cr, cc, c) in
+  let mc = M.__unexpose n n cr cc c in
   if Slap_size.nonzero k
   then ignore (I.syr2k ~n:(S.__expose n) ~k:(S.__expose k)
                  ?up ?beta ~cr ~cc ~c ~trans:(lacaml_trans2 trans)
@@ -205,7 +205,7 @@ let lacpy ?uplo ?b a =
   if Slap_size.nonzero m && Slap_size.nonzero n
   then ignore (I.lacpy ?uplo ~m:(S.__expose m) ~n:(S.__expose n)
                  ~br ~bc ~b ~ar ~ac a);
-  M.__unexpose (m, n, br, bc, b)
+  M.__unexpose m n br bc b
 
 let lassq ?scale ?sumsq x = Vec.wrap1 (I.lassq ?scale ?sumsq) x
 

@@ -268,12 +268,13 @@ struct
     let items = List.mapi (fun i -> List.mapi (fun j e -> ([i+1; j+1], e))) ell
                 |> List.flatten in
     let e_ba = bigarray kind [m; n] items in
-    let e_tuple = tuple [size m; (* dimension (#rows) *)
-                         size n; (* dimension (#columns) *)
-                         constant (Const_int 1); (* offset of rows *)
-                         constant (Const_int 1); (* offset of columns *)
-                         e_ba] in
-    let e_vec = apply (ident "Slap.Mat.__unexpose") ["", e_tuple] in
+    let e_vec =
+      apply (ident "Slap.Mat.__unexpose")
+        ["", size m; (* dimension (#rows) *)
+         "", size n; (* dimension (#columns) *)
+         "", constant (Const_int 1); (* offset of rows *)
+         "", constant (Const_int 1); (* offset of columns *)
+         "", e_ba] in
     constraint_ e_vec (Typ.mat kind)
 
   (* For errors *)

@@ -562,6 +562,9 @@ val __expose :
   int * int * ('num, 'prec, fortran_layout) Array2.t
 
 val __unexpose :
-  'm Slap_size.t * 'n Slap_size.t *
-  int * int * ('num, 'prec, fortran_layout) Array2.t ->
+  'm Slap_size.t ->
+  'n Slap_size.t ->
+  int ->
+  int ->
+  ('num, 'prec, fortran_layout) Array2.t ->
   ('m, 'n, 'num, 'prec, 'cnt_or_dsc) t

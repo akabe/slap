@@ -22,4 +22,4 @@
 let random ?rnd_state ?from ?range m n =
   let a =
     I.Mat.random ?rnd_state ?from ?range (S.__expose m) (S.__expose n) in
-  M.__unexpose (m, n, 1, 1, a)
+  M.__unexpose m n 1 1 a

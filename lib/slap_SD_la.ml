@@ -44,14 +44,14 @@ let ger ?(alpha = 1.0) x y a =
   assert(m = m' && n = n');
   ignore (I.ger ~m:(S.__expose m) ~n:(S.__expose n)
               ~alpha ~ofsx:1 ~incx x ~ofsy:1 ~incy y ~ar ~ac a);
-  M.__unexpose (m, n, ar, ac, a)
+  M.__unexpose m n ar ac a
 
 let syr ?(alpha = 1.0) ?(up = true) x a =
   let n, incx, x = V.__expose x in
   let n', n'', ar, ac, a = M.__expose a in
   assert(n = n' && n = n'');
   ignore(I.syr ~n:(S.__expose n) ~alpha ~up ~ofsx:1 ~incx x ~ar ~ac a);
-  M.__unexpose (n, n, ar, ac, a)
+  M.__unexpose n n ar ac a
 
 (** {2 LAPACK interface} *)
 
@@ -321,8 +321,8 @@ let gesvd ~jobu ~jobvt ?s ?u ?vt ?work a =
       ?s:(Slap_vec.opt_cnt_vec min_mn s) ~ur ~uc ~u ~vtr ~vtc ~vt
       ?work:(Slap_vec.opt_work work) ~ar ~ac a in
   (V.__unexpose min_mn 1 s,
-   M.__unexpose (m, u_cols, ur, uc, u),
-   M.__unexpose (vt_rows, n, vtr, vtc, vt))
+   M.__unexpose m u_cols ur uc u,
+   M.__unexpose vt_rows n vtr vtc vt)
 
 (** {4 gesdd} *)
 
@@ -369,9 +369,9 @@ let gesdd ~jobz ?s ?u ?vt ?work ?iwork a =
   let opt_mat_alloc m n a = Slap_mat.opt_mat_alloc prec m n a in
   let mks s = V.__unexpose min_mn 1 s in
   let mku u_cols ur uc u =
-    Some (M.__unexpose (m, S.__unexpose u_cols, ur, uc, u)) in
+    Some (M.__unexpose m (S.__unexpose u_cols) ur uc u) in
   let mkvt vt_rows vtr vtc vt =
-    Some (M.__unexpose (S.__unexpose vt_rows, n, vtr, vtc, vt)) in
+    Some (M.__unexpose (S.__unexpose vt_rows) n vtr vtc vt) in
   match gesdd_calc_sizes m n jobz with
   | 0, 0 ->
     let s, _, _ = _gesdd () in
@@ -422,10 +422,10 @@ let geev ?work ?vl ?vr ?wr ?wi a =
     | Some (Some x) ->
       let xn, xn', xr, xc, x = M.__expose x in
       assert(n = xn && n = xn');
-      let conv x = Some (M.__unexpose (n, n, xr, xc, x)) in
+      let conv x = Some (M.__unexpose n n xr xc x) in
       (conv, Some xr, Some xc, Some (Some x))
     | Some None ->
-      let conv x = Some (M.__unexpose (n, n, 1, 1, x)) in
+      let conv x = Some (M.__unexpose n n 1 1 x) in
       (conv, None, None, Some None)
     | None -> ((fun _ -> None), None, None, None)
   in
@@ -568,13 +568,13 @@ let syevr_dyn (type nn) ?vectors ?range ?up ?abstol ?work ?iwork ?w ?z ?isuppz
           m (S.__expose k) ();
       (S.__unexpose m,
        V.__unexpose n 1 w,
-       M.__unexpose (n, S.__unexpose m, zr, zc, z),
+       M.__unexpose n (S.__unexpose m) zr zc z,
        V.__unexpose (S.__unexpose (2 * m)) 1 isuppz)
     | None ->
       let (m, w, z, isuppz) = syevr (S.__unexpose (S.__expose n)) ar ac a in
       (S.__unexpose m,
        V.__unexpose n 1 w,
-       M.__unexpose (n, S.__unexpose (Array2.dim2 z), 1, 1, z),
+       M.__unexpose n (S.__unexpose (Array2.dim2 z)) 1 1 z,
        V.__unexpose (S.__unexpose (Array1.dim isuppz)) 1 isuppz) in
   let module R =
     struct

@@ -56,6 +56,10 @@ external create_array2 :
   ('a, 'b) kind -> 'm S.t -> 'n S.t -> ('a, 'b, fortran_layout) Array2.t
   = "slap_mat_create_array2"
 
+let check_mat (m, n, ar, ac, a) =
+  Slap_size.__expose m + (ar - 1) <= Array2.dim1 a
+  && Slap_size.__expose n + (ac - 1) <= Array2.dim2 a
+
 let opt_mat m n = function
   | None -> (None, None, None)
   | Some (m', n', ar, ac, a) ->
@@ -69,9 +73,14 @@ let opt_mat_alloc kind m n = function
     assert(m = m' && n = n');
     (ar, ac, a)
 
-let __expose = identity
+let __expose a =
+  assert(check_mat a);
+  a
 
-let __unexpose = identity
+let __unexpose m n ar ac a =
+  let a = (m, n, ar, ac, a) in
+  assert(check_mat a);
+  a
 
 (** {2 Creation of matrices} *)
 
