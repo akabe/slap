@@ -33,14 +33,14 @@ let wolfe_search ?(c1=1e-4) ?(c2=0.9) ?(init=1.0) df f p x =
   in
   aux 0.0 None init
 
-(** [update_h ?up h y s] destructively updates an approximated inverse Hessian
+(** [update_h h y s] destructively updates an approximated inverse Hessian
     matrix by BFGS (Broyden-Fletcher-Goldfarb-Shanno) algorithm. *)
-let update_h ?up h y s =
+let update_h h y s =
   let rho = 1. /. dot y s in
-  let hy = symv ?up h y in
+  let hy = symv h y in
   ignore (ger ~alpha:(~-. rho) hy s h); (* h := h - rho * hy * s^T *)
   ignore (ger ~alpha:(~-. rho) s hy h); (* h := h - rho * s * hy^T *)
-  ignore (syr ?up ~alpha:((1. +. dot y hy *. rho) *. rho) s h)
+  ignore (syr ~alpha:((1. +. dot y hy *. rho) *. rho) s h)
 
 (** [quasi_newton ~loops df f x] performs Quasi-Newton method.
     - [loops] is the number of iterations,
