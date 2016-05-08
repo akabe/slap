@@ -192,9 +192,9 @@ val __expose_uplo : _ uplo -> char
 
 val __unexpose_uplo : char -> _ uplo
 
-val __expose_norm : _ norm -> char
+val __expose_norm : (_, _) norm -> char
 
-val __unexpose_norm : char -> _ norm
+val __unexpose_norm : char -> (_, _) norm
 
 val check_side_dim :
   'k Slap_size.t -> 'm Slap_size.t -> 'n Slap_size.t ->

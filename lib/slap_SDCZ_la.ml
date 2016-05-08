@@ -145,7 +145,7 @@ external direct_gemv :
   a : ('a, 'b, fortran_layout) Array2.t ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
-  trans : _ Slap_common.trans ->
+  trans : (_, _) Slap_common.trans ->
   alpha : 'a ->
   beta : 'a ->
   ofsx : int ->
@@ -180,7 +180,7 @@ external direct_gbmv :
   n : _ Slap_size.t ->
   kl : _ Slap_size.t ->
   ku : _ Slap_size.t ->
-  trans : _ Slap_common.trans ->
+  trans : (_, _) Slap_common.trans ->
   alpha : 'a ->
   beta : 'a ->
   ofsx : int ->
@@ -246,7 +246,7 @@ external direct_trmv :
   a : ('a, 'b, fortran_layout) Array2.t ->
   n : _ Slap_size.t ->
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : _ Slap_common.trans ->
+  trans : (_, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
   incx : int ->
@@ -273,7 +273,7 @@ external direct_trsv :
   a : ('a, 'b, fortran_layout) Array2.t ->
   n : _ Slap_size.t ->
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : _ Slap_common.trans ->
+  trans : (_, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
   incx : int ->
@@ -299,7 +299,7 @@ external direct_tpmv :
   ap : ('a, 'b, fortran_layout) Array1.t ->
   n : _ Slap_size.t ->
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : _ Slap_common.trans ->
+  trans : (_, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
   incx : int ->
@@ -326,7 +326,7 @@ external direct_tpsv :
   ap : ('a, 'b, fortran_layout) Array1.t ->
   n : _ Slap_size.t ->
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : _ Slap_common.trans ->
+  trans : (_, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
   incx : int ->
@@ -351,8 +351,8 @@ let tpsv
 (* GEMM *)
 
 external direct_gemm :
-  transa : _ Slap_common.trans ->
-  transb : _ Slap_common.trans ->
+  transa : (_, _) Slap_common.trans ->
+  transb : (_, _) Slap_common.trans ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
   k : _ Slap_size.t ->
@@ -389,7 +389,7 @@ let gemm ?(beta = zero) ?c ~transa ?(alpha = one) a ~transb b =
 (* SYMM *)
 
 external direct_symm :
-  side : _ Slap_common.side ->
+  side : (_, _, _) Slap_common.side ->
   up : [< `U | `L ] Slap_common.uplo ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t->
@@ -427,9 +427,9 @@ let symm
 (* TRMM *)
 
 external direct_trmm :
-  side : _ Slap_common.side ->
+  side : (_, _, _) Slap_common.side ->
   up : [< `U | `L ] Slap_common.uplo ->
-  transa : _ Slap_common.trans ->
+  transa : (_, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
@@ -459,9 +459,9 @@ let trmm
 (* TRSM *)
 
 external direct_trsm :
-  side : _ Slap_common.side ->
+  side : (_, _, _) Slap_common.side ->
   up : [< `U | `L ] Slap_common.uplo ->
-  transa : _ Slap_common.trans ->
+  transa : (_, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
@@ -492,7 +492,7 @@ let trsm
 
 external direct_syrk :
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : _ Slap_common.trans ->
+  trans : (_, _) Slap_common.trans ->
   n : _ Slap_size.t ->
   k : _ Slap_size.t ->
   ar : int ->
@@ -526,7 +526,7 @@ let syrk
 
 external direct_syr2k :
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : _ Slap_common.trans ->
+  trans : (_, _) Slap_common.trans ->
   n : _ Slap_size.t ->
   k : _ Slap_size.t ->
   ar : int ->
@@ -617,7 +617,7 @@ type larnv_liseed = Slap_size.four
 
 let larnv_iseed_alloc = function
   | None ->
-    let iseed = Array1.create Int32 Fortran_layout 4 in
+    let iseed = Array1.create int32 fortran_layout 4 in
     Array1.fill iseed 1l;
     iseed
   | Some v ->
@@ -656,7 +656,7 @@ let lange_min_lwork m norm =
   Slap_size.__unexpose m'
 
 external direct_lange :
-  norm : _ Slap_common.norm ->
+  norm : (_, _) Slap_common.norm ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
   ar : int ->
@@ -722,7 +722,7 @@ let getrf ?ipiv a =
 (* GETRS *)
 
 external direct_getrs :
-  trans : _ Slap_common.trans ->
+  trans : (_, _) Slap_common.trans ->
   n : _ Slap_size.t ->
   nrhs : _ Slap_size.t ->
   ar : int ->
@@ -739,7 +739,7 @@ let getrs ?ipiv ~trans a b =
   let n'', nrhs, br, bc, b = Slap_mat.__expose b in
   assert(n = n' && n = n'');
   if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
-    let ipiv = Slap_vec.opt_cnt_vec_alloc Int32 (Slap_size.min n n) ipiv in
+    let ipiv = Slap_vec.opt_cnt_vec_alloc int32 (Slap_size.min n n) ipiv in
     let i = direct_getrs ~trans ~n ~nrhs ~ar ~ac ~a ~br ~bc ~b ~ipiv in
     if i <> 0 then failwithf "Slap.XSDCZ.getrs: internal error code=%d" i ()
   end
@@ -763,8 +763,8 @@ let getri_min_lwork n = Slap_size.max Slap_size.one n
 let getri_opt_lwork_aux a =
   let n, n', ar, ac, a = Slap_mat.__expose a in
   assert(n = n');
-  let work = Array1.create prec Fortran_layout  1 in
-  let ipiv = Array1.create Int32 Fortran_layout 0 in
+  let work = Array1.create prec fortran_layout  1 in
+  let ipiv = Array1.create int32 fortran_layout 0 in
   let i = direct_getri ~n ~ar ~ac ~a ~ipiv ~work ~lwork:(-1) in
   if i = 0 then Slap_size.__unexpose (int_of_num work.{1})
   else failwithf "Slap.XSDCZ.getri_opt_lwork: internal error code=%d" i ()
