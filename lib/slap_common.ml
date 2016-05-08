@@ -82,15 +82,15 @@ let norm_frob = 'F'
 
 (** {3 SVD computation flags} *)
 
-type (+'a, +'b, +'c, +'d, +'e) svd_job = [ `A | `S | `O | `N ]
+type (+'a, +'b, +'c, +'d, +'e) svd_job = char
 
-let svd_all = `A
+let svd_all = 'A'
 
-let svd_top = `S
+let svd_top = 'S'
 
-let svd_overwrite = `O
+let svd_overwrite = 'O'
 
-let svd_no = `N
+let svd_no = 'N'
 
 (** {2 Integer vectors} *)
 
@@ -149,7 +149,12 @@ let lacaml_norm4_opt = function
   | None -> None
   | Some v -> Some (lacaml_norm4 v)
 
-let lacaml_svd_job = identity
+let lacaml_svd_job = function
+  | 'A' -> `A
+  | 'S' -> `S
+  | 'O' -> `O
+  | 'N' -> `N
+  | _ -> assert(false)
 
 (** {2 Internal functions} *)
 
