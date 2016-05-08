@@ -108,7 +108,7 @@ val gbmv :
 val symv :
   ?beta:num_type ->
   ?y:('n, 'y_cd) vec ->
-  ?up:bool ->
+  ?up:[< `L | `U] Slap_common.uplo ->
   ?alpha:num_type ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'x_cd) vec -> ('n, 'y_cd) vec
@@ -116,16 +116,18 @@ val symv :
     [y := alpha * a * x + beta * y].
 
     @param beta default = [0.0]
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.upper},
+        then the lower triangular part of [a] is used.
     @param alpha default = [1.0]
  *)
 
 val trmv :
   trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
-  ?up:bool ->
+  ?up:[< `L | `U] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'x_cd) vec -> unit
 (** [trmv ~trans ?diag ?up a x] executes [x := OP(a) * x].
@@ -135,18 +137,20 @@ val trmv :
       - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.upper},
+        then the lower triangular part of [a] is used.
  *)
 
 val trsv :
   trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
-  ?up:bool ->
+  ?up:[< `L | `U] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'b_cd) vec -> unit
 (** [trmv ~trans ?diag ?up a b] solves linear system [OP(a) * x = b]
@@ -157,18 +161,20 @@ val trsv :
       - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.upper},
+        then the lower triangular part of [a] is used.
  *)
 
 val tpmv :
   trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
-  ?up:bool ->
+  ?up:[< `L | `U] Slap_common.uplo ->
   ('n Slap_size.packed, cnt) vec ->
   ('n, 'x_cd) vec -> unit
 (** [tpmv ~trans ?diag ?up a x] executes [x := OP(a) * x]
@@ -179,12 +185,14 @@ val tpmv :
       - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.upper},
+        then the lower triangular part of [a] is used.
 
     @since 0.2.0
  *)
@@ -192,7 +200,7 @@ val tpmv :
 val tpsv :
   trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
-  ?up:bool ->
+  ?up:[< `L | `U] Slap_common.uplo ->
   ('n Slap_size.packed, cnt) vec ->
   ('n, 'x_cd) vec -> unit
 (** [tpsv ~trans ?diag ?up a b] solves linear system [OP(a) * x = b]
@@ -204,12 +212,14 @@ val tpsv :
       - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.upper},
+        then the lower triangular part of [a] is used.
 
     @since 0.2.0
  *)

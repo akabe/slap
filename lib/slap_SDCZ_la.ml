@@ -131,82 +131,220 @@ let amax x =
   let n, incx, x = Slap_vec.__expose x in
   x.{direct_iamax ~n ~ofsx:1 ~incx ~x}
 
+
 (** {3 Level 2} *)
 
-let gemv ?beta ?y ~trans ?alpha a x =
-  let am, an, ar, ac, a = M.__expose a in
-  let n', incx, x = V.__expose x in
+(* GEMV *)
+
+external direct_gemv :
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  trans : _ Slap_common.trans ->
+  alpha : 'a ->
+  beta : 'a ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZgemv_stub_bc" "lacaml_XSDCZgemv_stub"
+
+let gemv ?(beta = zero) ?y ~trans ?(alpha = one) a x =
+  let am, an, ar, ac, a = Slap_mat.__expose a in
+  let n', incx, x = Slap_vec.__expose x in
   let m, n = Slap_common.get_transposed_dim trans am an in
   assert(n = n');
   let incy, y = Slap_vec.opt_vec_alloc prec m y in
-  let vy = V.__unexpose m incy y in
+  let vy = Slap_vec.__unexpose m incy y in
   if Slap_size.nonzero m && Slap_size.nonzero n
-  then ignore (I.gemv ~m:(S.__expose am) ~n:(S.__expose an)
-                 ?beta ~ofsy:1 ~incy ~y ~trans:(lacaml_trans3 trans)
-                 ?alpha ~ar ~ac a ~ofsx:1 ~incx x)
+  then direct_gemv ~ofsy:1 ~incy ~y ~ar ~ac ~a ~m:am ~n:an
+      ~trans ~alpha ~beta ~ofsx:1 ~incx ~x
   else Slap_vec.fill vy zero;
   vy
 
-let gbmv ~m:am ?beta ?y ~trans ?alpha a kl ku x =
-  let gbs, an, ar, ac, a = M.__expose a in
-  let n', incx, x = V.__expose x in
+
+(* GBMV *)
+
+external direct_gbmv :
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  kl : _ Slap_size.t ->
+  ku : _ Slap_size.t ->
+  trans : _ Slap_common.trans ->
+  alpha : 'a ->
+  beta : 'a ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZgbmv_stub_bc" "lacaml_XSDCZgbmv_stub"
+
+let gbmv ~m:am ?(beta = zero) ?y ~trans ?(alpha = one) a kl ku x =
+  let gbs, an, ar, ac, a = Slap_mat.__expose a in
+  let n', incx, x = Slap_vec.__expose x in
   let m, n = Slap_common.get_transposed_dim trans am an in
   assert(gbs = Slap_size.geband_dyn am an kl ku && n = n');
   let incy, y = Slap_vec.opt_vec_alloc prec m y in
-  let vy = V.__unexpose m incy y in
+  let vy = Slap_vec.__unexpose m incy y in
   if Slap_size.nonzero m && Slap_size.nonzero n
-  then ignore (I.gbmv ~m:(S.__expose am) ~n:(S.__expose an)
-                 ?beta ~ofsy:1 ~incy ~y ~trans:(lacaml_trans3 trans)
-                 ?alpha ~ar ~ac a (S.__expose kl) (S.__expose ku)
-                 ~ofsx:1 ~incx x)
+  then direct_gbmv ~ofsy:1 ~incy ~y ~ar ~ac ~a ~m:am ~n:an
+      ~kl ~ku ~trans ~alpha ~beta ~ofsx:1 ~incx ~x
   else Slap_vec.fill vy zero;
   vy
 
-let symv ?beta ?y ?up ?alpha a x =
-  let n, n', ar, ac, a = M.__expose a in
-  let n'', incx, x = V.__expose x in
+
+(* SYMV *)
+
+external direct_symv :
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  n : _ Slap_size.t ->
+  up : _ Slap_common.uplo ->
+  alpha : 'a ->
+  beta : 'a ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZsymv_stub_bc" "lacaml_XSDCZsymv_stub"
+
+let symv
+    ?(beta = zero)
+    ?y
+    ?(up = Slap_common.__default_uplo)
+    ?(alpha = one)
+    a x =
+  let n, n', ar, ac, a = Slap_mat.__expose a in
+  let n'', incx, x = Slap_vec.__expose x in
   assert(n = n' && n = n'');
   let incy, y = Slap_vec.opt_vec_alloc prec n y in
-  let vy = V.__unexpose n incy y in
+  let vy = Slap_vec.__unexpose n incy y in
   if Slap_size.nonzero n
-  then ignore (I.symv ~n:(S.__expose n) ?up ?beta ~ofsy:1 ~incy ~y
-                 ?alpha ~ar ~ac a ~ofsx:1 ~incx x)
+  then direct_symv ~ofsy:1 ~incy ~y ~ar ~ac ~a ~n
+      ~up ~alpha ~beta ~ofsx:1 ~incx ~x
   else Slap_vec.fill vy zero;
   vy
 
-let trmv ~trans ?(diag = non_unit) ?up a x =
-  let n, n', ar, ac, a = M.__expose a in
-  let n'', incx, x = V.__expose x in
+
+(* TRMV *)
+
+external direct_trmv :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  n : _ Slap_size.t ->
+  up : _ Slap_common.uplo ->
+  trans : _ Slap_common.trans ->
+  diag : Slap_common.diag ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZtrmv_stub_bc" "lacaml_XSDCZtrmv_stub"
+
+let trmv
+    ~trans
+    ?(diag = Slap_common.non_unit)
+    ?(up = Slap_common.__default_uplo)
+    a x =
+  let n, n', ar, ac, a = Slap_mat.__expose a in
+  let n'', incx, x = Slap_vec.__expose x in
   assert(n = n' && n = n'');
-  if S.__expose n <> 0
-  then I.trmv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ~diag:(lacaml_diag diag) ?up ~ar ~ac a ~ofsx:1 ~incx x
+  if Slap_size.nonzero n
+  then direct_trmv ~ar ~ac ~a ~n ~up ~trans ~diag ~ofsx:1 ~incx ~x
 
-let trsv ~trans ?(diag = non_unit) ?up a x =
-  let n, n', ar, ac, a = M.__expose a in
-  let n'', incx, x = V.__expose x in
+
+(* TRSV *)
+
+external direct_trsv :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  n : _ Slap_size.t ->
+  up : _ Slap_common.uplo ->
+  trans : _ Slap_common.trans ->
+  diag : Slap_common.diag ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZtrsv_stub_bc" "lacaml_XSDCZtrsv_stub"
+
+let trsv
+    ~trans
+    ?(diag = Slap_common.non_unit)
+    ?(up = Slap_common.__default_uplo)
+    a x =
+  let n, n', ar, ac, a = Slap_mat.__expose a in
+  let n'', incx, x = Slap_vec.__expose x in
   assert(n = n' && n = n'');
-  if S.__expose n <> 0
-  then I.trsv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ~diag:(lacaml_diag diag) ?up ~ar ~ac a ~ofsx:1 ~incx x
+  if Slap_size.nonzero n
+  then direct_trsv ~ar ~ac ~a ~n ~up ~trans ~diag ~ofsx:1 ~incx ~x
 
-let tpmv ~trans ?(diag = non_unit) ?up ap x =
-  assert(Slap_vec.check_cnt ap);
-  let k, _, ap = V.__expose ap in
-  let n, incx, x = V.__expose x in
-  assert(k = Slap_size.packed n);
-  if S.__expose n <> 0
-  then I.tpmv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ~diag:(lacaml_diag diag) ?up ~ofsap:1 ap ~ofsx:1 ~incx x
 
-let tpsv ~trans ?(diag = non_unit) ?up ap x =
+(* TPMV *)
+
+external direct_tpmv :
+  ofsap : int ->
+  ap : ('a, 'b, fortran_layout) Array1.t ->
+  n : _ Slap_size.t ->
+  up : _ Slap_common.uplo ->
+  trans : _ Slap_common.trans ->
+  diag : Slap_common.diag ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZtpmv_stub_bc" "lacaml_XSDCZtpmv_stub"
+
+let tpmv
+    ~trans
+    ?(diag = Slap_common.non_unit)
+    ?(up = Slap_common.__default_uplo)
+    ap x =
   assert(Slap_vec.check_cnt ap);
-  let k, _, ap = V.__expose ap in
-  let n, incx, x = V.__expose x in
+  let k, _, ap = Slap_vec.__expose ap in
+  let n, incx, x = Slap_vec.__expose x in
   assert(k = Slap_size.packed n);
-  if S.__expose n <> 0
-  then I.tpsv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ~diag:(lacaml_diag diag) ?up ~ofsap:1 ap ~ofsx:1 ~incx x
+  if Slap_size.nonzero n
+  then direct_tpmv ~ofsap:1 ~ap ~n ~up ~trans ~diag ~ofsx:1 ~incx ~x
+
+
+(* TPSV *)
+
+external direct_tpsv :
+  ofsap : int ->
+  ap : ('a, 'b, fortran_layout) Array1.t ->
+  n : _ Slap_size.t ->
+  up : _ Slap_common.uplo ->
+  trans : _ Slap_common.trans ->
+  diag : Slap_common.diag ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZtpsv_stub_bc" "lacaml_XSDCZtpsv_stub"
+
+let tpsv
+    ~trans
+    ?(diag = Slap_common.non_unit)
+    ?(up = Slap_common.__default_uplo)
+    ap x =
+  assert(Slap_vec.check_cnt ap);
+  let k, _, ap = Slap_vec.__expose ap in
+  let n, incx, x = Slap_vec.__expose x in
+  assert(k = Slap_size.packed n);
+  if Slap_size.nonzero n
+  then direct_tpsv ~ofsap:1 ~ap ~n ~up ~trans ~diag ~ofsx:1 ~incx ~x
+
 
 (** {3 Level 3} *)
 

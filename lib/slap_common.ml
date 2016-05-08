@@ -177,6 +177,8 @@ let lacaml_diag = function
 
 (** {2 Internal functions} *)
 
+let __default_uplo = upper
+
 let check_side_dim k m n = function
   | 'L' -> S.__expose m = S.__expose k
   | _ -> S.__expose n = S.__expose k

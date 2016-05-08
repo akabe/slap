@@ -188,6 +188,8 @@ val lacaml_diag : diag -> Lacaml.Common.diag
 
 (** {2 Internal functions} *)
 
+val __default_uplo : _ uplo
+
 val check_side_dim :
   'k Slap_size.t -> 'm Slap_size.t -> 'n Slap_size.t ->
   ('k, 'm, 'n) side -> bool
