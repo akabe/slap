@@ -28,6 +28,7 @@ let prec = complexXBITS
 let zero = Complex.zero
 let one = Complex.one
 let lacaml_trans3 = lacaml_trans3
+let int_of_num z = int_of_float z.Complex.re
 
 #include "slap_SDCZ_common.ml"
 

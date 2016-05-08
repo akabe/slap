@@ -694,41 +694,101 @@ let lauum ?(up = Slap_common.__unexpose_uplo 'U') a =
 
 (** {3 Linear equations (computational routines)} *)
 
+(* GETRF *)
+
+external direct_getrf :
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  ipiv : (int32, int32_elt, fortran_layout) Array1.t ->
+  int = "lacaml_XSDCZgetrf_stub_bc" "lacaml_XSDCZgetrf_stub"
+
 let getrf ?ipiv a =
-  let m, n, ar, ac, a = M.__expose a in
+  let m, n, ar, ac, a = Slap_mat.__expose a in
   let k = Slap_size.min m n in
   let ipiv = Slap_vec.opt_cnt_vec_alloc int32 k ipiv in
-  if Slap_size.nonzero m && Slap_size.nonzero n
-  then ignore (I.getrf ~m:(S.__expose m) ~n:(S.__expose n) ~ipiv ~ar ~ac a);
-  V.__unexpose k 1 ipiv
+  let res = Slap_vec.__unexpose k 1 ipiv in
+  if Slap_size.nonzero m && Slap_size.nonzero n then begin
+    let i = direct_getrf ~m ~n ~ar ~ac ~a ~ipiv in
+    if i = 0 then res (* success *)
+    else if i > 0
+    then failwithf "Slap.XSDCZ.getrf: U(%i,%i)=0 in the LU factorization" i i ()
+    else failwithf "Slap.XSDCZ.getrf: internal error code=%d" i ()
+  end else res
+
+
+(* GETRS *)
+
+external direct_getrs :
+  trans : _ Slap_common.trans ->
+  n : _ Slap_size.t ->
+  nrhs : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  ipiv : (int32, int32_elt, fortran_layout) Array1.t ->
+  int = "lacaml_XSDCZgetrs_stub_bc" "lacaml_XSDCZgetrs_stub"
 
 let getrs ?ipiv ~trans a b =
-  let n, n', ar, ac, a = M.__expose a in
-  let n'', nrhs, br, bc, b = M.__expose b in
+  let n, n', ar, ac, a = Slap_mat.__expose a in
+  let n'', nrhs, br, bc, b = Slap_mat.__expose b in
   assert(n = n' && n = n'');
-  if Slap_size.nonzero n
-  then I.getrs ~n:(S.__expose n)
-      ?ipiv:(Slap_vec.opt_cnt_vec (Slap_size.min n n) ipiv)
-      ~trans:(lacaml_trans3 trans) ~ar ~ac a ~nrhs:(S.__expose nrhs) ~br ~bc b
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
+    let ipiv = Slap_vec.opt_cnt_vec_alloc Int32 (Slap_size.min n n) ipiv in
+    let i = direct_getrs ~trans ~n ~nrhs ~ar ~ac ~a ~br ~bc ~b ~ipiv in
+    if i <> 0 then failwithf "Slap.XSDCZ.getrs: internal error code=%d" i ()
+  end
 
-type 'n getri_min_lwork
+(* GETRI *)
 
-let getri_min_lwork n =
-  S.__unexpose (I.getri_min_lwork (S.__expose n))
+external direct_getri :
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  ipiv : (int32, int32_elt, fortran_layout) Array1.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  int = "lacaml_XSDCZgetri_stub_bc" "lacaml_XSDCZgetri_stub"
+
+type 'n getri_min_lwork = (Slap_size.one, 'n) Slap_size.max
+
+let getri_min_lwork n = Slap_size.max Slap_size.one n
+
+let getri_opt_lwork_aux a =
+  let n, n', ar, ac, a = Slap_mat.__expose a in
+  assert(n = n');
+  let work = Array1.create prec Fortran_layout  1 in
+  let ipiv = Array1.create Int32 Fortran_layout 0 in
+  let i = direct_getri ~n ~ar ~ac ~a ~ipiv ~work ~lwork:(-1) in
+  if i = 0 then Slap_size.__unexpose (int_of_num work.{1})
+  else failwithf "Slap.XSDCZ.getri_opt_lwork: internal error code=%d" i ()
 
 let getri_opt_lwork a =
-  let n, n', ar, ac, a = M.__expose a in
-  assert(n = n');
-  I.getri_opt_lwork ~n:(S.__expose n) ~ar ~ac a
+  getri_opt_lwork_aux a
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
 let getri ?ipiv ?work a =
-  let n, n', ar, ac, a = M.__expose a in
+  let n, n', ar, ac, aa = Slap_mat.__expose a in
   assert(n = n');
-  if Slap_size.nonzero n
-  then I.getri ~n:(S.__expose n)
-      ?ipiv:(Slap_vec.opt_cnt_vec (Slap_size.min n n) ipiv)
-      ?work:(Slap_vec.opt_work work) ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    let lwork, work =
+      Slap_vec.__alloc_work prec work ~loc:"Slap.XSDCZ.getri"
+        ~min_lwork:(getri_min_lwork n) ~opt_lwork:(getri_opt_lwork_aux a) in
+    let ipiv = match ipiv with None -> getrf a | Some ipiv -> ipiv in
+    assert(Slap_vec.check_cnt ipiv);
+    let k, _, ipiv = Slap_vec.__expose ipiv in
+    assert(k = Slap_size.min n n);
+    let i = direct_getri ~n ~ar ~ac ~a:aa ~ipiv ~work ~lwork in
+    if i < 0 then failwithf "Slap.XSDCZ.getri: internal error code=%d" i ()
+    else if i > 0 then failwithf "Slap.XSDCZ.getri: singular on index %i" i ()
+  end
 
 type sytrf_min_lwork
 
