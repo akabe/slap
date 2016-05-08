@@ -223,7 +223,7 @@ external direct_symv :
 let symv
     ?(beta = zero)
     ?y
-    ?(up = Slap_common.__default_uplo)
+    ?(up = Slap_common.__unexpose_uplo 'U')
     ?(alpha = one)
     a x =
   let n, n', ar, ac, a = Slap_mat.__expose a in
@@ -256,7 +256,7 @@ external direct_trmv :
 let trmv
     ~trans
     ?(diag = Slap_common.non_unit)
-    ?(up = Slap_common.__default_uplo)
+    ?(up = Slap_common.__unexpose_uplo 'U')
     a x =
   let n, n', ar, ac, a = Slap_mat.__expose a in
   let n'', incx, x = Slap_vec.__expose x in
@@ -283,7 +283,7 @@ external direct_trsv :
 let trsv
     ~trans
     ?(diag = Slap_common.non_unit)
-    ?(up = Slap_common.__default_uplo)
+    ?(up = Slap_common.__unexpose_uplo 'U')
     a x =
   let n, n', ar, ac, a = Slap_mat.__expose a in
   let n'', incx, x = Slap_vec.__expose x in
@@ -309,7 +309,7 @@ external direct_tpmv :
 let tpmv
     ~trans
     ?(diag = Slap_common.non_unit)
-    ?(up = Slap_common.__default_uplo)
+    ?(up = Slap_common.__unexpose_uplo 'U')
     ap x =
   assert(Slap_vec.check_cnt ap);
   let k, _, ap = Slap_vec.__expose ap in
@@ -336,7 +336,7 @@ external direct_tpsv :
 let tpsv
     ~trans
     ?(diag = Slap_common.non_unit)
-    ?(up = Slap_common.__default_uplo)
+    ?(up = Slap_common.__unexpose_uplo 'U')
     ap x =
   assert(Slap_vec.check_cnt ap);
   let k, _, ap = Slap_vec.__expose ap in
@@ -408,7 +408,7 @@ external direct_symm :
 
 let symm
     ~side
-    ?(up = Slap_common.__default_uplo)
+    ?(up = Slap_common.__unexpose_uplo 'U')
     ?(beta = zero)
     ?c
     ?(alpha = one)
@@ -444,7 +444,7 @@ external direct_trmm :
 
 let trmm
     ~side
-    ?(up = Slap_common.__default_uplo)
+    ?(up = Slap_common.__unexpose_uplo 'U')
     ~transa
     ?(diag = Slap_common.non_unit)
     ?(alpha = one)
@@ -476,7 +476,7 @@ external direct_trsm :
 
 let trsm
     ~side
-    ?(up = Slap_common.__default_uplo)
+    ?(up = Slap_common.__unexpose_uplo 'U')
     ~transa
     ?(diag = Slap_common.non_unit)
     ?(alpha = one)
@@ -506,7 +506,7 @@ external direct_syrk :
   unit = "lacaml_XSDCZsyrk_stub_bc" "lacaml_XSDCZsyrk_stub"
 
 let syrk
-    ?(up = Slap_common.__default_uplo)
+    ?(up = Slap_common.__unexpose_uplo 'U')
     ?(beta = zero)
     ?c
     ~trans
@@ -543,7 +543,7 @@ external direct_syr2k :
   unit = "lacaml_XSDCZsyr2k_stub_bc" "lacaml_XSDCZsyr2k_stub"
 
 let syr2k
-    ?(up = Slap_common.__default_uplo)
+    ?(up = Slap_common.__unexpose_uplo 'U')
     ?(beta = zero)
     ?c
     ~trans
@@ -580,12 +580,9 @@ external direct_lacpy :
   b : ('a, 'b, fortran_layout) Array2.t ->
   unit = "lacaml_XSDCZlacpy_stub_bc" "lacaml_XSDCZlacpy_stub"
 
-let lacpy ?uplo ?b a =
+let lacpy ?(uplo = Slap_common.__unexpose_uplo 'A') ?b a =
   let m, n, ar, ac, a = Slap_mat.__expose a in
   let br, bc, b = Slap_mat.opt_mat_alloc prec m n b in
-  let uplo = match uplo with
-    | None -> Slap_common.both
-    | Some uplo -> uplo in
   if Slap_size.nonzero m && Slap_size.nonzero n
   then direct_lacpy ~uplo ~m ~n ~ar ~ac ~a ~br ~bc ~b;
   Slap_mat.__unexpose m n br bc b
@@ -668,7 +665,7 @@ external direct_lange :
   work : (float, 'c, fortran_layout) Array1.t ->
   float = "lacaml_XSDCZlange_stub_bc" "lacaml_XSDCZlange_stub"
 
-let lange ~norm ?work a =
+let lange ?(norm = Slap_common.__unexpose_norm 'O') ?work a =
   let m, n, ar, ac, a = Slap_mat.__expose a in
   let min_lwork = lange_min_lwork m norm in
   let _, work =
@@ -689,7 +686,7 @@ external direct_lauum :
   a : ('a, 'b, fortran_layout) Array2.t ->
   unit = "lacaml_XSDCZlauum_stub"
 
-let lauum ?(up = true) a =
+let lauum ?(up = Slap_common.__unexpose_uplo 'U') a =
   let n, n', ar, ac, a = Slap_mat.__expose a in
   assert(n = n');
   if Slap_size.nonzero n then direct_lauum ~up ~n ~ar ~ac ~a

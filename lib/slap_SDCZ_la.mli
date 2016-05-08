@@ -119,7 +119,7 @@ val symv :
     @param up default = {!Slap_common.upper}
       - If [up] = {!Slap_common.upper},
         then the upper triangular part of [a] is used;
-      - If [up] = {!Slap_common.upper},
+      - If [up] = {!Slap_common.lower},
         then the lower triangular part of [a] is used.
     @param alpha default = [1.0]
  *)
@@ -143,7 +143,7 @@ val trmv :
     @param up default = {!Slap_common.upper}
       - If [up] = {!Slap_common.upper},
         then the upper triangular part of [a] is used;
-      - If [up] = {!Slap_common.upper},
+      - If [up] = {!Slap_common.lower},
         then the lower triangular part of [a] is used.
  *)
 
@@ -167,7 +167,7 @@ val trsv :
     @param up default = {!Slap_common.upper}
       - If [up] = {!Slap_common.upper},
         then the upper triangular part of [a] is used;
-      - If [up] = {!Slap_common.upper},
+      - If [up] = {!Slap_common.lower},
         then the lower triangular part of [a] is used.
  *)
 
@@ -191,7 +191,7 @@ val tpmv :
     @param up default = {!Slap_common.upper}
       - If [up] = {!Slap_common.upper},
         then the upper triangular part of [a] is used;
-      - If [up] = {!Slap_common.upper},
+      - If [up] = {!Slap_common.lower},
         then the lower triangular part of [a] is used.
 
     @since 0.2.0
@@ -218,7 +218,7 @@ val tpsv :
     @param up default = {!Slap_common.upper}
       - If [up] = {!Slap_common.upper},
         then the upper triangular part of [a] is used;
-      - If [up] = {!Slap_common.upper},
+      - If [up] = {!Slap_common.lower},
         then the lower triangular part of [a] is used.
 
     @since 0.2.0
@@ -271,7 +271,7 @@ val symm :
     @param up default = {!Slap_common.upper}
       - If [up] = {!Slap_common.upper},
         then the upper triangular part of [a] is used;
-      - If [up] = {!Slap_common.upper},
+      - If [up] = {!Slap_common.lower},
         then the lower triangular part of [a] is used.
     @param beta default = [0.0]
     @param alpha default = [1.0]
@@ -297,7 +297,7 @@ val trmm :
     @param up default = {!Slap_common.upper}
       - If [up] = {!Slap_common.upper},
         then the upper triangular part of [a] is used;
-      - If [up] = {!Slap_common.upper},
+      - If [up] = {!Slap_common.lower},
         then the lower triangular part of [a] is used.
     @param transa the transpose flag for [a]:
       - If [transa] = {!Slap_common.normal}, then [OP(a)] = [a];
@@ -332,7 +332,7 @@ val trsm :
     @param up default = {!Slap_common.upper}
       - If [up] = {!Slap_common.upper},
         then the upper triangular part of [a] is used;
-      - If [up] = {!Slap_common.upper},
+      - If [up] = {!Slap_common.lower},
         then the lower triangular part of [a] is used.
     @param transa the transpose flag for [a]:
       - If [transa] = {!Slap_common.normal}, then [OP(a)] = [a];
@@ -363,7 +363,7 @@ val syrk :
     @param up default = {!Slap_common.upper}
       - If [up] = {!Slap_common.upper},
         then the upper triangular part of [a] is used;
-      - If [up] = {!Slap_common.upper},
+      - If [up] = {!Slap_common.lower},
         then the lower triangular part of [a] is used.
     @param beta default = [0.0]
     @param trans the transpose flag for [a]
@@ -393,7 +393,7 @@ val syr2k :
     @param up default = {!Slap_common.upper}
       - If [up] = {!Slap_common.upper},
         then the upper triangular part of [a] is used;
-      - If [up] = {!Slap_common.upper},
+      - If [up] = {!Slap_common.lower},
         then the lower triangular part of [a] is used.
     @param beta default = [0.0]
     @param trans the transpose flag for [a]
@@ -405,15 +405,16 @@ val syr2k :
 (** {3 Auxiliary routines} *)
 
 val lacpy :
-  ?uplo:[ `L | `U ] ->
+  ?uplo:[< `A | `L | `U ] Slap_common.uplo ->
   ?b:('m, 'n, 'b_cd) mat ->
   ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
 (** [lacpy ?uplo ?b a] copies the matrix [a] into the matrix [b].
-    - If [uplo] is omitted, all elements in [a] is copied.
-    - If [uplo] is [`U], the upper trapezoidal part of [a] is copied.
-    - If [uplo] is [`L], the lower trapezoidal part of [a] is copied.
     @return [b], which is overwritten.
-    @param uplo default = all elements in [a] is copied.
+    @param uplo default = {!Slap_common.upper_lower}
+      - If [uplo] = {!Slap_common.upper},
+        then the upper triangular part of [a] is copied;
+      - If [uplo] = {!Slap_common.lower},
+        then the lower triangular part of [a] is copied.
     @param b    default = a fresh matrix.
  *)
 
@@ -466,16 +467,20 @@ val lange :
     @param work default = an optimum-length vector.
  *)
 
-val lauum : ?up:bool -> ('n, 'n, 'cd) mat -> unit
+val lauum : ?up:[< `U | `L ] Slap_common.uplo -> ('n, 'n, 'cd) mat -> unit
 (** [lauum ?up a] computes
 
     - [U * U^T] where [U] is the upper triangular part of matrix [a]
-      if [up] is [true].
+      if [up] is {!Slap_common.upper}.
     - [L^T * L] where [L] is the lower triangular part of matrix [a]
-      if [up] is [false].
+      if [up] is {!Slap_common.lower}.
 
     The upper or lower triangular part is overwritten.
-    @param up default = [true].
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
  *)
 
 (** {3 Linear equations (computational routines)} *)

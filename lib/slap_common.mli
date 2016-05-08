@@ -37,7 +37,7 @@ val upper : [> `U ] uplo
 
 val lower : [> `L ] uplo
 
-val both : [> `A ] uplo
+val upper_lower : [> `A ] uplo
 
 (** {3 Transpose flags} *)
 
@@ -188,7 +188,9 @@ val lacaml_diag : diag -> Lacaml.Common.diag
 
 (** {2 Internal functions} *)
 
-val __default_uplo : _ uplo
+val __expose_uplo : _ uplo -> char
+
+val __unexpose_uplo : char -> _ uplo
 
 val __expose_norm : _ norm -> char
 

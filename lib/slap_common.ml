@@ -38,7 +38,7 @@ let upper = 'U'
 
 let lower = 'L'
 
-let both = 'A'
+let upper_lower = 'A'
 
 (** {3 Transpose flags} *)
 
@@ -177,7 +177,9 @@ let lacaml_diag = function
 
 (** {2 Internal functions} *)
 
-let __default_uplo = upper
+let __expose_uplo = identity
+
+let __unexpose_uplo = identity
 
 let __expose_norm = identity
 
