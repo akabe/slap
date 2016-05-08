@@ -25,6 +25,16 @@ open Bigarray
 
 type diag = [ `N | `U ]
 
+(** {3 Uppper/lower (triangular matrix) flags} *)
+
+type +'a uplo constraint 'a = [< `U | `L | `A ]
+
+val upper : [> `U ] uplo
+
+val lower : [> `L ] uplo
+
+val both : [> `A ] uplo
+
 (** {3 Transpose flags} *)
 
 type (+'a, +'tag) trans

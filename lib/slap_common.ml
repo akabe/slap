@@ -26,6 +26,16 @@ module S = Slap_size
 
 type diag = [ `N | `U ]
 
+(** {3 Uppper/lower (triangular matrix) flags} *)
+
+type +'a uplo = char constraint 'a = [< `U | `L | `A ]
+
+let upper = 'U'
+
+let lower = 'L'
+
+let both = 'A'
+
 (** {3 Transpose flags} *)
 
 type (+'a, +'tag) trans = char
