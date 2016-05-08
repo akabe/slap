@@ -86,39 +86,39 @@ let symv ?beta ?y ?up ?alpha a x =
   else Slap_vec.fill vy zero;
   vy
 
-let trmv ~trans ?diag ?up a x =
+let trmv ~trans ?(diag = non_unit) ?up a x =
   let n, n', ar, ac, a = M.__expose a in
   let n'', incx, x = V.__expose x in
   assert(n = n' && n = n'');
   if S.__expose n <> 0
   then I.trmv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ?diag ?up ~ar ~ac a ~ofsx:1 ~incx x
+      ~diag:(lacaml_diag diag) ?up ~ar ~ac a ~ofsx:1 ~incx x
 
-let trsv ~trans ?diag ?up a x =
+let trsv ~trans ?(diag = non_unit) ?up a x =
   let n, n', ar, ac, a = M.__expose a in
   let n'', incx, x = V.__expose x in
   assert(n = n' && n = n'');
   if S.__expose n <> 0
   then I.trsv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ?diag ?up ~ar ~ac a ~ofsx:1 ~incx x
+      ~diag:(lacaml_diag diag) ?up ~ar ~ac a ~ofsx:1 ~incx x
 
-let tpmv ~trans ?diag ?up ap x =
+let tpmv ~trans ?(diag = non_unit) ?up ap x =
   assert(Slap_vec.check_cnt ap);
   let k, _, ap = V.__expose ap in
   let n, incx, x = V.__expose x in
   assert(k = Slap_size.packed n);
   if S.__expose n <> 0
   then I.tpmv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ?diag ?up ~ofsap:1 ap ~ofsx:1 ~incx x
+      ~diag:(lacaml_diag diag) ?up ~ofsap:1 ap ~ofsx:1 ~incx x
 
-let tpsv ~trans ?diag ?up ap x =
+let tpsv ~trans ?(diag = non_unit) ?up ap x =
   assert(Slap_vec.check_cnt ap);
   let k, _, ap = V.__expose ap in
   let n, incx, x = V.__expose x in
   assert(k = Slap_size.packed n);
   if S.__expose n <> 0
   then I.tpsv ~n:(S.__expose n) ~trans:(lacaml_trans3 trans)
-      ?diag ?up ~ofsap:1 ap ~ofsx:1 ~incx x
+      ~diag:(lacaml_diag diag) ?up ~ofsap:1 ap ~ofsx:1 ~incx x
 
 (** {3 Level 3} *)
 
@@ -151,23 +151,23 @@ let symm ~side ?up ?beta ?c ?alpha a b =
   else Slap_mat.fill mc zero;
   mc
 
-let trmm ~side ?up ~transa ?diag ?alpha ~a b =
+let trmm ~side ?up ~transa ?(diag = non_unit) ?alpha ~a b =
   let k, k', ar, ac, a = M.__expose a in
   let m, n, br, bc, b = M.__expose b in
   assert(k = k' && check_side_dim k m n side);
   if Slap_size.nonzero m && Slap_size.nonzero n
   then I.trmm ~m:(S.__expose m) ~n:(S.__expose n)
       ~side:(lacaml_side side) ?up ~transa:(lacaml_trans3 transa)
-      ?diag ?alpha ~ar ~ac ~a ~br ~bc b
+      ~diag:(lacaml_diag diag) ?alpha ~ar ~ac ~a ~br ~bc b
 
-let trsm ~side ?up ~transa ?diag ?alpha ~a b =
+let trsm ~side ?up ~transa ?(diag = non_unit) ?alpha ~a b =
   let k, k', ar, ac, a = M.__expose a in
   let m, n, br, bc, b = M.__expose b in
   assert(k = k' && check_side_dim k m n side);
   if Slap_size.nonzero m && Slap_size.nonzero n
   then I.trsm ~m:(S.__expose m) ~n:(S.__expose n)
       ~side:(lacaml_side side) ?up ~transa:(lacaml_trans3 transa)
-      ?diag ?alpha ~ar ~ac ~a ~br ~bc b
+      ~diag:(lacaml_diag diag) ?alpha ~ar ~ac ~a ~br ~bc b
 
 let syrk ?up ?beta ?c ~trans ?alpha a =
   let an, ak, ar, ac, a = M.__expose a in
@@ -331,27 +331,28 @@ let potri ?up ?factorize ?jitter a =
   if Slap_size.nonzero n
   then I.potri ~n:(S.__expose n) ?up ?factorize ?jitter ~ar ~ac a
 
-let trtrs ?up ~trans ?diag a b =
+let trtrs ?up ~trans ?(diag = non_unit) a b =
   let n, n', ar, ac, a = M.__expose a in
   let n'', nrhs, br, bc, b = M.__expose b in
   assert(n = n' && n = n'');
   if Slap_size.nonzero n && Slap_size.nonzero nrhs
   then I.trtrs ~n:(S.__expose n) ?up ~trans:(lacaml_trans3 trans)
-      ?diag ~ar ~ac a ~nrhs:(S.__expose nrhs) ~br ~bc b
+      ~diag:(lacaml_diag diag) ~ar ~ac a ~nrhs:(S.__expose nrhs) ~br ~bc b
 
-let tbtrs ~kd ?up ~trans ?diag ab b =
+let tbtrs ~kd ?up ~trans ?(diag = non_unit) ab b =
   let sbsize, n, abr, abc, ab = M.__expose ab in
   let n', nrhs, br, bc, b = M.__expose b in
   assert(n = n' && sbsize = Slap_size.syband_dyn n kd);
   if Slap_size.nonzero n && Slap_size.nonzero nrhs
   then I.tbtrs ~n:(S.__expose n) ~kd:(S.__expose kd)
       ?up ~trans:(lacaml_trans3 trans)
-      ?diag ~abr ~abc ab ~nrhs:(S.__expose nrhs) ~br ~bc b
+      ~diag:(lacaml_diag diag) ~abr ~abc ab ~nrhs:(S.__expose nrhs) ~br ~bc b
 
-let trtri ?up ?diag a =
+let trtri ?up ?(diag = non_unit) a =
   let n, n', ar, ac, a = M.__expose a in
   assert(n = n');
-  if Slap_size.nonzero n then I.trtri ~n:(S.__expose n) ?up ?diag ~ar ~ac a
+  if Slap_size.nonzero n
+  then I.trtri ~n:(S.__expose n) ?up ~diag:(lacaml_diag diag) ~ar ~ac a
 
 type 'n geqrf_min_lwork
 

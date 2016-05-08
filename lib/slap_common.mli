@@ -23,7 +23,21 @@ open Bigarray
 
 (** {2 Flags} *)
 
-type diag = [ `N | `U ]
+type diag
+
+val unit : diag
+
+val non_unit : diag
+
+(** {3 Uppper/lower (triangular matrix) flags} *)
+
+type +'a uplo constraint 'a = [< `U | `L | `A ]
+
+val upper : [> `U ] uplo
+
+val lower : [> `L ] uplo
+
+val both : [> `A ] uplo
 
 (** {3 Transpose flags} *)
 
@@ -167,6 +181,8 @@ val lacaml_norm2_opt : (_, _) norm option -> Lacaml.Common.norm2 option
 val lacaml_norm4_opt : (_, _) norm option -> Lacaml.Common.norm4 option
 
 val lacaml_svd_job : (_, _, _, _, _) svd_job -> Lacaml.Common.svd_job
+
+val lacaml_diag : diag -> Lacaml.Common.diag
 
 (**/**)
 
