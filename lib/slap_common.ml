@@ -24,7 +24,11 @@ module S = Slap_size
 
 (** {2 Flags} *)
 
-type diag = [ `N | `U ]
+type diag = char
+
+let unit = 'U'
+
+let non_unit = 'N'
 
 (** {3 Uppper/lower (triangular matrix) flags} *)
 
@@ -164,6 +168,11 @@ let lacaml_svd_job = function
   | 'S' -> `S
   | 'O' -> `O
   | 'N' -> `N
+  | _ -> assert(false)
+
+let lacaml_diag = function
+  | 'N' -> `N
+  | 'U' -> `U
   | _ -> assert(false)
 
 (** {2 Internal functions} *)
