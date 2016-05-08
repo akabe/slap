@@ -253,7 +253,7 @@ val gemm :
 
 val symm :
   side:('k, 'm, 'n) Slap_common.side ->
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?beta:num_type ->
   ?c:('m, 'n, 'c_cd) mat ->
   ?alpha:num_type ->
@@ -268,16 +268,18 @@ val symm :
 
     @param side the side flag to specify direction of multiplication of [a] and
                 [b].
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.upper},
+        then the lower triangular part of [a] is used.
     @param beta default = [0.0]
     @param alpha default = [1.0]
  *)
 
 val trmm :
   side:('k, 'm, 'n) Slap_common.side ->
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
   ?alpha:num_type ->
@@ -292,23 +294,25 @@ val trmm :
 
     @param side the side flag to specify direction of multiplication of [a] and
                 [b].
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.upper},
+        then the lower triangular part of [a] is used.
     @param transa the transpose flag for [a]:
       - If [transa] = {!Slap_common.normal}, then [OP(a)] = [a];
       - If [transa] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [transa] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
         (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
     @param alpha default = [1.0]
  *)
 
 val trsm :
   side:('k, 'm, 'n) Slap_common.side ->
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
   ?alpha:num_type ->
@@ -325,22 +329,24 @@ val trsm :
 
     @param side the side flag to specify direction of multiplication of [a] and
                 [b].
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.upper},
+        then the lower triangular part of [a] is used.
     @param transa the transpose flag for [a]:
       - If [transa] = {!Slap_common.normal}, then [OP(a)] = [a];
       - If [transa] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [transa] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
         (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
     @param alpha default = [1.0]
  *)
 
 val syrk :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?beta:num_type ->
   ?c:('n, 'n, 'c_cd) mat ->
   trans:(('a_n, 'a_k, 'a_cd) mat ->
@@ -354,9 +360,11 @@ val syrk :
 
     where [a] is a general matrix and [c] is a symmetric matrix.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.upper},
+        then the lower triangular part of [a] is used.
     @param beta default = [0.0]
     @param trans the transpose flag for [a]
     @param alpha default = [1.0]
@@ -364,7 +372,7 @@ val syrk :
 
 
 val syr2k :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?beta:num_type ->
   ?c:('n, 'n, 'c_cd) mat ->
   trans:(('p, 'q, _) mat ->
@@ -382,9 +390,11 @@ val syr2k :
 
     with symmetric matrix [c], and general matrices [a] and [b].
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.upper},
+        then the lower triangular part of [a] is used.
     @param beta default = [0.0]
     @param trans the transpose flag for [a]
     @param alpha default = [1.0]

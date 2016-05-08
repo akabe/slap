@@ -348,78 +348,219 @@ let tpsv
 
 (** {3 Level 3} *)
 
-let gemm ?beta ?c ~transa ?alpha a ~transb b =
-  let am, ak, ar, ac, a = M.__expose a in
-  let bk, bn, br, bc, b = M.__expose b in
+(* GEMM *)
+
+external direct_gemm :
+  transa : _ Slap_common.trans ->
+  transb : _ Slap_common.trans ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  k : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  cr : int ->
+  cc : int ->
+  c : ('a, 'b, fortran_layout) Array2.t ->
+  alpha : 'a ->
+  beta : 'a ->
+  unit = "lacaml_XSDCZgemm_stub_bc" "lacaml_XSDCZgemm_stub"
+
+let gemm ?(beta = zero) ?c ~transa ?(alpha = one) a ~transb b =
+  let am, ak, ar, ac, a = Slap_mat.__expose a in
+  let bk, bn, br, bc, b = Slap_mat.__expose b in
   let m, k = Slap_common.get_transposed_dim transa am ak in
   let k', n = Slap_common.get_transposed_dim transb bk bn in
   assert(k = k');
   let cr, cc, c = Slap_mat.opt_mat_alloc prec m n c in
-  let mc = M.__unexpose m n cr cc c in
-  if S.__expose m <> 0 && S.__expose n <> 0 && S.__expose k <> 0
-  then ignore (I.gemm ~m:(S.__expose m) ~n:(S.__expose n) ~k:(S.__expose k)
-                 ?beta ~cr ~cc ~c
-                 ~transa:(lacaml_trans3 transa) ?alpha ~ar ~ac a
-                 ~transb:(lacaml_trans3 transb) ~br ~bc b)
-  else Slap_mat.fill mc zero;
+  let mc = Slap_mat.__unexpose m n cr cc c in
+  if Slap_size.nonzero m && Slap_size.nonzero n
+  then begin
+    if Slap_size.iszero k then Slap_mat.fill mc zero
+    else direct_gemm ~transa ~transb ~alpha ~beta
+        ~m ~n ~k ~ar ~ac ~a ~br ~bc ~b ~cr ~cc ~c
+  end;
   mc
 
-let symm ~side ?up ?beta ?c ?alpha a b =
-  let k, k', ar, ac, a = M.__expose a in
-  let m, n, br, bc, b = M.__expose b in
-  assert(k = k' && check_side_dim k m n side);
+
+(* SYMM *)
+
+external direct_symm :
+  side : _ Slap_common.side ->
+  up : _ Slap_common.uplo ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  cr : int ->
+  cc : int ->
+  c : ('a, 'b, fortran_layout) Array2.t ->
+  alpha : 'a ->
+  beta : 'a ->
+  unit = "lacaml_XSDCZsymm_stub_bc" "lacaml_XSDCZsymm_stub"
+
+let symm
+    ~side
+    ?(up = Slap_common.__default_uplo)
+    ?(beta = zero)
+    ?c
+    ?(alpha = one)
+    a b =
+  let k, k', ar, ac, a = Slap_mat.__expose a in
+  let m, n, br, bc, b = Slap_mat.__expose b in
+  assert(k = k' && Slap_common.check_side_dim k m n side);
   let cr, cc, c = Slap_mat.opt_mat_alloc prec m n c in
-  let mc = M.__unexpose m n cr cc c in
+  let mc = Slap_mat.__unexpose m n cr cc c in
   if Slap_size.nonzero m && Slap_size.nonzero n
-  then ignore (I.symm ~m:(S.__expose m) ~n:(S.__expose n)
-                 ~side:(lacaml_side side)
-                 ?up ?beta ~cr ~cc ~c ?alpha ~ar ~ac a ~br ~bc b)
+  then direct_symm ~side ~up ~m ~n ~ar ~ac ~a ~br ~bc ~b ~cr ~cc ~c ~alpha ~beta
   else Slap_mat.fill mc zero;
   mc
 
-let trmm ~side ?up ~transa ?(diag = non_unit) ?alpha ~a b =
-  let k, k', ar, ac, a = M.__expose a in
-  let m, n, br, bc, b = M.__expose b in
-  assert(k = k' && check_side_dim k m n side);
-  if Slap_size.nonzero m && Slap_size.nonzero n
-  then I.trmm ~m:(S.__expose m) ~n:(S.__expose n)
-      ~side:(lacaml_side side) ?up ~transa:(lacaml_trans3 transa)
-      ~diag:(lacaml_diag diag) ?alpha ~ar ~ac ~a ~br ~bc b
 
-let trsm ~side ?up ~transa ?(diag = non_unit) ?alpha ~a b =
-  let k, k', ar, ac, a = M.__expose a in
-  let m, n, br, bc, b = M.__expose b in
-  assert(k = k' && check_side_dim k m n side);
-  if Slap_size.nonzero m && Slap_size.nonzero n
-  then I.trsm ~m:(S.__expose m) ~n:(S.__expose n)
-      ~side:(lacaml_side side) ?up ~transa:(lacaml_trans3 transa)
-      ~diag:(lacaml_diag diag) ?alpha ~ar ~ac ~a ~br ~bc b
+(* TRMM *)
 
-let syrk ?up ?beta ?c ~trans ?alpha a =
-  let an, ak, ar, ac, a = M.__expose a in
-  let n, k = get_transposed_dim trans an ak in
+external direct_trmm :
+  side : _ Slap_common.side ->
+  up : _ Slap_common.uplo ->
+  transa : _ Slap_common.trans ->
+  diag : Slap_common.diag ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  alpha : 'a ->
+  unit = "lacaml_XSDCZtrmm_stub_bc" "lacaml_XSDCZtrmm_stub"
+
+let trmm
+    ~side
+    ?(up = Slap_common.__default_uplo)
+    ~transa
+    ?(diag = Slap_common.non_unit)
+    ?(alpha = one)
+    ~a b =
+  let k, k', ar, ac, a = Slap_mat.__expose a in
+  let m, n, br, bc, b = Slap_mat.__expose b in
+  assert(k = k' && Slap_common.check_side_dim k m n side);
+  if Slap_size.nonzero m && Slap_size.nonzero n
+  then direct_trmm ~side ~up ~transa ~diag ~m ~n ~ar ~ac ~a ~br ~bc ~b ~alpha
+
+
+(* TRSM *)
+
+external direct_trsm :
+  side : _ Slap_common.side ->
+  up : _ Slap_common.uplo ->
+  transa : _ Slap_common.trans ->
+  diag : Slap_common.diag ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  alpha : 'a ->
+  unit = "lacaml_XSDCZtrsm_stub_bc" "lacaml_XSDCZtrsm_stub"
+
+let trsm
+    ~side
+    ?(up = Slap_common.__default_uplo)
+    ~transa
+    ?(diag = Slap_common.non_unit)
+    ?(alpha = one)
+    ~a b =
+  let k, k', ar, ac, a = Slap_mat.__expose a in
+  let m, n, br, bc, b = Slap_mat.__expose b in
+  assert(k = k' && Slap_common.check_side_dim k m n side);
+  if Slap_size.nonzero m && Slap_size.nonzero n
+  then direct_trsm ~side ~up ~transa ~diag ~m ~n ~ar ~ac ~a ~br ~bc ~b ~alpha
+
+
+(* SYRK *)
+
+external direct_syrk :
+  up : _ Slap_common.uplo ->
+  trans : _ Slap_common.trans ->
+  n : _ Slap_size.t ->
+  k : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  cr : int ->
+  cc : int ->
+  c : ('a, 'b, fortran_layout) Array2.t ->
+  alpha : 'a ->
+  beta : 'a ->
+  unit = "lacaml_XSDCZsyrk_stub_bc" "lacaml_XSDCZsyrk_stub"
+
+let syrk
+    ?(up = Slap_common.__default_uplo)
+    ?(beta = zero)
+    ?c
+    ~trans
+    ?(alpha = one)
+    a =
+  let an, ak, ar, ac, a = Slap_mat.__expose a in
+  let n, k = Slap_common.get_transposed_dim trans an ak in
   let cr, cc, c = Slap_mat.opt_mat_alloc prec n n c in
-  let mc = M.__unexpose n n cr cc c in
+  let mc = Slap_mat.__unexpose n n cr cc c in
   if Slap_size.nonzero k
-  then ignore (I.syrk ~n:(S.__expose n) ~k:(S.__expose k)
-                 ?up ?beta ~cr ~cc ~c ~trans:(lacaml_trans2 trans)
-                 ?alpha ~ar ~ac a)
+  then direct_syrk ~up ~trans ~n ~k ~ar ~ac ~a ~cr ~cc ~c ~alpha ~beta
   else Slap_mat.fill mc zero;
   mc
 
-let syr2k ?up ?beta ?c ~trans ?alpha a b =
-  let am, an, ar, ac, a = M.__expose a in
-  let bm, bn, br, bc, b = M.__expose b in
+
+(* SYR2K *)
+
+external direct_syr2k :
+  up : _ Slap_common.uplo ->
+  trans : _ Slap_common.trans ->
+  n : _ Slap_size.t ->
+  k : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  cr : int ->
+  cc : int ->
+  c : ('a, 'b, fortran_layout) Array2.t ->
+  alpha : 'a ->
+  beta : 'a ->
+  unit = "lacaml_XSDCZsyr2k_stub_bc" "lacaml_XSDCZsyr2k_stub"
+
+let syr2k
+    ?(up = Slap_common.__default_uplo)
+    ?(beta = zero)
+    ?c
+    ~trans
+    ?(alpha = one)
+    a b =
+  let am, an, ar, ac, a = Slap_mat.__expose a in
+  let bm, bn, br, bc, b = Slap_mat.__expose b in
   assert(am = bm && an = bn);
-  let n, k = get_transposed_dim trans am an in
+  let n, k = Slap_common.get_transposed_dim trans am an in
   let cr, cc, c = Slap_mat.opt_mat_alloc prec n n c in
-  let mc = M.__unexpose n n cr cc c in
+  let mc = Slap_mat.__unexpose n n cr cc c in
   if Slap_size.nonzero k
-  then ignore (I.syr2k ~n:(S.__expose n) ~k:(S.__expose k)
-                 ?up ?beta ~cr ~cc ~c ~trans:(lacaml_trans2 trans)
-                 ?alpha ~ar ~ac a ~br ~bc b)
+  then direct_syr2k ~up ~trans ~n ~k ~ar ~ac ~a ~br ~bc ~b ~cr ~cc ~c
+      ~alpha ~beta
   else Slap_mat.fill mc zero;
   mc
+
 
 (** {2 LAPACK interface} *)
 
