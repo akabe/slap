@@ -212,7 +212,7 @@ external direct_symv :
   ac : int ->
   a : ('a, 'b, fortran_layout) Array2.t ->
   n : _ Slap_size.t ->
-  up : _ Slap_common.uplo ->
+  up : [< `U | `L ] Slap_common.uplo ->
   alpha : 'a ->
   beta : 'a ->
   ofsx : int ->
@@ -245,7 +245,7 @@ external direct_trmv :
   ac : int ->
   a : ('a, 'b, fortran_layout) Array2.t ->
   n : _ Slap_size.t ->
-  up : _ Slap_common.uplo ->
+  up : [< `U | `L ] Slap_common.uplo ->
   trans : _ Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
@@ -272,7 +272,7 @@ external direct_trsv :
   ac : int ->
   a : ('a, 'b, fortran_layout) Array2.t ->
   n : _ Slap_size.t ->
-  up : _ Slap_common.uplo ->
+  up : [< `U | `L ] Slap_common.uplo ->
   trans : _ Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
@@ -298,7 +298,7 @@ external direct_tpmv :
   ofsap : int ->
   ap : ('a, 'b, fortran_layout) Array1.t ->
   n : _ Slap_size.t ->
-  up : _ Slap_common.uplo ->
+  up : [< `U | `L ] Slap_common.uplo ->
   trans : _ Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
@@ -325,7 +325,7 @@ external direct_tpsv :
   ofsap : int ->
   ap : ('a, 'b, fortran_layout) Array1.t ->
   n : _ Slap_size.t ->
-  up : _ Slap_common.uplo ->
+  up : [< `U | `L ] Slap_common.uplo ->
   trans : _ Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
@@ -390,7 +390,7 @@ let gemm ?(beta = zero) ?c ~transa ?(alpha = one) a ~transb b =
 
 external direct_symm :
   side : _ Slap_common.side ->
-  up : _ Slap_common.uplo ->
+  up : [< `U | `L ] Slap_common.uplo ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t->
   ar : int ->
@@ -428,7 +428,7 @@ let symm
 
 external direct_trmm :
   side : _ Slap_common.side ->
-  up : _ Slap_common.uplo ->
+  up : [< `U | `L ] Slap_common.uplo ->
   transa : _ Slap_common.trans ->
   diag : Slap_common.diag ->
   m : _ Slap_size.t ->
@@ -460,7 +460,7 @@ let trmm
 
 external direct_trsm :
   side : _ Slap_common.side ->
-  up : _ Slap_common.uplo ->
+  up : [< `U | `L ] Slap_common.uplo ->
   transa : _ Slap_common.trans ->
   diag : Slap_common.diag ->
   m : _ Slap_size.t ->
@@ -491,7 +491,7 @@ let trsm
 (* SYRK *)
 
 external direct_syrk :
-  up : _ Slap_common.uplo ->
+  up : [< `U | `L ] Slap_common.uplo ->
   trans : _ Slap_common.trans ->
   n : _ Slap_size.t ->
   k : _ Slap_size.t ->
@@ -525,7 +525,7 @@ let syrk
 (* SYR2K *)
 
 external direct_syr2k :
-  up : _ Slap_common.uplo ->
+  up : [< `U | `L ] Slap_common.uplo ->
   trans : _ Slap_common.trans ->
   n : _ Slap_size.t ->
   k : _ Slap_size.t ->
@@ -569,7 +569,7 @@ let syr2k
 (* LACPY *)
 
 external direct_lacpy :
-  uplo : _ Slap_common.uplo ->
+  uplo : [< `A | `U | `L ] Slap_common.uplo ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
   ar : int ->
@@ -682,7 +682,7 @@ let lange ~norm ?work a =
 (* LAUUM *)
 
 external direct_lauum :
-  up : _ Slap_common.uplo ->
+  up : [< `U | `L ] Slap_common.uplo ->
   n : _ Slap_size.t ->
   ar : int ->
   ac : int ->
