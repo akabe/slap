@@ -27,3 +27,9 @@ type dsc
 
 (** The identity function. *)
 let identity x = x
+
+(** [failwith] + [printf]-style format *)
+let failwithf fmt = Format.ksprintf (fun s () -> failwith s) fmt
+
+(** [invalid_arg] + [printf]-style format *)
+let invalid_argf fmt = Format.ksprintf (fun s () -> invalid_arg s) fmt

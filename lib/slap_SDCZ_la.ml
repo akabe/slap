@@ -566,41 +566,134 @@ let syr2k
 
 (** {3 Auxiliary routines} *)
 
-let lacpy ?uplo ?b a =
-  let m, n, ar, ac, a = M.__expose a in
-  let br, bc, b = Slap_mat.opt_mat_alloc prec m n b in
-  if Slap_size.nonzero m && Slap_size.nonzero n
-  then ignore (I.lacpy ?uplo ~m:(S.__expose m) ~n:(S.__expose n)
-                 ~br ~bc ~b ~ar ~ac a);
-  M.__unexpose m n br bc b
+(* LACPY *)
 
-let lassq ?scale ?sumsq x = Vec.wrap1 (I.lassq ?scale ?sumsq) x
+external direct_lacpy :
+  uplo : _ Slap_common.uplo ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  unit = "lacaml_XSDCZlacpy_stub_bc" "lacaml_XSDCZlacpy_stub"
+
+let lacpy ?uplo ?b a =
+  let m, n, ar, ac, a = Slap_mat.__expose a in
+  let br, bc, b = Slap_mat.opt_mat_alloc prec m n b in
+  let uplo = match uplo with
+    | None -> Slap_common.both
+    | Some uplo -> uplo in
+  if Slap_size.nonzero m && Slap_size.nonzero n
+  then direct_lacpy ~uplo ~m ~n ~ar ~ac ~a ~br ~bc ~b;
+  Slap_mat.__unexpose m n br bc b
+
+
+(* LASSQ *)
+
+external direct_lassq :
+  n : _ Slap_size.t ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  scale : float ->
+  sumsq : float ->
+  float * float = "lacaml_XSDCZlassq_stub_bc" "lacaml_XSDCZlassq_stub"
+
+let lassq ?(scale = 0.0) ?(sumsq = 1.0) x =
+  let n, incx, x = Slap_vec.__expose x in
+  direct_lassq ~n ~ofsx:1 ~incx ~x ~scale ~sumsq
+
+(* LARNV *)
+
+external direct_larnv :
+  idist : int ->
+  iseed : (int32, int32_elt, fortran_layout) Array1.t ->
+  n : _ Slap_size.t ->
+  ofsx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZlarnv_stub"
 
 type larnv_liseed = Slap_size.four
 
-let larnv ?idist ?iseed ~x () =
+let larnv_iseed_alloc = function
+  | None ->
+    let iseed = Array1.create Int32 Fortran_layout 4 in
+    Array1.fill iseed 1l;
+    iseed
+  | Some v ->
+    let n, _, iseed = Slap_vec.__expose v in
+    assert(Slap_size.__expose n = 4 && Slap_vec.check_cnt v);
+    (* Dynamic checks for correctness of elements *)
+    let n = Slap_size.__expose n in
+    for i = 1 to n do
+      if iseed.{i} < 0l || iseed.{i} > 4095l
+      then invalid_arg "Slap.XSDCZ.larnv: \
+                        `iseed' entries must be between 0 and 4095"
+    done;
+    if (Int32.to_int iseed.{n}) land 1 = 0
+    then invalid_arg "Slap.XSDCZ.larnv: the last `iseed' entry must be odd";
+    iseed
+
+let larnv ?(idist = `Normal) ?iseed ~x () =
   assert(Slap_vec.check_cnt x);
-  let n, _, x = V.__expose x in
-  ignore (I.larnv ?idist ?iseed:(Slap_vec.opt_cnt_vec Slap_size.four iseed)
-            ~n:(S.__expose n) ~x ());
-  V.__unexpose n 1 x
+  let n, _, x = Slap_vec.__expose x in
+  let idist = match idist with
+    | `Uniform0 -> 1
+    | `Uniform1 -> 2
+    | `Normal -> 3 in
+  direct_larnv ~idist ~iseed:(larnv_iseed_alloc iseed) ~n ~ofsx:1 ~x;
+  Slap_vec.__unexpose n 1 x
+
+
+(* LANGE *)
 
 type ('m, 'a) lange_min_lwork
 
-let lange_min_lwork n norm =
-  S.__unexpose (I.lange_min_lwork (S.__expose n) (lacaml_norm4 norm))
+let lange_min_lwork m norm =
+  let m' = match Slap_common.__expose_norm norm with
+    | 'I' -> Slap_size.__expose m
+    | _ -> 0 in
+  Slap_size.__unexpose m'
 
-let lange ?norm ?work a =
-  let m, n, ar, ac, a = M.__expose a in
+external direct_lange :
+  norm : _ Slap_common.norm ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  work : (float, 'c, fortran_layout) Array1.t ->
+  float = "lacaml_XSDCZlange_stub_bc" "lacaml_XSDCZlange_stub"
+
+let lange ~norm ?work a =
+  let m, n, ar, ac, a = Slap_mat.__expose a in
+  let min_lwork = lange_min_lwork m norm in
+  let _, work =
+    Slap_vec.__alloc_work rprec work
+      ~loc:"Slap.XSDCZ.lange" ~min_lwork ~opt_lwork:min_lwork in
   if Slap_size.nonzero m && Slap_size.nonzero n
-  then I.lange ~m:(S.__expose m) ~n:(S.__expose n)
-      ?norm:(lacaml_norm4_opt norm) ?work:(Slap_vec.opt_work work) ~ar ~ac a
+  then direct_lange ~norm ~m ~n ~ar ~ac ~a ~work
   else 0.0
 
-let lauum ?up a =
-  let n, n', ar, ac, a = M.__expose a in
+
+(* LAUUM *)
+
+external direct_lauum :
+  up : _ Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  unit = "lacaml_XSDCZlauum_stub"
+
+let lauum ?(up = true) a =
+  let n, n', ar, ac, a = Slap_mat.__expose a in
   assert(n = n');
-  if Slap_size.nonzero n then I.lauum ?up ~n:(S.__expose n) ~ar ~ac a
+  if Slap_size.nonzero n then direct_lauum ~up ~n ~ar ~ac ~a
+
 
 (** {3 Linear equations (computational routines)} *)
 

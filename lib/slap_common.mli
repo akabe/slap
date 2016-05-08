@@ -190,6 +190,10 @@ val lacaml_diag : diag -> Lacaml.Common.diag
 
 val __default_uplo : _ uplo
 
+val __expose_norm : _ norm -> char
+
+val __unexpose_norm : char -> _ norm
+
 val check_side_dim :
   'k Slap_size.t -> 'm Slap_size.t -> 'n Slap_size.t ->
   ('k, 'm, 'n) side -> bool
