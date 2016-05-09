@@ -554,7 +554,7 @@ val sytrf_min_lwork : unit -> sytrf_min_lwork Slap_size.t
  *)
 
 val sytrf_opt_lwork :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ('n, 'n, 'cd) mat -> (module Slap_size.SIZE)
 (** [sytrf_opt_lwork ?up a] computes the optimal length of workspace for [sytrf]
     routine.
@@ -565,7 +565,7 @@ val sytrf_opt_lwork :
  *)
 
 val sytrf :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?ipiv:('n, cnt) Slap_common.int32_vec ->
   ?work:('lwork, cnt) vec ->
   ('n, 'n, 'cd) mat -> ('n, 'cnt) Slap_common.int32_vec
@@ -580,14 +580,18 @@ val sytrf :
     block-diagonal matrix. The permutation matrix is returned in [ipiv].
 
     @return vector [ipiv], which is overwritten.
-    @param up default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param work default = an optimum-length vector.
 
     @raise Failure if [a] is singular.
  *)
 
 val sytrs :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?ipiv:('n, cnt) Slap_common.int32_vec ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'nrhs, 'b_cd) mat -> unit
@@ -605,7 +609,11 @@ val sytrs :
     triangular matrices with unit diagonal, and [D] is a symmetric
     block-diagonal matrix.
 
-    @param up   default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
                 omitted.
 
