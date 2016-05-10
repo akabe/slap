@@ -900,11 +900,37 @@ let sytri ?(up = Slap_common.__unexpose_uplo 'U') ?ipiv ?work aa =
     else if i > 0 then failwithf "Slap.XSDCZ.sytri: singular on index %i" i ()
   end
 
-let potrf ?up ?jitter a =
-  let n, n', ar, ac, a = M.__expose a in
+
+(* POTRF *)
+
+external direct_potrf :
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZpotrf_stub"
+
+let maybe_add_jitter ?jitter a =
+  match jitter with
+  | None -> ()
+  | Some jitter when jitter < zero ->
+    invalid_arg "Slap.XSDCZ.potrf: jitter should be non-negative"
+  | Some jitter ->
+    let d = Slap_mat.diag a in
+    ignore (Vec.add_const jitter ~y:d d)
+
+let potrf ?(up = Slap_common.__unexpose_uplo 'U') ?jitter aa =
+  let n, n', ar, ac, a = Slap_mat.__expose aa in
   assert(n = n');
-  if Slap_size.nonzero n
-  then I.potrf ~n:(S.__expose n) ?up ?jitter ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    maybe_add_jitter ?jitter aa;
+    let i = direct_potrf ~up ~n ~ar ~ac ~a in
+    if i > 0
+    then failwithf "Slap.XSDCZ.potrf: \
+                    leading minor of order %d is not positive definite" i ();
+    if i < 0 then failwithf "Slap.XSDCZ.potrf: internal error code=%d" i ();
+  end
 
 let potrs ?up a ?factorize ?jitter b =
   let n, n', ar, ac, a = M.__expose a in

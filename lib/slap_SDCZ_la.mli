@@ -655,7 +655,7 @@ val sytri :
  *)
 
 val potrf :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?jitter:num_type ->
   ('n, 'n, 'cd) mat -> unit
 (** [potrf ?up ?jitter a] computes the Cholesky factorization of symmetrix
@@ -668,10 +668,14 @@ val potrf :
     Either of them is returned in the upper or lower triangular part of [a],
     as specified by [up].
 
-    @param up default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param jitter default = nothing
 
-    @raise Failure if [a] is singular.
+    @raise Failure if [a] is not positive-definite symmetric.
  *)
 
 val potrs :
