@@ -867,16 +867,38 @@ let sytrs ?(up = Slap_common.__unexpose_uplo 'U') ?ipiv aa bb =
     if i <> 0 then failwithf "Slap.XSDCZ.sytrs: internal error code=%d" i ()
   end
 
-type 'n sytri_min_lwork
 
-let sytri_min_lwork n = S.__unexpose (I.sytri_min_lwork (S.__expose n))
+(* SYTRI *)
 
-let sytri ?up ?ipiv ?work a =
-  let n, n', ar, ac, a = M.__expose a in
+external direct_sytri :
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  ipiv : (int32, int32_elt, fortran_layout) Array1.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  int = "lacaml_XSDCZsytri_stub_bc" "lacaml_XSDCZsytri_stub"
+
+type 'n sytri_min_lwork = 'n
+
+let sytri_min_lwork n = n
+
+let sytri ?(up = Slap_common.__unexpose_uplo 'U') ?ipiv ?work aa =
+  let n, n', ar, ac, a = Slap_mat.__expose aa in
   assert(n = n');
-  if Slap_size.nonzero n
-  then I.sytri ~n:(S.__expose n) ?up ?ipiv:(Slap_vec.opt_cnt_vec n ipiv)
-      ?work:(Slap_vec.opt_work work) ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    let lwork, work =
+      Slap_vec.__alloc_work prec work ~loc:"Slap.XSDCZ.sytri"
+        ~min_lwork:(sytri_min_lwork n) ~opt_lwork:(sytri_min_lwork n) in
+    let ipiv = match ipiv with None -> sytrf ~up aa | Some ipiv -> ipiv in
+    assert(Slap_vec.check_cnt ipiv);
+    let n''', _, ipiv = Slap_vec.__expose ipiv in
+    assert(n = n''');
+    let i = direct_sytri ~up ~n ~ar ~ac ~a ~ipiv ~work in
+    if i < 0 then failwithf "Slap.XSDCZ.sytri: internal error code=%d" i ()
+    else if i > 0 then failwithf "Slap.XSDCZ.sytri: singular on index %i" i ()
+  end
 
 let potrf ?up ?jitter a =
   let n, n', ar, ac, a = M.__expose a in

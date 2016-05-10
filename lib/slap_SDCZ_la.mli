@@ -628,7 +628,7 @@ val sytri_min_lwork : 'n Slap_size.t -> 'n sytri_min_lwork Slap_size.t
  *)
 
 val sytri :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?ipiv:('n, cnt) Slap_common.int32_vec ->
   ?work:('lwork, cnt) vec ->
   ('n, 'n, 'cd) mat -> unit
@@ -642,7 +642,11 @@ val sytri :
     triangular matrices with unit diagonal, and [D] is a symmetric
     block-diagonal matrix.
 
-    @param up   default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
                 omitted.
     @param work default = an optimum-length vector.
