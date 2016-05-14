@@ -980,13 +980,32 @@ let potri ?(up = Slap_common.__unexpose_uplo 'U')
     else if i > 0 then failwithf "Slap.XSDCZ.sytri: singular on index %i" i ()
   end
 
-let trtrs ?up ~trans ?(diag = non_unit) a b =
-  let n, n', ar, ac, a = M.__expose a in
-  let n'', nrhs, br, bc, b = M.__expose b in
+
+(* TRTRS *)
+
+external direct_trtrs :
+  up : [< `U | `L ] Slap_common.uplo ->
+  trans : _ Slap_common.trans ->
+  diag : Slap_common.diag ->
+  n : _ Slap_size.t ->
+  nrhs : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZtrtrs_stub_bc" "lacaml_XSDCZtrtrs_stub"
+
+let trtrs ?(up = Slap_common.__unexpose_uplo 'U')
+    ~trans ?(diag = Slap_common.non_unit) a b =
+  let n, n', ar, ac, a = Slap_mat.__expose a in
+  let n'', nrhs, br, bc, b = Slap_mat.__expose b in
   assert(n = n' && n = n'');
-  if Slap_size.nonzero n && Slap_size.nonzero nrhs
-  then I.trtrs ~n:(S.__expose n) ?up ~trans:(lacaml_trans3 trans)
-      ~diag:(lacaml_diag diag) ~ar ~ac a ~nrhs:(S.__expose nrhs) ~br ~bc b
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
+    let i = direct_trtrs ~up ~trans ~diag ~n ~nrhs ~ar ~ac ~a ~br ~bc ~b in
+    if i <> 0 then failwithf "Slap.XSDCZ.trtrs: internal error code=%d" i ()
+  end
 
 let tbtrs ~kd ?up ~trans ?(diag = non_unit) ab b =
   let sbsize, n, abr, abc, ab = M.__expose ab in
