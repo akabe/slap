@@ -1058,24 +1058,46 @@ let trtri ?(up = Slap_common.__unexpose_uplo 'U')
     else if i > 0 then failwithf "Slap.XSDCZ.trtri: singular on index %i" i ()
   end
 
-type 'n geqrf_min_lwork
 
-let geqrf_min_lwork ~n =
-  S.__unexpose (I.geqrf_min_lwork ~n:(S.__expose n))
+(* GEQRF *)
+
+external direct_geqrf :
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t->
+  tau : ('a, 'b, fortran_layout) Array1.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  unit = "lacaml_XSDCZgeqrf_stub_bc" "lacaml_XSDCZgeqrf_stub"
+
+type 'n geqrf_min_lwork = (Slap_size.one, 'n) Slap_size.max
+
+let geqrf_min_lwork ~n = Slap_size.(max one n)
+
+let geqrf_opt_lwork_aux a =
+  let m, n, ar, ac, a = Slap_mat.__expose a in
+  let work = Array1.create prec fortran_layout 1 in
+  direct_geqrf ~m ~n ~ar ~ac ~a ~tau:work ~work ~lwork:(-1);
+  Slap_size.__unexpose (int_of_num work.{1})
 
 let geqrf_opt_lwork a =
-  let m, n, ar, ac, a = M.__expose a in
-  I.geqrf_opt_lwork ~m:(S.__expose m) ~n:(S.__expose n) ~ar ~ac a
+  geqrf_opt_lwork_aux a
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
-let geqrf ?work ?tau a =
-  let m, n, ar, ac, a = M.__expose a in
+let geqrf ?work ?tau aa =
+  let m, n, ar, ac, a = Slap_mat.__expose aa in
   let k = Slap_size.min m n in
   let tau = Slap_vec.opt_cnt_vec_alloc prec k tau in
-  if Slap_size.nonzero m && Slap_size.nonzero n
-  then ignore (I.geqrf ~m:(S.__expose m) ~n:(S.__expose n)
-                 ?work:(Slap_vec.opt_work work) ~tau ~ar ~ac a);
-  V.__unexpose k 1 tau
+  if Slap_size.nonzero m && Slap_size.nonzero n then begin
+    let lwork, work =
+      Slap_vec.__alloc_work prec work ~loc:"Slap.XSDCZ.geqrf"
+        ~min_lwork:(geqrf_min_lwork n) ~opt_lwork:(geqrf_opt_lwork_aux aa) in
+    direct_geqrf ~m ~n ~ar ~ac ~a ~tau ~work ~lwork
+  end;
+  Slap_vec.__unexpose k 1 tau
 
 (** {3 Linear equations (simple drivers)} *)
 
