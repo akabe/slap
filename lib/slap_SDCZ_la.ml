@@ -985,7 +985,7 @@ let potri ?(up = Slap_common.__unexpose_uplo 'U')
 
 external direct_trtrs :
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : _ Slap_common.trans ->
+  trans : (_, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   n : _ Slap_size.t ->
   nrhs : _ Slap_size.t ->
@@ -1012,7 +1012,7 @@ let trtrs ?(up = Slap_common.__unexpose_uplo 'U')
 
 external direct_tbtrs :
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : _ Slap_common.trans ->
+  trans : (_, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   n : _ Slap_size.t ->
   kd : _ Slap_size.t ->
