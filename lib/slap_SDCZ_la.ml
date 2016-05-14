@@ -1101,13 +1101,33 @@ let geqrf ?work ?tau aa =
 
 (** {3 Linear equations (simple drivers)} *)
 
+let xxsv_error_lu loc i =
+  failwithf "%s: U(%i,%i)=0 in the LU factorization" loc i i ()
+
+(* GESV *)
+
+external direct_gesv :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  n : _ Slap_size.t ->
+  ipiv : (int32, int32_elt, fortran_layout) Array1.t ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZgesv_stub_bc" "lacaml_XSDCZgesv_stub"
+
 let gesv ?ipiv a b =
-  let n, n', ar, ac, a = M.__expose a in
-  let n'', nrhs, br, bc, b = M.__expose b in
+  let n, n', ar, ac, a = Slap_mat.__expose a in
+  let n'', nrhs, br, bc, b = Slap_mat.__expose b in
   assert(n = n' && n = n'');
-  if Slap_size.nonzero n && Slap_size.nonzero nrhs
-  then I.gesv ~n:(S.__expose n) ?ipiv:(Slap_vec.opt_cnt_vec n ipiv)
-      ~ar ~ac a ~nrhs:(S.__expose nrhs) ~br ~bc b
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
+    let ipiv = Slap_vec.opt_cnt_vec_alloc int32 n ipiv in
+    let i = direct_gesv ~ar ~ac ~a ~n ~ipiv ~nrhs ~br ~bc ~b in
+    if i > 0 then xxsv_error_lu "Slap.XSDCZ.gesv" i
+    else if i < 0 then failwithf "Slap.XSDCZ.gesv: internal error code=%d" i ()
+  end
 
 let gbsv ?ipiv ab kl ku b =
   let lusize, n, abr, abc, ab = M.__expose ab in
