@@ -952,7 +952,7 @@ let potrs ?(up = Slap_common.__unexpose_uplo 'U') aa
   let n, n', ar, ac, a = Slap_mat.__expose aa in
   let n'', nrhs, br, bc, b = Slap_mat.__expose b in
   assert(n = n' && n = n'');
-  if Slap_size.nonzero n then begin
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
     if factorize then potrf ~up ?jitter aa;
     let i = direct_potrs ~up ~n ~nrhs ~ar ~ac ~a ~br ~bc ~b in
     if i <> 0 then failwithf "Slap.XSDCZ.potrs: internal error code=%d" i ();
