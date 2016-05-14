@@ -762,7 +762,7 @@ val trtrs :
 
 val tbtrs :
   kd:'kd Slap_size.t ->
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
   (('n, 'kd) Slap_size.syband, 'n, 'a_cd) mat ->
@@ -774,9 +774,11 @@ val tbtrs :
     storage format. The solution [x] is returned in [b].
 
     @param kd the number of subdiagonals or superdiagonals in [A].
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [A] is used;
-      - If [up] = [false], then the lower triangular part of [A] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [A] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [A] is used.
     @param trans the transpose flag for [A]:
       - If [trans] = {!Slap_common.normal}, then [OP(A)] = [A];
       - If [trans] = {!Slap_common.trans}, then [OP(A)] = [A^T];
@@ -790,15 +792,18 @@ val tbtrs :
     @since 0.2.0
  *)
 
-val trtri : ?up:bool ->
-            ?diag:Slap_common.diag ->
-            ('n, 'n, 'cd) mat -> unit
+val trtri :
+  ?up:[< `U | `L ] Slap_common.uplo ->
+  ?diag:Slap_common.diag ->
+  ('n, 'n, 'cd) mat -> unit
 (** [trtri ?up ?diag a] computes the inverse of triangular matrix [a]. The
     inverse matrix is returned in [a].
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [A] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [A] is used.
     @param diag default = [`N]
       - If [diag] = [`U], then [a] is unit triangular;
       - If [diag] = [`N], then [a] is not unit triangular.

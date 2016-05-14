@@ -1007,20 +1007,56 @@ let trtrs ?(up = Slap_common.__unexpose_uplo 'U')
     if i <> 0 then failwithf "Slap.XSDCZ.trtrs: internal error code=%d" i ()
   end
 
-let tbtrs ~kd ?up ~trans ?(diag = non_unit) ab b =
-  let sbsize, n, abr, abc, ab = M.__expose ab in
-  let n', nrhs, br, bc, b = M.__expose b in
-  assert(n = n' && sbsize = Slap_size.syband_dyn n kd);
-  if Slap_size.nonzero n && Slap_size.nonzero nrhs
-  then I.tbtrs ~n:(S.__expose n) ~kd:(S.__expose kd)
-      ?up ~trans:(lacaml_trans3 trans)
-      ~diag:(lacaml_diag diag) ~abr ~abc ab ~nrhs:(S.__expose nrhs) ~br ~bc b
 
-let trtri ?up ?(diag = non_unit) a =
-  let n, n', ar, ac, a = M.__expose a in
+(* TBTRS *)
+
+external direct_tbtrs :
+  up : [< `U | `L ] Slap_common.uplo ->
+  trans : _ Slap_common.trans ->
+  diag : Slap_common.diag ->
+  n : _ Slap_size.t ->
+  kd : _ Slap_size.t ->
+  nrhs : _ Slap_size.t ->
+  abr : int ->
+  abc : int ->
+  ab : ('a, 'b, fortran_layout) Array2.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZtbtrs_stub_bc" "lacaml_XSDCZtbtrs_stub"
+
+let tbtrs ~kd ?(up = Slap_common.__unexpose_uplo 'U')
+    ~trans ?(diag = Slap_common.non_unit) ab b =
+  let sbsize, n, abr, abc, ab = Slap_mat.__expose ab in
+  let n', nrhs, br, bc, b = Slap_mat.__expose b in
+  assert(n = n' && sbsize = Slap_size.syband_dyn n kd);
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
+    let i =
+      direct_tbtrs ~up ~trans ~diag ~n ~kd ~nrhs ~abr ~abc ~ab ~br ~bc ~b in
+    if i <> 0 then failwithf "Slap.XSDCZ.tbtrs: internal error code=%d" i ()
+  end
+
+
+(* TRTRI *)
+
+external direct_trtri :
+  up : [< `U | `L ] Slap_common.uplo ->
+  diag : Slap_common.diag ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t->
+  int = "lacaml_XSDCZtrtri_stub_bc" "lacaml_XSDCZtrtri_stub"
+
+let trtri ?(up = Slap_common.__unexpose_uplo 'U')
+    ?(diag = Slap_common.non_unit) a =
+  let n, n', ar, ac, a = Slap_mat.__expose a in
   assert(n = n');
-  if Slap_size.nonzero n
-  then I.trtri ~n:(S.__expose n) ?up ~diag:(lacaml_diag diag) ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    let i = direct_trtri ~up ~diag ~n ~ar ~ac ~a in
+    if i < 0 then failwithf "Slap.XSDCZ.trtri: internal error code=%d" i ()
+    else if i > 0 then failwithf "Slap.XSDCZ.trtri: singular on index %i" i ()
+  end
 
 type 'n geqrf_min_lwork
 
