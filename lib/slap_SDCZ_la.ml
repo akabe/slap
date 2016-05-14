@@ -976,8 +976,8 @@ let potri ?(up = Slap_common.__unexpose_uplo 'U')
   if Slap_size.nonzero n then begin
     if factorize then potrf ~up ?jitter aa;
     let i = direct_potri ~up ~n ~ar ~ac ~a in
-    if i < 0 then failwithf "Slap.XSDCZ.sytri: internal error code=%d" i ()
-    else if i > 0 then failwithf "Slap.XSDCZ.sytri: singular on index %i" i ()
+    if i < 0 then failwithf "Slap.XSDCZ.potri: internal error code=%d" i ()
+    else if i > 0 then failwithf "Slap.XSDCZ.potri: singular on index %i" i ()
   end
 
 
