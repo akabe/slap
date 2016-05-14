@@ -932,19 +932,53 @@ let potrf ?(up = Slap_common.__unexpose_uplo 'U') ?jitter aa =
     if i < 0 then failwithf "Slap.XSDCZ.potrf: internal error code=%d" i ();
   end
 
-let potrs ?up a ?factorize ?jitter b =
-  let n, n', ar, ac, a = M.__expose a in
-  let n'', nrhs, br, bc, b = M.__expose b in
-  assert(n = n' && n = n'');
-  if Slap_size.nonzero n
-  then I.potrs ~n:(S.__expose n) ?up ~ar ~ac a
-      ~nrhs:(S.__expose nrhs) ~br ~bc ?factorize ?jitter b
 
-let potri ?up ?factorize ?jitter a =
-  let n, n', ar, ac, a = M.__expose a in
+(* POTRS *)
+
+external direct_potrs :
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  nrhs : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZpotrs_stub_bc" "lacaml_XSDCZpotrs_stub"
+
+let potrs ?(up = Slap_common.__unexpose_uplo 'U') aa
+    ?(factorize = true) ?jitter b =
+  let n, n', ar, ac, a = Slap_mat.__expose aa in
+  let n'', nrhs, br, bc, b = Slap_mat.__expose b in
+  assert(n = n' && n = n'');
+  if Slap_size.nonzero n then begin
+    if factorize then potrf ~up ?jitter aa;
+    let i = direct_potrs ~up ~n ~nrhs ~ar ~ac ~a ~br ~bc ~b in
+    if i <> 0 then failwithf "Slap.XSDCZ.potrs: internal error code=%d" i ();
+  end
+
+
+(* POTRI *)
+
+external direct_potri :
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZpotri_stub"
+
+let potri ?(up = Slap_common.__unexpose_uplo 'U')
+    ?(factorize = true) ?jitter aa =
+  let n, n', ar, ac, a = Slap_mat.__expose aa in
   assert(n = n');
-  if Slap_size.nonzero n
-  then I.potri ~n:(S.__expose n) ?up ?factorize ?jitter ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    if factorize then potrf ~up ?jitter aa;
+    let i = direct_potri ~up ~n ~ar ~ac ~a in
+    if i < 0 then failwithf "Slap.XSDCZ.sytri: internal error code=%d" i ()
+    else if i > 0 then failwithf "Slap.XSDCZ.sytri: singular on index %i" i ()
+  end
 
 let trtrs ?up ~trans ?(diag = non_unit) a b =
   let n, n', ar, ac, a = M.__expose a in

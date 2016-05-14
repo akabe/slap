@@ -679,7 +679,7 @@ val potrf :
  *)
 
 val potrs :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
   ?factorize:bool ->
   ?jitter:num_type ->
@@ -688,12 +688,18 @@ val potrs :
     the Cholesky factorization of symmetrix (Hermitian) positive-definite matrix
     [a]:
 
-    - [a = U^T * U] (real) or [a = U^H * U] (complex) if [up] = [true];
-    - [a = L * L^T] (real) or [a = L * L^H] (complex) if [up] = [false]
+    - [a = U^T * U] (real) or [a = U^H * U] (complex)
+      if [up] = {!Slap_common.upper};
+    - [a = L * L^T] (real) or [a = L * L^H] (complex)
+      if [up] = {!Slap_common.lower}
 
     where [U] and [L] are upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param factorize default = [true] ([potrf] is called implicitly)
     @param jitter default = nothing
 
@@ -701,19 +707,25 @@ val potrs :
  *)
 
 val potri :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?factorize:bool ->
   ?jitter:num_type ->
   ('n, 'n, 'cd) mat -> unit
 (** [potrf ?up ?jitter a] computes the inverse of symmetrix (Hermitian)
     positive-definite matrix [a] using the Cholesky factorization:
 
-    - [a = U^T * U] (real) or [a = U^H * U] (complex) if [up] = [true];
-    - [a = L * L^T] (real) or [a = L * L^H] (complex) if [up] = [false]
+    - [a = U^T * U] (real) or [a = U^H * U] (complex)
+      if [up] = {!Slap_common.upper};
+    - [a = L * L^T] (real) or [a = L * L^H] (complex)
+      if [up] = {!Slap_common.lower}
 
     where [U] and [L] are upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param factorize default = [true] ([potrf] is called implicitly)
     @param jitter default = nothing
 
