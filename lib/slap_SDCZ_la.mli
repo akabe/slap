@@ -877,7 +877,7 @@ val gbsv :
  *)
 
 val posv :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'nrhs, 'b_cd) mat -> unit
 (** [posv ?up a b] solves systems of linear equations [a * x = b] where [a] is
@@ -887,21 +887,25 @@ val posv :
 
     The Cholesky decomposition is used:
 
-    - If [up] = [true], then [a = U^T * U] (real) or [a = U^H * U] (complex)
-    - If [up] = [false], then [a = L^T * L] (real) or [a = L^H * L] (complex)
+    - If [up] = {!Slap_common.upper},
+      then [a = U^T * U] (real) or [a = U^H * U] (complex)
+    - If [up] = {!Slap_common.lower},
+      then [a = L^T * L] (real) or [a = L^H * L] (complex)
 
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
 
     @raise Failure if the matrix is singular.
     @since 0.2.0
  *)
 
 val ppsv :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ('n Slap_size.packed, cnt) vec ->
   ('n, 'nrhs, 'b_cd) mat -> unit
 (** [ppsv ?up a b] solves systems of linear equations [a * x = b] where [a] is
@@ -909,23 +913,26 @@ val ppsv :
     each column of matrix [b] is the r.h.s vector, and each column of matrix [x]
     is the corresponding solution. The solution [x] is returned in [b].
 
-    The Cholesky decomposition is used:
-
-    - If [up] = [true], then [a = U^T * U] (real) or [a = U^H * U] (complex)
-    - If [up] = [false], then [a = L^T * L] (real) or [a = L^H * L] (complex)
+    - If [up] = {!Slap_common.upper},
+      then [a = U^T * U] (real) or [a = U^H * U] (complex)
+    - If [up] = {!Slap_common.lower},
+      then [a = L^T * L] (real) or [a = L^H * L] (complex)
 
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
 
     @raise Failure if the matrix is singular.
     @since 0.2.0
  *)
 
 val pbsv :
-  ?up:bool -> kd:'kd Slap_size.t ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
+  kd:'kd Slap_size.t ->
   (('n, 'kd) Slap_size.syband, 'n, 'ab_cd) mat ->
   ('n, 'nrhs, 'b_cd) mat -> unit
 (** [pbsv ?up ~kd ab b] solves systems of linear equations [ab * x = b] where
@@ -936,14 +943,18 @@ val pbsv :
 
     This routine uses the Cholesky decomposition:
 
-    - If [up] = [true], then [ab = U^T * U] (real) or [ab = U^H * U] (complex)
-    - If [up] = [false], then [ab = L^T * L] (real) or [ab = L^H * L] (complex)
+    - If [up] = {!Slap_common.upper},
+      then [a = U^T * U] (real) or [a = U^H * U] (complex)
+    - If [up] = {!Slap_common.lower},
+      then [a = L^T * L] (real) or [a = L^H * L] (complex)
 
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [ab] is used;
-      - If [up] = [false], then the lower triangular part of [ab] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param kd the number of subdiagonals or superdiagonals in [ab].
 
     @raise Failure if the matrix is singular.
@@ -967,8 +978,16 @@ val ptsv :
     @since 0.2.0
  *)
 
+type sysv_min_lwork
+
+val sysv_min_lwork :
+  unit ->
+  sysv_min_lwork Slap_size.t
+(** [sysv_min_lwork ()] computes the minimum length of workspace for [sysv]
+    routine. *)
+
 val sysv_opt_lwork :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'nrhs, 'b_cd) mat -> (module Slap_size.SIZE)
 (** [sysv_opt_lwork ?up a b] computes the optimal length of workspace for [sysv]
@@ -976,7 +995,7 @@ val sysv_opt_lwork :
  *)
 
 val sysv :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?ipiv:('n, cnt) Slap_common.int32_vec ->
   ?work:('lwork, cnt) vec ->
   ('n, 'n, 'a_cd) mat ->
@@ -987,13 +1006,15 @@ val sysv :
     solution. The solution [x] is returned in [b].
 
     The diagonal pivoting method is used:
-    - If [up] = [true], then [a = U * D * U^T]
-    - If [up] = [false], then [a = L * D * L^T]
+    - If [up] = {!Slap_common.upper}, then [a = U * D * U^T]
+    - If [up] = {!Slap_common.lower}, then [a = L * D * L^T]
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
-    @param up   default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
                 omitted.
     @param work default = an optimum-length vector.
@@ -1003,7 +1024,7 @@ val sysv :
  *)
 
 val spsv :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?ipiv:('n, cnt) Slap_common.int32_vec ->
   ('n Slap_size.packed, cnt) vec ->
   ('n, 'nrhs, 'b_cd) mat -> unit
@@ -1013,13 +1034,15 @@ val spsv :
     corresponding solution. The solution [x] is returned in [b].
 
     The diagonal pivoting method is used:
-    - If [up] = [true], then [a = U * D * U^T]
-    - If [up] = [false], then [a = L * D * L^T]
+    - If [up] = {!Slap_common.upper}, then [a = U * D * U^T]
+    - If [up] = {!Slap_common.lower}, then [a = L * D * L^T]
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
                 omitted.
 

@@ -33,6 +33,20 @@ let xxtri_error loc i =
   then Slap_misc.failwithf "%s: singular on index %i" loc i ()
   else internal_error loc i
 
+let sxsv_error loc i =
+  assert(i <> 0);
+  if i > 0
+  then Slap_misc.failwithf "%s: D(%i,%i)=0 in the diagonal pivoting \
+                            factorization" loc i i ()
+  else internal_error loc i
+
+let pxsv_error loc i =
+  assert(i <> 0);
+  if i > 0
+  then Slap_misc.failwithf "%s: the leading minor of order %i is not positive \
+                            definite" loc i ()
+  else internal_error "Slap.XSDCZ.posv" i
+
 let lu_error loc i =
   assert(i <> 0);
   if i > 0
@@ -1106,7 +1120,7 @@ let geqrf ?work ?tau aa =
   if Slap_size.nonzero m && Slap_size.nonzero n then begin
     let lwork, work =
       Slap_vec.__alloc_work prec work ~loc:"Slap.XSDCZ.geqrf"
-        ~min_lwork:(geqrf_min_lwork n) ~opt_lwork:(geqrf_opt_lwork_aux aa) in
+        ~min_lwork:(geqrf_min_lwork ~n) ~opt_lwork:(geqrf_opt_lwork_aux aa) in
     direct_geqrf ~m ~n ~ar ~ac ~a ~tau ~work ~lwork
   end;
   Slap_vec.__unexpose k 1 tau
@@ -1137,72 +1151,209 @@ let gesv ?ipiv a b =
     if i <> 0 then lu_error "Slap.XSDCZ.gesv" i
   end
 
+
+(* GBSV *)
+
+external direct_gbsv :
+  abr : int ->
+  abc : int ->
+  ab : ('a, 'b, fortran_layout) Array2.t ->
+  n : _ Slap_size.t ->
+  kl : _ Slap_size.t ->
+  ku : _ Slap_size.t ->
+  ipiv : (int32, int32_elt, fortran_layout) Array1.t ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZgbsv_stub_bc" "lacaml_XSDCZgbsv_stub"
+
 let gbsv ?ipiv ab kl ku b =
-  let lusize, n, abr, abc, ab = M.__expose ab in
-  let n', nrhs, br, bc, b = M.__expose b in
+  let lusize, n, abr, abc, ab = Slap_mat.__expose ab in
+  let n', nrhs, br, bc, b = Slap_mat.__expose b in
   assert(lusize = Slap_size.luband_dyn n n kl ku && n = n');
-  if Slap_size.nonzero n && Slap_size.nonzero nrhs
-  then I.gbsv ~n:(S.__expose n) ?ipiv:(Slap_vec.opt_cnt_vec n ipiv)
-      ~abr ~abc ab (S.__expose kl) (S.__expose ku)
-      ~nrhs:(S.__expose nrhs) ~br ~bc b
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
+    let ipiv = Slap_vec.opt_cnt_vec_alloc int32 n ipiv in
+    let i = direct_gbsv ~abr ~abc ~ab ~n ~kl ~ku ~ipiv ~nrhs ~br ~bc ~b in
+    if i <> 0 then lu_error "Slap.XSDCZ.gbsv" i
+  end
 
-let posv ?up a b =
-  let n, n', ar, ac, a = M.__expose a in
-  let n'', nrhs, br, bc, b = M.__expose b in
+
+(* POSV *)
+
+external direct_posv :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  n : _ Slap_size.t ->
+  up : [< `U | `L ] Slap_common.uplo ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZposv_stub_bc" "lacaml_XSDCZposv_stub"
+
+let posv ?(up = Slap_common.__unexpose_uplo 'U') a b =
+  let n, n', ar, ac, a = Slap_mat.__expose a in
+  let n'', nrhs, br, bc, b = Slap_mat.__expose b in
   assert(n = n' && n = n'');
-  if Slap_size.nonzero n && Slap_size.nonzero nrhs
-  then I.posv ~n:(S.__expose n) ?up ~ar ~ac a
-      ~nrhs:(S.__expose nrhs) ~br ~bc b
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
+    let i = direct_posv ~ar ~ac ~a ~n ~up ~nrhs ~br ~bc ~b in
+    if i <> 0 then pxsv_error "Slap.XSDCZ.posv" i
+  end
 
-let ppsv ?up ap b =
+
+(* PPSV *)
+
+external direct_ppsv :
+  ofsap : int ->
+  ap : ('a, 'b, fortran_layout) Array1.t ->
+  n : _ Slap_size.t ->
+  up : [< `U | `L ] Slap_common.uplo ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZppsv_stub_bc" "lacaml_XSDCZppsv_stub"
+
+let ppsv ?(up = Slap_common.__unexpose_uplo 'U') ap b =
   assert(Slap_vec.check_cnt ap);
-  let k, _, ap = V.__expose ap in
-  let n, nrhs, br, bc, b = M.__expose b in
+  let k, _, ap = Slap_vec.__expose ap in
+  let n, nrhs, br, bc, b = Slap_mat.__expose b in
   assert(k = Slap_size.packed n);
-  if Slap_size.nonzero n && Slap_size.nonzero nrhs
-  then I.ppsv ~n:(S.__expose n) ?up ~ofsap:1 ap
-      ~nrhs:(S.__expose nrhs) ~br ~bc b
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
+    let i = direct_ppsv ~ofsap:1 ~ap ~n ~up ~nrhs ~br ~bc ~b in
+    if i <> 0 then pxsv_error "Slap.XSDCZ.ppsv" i
+  end
 
-let pbsv ?up ~kd ab b =
-  let sbsize, n, abr, abc, ab = M.__expose ab in
-  let n', nrhs, br, bc, b = M.__expose b in
+
+(* PBSV *)
+
+external direct_pbsv :
+  abr : int ->
+  abc : int ->
+  ab : ('a, 'b, fortran_layout) Array2.t ->
+  n : _ Slap_size.t ->
+  kd : _ Slap_size.t ->
+  up : [< `U | `L ] Slap_common.uplo ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZpbsv_stub_bc" "lacaml_XSDCZpbsv_stub"
+
+let pbsv ?(up = Slap_common.__unexpose_uplo 'U') ~kd ab b =
+  let sbsize, n, abr, abc, ab = Slap_mat.__expose ab in
+  let n', nrhs, br, bc, b = Slap_mat.__expose b in
   assert(sbsize = Slap_size.syband_dyn n kd && n = n');
-  if Slap_size.nonzero n && Slap_size.nonzero nrhs
-  then I.pbsv ~n:(S.__expose n) ?up ~kd:(S.__expose kd) ~abr ~abc ab
-      ~nrhs:(S.__expose nrhs) ~br ~bc b
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
+    let i = direct_pbsv ~abr ~abc ~ab ~n ~kd ~up ~nrhs ~br ~bc ~b in
+    if i <> 0 then pxsv_error "Slap.XSDCZ.pbsv" i
+  end
+
+(* PTSV *)
+
+external direct_ptsv :
+  ofsd : int ->
+  d : ('a, 'b, fortran_layout) Array1.t ->
+  ofse : int ->
+  e : ('a, 'b, fortran_layout) Array1.t ->
+  n : _ Slap_size.t ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZptsv_stub_bc" "lacaml_XSDCZptsv_stub"
 
 let ptsv d e b =
   assert(Slap_vec.check_cnt d && Slap_vec.check_cnt e);
-  let n, _, d = V.__expose d in
-  let np, _, e = V.__expose e in
-  let n', nrhs, br, bc, b = M.__expose b in
+  let n, _, d = Slap_vec.__expose d in
+  let np, _, e = Slap_vec.__expose e in
+  let n', nrhs, br, bc, b = Slap_mat.__expose b in
   assert(n = n' && Slap_size.pred_dyn n = np);
-  if Slap_size.nonzero n && Slap_size.nonzero nrhs
-  then I.ptsv ~n:(S.__expose n) ~ofsd:1 d ~ofse:1 e
-      ~nrhs:(S.__expose nrhs) ~br ~bc b
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
+    let i = direct_ptsv ~ofsd:1 ~d ~ofse:1 ~e ~n ~nrhs ~br ~bc ~b in
+    if i <> 0 then pxsv_error "Slap.XSDCZ.ptsv" i
+  end
 
-let sysv_opt_lwork ?up a b =
-  let n, n', ar, ac, a = M.__expose a in
-  let n'', nrhs, br, bc, b = M.__expose b in
+
+(* SYSV *)
+
+external direct_sysv :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  n : _ Slap_size.t ->
+  up : [< `U | `L ] Slap_common.uplo ->
+  ipiv : (int32, int32_elt, fortran_layout) Array1.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZsysv_stub_bc" "lacaml_XSDCZsysv_stub"
+
+type sysv_min_lwork = Slap_size.one
+
+let sysv_min_lwork () = Slap_size.one
+
+let sysv_opt_lwork_aux ~up a b =
+  let n, n', ar, ac, a = Slap_mat.__expose a in
+  let n'', nrhs, br, bc, b = Slap_mat.__expose b in
   assert(n = n' && n = n'');
-  I.sysv_opt_lwork ~n:(S.__expose n) ?up ~ar ~ac a
-    ~nrhs:(S.__expose nrhs) ~br ~bc b
+  let work = Array1.create prec fortran_layout 1 in
+  let ipiv = Array1.create int32 fortran_layout 0 in
+  let i =
+    direct_sysv ~ar ~ac ~a ~n ~up ~ipiv ~work ~lwork:(-1) ~nrhs ~br ~bc ~b in
+  if i = 0 then Slap_size.__unexpose (int_of_num work.{1})
+  else internal_error "Slap.XSDCZ.sysv_opt_lwork" i
+
+let sysv_opt_lwork ?(up = Slap_common.__unexpose_uplo 'U') a b =
+  sysv_opt_lwork_aux ~up a b
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
-let sysv ?up ?ipiv ?work a b =
-  let n, n', ar, ac, a = M.__expose a in
-  let n'', nrhs, br, bc, b = M.__expose b in
+let sysv ?(up = Slap_common.__unexpose_uplo 'U') ?ipiv ?work aa bb =
+  let n, n', ar, ac, a = Slap_mat.__expose aa in
+  let n'', nrhs, br, bc, b = Slap_mat.__expose bb in
   assert(n = n' && n = n'');
-  I.sysv ~n:(S.__expose n) ?up ?ipiv:(Slap_vec.opt_cnt_vec n ipiv)
-    ?work:(Slap_vec.opt_work work) ~ar ~ac a ~nrhs:(S.__expose nrhs) ~br ~bc b
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
+    let ipiv = Slap_vec.opt_cnt_vec_alloc int32 n ipiv in
+    let lwork, work =
+      Slap_vec.__alloc_work prec work ~loc:"Slap.XSDCZ.sysv"
+        ~min_lwork:(sysv_min_lwork ())
+        ~opt_lwork:(sysv_opt_lwork_aux ~up aa bb) in
+    let i =
+      direct_sysv ~ar ~ac ~a ~n ~up ~ipiv ~work ~lwork ~nrhs ~br ~bc ~b in
+    if i <> 0 then sxsv_error "Slap.XSDCZ.sysv" i
+  end
 
-let spsv ?up ?ipiv ap b =
+
+(* SPSV *)
+
+external direct_spsv :
+  ofsap : int ->
+  ap : ('a, 'b, fortran_layout) Array1.t ->
+  n : _ Slap_size.t ->
+  up : [< `L | `U ] Slap_common.uplo ->
+  ipiv : (int32, int32_elt, fortran_layout) Array1.t ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZspsv_stub_bc" "lacaml_XSDCZspsv_stub"
+
+let spsv ?(up = Slap_common.__unexpose_uplo 'U') ?ipiv ap b =
   assert(Slap_vec.check_cnt ap);
-  let k, _, ap = V.__expose ap in
-  let n, nrhs, br, bc, b = M.__expose b in
+  let k, _, ap = Slap_vec.__expose ap in
+  let n, nrhs, br, bc, b = Slap_mat.__expose b in
   assert(k = Slap_size.packed n);
-  I.spsv ~n:(S.__expose n) ?up ?ipiv:(Slap_vec.opt_cnt_vec n ipiv)
-    ~ofsap:1 ap ~nrhs:(S.__expose nrhs) ~br ~bc b
+  if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
+    let ipiv = Slap_vec.opt_cnt_vec_alloc int32 n ipiv in
+    let i = direct_spsv ~ofsap:1 ~ap ~n ~up ~ipiv ~nrhs ~br ~bc ~b in
+    if i <> 0 then sxsv_error "Slap.XSDCZ.spsv" i
+  end
 
 (** {3 Least squares (simple drivers)} *)
 
