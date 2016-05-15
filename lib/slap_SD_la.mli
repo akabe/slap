@@ -93,19 +93,27 @@ val syr :
 
 type ('m, 'a) lansy_min_lwork
 
-val lansy_min_lwork : 'n Slap_size.t -> 'a Slap_common.norm4 ->
-                      ('n, 'a) lansy_min_lwork Slap_size.t
+val lansy_min_lwork :
+  'n Slap_size.t ->
+  'a Slap_common.norm4 ->
+  ('n, 'a) lansy_min_lwork Slap_size.t
 (** [lansy_min_lwork n norm] computes the minimum length of workspace for
     [lansy] routine. [n] is the number of rows or columns in a matrix.
     [norm] is a matrix norm.
  *)
 
-val lansy : ?up:bool ->
-            ?norm:'norm Slap_common.norm4 ->
-            ?work:('lwork, cnt) vec -> ('n, 'n, 'cd) mat -> float
+val lansy :
+  ?up:[< `U | `L ] Slap_common.uplo ->
+  ?norm:'norm Slap_common.norm4 ->
+  ?work:('lwork, cnt) vec ->
+  ('n, 'n, 'cd) mat -> float
 (** [lansy ?up ?norm ?work a]
     @return the norm of matrix [a].
-    @param up   default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param norm default = {!Slap_common.norm_1}
       - If [norm] = {!Slap_common.norm_1}, the one norm is returned;
       - If [norm] = {!Slap_common.norm_inf}, the infinity norm is returned;

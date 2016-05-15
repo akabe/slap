@@ -141,18 +141,57 @@ let syr ?(alpha = 1.0) ?(up = Slap_common.__unexpose_uplo 'U') x a =
 
 (** {3 Auxiliary routines} *)
 
+(* LANSY *)
+
+external direct_lansy :
+  norm : (_, _) Slap_common.norm ->
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  float = "lacaml_XSDCZlansy_stub_bc" "lacaml_XSDCZlansy_stub"
+
 type ('m, 'a) lansy_min_lwork
 
 let lansy_min_lwork n norm =
-  S.__unexpose (I.lansy_min_lwork (S.__expose n) (lacaml_norm4 norm))
+  let lwork = match Slap_common.__expose_norm norm with
+    | 'I' | 'O' -> Slap_size.__expose n
+    | _ -> 0 in
+  Slap_size.__unexpose lwork
 
-let lansy ?up ?norm ?work a =
-  let n, n', ar, ac, a = M.__expose a in
+let lansy
+    ?(up = Slap_common.__unexpose_uplo 'U')
+    ?(norm = Slap_common.__unexpose_norm 'O')
+    ?work a =
+  let n, n', ar, ac, a = Slap_mat.__expose a in
   assert(n = n');
-  I.lansy ~n:(S.__expose n) ?up ?norm:(lacaml_norm4_opt norm)
-    ?work:(Slap_vec.opt_work work) ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    let min_lwork = lansy_min_lwork n norm in
+    let _, work = Slap_vec.__alloc_work prec work ~loc:"Slap.XSDCZ.lansy"
+        ~min_lwork  ~opt_lwork:min_lwork in
+    direct_lansy ~norm ~up ~n ~ar ~ac ~a ~work
+  end
+  else 0.0
 
-let lamch = I.lamch
+(* LAMCH *)
+
+external direct_lamch : char -> float = "lacaml_XSDCZlamch_stub"
+
+let lamch cmach =
+  direct_lamch
+    (match cmach with
+     | `N -> 'N'
+     | `O -> 'O'
+     | `P -> 'P'
+     | `R -> 'R'
+     | `S -> 'S'
+     | `U -> 'U'
+     | `L -> 'L'
+     | `M -> 'M'
+     | `B -> 'B'
+     | `E -> 'E')
 
 (** {3 Linear equations (computational routines)} *)
 
