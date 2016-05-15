@@ -23,6 +23,22 @@ let pp_vec ppf x = Slap_io.pp_vec_gen pp_num ppf x
 
 let pp_mat ppf a = Slap_io.pp_mat_gen pp_num ppf a
 
+(* error report functions: *)
+
+let internal_error loc i = raise (Slap_misc.Internal_error (loc, i))
+
+let xxtri_error loc i =
+  assert(i <> 0);
+  if i > 0
+  then Slap_misc.failwithf "%s: singular on index %i" loc i ()
+  else internal_error loc i
+
+let lu_error loc i =
+  assert(i <> 0);
+  if i > 0
+  then Slap_misc.failwithf "%s: U(%i,%i)=0 in the LU factorization" loc i i ()
+  else internal_error loc i
+
 (** {2 BLAS interface} *)
 
 (** {3 Level 1} *)
@@ -712,10 +728,7 @@ let getrf ?ipiv a =
   let res = Slap_vec.__unexpose k 1 ipiv in
   if Slap_size.nonzero m && Slap_size.nonzero n then begin
     let i = direct_getrf ~m ~n ~ar ~ac ~a ~ipiv in
-    if i = 0 then res (* success *)
-    else if i > 0
-    then failwithf "Slap.XSDCZ.getrf: U(%i,%i)=0 in the LU factorization" i i ()
-    else failwithf "Slap.XSDCZ.getrf: internal error code=%d" i ()
+    if i = 0 then res else lu_error "Slap.XSDCZ.getrf" i
   end else res
 
 
@@ -741,7 +754,7 @@ let getrs ?ipiv ~trans a b =
   if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
     let ipiv = Slap_vec.opt_cnt_vec_alloc int32 (Slap_size.min n n) ipiv in
     let i = direct_getrs ~trans ~n ~nrhs ~ar ~ac ~a ~br ~bc ~b ~ipiv in
-    if i <> 0 then failwithf "Slap.XSDCZ.getrs: internal error code=%d" i ()
+    if i <> 0 then internal_error "Slap.XSDCZ.getrs" i
   end
 
 (* GETRI *)
@@ -767,7 +780,7 @@ let getri_opt_lwork_aux a =
   let ipiv = Array1.create int32 fortran_layout 0 in
   let i = direct_getri ~n ~ar ~ac ~a ~ipiv ~work ~lwork:(-1) in
   if i = 0 then Slap_size.__unexpose (int_of_num work.{1})
-  else failwithf "Slap.XSDCZ.getri_opt_lwork: internal error code=%d" i ()
+  else internal_error "Slap.XSDCZ.getri_opt_lwork" i
 
 let getri_opt_lwork a =
   getri_opt_lwork_aux a
@@ -786,8 +799,7 @@ let getri ?ipiv ?work a =
     let k, _, ipiv = Slap_vec.__expose ipiv in
     assert(k = Slap_size.min n n);
     let i = direct_getri ~n ~ar ~ac ~a:aa ~ipiv ~work ~lwork in
-    if i < 0 then failwithf "Slap.XSDCZ.getri: internal error code=%d" i ()
-    else if i > 0 then failwithf "Slap.XSDCZ.getri: singular on index %i" i ()
+    if i <> 0 then xxtri_error "Slap.XSDCZ.getri" i
   end
 
 
@@ -1101,9 +1113,6 @@ let geqrf ?work ?tau aa =
 
 (** {3 Linear equations (simple drivers)} *)
 
-let xxsv_error_lu loc i =
-  failwithf "%s: U(%i,%i)=0 in the LU factorization" loc i i ()
-
 (* GESV *)
 
 external direct_gesv :
@@ -1125,8 +1134,7 @@ let gesv ?ipiv a b =
   if Slap_size.nonzero n && Slap_size.nonzero nrhs then begin
     let ipiv = Slap_vec.opt_cnt_vec_alloc int32 n ipiv in
     let i = direct_gesv ~ar ~ac ~a ~n ~ipiv ~nrhs ~br ~bc ~b in
-    if i > 0 then xxsv_error_lu "Slap.XSDCZ.gesv" i
-    else if i < 0 then failwithf "Slap.XSDCZ.gesv: internal error code=%d" i ()
+    if i <> 0 then lu_error "Slap.XSDCZ.gesv" i
   end
 
 let gbsv ?ipiv ab kl ku b =
