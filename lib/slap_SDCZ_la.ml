@@ -1357,27 +1357,67 @@ let spsv ?(up = Slap_common.__unexpose_uplo 'U') ?ipiv ap b =
 
 (** {3 Least squares (simple drivers)} *)
 
-type ('m, 'n, 'nrhs) gels_min_lwork
+(* GELS *)
+
+external direct_gels :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  trans : (_, _) Slap_common.trans ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZgels_stub_bc" "lacaml_XSDCZgels_stub"
+
+type ('m, 'n, 'nrhs) gels_min_lwork =
+  (Slap_size.one,
+   (('m, 'n) Slap_size.min,
+    (('m, 'n) Slap_size.min, 'nrhs) Slap_size.max) Slap_size.add) Slap_size.max
 
 let gels_min_lwork ~m ~n ~nrhs =
-  S.__unexpose (I.gels_min_lwork
-                    ~m:(S.__expose m) ~n:(S.__expose n)
-                    ~nrhs:(S.__expose nrhs))
+  let open Slap_size in
+  let min_mn = min m n in
+  max one (add min_mn (max min_mn nrhs))
+
+let gels_error loc i =
+  assert(i <> 0);
+  if i > 0
+  then Slap_misc.failwithf
+      "%s: failed to converge on off-diagonal element %d" loc i ()
+  else internal_error loc i
+
+let gels_opt_lwork_aux ~trans a b =
+  let am, an, ar, ac, a = Slap_mat.__expose a in
+  let m, nrhs, br, bc, b = Slap_mat.__expose b in
+  let m', n = Slap_common.get_transposed_dim trans am an in
+  assert(m = m');
+  let work = Array1.create prec fortran_layout 1 in
+  let i =
+    direct_gels ~ar ~ac ~a ~m ~n ~trans ~work ~lwork:(-1) ~nrhs ~br ~bc ~b in
+  if i = 0 then Slap_size.__unexpose (int_of_num work.{1})
+  else gels_error "Slap.XSDCZ.gels_opt_lwork" i
 
 let gels_opt_lwork ~trans a b =
-  let am, an, ar, ac, a = M.__expose a in
-  let bm, nrhs, br, bc, b = M.__expose b in
-  let m, n = get_transposed_dim trans am an in
-  assert(m = bm);
-  I.gels_opt_lwork ~m:(S.__expose m) ~n:(S.__expose n)
-    ~trans:(lacaml_trans2 trans) ~ar ~ac a ~nrhs:(S.__expose nrhs) ~br ~bc b
+  gels_opt_lwork_aux ~trans a b
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
-let gels ?work ~trans a b =
-  let am, an, ar, ac, a = M.__expose a in
-  let bm, nrhs, br, bc, b = M.__expose b in
-  let m, n = get_transposed_dim trans am an in
-  assert(m = bm);
-  I.gels ~m:(S.__expose m) ~n:(S.__expose n) ?work:(Slap_vec.opt_work work)
-    ~trans:(lacaml_trans2 trans) ~ar ~ac a
-    ~nrhs:(S.__expose nrhs) ~br ~bc b
+let gels ?work ~trans aa bb =
+  let am, an, ar, ac, a = Slap_mat.__expose aa in
+  let m, nrhs, br, bc, b = Slap_mat.__expose bb in
+  let m', n = Slap_common.get_transposed_dim trans am an in
+  assert(m = m');
+  if Slap_size.nonzero m && Slap_size.nonzero n && Slap_size.nonzero nrhs
+  then begin
+    let lwork, work =
+      Slap_vec.__alloc_work prec work ~loc:"Slap.XSDCZ.gels"
+        ~min_lwork:(gels_min_lwork ~m ~n ~nrhs)
+        ~opt_lwork:(gels_opt_lwork_aux ~trans aa bb) in
+    let i = direct_gels ~ar ~ac ~a ~m ~n ~trans ~work ~lwork ~nrhs ~br ~bc ~b in
+    if i <> 0 then gels_error "Slap.XSDCZ.gels" i
+  end
