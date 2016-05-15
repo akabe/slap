@@ -17,41 +17,125 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
+open Bigarray
+
 (** {2 BLAS interface} *)
 
 (** {3 Level 1} *)
 
-let dot x y =
-  Vec.wrap2 (fun ?n ?ofsx ?incx x -> I.dot ?n ?ofsx ?incx x) x y
+(* DOT *)
 
-let asum x = Vec.wrap1 I.asum x
+external direct_dot :
+  n : _ Slap_size.t ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  float = "lacaml_XSDCZdot_stub_bc" "lacaml_XSDCZdot_stub"
+
+let dot x y =
+  let n, incx, x = Slap_vec.__expose x in
+  let n', incy, y = Slap_vec.__expose y in
+  assert(n = n');
+  direct_dot ~n ~ofsx:1 ~incx ~x ~ofsy:1 ~incy ~y
+
+
+(* ASUM *)
+
+external direct_asum :
+  n : _ Slap_size.t ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  float = "lacaml_XSDCZasum_stub"
+
+let asum x =
+  let n, incx, x = Slap_vec.__expose x in
+  direct_asum ~n ~ofsx:1 ~incx ~x
 
 (** {3 Level 2} *)
 
-let sbmv ~k ?y a ?up ?alpha ?beta x =
-  let sbs, n, ar, ac, a = M.__expose a in
-  let n', incx, x = V.__expose x in
+(* SBMV *)
+
+external direct_sbmv :
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  n : _ Slap_size.t ->
+  k : _ Slap_size.t ->
+  up : [< `U | `L ] Slap_common.uplo ->
+  alpha : float ->
+  beta : float ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZsbmv_stub_bc" "lacaml_XSDCZsbmv_stub"
+
+let sbmv ~k ?y a ?(up = Slap_common.__unexpose_uplo 'U')
+    ?(alpha = 1.0) ?(beta = 0.0) x =
+  let sbs, n, ar, ac, a = Slap_mat.__expose a in
+  let n', incx, x = Slap_vec.__expose x in
   assert(n = n' && sbs = Slap_size.syband_dyn n k);
   let incy, y = Slap_vec.opt_vec_alloc prec n y in
-  ignore (I.sbmv ~n:(S.__expose n) ~k:(S.__expose k)
-            ~ofsy:1 ~incy ~y ~ar ~ac a ?up ?alpha ?beta ~ofsx:1 ~incx x);
-  V.__unexpose n incy y
+  if Slap_size.nonzero n && Slap_size.nonzero k
+  then direct_sbmv ~ofsy:1 ~incy ~y ~ar ~ac ~a ~n ~k ~up ~alpha ~beta
+      ~ofsx:1 ~incx ~x;
+  Slap_vec.__unexpose n incy y
+
+
+(* GER *)
+
+external direct_ger :
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  alpha : float ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  unit = "lacaml_XSDCZger_stub_bc" "lacaml_XSDCZger_stub"
 
 let ger ?(alpha = 1.0) x y a =
-  let m, incx, x = V.__expose x in
-  let n, incy, y = V.__expose y in
-  let m', n', ar, ac, a = M.__expose a in
+  let m, incx, x = Slap_vec.__expose x in
+  let n, incy, y = Slap_vec.__expose y in
+  let m', n', ar, ac, a = Slap_mat.__expose a in
   assert(m = m' && n = n');
-  ignore (I.ger ~m:(S.__expose m) ~n:(S.__expose n)
-              ~alpha ~ofsx:1 ~incx x ~ofsy:1 ~incy y ~ar ~ac a);
-  M.__unexpose m n ar ac a
+  if Slap_size.nonzero m && Slap_size.nonzero n
+  then direct_ger ~m ~n ~alpha ~ofsx:1 ~incx ~x ~ofsy:1 ~incy ~y ~ar ~ac ~a;
+  Slap_mat.__unexpose m n ar ac a
 
-let syr ?(alpha = 1.0) ?(up = true) x a =
-  let n, incx, x = V.__expose x in
-  let n', n'', ar, ac, a = M.__expose a in
+
+(* SYR *)
+
+external direct_syr :
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  alpha : float ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  unit = "lacaml_XSDCZsyr_stub_bc" "lacaml_XSDCZsyr_stub"
+
+let syr ?(alpha = 1.0) ?(up = Slap_common.__unexpose_uplo 'U') x a =
+  let n, incx, x = Slap_vec.__expose x in
+  let n', n'', ar, ac, a = Slap_mat.__expose a in
   assert(n = n' && n = n'');
-  ignore(I.syr ~n:(S.__expose n) ~alpha ~up ~ofsx:1 ~incx x ~ar ~ac a);
-  M.__unexpose n n ar ac a
+  if Slap_size.nonzero n
+  then direct_syr ~up ~n ~alpha ~ofsx:1 ~incx ~x ~ar ~ac ~a;
+  Slap_mat.__unexpose n n ar ac a
 
 (** {2 LAPACK interface} *)
 
