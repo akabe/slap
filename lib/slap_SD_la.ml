@@ -197,32 +197,62 @@ let lamch cmach =
 
 (** {4 orgqr} *)
 
-let check_orgqr_args loc k m n =
-  if S.__expose m < S.__expose n || S.__expose n < S.__expose k
-  then invalid_argf "%s: m >= n >= k" loc ()
+external direct_orgqr :
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  k : _ Slap_size.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  tau : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZorgqr_stub_bc" "lacaml_XSDCZorgqr_stub"
 
-type 'n orgqr_min_lwork
+type 'n orgqr_min_lwork = (Slap_size.one, 'n) Slap_size.max
 
-let orgqr_min_lwork ~n =
-  S.__unexpose (I.orgqr_min_lwork ~n:(S.__expose n))
+let orgqr_min_lwork ~n = Slap_size.max Slap_size.one n
+
+let orgqr_check_size loc k m n =
+  let k = Slap_size.__expose k in
+  let m = Slap_size.__expose m in
+  let n = Slap_size.__expose n in
+  if m < n
+  then Slap_misc.invalid_argf "%s: dim1(a)=%d, dim2(a)=%d \
+                               (unsatisfied: dim1(a) >= dim2(a))" loc m n ();
+  if n < k
+  then Slap_misc.invalid_argf "%s: dim2(a)=%d, dim(tau)=%d \
+                               (unsatisfied: dim2(a) >= dim(tau))" loc n k ()
+
+let orgqr_opt_lwork_aux ~tau a =
+  assert(Slap_vec.check_cnt tau);
+  let k, _, tau = Slap_vec.__expose tau in
+  let m, n, ar, ac, a = Slap_mat.__expose a in
+  orgqr_check_size "orgqr_opt_lwork" k m n;
+  let work = Array1.create prec fortran_layout 1 in
+  let i = direct_orgqr ~m ~n ~k ~work ~lwork:(-1) ~tau ~ar ~ac ~a in
+  if i = 0 then Slap_size.__unexpose (int_of_float work.{1})
+  else internal_error "Slap.XSDCZ.orgqr_opt_lwork" i
 
 let orgqr_opt_lwork ~tau a =
-  assert(Slap_vec.check_cnt tau);
-  let k, _, tau = V.__expose tau in
-  let m, n, ar, ac, a = M.__expose a in
-  check_orgqr_args "orgqr_opt_lwork" k m n;
-  I.orgqr_opt_lwork
-    ~m:(S.__expose m) ~n:(S.__expose n) ~k:(S.__expose k)
-    ~tau ~ar ~ac a
+  orgqr_opt_lwork_aux ~tau a
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
 let orgqr_dyn ?work ~tau a =
   assert(Slap_vec.check_cnt tau);
-  let k, _, tau = V.__expose tau in
-  let m, n, ar, ac, a = M.__expose a in
-  check_orgqr_args "orgqr_dyn" k m n;
-  I.orgqr ~m:(S.__expose m) ~n:(S.__expose n) ~k:(S.__expose k)
-    ?work:(Slap_vec.opt_work work) ~tau ~ar ~ac a
+  let k, _, ba_tau = Slap_vec.__expose tau in
+  let m, n, ar, ac, ba_a = Slap_mat.__expose a in
+  orgqr_check_size "orgqr_dyn" k m n;
+  if Slap_size.nonzero k && Slap_size.nonzero m && Slap_size.nonzero n
+  then begin
+    let loc = "Slap.XSDCZ.orgqr_dyn" in
+    let lwork, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:(orgqr_min_lwork ~n)
+        ~opt_lwork:(orgqr_opt_lwork_aux ~tau a) in
+    let i = direct_orgqr ~m ~n ~k ~work ~lwork ~tau:ba_tau ~ar ~ac ~a:ba_a in
+    if i <> 0 then internal_error loc i
+  end
 
 (** {4 ormqr} *)
 
