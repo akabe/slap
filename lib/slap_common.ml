@@ -185,6 +185,10 @@ let __expose_norm = identity
 
 let __unexpose_norm = identity
 
+let __expose_side = identity
+
+let __unexpose_side = identity
+
 let check_side_dim k m n = function
   | 'L' -> S.__expose m = S.__expose k
   | _ -> S.__expose n = S.__expose k

@@ -196,6 +196,10 @@ val __expose_norm : (_, _) norm -> char
 
 val __unexpose_norm : char -> (_, _) norm
 
+val __expose_side : (_, _, _) side -> char
+
+val __unexpose_side : char -> (_, _, _) side
+
 val check_side_dim :
   'k Slap_size.t -> 'm Slap_size.t -> 'n Slap_size.t ->
   ('k, 'm, 'n) side -> bool

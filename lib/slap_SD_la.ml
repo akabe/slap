@@ -256,46 +256,82 @@ let orgqr_dyn ?work ~tau a =
 
 (** {4 ormqr} *)
 
+external direct_ormqr :
+  side : (_, _, _) Slap_common.side ->
+  trans : (_, _) Slap_common.trans ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  k : _ Slap_size.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  tau : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  cr : int ->
+  cc : int ->
+  c : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZormqr_stub_bc" "lacaml_XSDCZormqr_stub"
+
 let check_ormqr ~loc ~side ~r ~m ~n ~k ~k' =
   assert(k = k');
-  match lacaml_side side with
-  | `L ->
-    assert(S.__expose r = S.__expose m);
-    if S.__expose k > S.__expose m then invalid_argf "%s" loc ()
-  | `R ->
-    assert(S.__expose r = S.__expose n);
-    if S.__expose k > S.__expose m then invalid_argf "%s" loc ()
+  let r = Slap_size.__expose r in
+  let m = Slap_size.__expose m in
+  let n = Slap_size.__expose n in
+  let k = Slap_size.__expose k in
+  assert(match Slap_common.__expose_side side with
+      | 'L' -> r = m
+      | _ -> r = n);
+  if k > m
+  then Slap_misc.invalid_argf "%s: dim(tau)=%d, dim1(c)=%d \
+                               (unsatisfied: dim(tau) <= dim1(c))" loc k m ()
 
 type ('r, 'm, 'n) ormqr_min_lwork
 
 let ormqr_min_lwork ~side ~m ~n =
   begin
-    match lacaml_side side with
-    | `L -> max 1 (S.__expose n)
-    | `R -> max 1 (S.__expose m)
+    match Slap_common.__expose_side side with
+    | 'L' -> max 1 (Slap_size.__expose n)
+    | _ -> max 1 (Slap_size.__expose m)
   end
-  |> S.__unexpose
+  |> Slap_size.__unexpose
+
+let ormqr_opt_lwork_aux ~side ~trans ~tau a c =
+  assert(Slap_vec.check_cnt tau);
+  let loc = "Slap.XSDCZ.ormqr_opt_lwork" in
+  let k, _, tau = Slap_vec.__expose tau in
+  let r, k', ar, ac, a = Slap_mat.__expose a in
+  let m, n, cr, cc, c = Slap_mat.__expose c in
+  check_ormqr ~loc ~side ~r ~m ~n ~k ~k';
+  let work = Array1.create prec fortran_layout 1 in
+  let i = direct_ormqr ~side ~trans ~m ~n ~k
+      ~work ~lwork:(-1) ~tau ~ar ~ac ~a ~cr ~cc ~c in
+  if i = 0 then Slap_size.__unexpose (int_of_float work.{1})
+  else internal_error loc i
 
 let ormqr_opt_lwork ~side ~trans ~tau a c =
-  assert(Slap_vec.check_cnt tau);
-  let k, _, tau = V.__expose tau in
-  let r, k', ar, ac, a = M.__expose a in
-  let m, n, cr, cc, c = M.__expose c in
-  check_ormqr ~loc:"ormqr_opt_lwork" ~side ~r ~m ~n ~k ~k';
-  I.ormqr_opt_lwork ~side:(lacaml_side side) ~trans:(lacaml_trans2 trans)
-    ~m:(S.__expose m) ~n:(S.__expose n) ~k:(S.__expose k)
-    ~tau ~ar ~ac a ~cr ~cc c
+  ormqr_opt_lwork_aux ~side ~trans ~tau a c
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
 let ormqr_dyn ~side ~trans ?work ~tau a c =
   assert(Slap_vec.check_cnt tau);
-  let k, _, tau = V.__expose tau in
-  let r, k', ar, ac, a = M.__expose a in
-  let m, n, cr, cc, c = M.__expose c in
-  check_ormqr ~loc:"ormqr_dyn" ~side ~r ~m ~n ~k ~k';
-  I.ormqr ~side:(lacaml_side side) ~trans:(lacaml_trans2 trans)
-    ~m:(S.__expose m) ~n:(S.__expose n) ~k:(S.__expose k)
-    ?work:(Slap_vec.opt_work work) ~tau ~ar ~ac a ~cr ~cc c
+  let loc = "Slap.XSDCZ.ormqr" in
+  let k, _, tau' = Slap_vec.__expose tau in
+  let r, k', ar, ac, a' = Slap_mat.__expose a in
+  let m, n, cr, cc, c' = Slap_mat.__expose c in
+  check_ormqr ~loc:"ormqr" ~side ~r ~m ~n ~k ~k';
+  if Slap_size.nonzero r && Slap_size.nonzero m
+     && Slap_size.nonzero n && Slap_size.nonzero k
+  then begin
+    let lwork, work =
+      Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:(ormqr_min_lwork ~side ~m ~n)
+        ~opt_lwork:(ormqr_opt_lwork_aux ~side ~trans ~tau a c) in
+    let i = direct_ormqr ~side ~trans ~m ~n ~k
+        ~work ~lwork ~tau:tau' ~ar ~ac ~a:a' ~cr ~cc ~c:c' in
+    if i <> 0 then internal_error loc i
+  end
 
 (** {4 gecon} *)
 
