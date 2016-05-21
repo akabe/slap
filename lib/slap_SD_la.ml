@@ -373,23 +373,52 @@ let gecon ?(norm = Slap_common.__unexpose_norm 'O') ?anorm ?work ?iwork aa =
     else internal_error loc i
   end else 0.0
 
+
 (** {4 sycon} *)
 
-type 'n sycon_min_lwork
+external direct_sycon :
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  ipiv : (int32, int32_elt, fortran_layout) Array1.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  iwork : (int32, int32_elt, fortran_layout) Array1.t ->
+  anorm : float ->
+  int * float = "lacaml_XSDCZsycon_stub_bc" "lacaml_XSDCZsycon_stub"
 
-let sycon_min_lwork n = S.__unexpose (I.sycon_min_lwork (S.__expose n))
+type 'n sycon_min_lwork = (Slap_size.two, 'n) Slap_size.mul
 
-type 'n sycon_min_liwork
+let sycon_min_lwork n = Slap_size.mul Slap_size.two n
 
-let sycon_min_liwork n = S.__unexpose (I.sycon_min_liwork (S.__expose n))
+type 'n sycon_min_liwork = 'n
 
-let sycon ?up ?ipiv ?anorm ?work ?iwork a =
-  let n, n', ar, ac, a = M.__expose a in
+let sycon_min_liwork n = n
+
+let sycon ?(up = Slap_common.__unexpose_uplo 'U') ?ipiv ?anorm ?work ?iwork aa =
+  let n, n', ar, ac, a = Slap_mat.__expose aa in
   assert(n = n');
-  I.sycon ~n:(S.__expose n) ?up ?ipiv:(Slap_vec.opt_cnt_vec n ipiv) ?anorm
-    ?work:(Slap_vec.opt_work work)
-    ?iwork:(Slap_vec.opt_work iwork)
-    ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    let loc = "Slap.XSDCZ.sycon" in
+    let min_lwork = sycon_min_lwork n in
+    let _, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork ~opt_lwork:min_lwork in
+    let min_liwork = sycon_min_liwork n in
+    let _, iwork = Slap_vec.__alloc_work int32 iwork ~loc
+        ~min_lwork:min_liwork ~opt_lwork:min_liwork in
+    let ipiv =
+      if ipiv = None
+      then sytrf ~up ~work:(Slap_vec.__unexpose min_lwork 1 work) aa
+           |> Slap_vec.__expose
+           |> (fun (_, _, ipiv) -> ipiv)
+      else Slap_vec.opt_cnt_vec_alloc int32 n ipiv in
+    let anorm = match anorm with
+      | None -> lange aa
+      | Some anorm -> anorm in
+    let i, res = direct_sycon ~up ~n ~ar ~ac ~a ~ipiv ~work ~iwork ~anorm in
+    if i = 0 then res else internal_error loc i
+  end else 0.0
 
 (** {4 pocon} *)
 
