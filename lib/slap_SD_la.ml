@@ -422,21 +422,42 @@ let sycon ?(up = Slap_common.__unexpose_uplo 'U') ?ipiv ?anorm ?work ?iwork aa =
 
 (** {4 pocon} *)
 
-type 'n pocon_min_lwork
+external direct_pocon :
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  iwork : (int32, int32_elt, fortran_layout) Array1.t ->
+  anorm : float ->
+  int * float = "lacaml_XSDCZpocon_stub_bc" "lacaml_XSDCZpocon_stub"
 
-let pocon_min_lwork n = S.__unexpose (I.pocon_min_lwork (S.__expose n))
+type 'n pocon_min_lwork = (Slap_size.three, 'n) Slap_size.mul
 
-type 'n pocon_min_liwork
+let pocon_min_lwork n = Slap_size.mul Slap_size.three n
 
-let pocon_min_liwork n = S.__unexpose (I.pocon_min_liwork (S.__expose n))
+type 'n pocon_min_liwork = 'n
 
-let pocon ?up ?anorm ?work ?iwork a =
-  let n, n', ar, ac, a = M.__expose a in
+let pocon_min_liwork n = n
+
+let pocon ?(up = Slap_common.__unexpose_uplo 'U') ?anorm ?work ?iwork aa =
+  let n, n', ar, ac, a = Slap_mat.__expose aa in
   assert(n = n');
-  I.pocon ~n:(S.__expose n) ?up ?anorm
-    ?work:(Slap_vec.opt_work work)
-    ?iwork:(Slap_vec.opt_work iwork)
-    ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    let loc = "Slap.XSDCZ.pocon" in
+    let min_lwork = pocon_min_lwork n in
+    let _, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork ~opt_lwork:min_lwork in
+    let min_liwork = pocon_min_liwork n in
+    let _, iwork = Slap_vec.__alloc_work int32 iwork ~loc
+        ~min_lwork:min_liwork ~opt_lwork:min_liwork in
+    let anorm = match anorm with
+      | None -> lange aa
+      | Some anorm -> anorm in
+    let i, res = direct_pocon ~up ~n ~ar ~ac ~a ~work ~iwork ~anorm in
+    if i = 0 then res else internal_error loc i
+  end else 0.0
 
 (** {3 Least squares (expert drivers)} *)
 

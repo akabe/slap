@@ -304,18 +304,21 @@ val pocon_min_liwork : 'n Slap_size.t -> 'n pocon_min_liwork Slap_size.t
     [pocon] routine. [n] is the number of rows or columns in a matrix.
  *)
 
-val pocon : ?up:bool ->
-            ?anorm:float ->
-            ?work:('lwork, cnt) vec ->
-            ?iwork:('liwork, cnt) Slap_common.int32_vec ->
-            ('n, 'n, 'cd) mat -> float
+val pocon :
+  ?up:[< `U | `L ] Slap_common.uplo ->
+  ?anorm:float ->
+  ?work:('lwork, cnt) vec ->
+  ?iwork:('liwork, cnt) Slap_common.int32_vec ->
+  ('n, 'n, 'cd) mat -> float
 (** [pocon ?up ?anorm ?work ?iwork a] estimates the reciprocal of the
     condition number of symmetric positive-definite matrix [a].
     Since [a] is symmetric, the 1-norm is equal to the infinity norm.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param anorm default = the norm of matrix [a] as returned by [lange].
     @param work  default = an optimum-length vector.
     @param iwork default = an optimum-length vector.
