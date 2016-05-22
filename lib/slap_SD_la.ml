@@ -548,33 +548,78 @@ let gelsy aa ?(rcond = -1.0) ?jpvt ?work bb =
 
 (** {4 gelsd} *)
 
+external direct_gelsd :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ofss : int ->
+  s : ('a, 'b, fortran_layout) Array1.t ->
+  rcond : float ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  iwork : ('a, 'b, fortran_layout) Array1.t ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int * int = "lacaml_XSDCZgelsd_stub_bc" "lacaml_XSDCZgelsd_stub"
+
 type ('m, 'n, 'nrhs) gelsd_min_lwork
 
 let gelsd_min_lwork ~m ~n ~nrhs =
-  S.__unexpose (I.gelsd_min_lwork
-                    ~m:(S.__expose m) ~n:(S.__expose n)
-                    ~nrhs:(S.__expose nrhs))
+  Lacaml.XSDCZ.gelsd_min_lwork
+    ~m:(Slap_size.__expose m) ~n:(Slap_size.__expose n)
+    ~nrhs:(Slap_size.__expose nrhs)
+  |> Slap_size.__unexpose
+
+let gelsd_opt_lwork_aux a b =
+  let m, n, ar, ac, a = Slap_mat.__expose a in
+  let n', nrhs, br, bc, b = Slap_mat.__expose b in
+  assert(n = n');
+  let work = Array1.create prec fortran_layout 1 in
+  let empty = Array1.create prec fortran_layout 0 in
+  let i, _ =
+    direct_gelsd ~ar ~ac ~a ~m ~n ~ofss:1 ~s:empty ~rcond:(-1.0)
+      ~work ~lwork:(-1) ~iwork:empty ~nrhs ~br ~bc ~b in
+  if i = 0 then
+    (* FIXME: Lacaml says this code has a bug of LAPACK maybe. *)
+    Slap_size.max
+      (Slap_size.__unexpose (int_of_float work.{1}))
+      (gelsd_min_lwork ~m ~n ~nrhs)
+  else gelsx_err "Slap.XSDCZ.gelsd_opt_lwork" i
 
 let gelsd_opt_lwork a b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
-  assert(n = n');
-  I.gelsd_opt_lwork ~m:(S.__expose m) ~n:(S.__expose n)
-    ~nrhs:(S.__expose nrhs) ~ar ~ac a ~br ~bc b
+  gelsd_opt_lwork_aux a b
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
 type ('m, 'n, 'nrhs) gelsd_min_iwork
 
 let gelsd_min_iwork m n =
-  S.__unexpose (I.gelsd_min_iwork (S.__expose m) (S.__expose n))
+  Lacaml.XSDCZ.gelsd_min_iwork (Slap_size.__expose m) (Slap_size.__expose n)
+  |> Slap_size.__unexpose
 
-let gelsd a ?rcond ?s ?work ?iwork b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
+let gelsd aa ?(rcond = -1.0) ?s ?work ?iwork bb =
+  let m, n, ar, ac, a = Slap_mat.__expose aa in
+  let n', nrhs, br, bc, b = Slap_mat.__expose bb in
   assert(n = n');
-  I.gelsd  ~m:(S.__expose m) ~n:(S.__expose n) ~nrhs:(S.__expose nrhs)
-    ~ar ~ac a ?rcond ~br ~bc b ?s:(Slap_vec.opt_cnt_vec (Slap_size.min m n) s)
-    ?work:(Slap_vec.opt_work work) ?iwork:(Slap_vec.opt_work iwork)
+  let mn = Slap_size.min m n in
+  if Slap_size.nonzero mn && Slap_size.nonzero nrhs then begin
+    let loc = "Slap.XSDCZ.gelsd" in
+    let s = Slap_vec.opt_cnt_vec_alloc prec mn s in
+    let min_liwork = gelsd_min_iwork m n in
+    let _, iwork = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:min_liwork ~opt_lwork:min_liwork in
+    let lwork, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:(gelsd_min_lwork ~m ~n ~nrhs)
+        ~opt_lwork:(gelsd_opt_lwork_aux aa bb) in
+    let i, rank =
+      direct_gelsd ~ar ~ac ~a ~m ~n ~ofss:1 ~s ~rcond
+        ~work ~lwork ~iwork ~nrhs ~br ~bc ~b in
+    if i = 0 then rank else gelsx_err loc i
+  end else 0
 
 (** {4 gelss} *)
 
