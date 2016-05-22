@@ -461,30 +461,90 @@ let pocon ?(up = Slap_common.__unexpose_uplo 'U') ?anorm ?work ?iwork aa =
 
 (** {3 Least squares (expert drivers)} *)
 
+let gelsx_err loc i =
+  assert(i <> 0);
+  if i > 0
+  then Slap_misc.failwithf "%s: failed to converge on off-diagonal \
+                            element %d" loc i ()
+  else internal_error loc i
+
 (** {4 gelsy} *)
 
-type ('m, 'n, 'nrhs) gelsy_min_lwork
+external direct_gelsy :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  jpvt : (int32, int32_elt, fortran_layout) Array1.t ->
+  rcond : float ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int * int = "lacaml_XSDCZgelsy_stub_bc" "lacaml_XSDCZgelsy_stub"
+
+type ('m, 'n, 'nrhs) gelsy_min_lwork =
+  (((('m, 'n) Slap_size.min,
+     (Slap_size.three, 'n) Slap_size.mul) Slap_size.add,
+    Slap_size.one)
+     Slap_size.add,
+   ((Slap_size.two, ('m, 'n) Slap_size.min) Slap_size.mul,
+    'nrhs) Slap_size.add)
+    Slap_size.max
 
 let gelsy_min_lwork ~m ~n ~nrhs =
-  S.__unexpose (I.gelsy_min_lwork
-                    ~m:(S.__expose m) ~n:(S.__expose n)
-                    ~nrhs:(S.__expose nrhs))
+  let open Slap_size in
+  let ( + ) = add in
+  let ( * ) = mul in
+  let min_mn = min m n in
+  max (min_mn + three * n + one) (two * min_mn + nrhs)
+
+let gelsy_opt_lwork_aux a b =
+  let m, n, ar, ac, a = Slap_mat.__expose a in
+  let n', nrhs, br, bc, b = Slap_mat.__expose b in
+  assert(n = n');
+  let work = Array1.create prec fortran_layout 1 in
+  let jpvt = Array1.create int32 fortran_layout 0 in
+  let i, _ =
+    direct_gelsy ~ar ~ac ~a ~m ~n ~jpvt
+      ~rcond:(-1.0) ~work ~lwork:(-1) ~nrhs ~br ~bc ~b in
+  if i = 0 then int_of_float work.{1} |> Slap_size.__unexpose
+  else gelsx_err "Slap.XSDCZ.gelsy_opt_lwork" i
 
 let gelsy_opt_lwork a b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
-  assert(n = n');
-  I.gelsy_opt_lwork ~m:(S.__expose m) ~n:(S.__expose n)
-    ~nrhs:(S.__expose nrhs) ~ar ~ac a ~br ~bc b
+  gelsy_opt_lwork_aux a b
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
-let gelsy a ?rcond ?jpvt ?work b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
+let gelsy aa ?(rcond = -1.0) ?jpvt ?work bb =
+  let m, n, ar, ac, a = Slap_mat.__expose aa in
+  let n', nrhs, br, bc, b = Slap_mat.__expose bb in
   assert(n = n');
-  I.gelsy ~m:(S.__expose m) ~n:(S.__expose n) ~nrhs:(S.__expose nrhs)
-    ?jpvt:(Slap_vec.opt_cnt_vec n jpvt) ?work:(Slap_vec.opt_work work)
-     ~ar ~ac a ?rcond ~br ~bc b
+  if Slap_size.nonzero m && Slap_size.nonzero n && Slap_size.nonzero nrhs
+  then begin
+    let loc = "Slap.XSDCZ.gelsy" in
+    let jpvt = match jpvt with
+      | Some jpvt ->
+        assert(Slap_vec.check_cnt jpvt);
+        let n'', _, jpvt = Slap_vec.__expose jpvt in
+        assert(n = n'');
+        jpvt
+      | None ->
+        let jpvt = Array1.create int32 fortran_layout (Slap_size.to_int n) in
+        Array1.fill jpvt Int32.zero;
+        jpvt in
+    let lwork, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:(gelsy_min_lwork ~m ~n ~nrhs)
+        ~opt_lwork:(gelsy_opt_lwork_aux aa bb) in
+    let i, rank =
+      direct_gelsy ~ar ~ac ~a ~m ~n
+        ~jpvt ~rcond ~work ~lwork ~nrhs ~br ~bc ~b in
+    if i = 0 then rank
+    else gelsx_err loc i
+  end else 0
 
 (** {4 gelsd} *)
 
