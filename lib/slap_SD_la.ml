@@ -623,30 +623,64 @@ let gelsd aa ?(rcond = -1.0) ?s ?work ?iwork bb =
 
 (** {4 gelss} *)
 
+external direct_gelss :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ofss : int ->
+  s : ('a, 'b, fortran_layout) Array1.t ->
+  rcond : float ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int * int = "lacaml_XSDCZgelss_stub_bc" "lacaml_XSDCZgelss_stub"
+
 type ('m, 'n, 'nrhs) gelss_min_lwork
 
 let gelss_min_lwork ~m ~n ~nrhs =
-  S.__unexpose (I.gelss_min_lwork
-                    ~m:(S.__expose m) ~n:(S.__expose n)
-                    ~nrhs:(S.__expose nrhs))
+  Lacaml.XSDCZ.gelss_min_lwork
+    ~m:(Slap_size.__expose m) ~n:(Slap_size.__expose n)
+    ~nrhs:(Slap_size.__expose nrhs)
+  |> Slap_size.__unexpose
+
+let gelss_opt_lwork_aux a b =
+  let m, n, ar, ac, a = Slap_mat.__expose a in
+  let n', nrhs, br, bc, b = Slap_mat.__expose b in
+  assert(n = n');
+  let work = Array1.create prec fortran_layout 1 in
+  let i, _ =
+    direct_gelss ~ar ~ac ~a ~m ~n ~ofss:1 ~s:Lacaml.XSDCZ.Vec.empty
+      ~rcond:(-1.0) ~work ~lwork:(-1) ~nrhs ~br ~bc ~b in
+  if i = 0 then int_of_float work.{1} |> Slap_size.__unexpose
+  else gelsx_err "Slap.XSDCZ.gelss_opt_lwork" i
 
 let gelss_opt_lwork a b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
-  assert(n = n');
-  I.gelss_opt_lwork
-    ~m:(S.__expose m) ~n:(S.__expose n) ~nrhs:(S.__expose nrhs)
-    ~ar ~ac a ~br ~bc b
+  gelss_opt_lwork_aux a b
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
-let gelss a ?rcond ?s ?work b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
+let gelss aa ?(rcond = -1.0) ?s ?work bb =
+  let m, n, ar, ac, a = Slap_mat.__expose aa in
+  let n', nrhs, br, bc, b = Slap_mat.__expose bb in
   assert(n = n');
-  I.gelss ~m:(S.__expose m) ~n:(S.__expose n) ~nrhs:(S.__expose nrhs)
-    ~ar ~ac a ?rcond ~br ~bc b
-    ?s:(Slap_vec.opt_cnt_vec (Slap_size.min m n) s)
-    ?work:(Slap_vec.opt_work work)
+  let mn = Slap_size.min m n in
+  if Slap_size.nonzero mn && Slap_size.nonzero nrhs
+  then begin
+    let loc = "Slap.XSDCZ.gelss" in
+    let s = Slap_vec.opt_cnt_vec_alloc prec mn s in
+    let lwork, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:(gelss_min_lwork ~m ~n ~nrhs)
+        ~opt_lwork:(gelss_opt_lwork_aux aa bb) in
+    let i, rank =
+      direct_gelss ~ar ~ac ~a ~m ~n ~ofss:1 ~s ~rcond
+        ~work ~lwork ~nrhs ~br ~bc ~b in
+    if i = 0 then rank else gelsx_err loc i
+  end else 0
 
 (** {3 General SVD routines} *)
 
