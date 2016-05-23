@@ -1,10 +1,9 @@
-# Dependencies
-OPAM_DEPS="ocamlbuild ocamlfind cppo lacaml>=8.0.0 ounit"
-
 export PREFIX="./usr"
 export BINDIR="$PREFIX/bin"
 export LIBDIR="$PREFIX/lib"
 export PATH="$BINDIR:$PATH"
+export OPAMYES=1
+export OPAMVERBOSE=1
 
 mkdir -p $PREFIX
 
@@ -13,19 +12,11 @@ wget -q -O opam_installer.sh "https://raw.github.com/ocaml/opam/master/shell/opa
 if [ -n "${OPAM_VERSION:-}" ]; then
     sed -i "s/^VERSION=.*$/VERSION='$OPAM_VERSION'/" opam_installer.sh
 fi
-echo y | sh opam_installer.sh $BINDIR
-
-# Install OCaml
-export OPAMYES=1
-export OPAMVERBOSE=1
-opam init
-opam switch $OCAML_VERSION
+echo y | sh opam_installer.sh $BINDIR $OCAML_VERSION
 eval `opam config env`
 
 # Install OPAM packages
-if [ -n "${OPAM_DEPS:-}" ]; then
-    opam install $OPAM_DEPS
-fi
+opam install cppo lacaml>=8.0.0 ounit
 
 # Test
 ./configure $CONFIG --enable-tests --enable-examples
