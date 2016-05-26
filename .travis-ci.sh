@@ -1,3 +1,5 @@
+OPAM_PKGS="cppo lacaml>=8.0.0 ounit"
+
 export PREFIX="./usr"
 export BINDIR="$PREFIX/bin"
 export LIBDIR="$PREFIX/lib"
@@ -16,7 +18,17 @@ echo y | sh opam_installer.sh $BINDIR $OCAML_VERSION
 eval `opam config env`
 
 # Install OPAM packages
-opam install cppo lacaml>=8.0.0 ounit
+if [ "$OCAML_VERSION" == "4.03.0" ]; then
+    # OCaml 4.03.0 possibly requires reinstallation of ocamlbuild. (bug?)
+    # [STDERR] Warning: Won't be able to compile a native plugin
+    #          Failure: Cannot find "ocamlbuild.cmo" in ocamlbuild -where directory.
+    if ! opam install $OPAM_PKGS; then
+        opam reinstall ocamlbuild
+        opam install $OPAM_PKGS
+    fi
+else
+    opam install $OPAM_PKGS
+fi
 
 # Test
 ./configure $CONFIG --enable-tests --enable-examples
