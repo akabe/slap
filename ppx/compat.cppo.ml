@@ -9,8 +9,8 @@ let nolabel = Nolabel (* Asttypes.arg_label for 4.03 only *)
 
 module Const =
 struct
-  let int ?suffix n = PConst_int (string_of_int n, suffix)
-  let string ?quot s = PConst_string (s, quot)
+  let int ?suffix n = Pconst_integer (string_of_int n, suffix)
+  let string ?quot s = Pconst_string (s, quot)
 end
 
 #else

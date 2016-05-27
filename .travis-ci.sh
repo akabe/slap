@@ -25,7 +25,7 @@ if [ "$OCAML_VERSION" == "4.03.0" ]; then
     # [STDERR] Warning: Won't be able to compile a native plugin
     #          Failure: Cannot find "ocamlbuild.cmo" in ocamlbuild -where directory.
     if ! opam install $OPAM_PKGS; then
-        echo "\033[31m[WARN] Retry installation of OPAM packages after rebuilding OCamlbuild.\033[0m"
+        echo -e "\033[31m[WARN] Retry installation of OPAM packages after rebuilding OCamlbuild.\033[0m"
         opam reinstall ocamlbuild
         opam install $OPAM_PKGS
     fi
