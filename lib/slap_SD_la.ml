@@ -686,43 +686,87 @@ let gelss aa ?(rcond = -1.0) ?s ?work bb =
 
 (** {4 gesvd} *)
 
+external direct_gesvd :
+  jobu : (_, _, _, _, _) Slap_common.svd_job ->
+  jobvt : (_, _, _, _, _) Slap_common.svd_job ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  s : ('a, 'b, fortran_layout) Array1.t ->
+  ur : int ->
+  uc : int ->
+  u : ('a, 'b, fortran_layout) Array2.t ->
+  vtc : int ->
+  vtr : int ->
+  vt : ('a, 'b, fortran_layout) Array2.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  int = "lacaml_XSDCZgesvd_stub_bc" "lacaml_XSDCZgesvd_stub"
+
 type ('m, 'n) gesvd_min_lwork
 
 let gesvd_min_lwork ~m ~n =
-  S.__unexpose (I.gesvd_min_lwork ~m:(S.__expose m) ~n:(S.__expose n))
+  let open Slap_size in
+  Lacaml.XSDCZ.gesvd_min_lwork ~m:(__expose m) ~n:(__expose n)
+  |> __unexpose
 
 let gesvd_calc_sizes m n jobu jobvt =
-  let min_mn = Slap_size.min m n in
-  let job_size c = function
-    | `A -> S.__expose c
-    | `S -> S.__expose min_mn
-    | `O | `N -> 0 in
-  let u_cols = S.__unexpose (job_size m (lacaml_svd_job jobu)) in
-  let vt_rows = S.__unexpose (job_size n (lacaml_svd_job jobvt)) in
+  let open Slap_size in
+  let min_mn = min m n in
+  let job_size k job = match Slap_common.__expose_svd_job job with
+    | 'A' -> __expose k
+    | 'S' -> __expose min_mn
+    | _ -> 0 in
+  let u_cols = __unexpose (job_size m jobu) in
+  let vt_rows = __unexpose (job_size n jobvt) in
   (min_mn, u_cols, vt_rows)
 
-let gesvd_opt_lwork ~jobu ~jobvt ?s ?u ?vt a =
-  let m, n, ar, ac, a = M.__expose a in
-  let min_mn, u_cols, vt_rows = gesvd_calc_sizes m n jobu jobvt in
-  let ur, uc, u = Slap_mat.opt_mat m u_cols u in
-  let vtr, vtc, vt = Slap_mat.opt_mat vt_rows n vt in
-  I.gesvd_opt_lwork ~m:(S.__expose m) ~n:(S.__expose n)
-    ~jobu:(lacaml_svd_job jobu) ~jobvt:(lacaml_svd_job jobvt)
-    ?s:(Slap_vec.opt_cnt_vec min_mn s) ?ur ?uc ?u ?vtr ?vtc ?vt ~ar ~ac a
-  |> Slap_size.unsafe_of_int
+let gesvd_err loc i =
+  assert(i <> 0);
+  if i > 0
+  then Slap_misc.failwithf
+      "%s: %d off-diagonal elements did not converge" loc i ()
+  else internal_error loc i
 
-let gesvd ~jobu ~jobvt ?s ?u ?vt ?work a =
-  let m, n, ar, ac, a = M.__expose a in
+let gesvd_opt_lwork_aux ~jobu ~jobvt ?s ?u ?vt a =
+  let m, n, ar, ac, a = Slap_mat.__expose a in
   let min_mn, u_cols, vt_rows = gesvd_calc_sizes m n jobu jobvt in
   let ur, uc, u = Slap_mat.opt_mat_alloc prec m u_cols u in
   let vtr, vtc, vt = Slap_mat.opt_mat_alloc prec vt_rows n vt in
-  let s, u, vt = I.gesvd ~m:(S.__expose m) ~n:(S.__expose n)
-      ~jobu:(lacaml_svd_job jobu) ~jobvt:(lacaml_svd_job jobvt)
-      ?s:(Slap_vec.opt_cnt_vec min_mn s) ~ur ~uc ~u ~vtr ~vtc ~vt
-      ?work:(Slap_vec.opt_work work) ~ar ~ac a in
-  (V.__unexpose min_mn 1 s,
-   M.__unexpose m u_cols ur uc u,
-   M.__unexpose vt_rows n vtr vtc vt)
+  let s = Slap_vec.opt_cnt_vec_alloc prec min_mn s in
+  let work = Array1.create prec fortran_layout 1 in
+  let i =
+    direct_gesvd ~jobu ~jobvt ~m ~n ~ar ~ac ~a ~s ~ur ~uc ~u
+      ~vtr ~vtc ~vt ~work ~lwork:(-1) in
+  if i = 0 then int_of_float work.{1} |> Slap_size.__unexpose
+  else gesvd_err "Slap.XSDCZ.gesvd_opt_lwork" i
+
+let gesvd_opt_lwork ~jobu ~jobvt ?s ?u ?vt a =
+  gesvd_opt_lwork_aux ~jobu ~jobvt ?s ?u ?vt a
+  |> Slap_size.__expose
+  |> Slap_size.unsafe_of_int
+
+let gesvd ~jobu ~jobvt ?s ?u ?vt ?work a_mat =
+  let m, n, ar, ac, a = Slap_mat.__expose a_mat in
+  let min_mn, u_cols, vt_rows = gesvd_calc_sizes m n jobu jobvt in
+  let ur, uc, u = Slap_mat.opt_mat_alloc prec m u_cols u in
+  let vtr, vtc, vt = Slap_mat.opt_mat_alloc prec vt_rows n vt in
+  let s = Slap_vec.opt_cnt_vec_alloc prec min_mn s in
+  let u_mat = Slap_mat.__unexpose m u_cols ur uc u in
+  let vt_mat = Slap_mat.__unexpose vt_rows n vtr vtc vt in
+  let s_vec = Slap_vec.__unexpose min_mn 1 s in
+  let loc = "Slap.XSDCZ.gesvd" in
+  let lwork, work =
+    Slap_vec.__alloc_work prec work ~loc
+      ~min_lwork:(gesvd_min_lwork ~m ~n)
+      ~opt_lwork:(gesvd_opt_lwork_aux
+                    ~jobu ~jobvt ~s:s_vec ~u:u_mat ~vt:vt_mat a_mat) in
+  let i =
+    direct_gesvd ~jobu ~jobvt ~m ~n ~ar ~ac ~a ~s ~ur ~uc ~u
+      ~vtr ~vtc ~vt ~work ~lwork:(-1) in
+  if i = 0 then (s_vec, u_mat, vt_mat) else gesvd_err loc i
 
 (** {4 gesdd} *)
 
