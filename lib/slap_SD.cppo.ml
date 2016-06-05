@@ -28,6 +28,7 @@ let prec = floatXBITS
 let zero = 0.0
 let one = 1.0
 let lacaml_trans3 = Slap_common.lacaml_trans2
+let int_of_num = int_of_float
 
 #include "slap_SDCZ_common.ml"
 

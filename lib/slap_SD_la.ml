@@ -17,312 +17,756 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 *)
 
+open Bigarray
+
 (** {2 BLAS interface} *)
 
 (** {3 Level 1} *)
 
-let dot x y =
-  Vec.wrap2 (fun ?n ?ofsx ?incx x -> I.dot ?n ?ofsx ?incx x) x y
+(* DOT *)
 
-let asum x = Vec.wrap1 I.asum x
+external direct_dot :
+  n : _ Slap_size.t ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  float = "lacaml_XSDCZdot_stub_bc" "lacaml_XSDCZdot_stub"
+
+let dot x y =
+  let n, incx, x = Slap_vec.__expose x in
+  let n', incy, y = Slap_vec.__expose y in
+  assert(n = n');
+  direct_dot ~n ~ofsx:1 ~incx ~x ~ofsy:1 ~incy ~y
+
+
+(* ASUM *)
+
+external direct_asum :
+  n : _ Slap_size.t ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  float = "lacaml_XSDCZasum_stub"
+
+let asum x =
+  let n, incx, x = Slap_vec.__expose x in
+  direct_asum ~n ~ofsx:1 ~incx ~x
 
 (** {3 Level 2} *)
 
-let sbmv ~k ?y a ?up ?alpha ?beta x =
-  let sbs, n, ar, ac, a = M.__expose a in
-  let n', incx, x = V.__expose x in
+(* SBMV *)
+
+external direct_sbmv :
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  n : _ Slap_size.t ->
+  k : _ Slap_size.t ->
+  up : [< `U | `L ] Slap_common.uplo ->
+  alpha : float ->
+  beta : float ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  unit = "lacaml_XSDCZsbmv_stub_bc" "lacaml_XSDCZsbmv_stub"
+
+let sbmv ~k ?y a ?(up = Slap_common.__unexpose_uplo 'U')
+    ?(alpha = 1.0) ?(beta = 0.0) x =
+  let sbs, n, ar, ac, a = Slap_mat.__expose a in
+  let n', incx, x = Slap_vec.__expose x in
   assert(n = n' && sbs = Slap_size.syband_dyn n k);
   let incy, y = Slap_vec.opt_vec_alloc prec n y in
-  ignore (I.sbmv ~n:(S.__expose n) ~k:(S.__expose k)
-            ~ofsy:1 ~incy ~y ~ar ~ac a ?up ?alpha ?beta ~ofsx:1 ~incx x);
-  V.__unexpose n incy y
+  if Slap_size.nonzero n && Slap_size.nonzero k
+  then direct_sbmv ~ofsy:1 ~incy ~y ~ar ~ac ~a ~n ~k ~up ~alpha ~beta
+      ~ofsx:1 ~incx ~x;
+  Slap_vec.__unexpose n incy y
+
+
+(* GER *)
+
+external direct_ger :
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  alpha : float ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  ofsy : int ->
+  incy : int ->
+  y : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  unit = "lacaml_XSDCZger_stub_bc" "lacaml_XSDCZger_stub"
 
 let ger ?(alpha = 1.0) x y a =
-  let m, incx, x = V.__expose x in
-  let n, incy, y = V.__expose y in
-  let m', n', ar, ac, a = M.__expose a in
+  let m, incx, x = Slap_vec.__expose x in
+  let n, incy, y = Slap_vec.__expose y in
+  let m', n', ar, ac, a = Slap_mat.__expose a in
   assert(m = m' && n = n');
-  ignore (I.ger ~m:(S.__expose m) ~n:(S.__expose n)
-              ~alpha ~ofsx:1 ~incx x ~ofsy:1 ~incy y ~ar ~ac a);
-  M.__unexpose m n ar ac a
+  if Slap_size.nonzero m && Slap_size.nonzero n
+  then direct_ger ~m ~n ~alpha ~ofsx:1 ~incx ~x ~ofsy:1 ~incy ~y ~ar ~ac ~a;
+  Slap_mat.__unexpose m n ar ac a
 
-let syr ?(alpha = 1.0) ?(up = true) x a =
-  let n, incx, x = V.__expose x in
-  let n', n'', ar, ac, a = M.__expose a in
+
+(* SYR *)
+
+external direct_syr :
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  alpha : float ->
+  ofsx : int ->
+  incx : int ->
+  x : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  unit = "lacaml_XSDCZsyr_stub_bc" "lacaml_XSDCZsyr_stub"
+
+let syr ?(alpha = 1.0) ?(up = Slap_common.__unexpose_uplo 'U') x a =
+  let n, incx, x = Slap_vec.__expose x in
+  let n', n'', ar, ac, a = Slap_mat.__expose a in
   assert(n = n' && n = n'');
-  ignore(I.syr ~n:(S.__expose n) ~alpha ~up ~ofsx:1 ~incx x ~ar ~ac a);
-  M.__unexpose n n ar ac a
+  if Slap_size.nonzero n
+  then direct_syr ~up ~n ~alpha ~ofsx:1 ~incx ~x ~ar ~ac ~a;
+  Slap_mat.__unexpose n n ar ac a
 
 (** {2 LAPACK interface} *)
 
 (** {3 Auxiliary routines} *)
 
+(* LANSY *)
+
+external direct_lansy :
+  norm : (_, _) Slap_common.norm ->
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  float = "lacaml_XSDCZlansy_stub_bc" "lacaml_XSDCZlansy_stub"
+
 type ('m, 'a) lansy_min_lwork
 
 let lansy_min_lwork n norm =
-  S.__unexpose (I.lansy_min_lwork (S.__expose n) (lacaml_norm4 norm))
+  let lwork = match Slap_common.__expose_norm norm with
+    | 'I' | 'O' -> Slap_size.__expose n
+    | _ -> 0 in
+  Slap_size.__unexpose lwork
 
-let lansy ?up ?norm ?work a =
-  let n, n', ar, ac, a = M.__expose a in
+let lansy
+    ?(up = Slap_common.__unexpose_uplo 'U')
+    ?(norm = Slap_common.__unexpose_norm 'O')
+    ?work a =
+  let n, n', ar, ac, a = Slap_mat.__expose a in
   assert(n = n');
-  I.lansy ~n:(S.__expose n) ?up ?norm:(lacaml_norm4_opt norm)
-    ?work:(Slap_vec.opt_work work) ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    let min_lwork = lansy_min_lwork n norm in
+    let _, work = Slap_vec.__alloc_work prec work ~loc:"Slap.XSDCZ.lansy"
+        ~min_lwork  ~opt_lwork:min_lwork in
+    direct_lansy ~norm ~up ~n ~ar ~ac ~a ~work
+  end
+  else 0.0
 
-let lamch = I.lamch
+(* LAMCH *)
+
+external direct_lamch : char -> float = "lacaml_XSDCZlamch_stub"
+
+let lamch cmach =
+  direct_lamch
+    (match cmach with
+     | `N -> 'N'
+     | `O -> 'O'
+     | `P -> 'P'
+     | `R -> 'R'
+     | `S -> 'S'
+     | `U -> 'U'
+     | `L -> 'L'
+     | `M -> 'M'
+     | `B -> 'B'
+     | `E -> 'E')
 
 (** {3 Linear equations (computational routines)} *)
 
 (** {4 orgqr} *)
 
-let check_orgqr_args loc k m n =
-  if S.__expose m < S.__expose n || S.__expose n < S.__expose k
-  then invalid_argf "%s: m >= n >= k" loc ()
+external direct_orgqr :
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  k : _ Slap_size.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  tau : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZorgqr_stub_bc" "lacaml_XSDCZorgqr_stub"
 
-type 'n orgqr_min_lwork
+type 'n orgqr_min_lwork = (Slap_size.one, 'n) Slap_size.max
 
-let orgqr_min_lwork ~n =
-  S.__unexpose (I.orgqr_min_lwork ~n:(S.__expose n))
+let orgqr_min_lwork ~n = Slap_size.max Slap_size.one n
+
+let orgqr_check_size loc k m n =
+  let k = Slap_size.__expose k in
+  let m = Slap_size.__expose m in
+  let n = Slap_size.__expose n in
+  if m < n
+  then Slap_misc.invalid_argf "%s: dim1(a)=%d, dim2(a)=%d \
+                               (unsatisfied: dim1(a) >= dim2(a))" loc m n ();
+  if n < k
+  then Slap_misc.invalid_argf "%s: dim2(a)=%d, dim(tau)=%d \
+                               (unsatisfied: dim2(a) >= dim(tau))" loc n k ()
+
+let orgqr_opt_lwork_aux ~tau a =
+  assert(Slap_vec.check_cnt tau);
+  let k, _, tau = Slap_vec.__expose tau in
+  let m, n, ar, ac, a = Slap_mat.__expose a in
+  orgqr_check_size "orgqr_opt_lwork" k m n;
+  let work = Array1.create prec fortran_layout 1 in
+  let i = direct_orgqr ~m ~n ~k ~work ~lwork:(-1) ~tau ~ar ~ac ~a in
+  if i = 0 then Slap_size.__unexpose (int_of_float work.{1})
+  else internal_error "Slap.XSDCZ.orgqr_opt_lwork" i
 
 let orgqr_opt_lwork ~tau a =
-  assert(Slap_vec.check_cnt tau);
-  let k, _, tau = V.__expose tau in
-  let m, n, ar, ac, a = M.__expose a in
-  check_orgqr_args "orgqr_opt_lwork" k m n;
-  I.orgqr_opt_lwork
-    ~m:(S.__expose m) ~n:(S.__expose n) ~k:(S.__expose k)
-    ~tau ~ar ~ac a
+  orgqr_opt_lwork_aux ~tau a
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
 let orgqr_dyn ?work ~tau a =
   assert(Slap_vec.check_cnt tau);
-  let k, _, tau = V.__expose tau in
-  let m, n, ar, ac, a = M.__expose a in
-  check_orgqr_args "orgqr_dyn" k m n;
-  I.orgqr ~m:(S.__expose m) ~n:(S.__expose n) ~k:(S.__expose k)
-    ?work:(Slap_vec.opt_work work) ~tau ~ar ~ac a
+  let k, _, ba_tau = Slap_vec.__expose tau in
+  let m, n, ar, ac, ba_a = Slap_mat.__expose a in
+  orgqr_check_size "orgqr_dyn" k m n;
+  if Slap_size.nonzero k && Slap_size.nonzero m && Slap_size.nonzero n
+  then begin
+    let loc = "Slap.XSDCZ.orgqr_dyn" in
+    let lwork, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:(orgqr_min_lwork ~n)
+        ~opt_lwork:(orgqr_opt_lwork_aux ~tau a) in
+    let i = direct_orgqr ~m ~n ~k ~work ~lwork ~tau:ba_tau ~ar ~ac ~a:ba_a in
+    if i <> 0 then internal_error loc i
+  end
 
 (** {4 ormqr} *)
 
+external direct_ormqr :
+  side : (_, _, _) Slap_common.side ->
+  trans : (_, _) Slap_common.trans ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  k : _ Slap_size.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  tau : ('a, 'b, fortran_layout) Array1.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  cr : int ->
+  cc : int ->
+  c : ('a, 'b, fortran_layout) Array2.t ->
+  int = "lacaml_XSDCZormqr_stub_bc" "lacaml_XSDCZormqr_stub"
+
 let check_ormqr ~loc ~side ~r ~m ~n ~k ~k' =
   assert(k = k');
-  match lacaml_side side with
-  | `L ->
-    assert(S.__expose r = S.__expose m);
-    if S.__expose k > S.__expose m then invalid_argf "%s" loc ()
-  | `R ->
-    assert(S.__expose r = S.__expose n);
-    if S.__expose k > S.__expose m then invalid_argf "%s" loc ()
+  let r = Slap_size.__expose r in
+  let m = Slap_size.__expose m in
+  let n = Slap_size.__expose n in
+  let k = Slap_size.__expose k in
+  assert(match Slap_common.__expose_side side with
+      | 'L' -> r = m
+      | _ -> r = n);
+  if k > m
+  then Slap_misc.invalid_argf "%s: dim(tau)=%d, dim1(c)=%d \
+                               (unsatisfied: dim(tau) <= dim1(c))" loc k m ()
 
 type ('r, 'm, 'n) ormqr_min_lwork
 
 let ormqr_min_lwork ~side ~m ~n =
   begin
-    match lacaml_side side with
-    | `L -> max 1 (S.__expose n)
-    | `R -> max 1 (S.__expose m)
+    match Slap_common.__expose_side side with
+    | 'L' -> max 1 (Slap_size.__expose n)
+    | _ -> max 1 (Slap_size.__expose m)
   end
-  |> S.__unexpose
+  |> Slap_size.__unexpose
+
+let ormqr_opt_lwork_aux ~side ~trans ~tau a c =
+  assert(Slap_vec.check_cnt tau);
+  let loc = "Slap.XSDCZ.ormqr_opt_lwork" in
+  let k, _, tau = Slap_vec.__expose tau in
+  let r, k', ar, ac, a = Slap_mat.__expose a in
+  let m, n, cr, cc, c = Slap_mat.__expose c in
+  check_ormqr ~loc ~side ~r ~m ~n ~k ~k';
+  let work = Array1.create prec fortran_layout 1 in
+  let i = direct_ormqr ~side ~trans ~m ~n ~k
+      ~work ~lwork:(-1) ~tau ~ar ~ac ~a ~cr ~cc ~c in
+  if i = 0 then Slap_size.__unexpose (int_of_float work.{1})
+  else internal_error loc i
 
 let ormqr_opt_lwork ~side ~trans ~tau a c =
-  assert(Slap_vec.check_cnt tau);
-  let k, _, tau = V.__expose tau in
-  let r, k', ar, ac, a = M.__expose a in
-  let m, n, cr, cc, c = M.__expose c in
-  check_ormqr ~loc:"ormqr_opt_lwork" ~side ~r ~m ~n ~k ~k';
-  I.ormqr_opt_lwork ~side:(lacaml_side side) ~trans:(lacaml_trans2 trans)
-    ~m:(S.__expose m) ~n:(S.__expose n) ~k:(S.__expose k)
-    ~tau ~ar ~ac a ~cr ~cc c
+  ormqr_opt_lwork_aux ~side ~trans ~tau a c
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
 let ormqr_dyn ~side ~trans ?work ~tau a c =
   assert(Slap_vec.check_cnt tau);
-  let k, _, tau = V.__expose tau in
-  let r, k', ar, ac, a = M.__expose a in
-  let m, n, cr, cc, c = M.__expose c in
-  check_ormqr ~loc:"ormqr_dyn" ~side ~r ~m ~n ~k ~k';
-  I.ormqr ~side:(lacaml_side side) ~trans:(lacaml_trans2 trans)
-    ~m:(S.__expose m) ~n:(S.__expose n) ~k:(S.__expose k)
-    ?work:(Slap_vec.opt_work work) ~tau ~ar ~ac a ~cr ~cc c
+  let loc = "Slap.XSDCZ.ormqr" in
+  let k, _, tau' = Slap_vec.__expose tau in
+  let r, k', ar, ac, a' = Slap_mat.__expose a in
+  let m, n, cr, cc, c' = Slap_mat.__expose c in
+  check_ormqr ~loc:"ormqr" ~side ~r ~m ~n ~k ~k';
+  if Slap_size.nonzero r && Slap_size.nonzero m
+     && Slap_size.nonzero n && Slap_size.nonzero k
+  then begin
+    let lwork, work =
+      Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:(ormqr_min_lwork ~side ~m ~n)
+        ~opt_lwork:(ormqr_opt_lwork_aux ~side ~trans ~tau a c) in
+    let i = direct_ormqr ~side ~trans ~m ~n ~k
+        ~work ~lwork ~tau:tau' ~ar ~ac ~a:a' ~cr ~cc ~c:c' in
+    if i <> 0 then internal_error loc i
+  end
 
 (** {4 gecon} *)
 
-type 'n gecon_min_lwork
+external direct_gecon :
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  iwork : (int32, int32_elt, fortran_layout) Array1.t ->
+  norm : (_, _) Slap_common.norm ->
+  anorm : float ->
+  int * float = "lacaml_XSDCZgecon_stub_bc" "lacaml_XSDCZgecon_stub"
 
-let gecon_min_lwork n = S.__unexpose (I.gecon_min_lwork (S.__expose n))
+type 'n gecon_min_lwork = (Slap_size.four, 'n) Slap_size.mul
 
-type 'n gecon_min_liwork
+let gecon_min_lwork n = Slap_size.mul Slap_size.four n
 
-let gecon_min_liwork n = S.__unexpose (I.gecon_min_liwork (S.__expose n))
+type 'n gecon_min_liwork = 'n
 
-let gecon ?norm ?anorm ?work ?iwork a =
-  let n, n', ar, ac, a = M.__expose a in
+let gecon_min_liwork n = n
+
+let gecon ?(norm = Slap_common.__unexpose_norm 'O') ?anorm ?work ?iwork aa =
+  let n, n', ar, ac, a = Slap_mat.__expose aa in
   assert(n = n');
-  I.gecon ~n:(S.__expose n) ?norm:(lacaml_norm2_opt norm) ?anorm
-           ?work:(Slap_vec.opt_work work)
-           ?iwork:(Slap_vec.opt_work iwork)
-           ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    let loc = "Slap.XSDCZ.gecon" in
+    let min_lwork = gecon_min_lwork n in
+    let _, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork ~opt_lwork:min_lwork in
+    let min_liwork = gecon_min_liwork n in
+    let _, iwork = Slap_vec.__alloc_work int32 iwork ~loc
+        ~min_lwork:min_liwork ~opt_lwork:min_liwork in
+    let anorm = match anorm with
+      | None -> lange ~norm aa
+      | Some anorm -> anorm in
+    let i, res = direct_gecon ~n ~ar ~ac ~a ~work ~iwork ~norm ~anorm in
+    if i = 0 then res
+    else internal_error loc i
+  end else 0.0
+
 
 (** {4 sycon} *)
 
-type 'n sycon_min_lwork
+external direct_sycon :
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  ipiv : (int32, int32_elt, fortran_layout) Array1.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  iwork : (int32, int32_elt, fortran_layout) Array1.t ->
+  anorm : float ->
+  int * float = "lacaml_XSDCZsycon_stub_bc" "lacaml_XSDCZsycon_stub"
 
-let sycon_min_lwork n = S.__unexpose (I.sycon_min_lwork (S.__expose n))
+type 'n sycon_min_lwork = (Slap_size.two, 'n) Slap_size.mul
 
-type 'n sycon_min_liwork
+let sycon_min_lwork n = Slap_size.mul Slap_size.two n
 
-let sycon_min_liwork n = S.__unexpose (I.sycon_min_liwork (S.__expose n))
+type 'n sycon_min_liwork = 'n
 
-let sycon ?up ?ipiv ?anorm ?work ?iwork a =
-  let n, n', ar, ac, a = M.__expose a in
+let sycon_min_liwork n = n
+
+let sycon ?(up = Slap_common.__unexpose_uplo 'U') ?ipiv ?anorm ?work ?iwork aa =
+  let n, n', ar, ac, a = Slap_mat.__expose aa in
   assert(n = n');
-  I.sycon ~n:(S.__expose n) ?up ?ipiv:(Slap_vec.opt_cnt_vec n ipiv) ?anorm
-    ?work:(Slap_vec.opt_work work)
-    ?iwork:(Slap_vec.opt_work iwork)
-    ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    let loc = "Slap.XSDCZ.sycon" in
+    let min_lwork = sycon_min_lwork n in
+    let _, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork ~opt_lwork:min_lwork in
+    let min_liwork = sycon_min_liwork n in
+    let _, iwork = Slap_vec.__alloc_work int32 iwork ~loc
+        ~min_lwork:min_liwork ~opt_lwork:min_liwork in
+    let ipiv =
+      if ipiv = None
+      then sytrf ~up ~work:(Slap_vec.__unexpose min_lwork 1 work) aa
+           |> Slap_vec.__expose
+           |> (fun (_, _, ipiv) -> ipiv)
+      else Slap_vec.opt_cnt_vec_alloc int32 n ipiv in
+    let anorm = match anorm with
+      | None -> lange aa
+      | Some anorm -> anorm in
+    let i, res = direct_sycon ~up ~n ~ar ~ac ~a ~ipiv ~work ~iwork ~anorm in
+    if i = 0 then res else internal_error loc i
+  end else 0.0
 
 (** {4 pocon} *)
 
-type 'n pocon_min_lwork
+external direct_pocon :
+  up : [< `U | `L ] Slap_common.uplo ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  iwork : (int32, int32_elt, fortran_layout) Array1.t ->
+  anorm : float ->
+  int * float = "lacaml_XSDCZpocon_stub_bc" "lacaml_XSDCZpocon_stub"
 
-let pocon_min_lwork n = S.__unexpose (I.pocon_min_lwork (S.__expose n))
+type 'n pocon_min_lwork = (Slap_size.three, 'n) Slap_size.mul
 
-type 'n pocon_min_liwork
+let pocon_min_lwork n = Slap_size.mul Slap_size.three n
 
-let pocon_min_liwork n = S.__unexpose (I.pocon_min_liwork (S.__expose n))
+type 'n pocon_min_liwork = 'n
 
-let pocon ?up ?anorm ?work ?iwork a =
-  let n, n', ar, ac, a = M.__expose a in
+let pocon_min_liwork n = n
+
+let pocon ?(up = Slap_common.__unexpose_uplo 'U') ?anorm ?work ?iwork aa =
+  let n, n', ar, ac, a = Slap_mat.__expose aa in
   assert(n = n');
-  I.pocon ~n:(S.__expose n) ?up ?anorm
-    ?work:(Slap_vec.opt_work work)
-    ?iwork:(Slap_vec.opt_work iwork)
-    ~ar ~ac a
+  if Slap_size.nonzero n then begin
+    let loc = "Slap.XSDCZ.pocon" in
+    let min_lwork = pocon_min_lwork n in
+    let _, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork ~opt_lwork:min_lwork in
+    let min_liwork = pocon_min_liwork n in
+    let _, iwork = Slap_vec.__alloc_work int32 iwork ~loc
+        ~min_lwork:min_liwork ~opt_lwork:min_liwork in
+    let anorm = match anorm with
+      | None -> lange aa
+      | Some anorm -> anorm in
+    let i, res = direct_pocon ~up ~n ~ar ~ac ~a ~work ~iwork ~anorm in
+    if i = 0 then res else internal_error loc i
+  end else 0.0
 
 (** {3 Least squares (expert drivers)} *)
 
+let gelsx_err loc i =
+  assert(i <> 0);
+  if i > 0
+  then Slap_misc.failwithf "%s: failed to converge on off-diagonal \
+                            element %d" loc i ()
+  else internal_error loc i
+
 (** {4 gelsy} *)
 
-type ('m, 'n, 'nrhs) gelsy_min_lwork
+external direct_gelsy :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  jpvt : (int32, int32_elt, fortran_layout) Array1.t ->
+  rcond : float ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int * int = "lacaml_XSDCZgelsy_stub_bc" "lacaml_XSDCZgelsy_stub"
+
+type ('m, 'n, 'nrhs) gelsy_min_lwork =
+  (((('m, 'n) Slap_size.min,
+     (Slap_size.three, 'n) Slap_size.mul) Slap_size.add,
+    Slap_size.one)
+     Slap_size.add,
+   ((Slap_size.two, ('m, 'n) Slap_size.min) Slap_size.mul,
+    'nrhs) Slap_size.add)
+    Slap_size.max
 
 let gelsy_min_lwork ~m ~n ~nrhs =
-  S.__unexpose (I.gelsy_min_lwork
-                    ~m:(S.__expose m) ~n:(S.__expose n)
-                    ~nrhs:(S.__expose nrhs))
+  let open Slap_size in
+  let ( + ) = add in
+  let ( * ) = mul in
+  let min_mn = min m n in
+  max (min_mn + three * n + one) (two * min_mn + nrhs)
+
+let gelsy_opt_lwork_aux a b =
+  let m, n, ar, ac, a = Slap_mat.__expose a in
+  let n', nrhs, br, bc, b = Slap_mat.__expose b in
+  assert(n = n');
+  let work = Array1.create prec fortran_layout 1 in
+  let jpvt = Array1.create int32 fortran_layout 0 in
+  let i, _ =
+    direct_gelsy ~ar ~ac ~a ~m ~n ~jpvt
+      ~rcond:(-1.0) ~work ~lwork:(-1) ~nrhs ~br ~bc ~b in
+  if i = 0 then int_of_float work.{1} |> Slap_size.__unexpose
+  else gelsx_err "Slap.XSDCZ.gelsy_opt_lwork" i
 
 let gelsy_opt_lwork a b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
-  assert(n = n');
-  I.gelsy_opt_lwork ~m:(S.__expose m) ~n:(S.__expose n)
-    ~nrhs:(S.__expose nrhs) ~ar ~ac a ~br ~bc b
+  gelsy_opt_lwork_aux a b
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
-let gelsy a ?rcond ?jpvt ?work b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
+let gelsy aa ?(rcond = -1.0) ?jpvt ?work bb =
+  let m, n, ar, ac, a = Slap_mat.__expose aa in
+  let n', nrhs, br, bc, b = Slap_mat.__expose bb in
   assert(n = n');
-  I.gelsy ~m:(S.__expose m) ~n:(S.__expose n) ~nrhs:(S.__expose nrhs)
-    ?jpvt:(Slap_vec.opt_cnt_vec n jpvt) ?work:(Slap_vec.opt_work work)
-     ~ar ~ac a ?rcond ~br ~bc b
+  if Slap_size.nonzero m && Slap_size.nonzero n && Slap_size.nonzero nrhs
+  then begin
+    let loc = "Slap.XSDCZ.gelsy" in
+    let jpvt = match jpvt with
+      | Some jpvt ->
+        assert(Slap_vec.check_cnt jpvt);
+        let n'', _, jpvt = Slap_vec.__expose jpvt in
+        assert(n = n'');
+        jpvt
+      | None ->
+        let jpvt = Array1.create int32 fortran_layout (Slap_size.to_int n) in
+        Array1.fill jpvt Int32.zero;
+        jpvt in
+    let lwork, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:(gelsy_min_lwork ~m ~n ~nrhs)
+        ~opt_lwork:(gelsy_opt_lwork_aux aa bb) in
+    let i, rank =
+      direct_gelsy ~ar ~ac ~a ~m ~n
+        ~jpvt ~rcond ~work ~lwork ~nrhs ~br ~bc ~b in
+    if i = 0 then rank
+    else gelsx_err loc i
+  end else 0
 
 (** {4 gelsd} *)
+
+external direct_gelsd :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ofss : int ->
+  s : ('a, 'b, fortran_layout) Array1.t ->
+  rcond : float ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  iwork : ('a, 'b, fortran_layout) Array1.t ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int * int = "lacaml_XSDCZgelsd_stub_bc" "lacaml_XSDCZgelsd_stub"
 
 type ('m, 'n, 'nrhs) gelsd_min_lwork
 
 let gelsd_min_lwork ~m ~n ~nrhs =
-  S.__unexpose (I.gelsd_min_lwork
-                    ~m:(S.__expose m) ~n:(S.__expose n)
-                    ~nrhs:(S.__expose nrhs))
+  Lacaml.XSDCZ.gelsd_min_lwork
+    ~m:(Slap_size.__expose m) ~n:(Slap_size.__expose n)
+    ~nrhs:(Slap_size.__expose nrhs)
+  |> Slap_size.__unexpose
+
+let gelsd_opt_lwork_aux a b =
+  let m, n, ar, ac, a = Slap_mat.__expose a in
+  let n', nrhs, br, bc, b = Slap_mat.__expose b in
+  assert(n = n');
+  let work = Array1.create prec fortran_layout 1 in
+  let empty = Array1.create prec fortran_layout 0 in
+  let i, _ =
+    direct_gelsd ~ar ~ac ~a ~m ~n ~ofss:1 ~s:empty ~rcond:(-1.0)
+      ~work ~lwork:(-1) ~iwork:empty ~nrhs ~br ~bc ~b in
+  if i = 0 then
+    (* FIXME: Lacaml says this code has a bug of LAPACK maybe. *)
+    Slap_size.max
+      (Slap_size.__unexpose (int_of_float work.{1}))
+      (gelsd_min_lwork ~m ~n ~nrhs)
+  else gelsx_err "Slap.XSDCZ.gelsd_opt_lwork" i
 
 let gelsd_opt_lwork a b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
-  assert(n = n');
-  I.gelsd_opt_lwork ~m:(S.__expose m) ~n:(S.__expose n)
-    ~nrhs:(S.__expose nrhs) ~ar ~ac a ~br ~bc b
+  gelsd_opt_lwork_aux a b
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
 type ('m, 'n, 'nrhs) gelsd_min_iwork
 
 let gelsd_min_iwork m n =
-  S.__unexpose (I.gelsd_min_iwork (S.__expose m) (S.__expose n))
+  Lacaml.XSDCZ.gelsd_min_iwork (Slap_size.__expose m) (Slap_size.__expose n)
+  |> Slap_size.__unexpose
 
-let gelsd a ?rcond ?s ?work ?iwork b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
+let gelsd aa ?(rcond = -1.0) ?s ?work ?iwork bb =
+  let m, n, ar, ac, a = Slap_mat.__expose aa in
+  let n', nrhs, br, bc, b = Slap_mat.__expose bb in
   assert(n = n');
-  I.gelsd  ~m:(S.__expose m) ~n:(S.__expose n) ~nrhs:(S.__expose nrhs)
-    ~ar ~ac a ?rcond ~br ~bc b ?s:(Slap_vec.opt_cnt_vec (Slap_size.min m n) s)
-    ?work:(Slap_vec.opt_work work) ?iwork:(Slap_vec.opt_work iwork)
+  let mn = Slap_size.min m n in
+  if Slap_size.nonzero mn && Slap_size.nonzero nrhs then begin
+    let loc = "Slap.XSDCZ.gelsd" in
+    let s = Slap_vec.opt_cnt_vec_alloc prec mn s in
+    let min_liwork = gelsd_min_iwork m n in
+    let _, iwork = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:min_liwork ~opt_lwork:min_liwork in
+    let lwork, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:(gelsd_min_lwork ~m ~n ~nrhs)
+        ~opt_lwork:(gelsd_opt_lwork_aux aa bb) in
+    let i, rank =
+      direct_gelsd ~ar ~ac ~a ~m ~n ~ofss:1 ~s ~rcond
+        ~work ~lwork ~iwork ~nrhs ~br ~bc ~b in
+    if i = 0 then rank else gelsx_err loc i
+  end else 0
 
 (** {4 gelss} *)
+
+external direct_gelss :
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ofss : int ->
+  s : ('a, 'b, fortran_layout) Array1.t ->
+  rcond : float ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  nrhs : _ Slap_size.t ->
+  br : int ->
+  bc : int ->
+  b : ('a, 'b, fortran_layout) Array2.t ->
+  int * int = "lacaml_XSDCZgelss_stub_bc" "lacaml_XSDCZgelss_stub"
 
 type ('m, 'n, 'nrhs) gelss_min_lwork
 
 let gelss_min_lwork ~m ~n ~nrhs =
-  S.__unexpose (I.gelss_min_lwork
-                    ~m:(S.__expose m) ~n:(S.__expose n)
-                    ~nrhs:(S.__expose nrhs))
+  Lacaml.XSDCZ.gelss_min_lwork
+    ~m:(Slap_size.__expose m) ~n:(Slap_size.__expose n)
+    ~nrhs:(Slap_size.__expose nrhs)
+  |> Slap_size.__unexpose
+
+let gelss_opt_lwork_aux a b =
+  let m, n, ar, ac, a = Slap_mat.__expose a in
+  let n', nrhs, br, bc, b = Slap_mat.__expose b in
+  assert(n = n');
+  let work = Array1.create prec fortran_layout 1 in
+  let i, _ =
+    direct_gelss ~ar ~ac ~a ~m ~n ~ofss:1 ~s:Lacaml.XSDCZ.Vec.empty
+      ~rcond:(-1.0) ~work ~lwork:(-1) ~nrhs ~br ~bc ~b in
+  if i = 0 then int_of_float work.{1} |> Slap_size.__unexpose
+  else gelsx_err "Slap.XSDCZ.gelss_opt_lwork" i
 
 let gelss_opt_lwork a b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
-  assert(n = n');
-  I.gelss_opt_lwork
-    ~m:(S.__expose m) ~n:(S.__expose n) ~nrhs:(S.__expose nrhs)
-    ~ar ~ac a ~br ~bc b
+  gelss_opt_lwork_aux a b
+  |> Slap_size.__expose
   |> Slap_size.unsafe_of_int
 
-let gelss a ?rcond ?s ?work b =
-  let m, n, ar, ac, a = M.__expose a in
-  let n', nrhs, br, bc, b = M.__expose b in
+let gelss aa ?(rcond = -1.0) ?s ?work bb =
+  let m, n, ar, ac, a = Slap_mat.__expose aa in
+  let n', nrhs, br, bc, b = Slap_mat.__expose bb in
   assert(n = n');
-  I.gelss ~m:(S.__expose m) ~n:(S.__expose n) ~nrhs:(S.__expose nrhs)
-    ~ar ~ac a ?rcond ~br ~bc b
-    ?s:(Slap_vec.opt_cnt_vec (Slap_size.min m n) s)
-    ?work:(Slap_vec.opt_work work)
+  let mn = Slap_size.min m n in
+  if Slap_size.nonzero mn && Slap_size.nonzero nrhs
+  then begin
+    let loc = "Slap.XSDCZ.gelss" in
+    let s = Slap_vec.opt_cnt_vec_alloc prec mn s in
+    let lwork, work = Slap_vec.__alloc_work prec work ~loc
+        ~min_lwork:(gelss_min_lwork ~m ~n ~nrhs)
+        ~opt_lwork:(gelss_opt_lwork_aux aa bb) in
+    let i, rank =
+      direct_gelss ~ar ~ac ~a ~m ~n ~ofss:1 ~s ~rcond
+        ~work ~lwork ~nrhs ~br ~bc ~b in
+    if i = 0 then rank else gelsx_err loc i
+  end else 0
 
 (** {3 General SVD routines} *)
 
 (** {4 gesvd} *)
 
+external direct_gesvd :
+  jobu : (_, _, _, _, _) Slap_common.svd_job ->
+  jobvt : (_, _, _, _, _) Slap_common.svd_job ->
+  m : _ Slap_size.t ->
+  n : _ Slap_size.t ->
+  ar : int ->
+  ac : int ->
+  a : ('a, 'b, fortran_layout) Array2.t ->
+  s : ('a, 'b, fortran_layout) Array1.t ->
+  ur : int ->
+  uc : int ->
+  u : ('a, 'b, fortran_layout) Array2.t ->
+  vtc : int ->
+  vtr : int ->
+  vt : ('a, 'b, fortran_layout) Array2.t ->
+  work : ('a, 'b, fortran_layout) Array1.t ->
+  lwork : int ->
+  int = "lacaml_XSDCZgesvd_stub_bc" "lacaml_XSDCZgesvd_stub"
+
 type ('m, 'n) gesvd_min_lwork
 
 let gesvd_min_lwork ~m ~n =
-  S.__unexpose (I.gesvd_min_lwork ~m:(S.__expose m) ~n:(S.__expose n))
+  let open Slap_size in
+  Lacaml.XSDCZ.gesvd_min_lwork ~m:(__expose m) ~n:(__expose n)
+  |> __unexpose
 
 let gesvd_calc_sizes m n jobu jobvt =
-  let min_mn = Slap_size.min m n in
-  let job_size c = function
-    | `A -> S.__expose c
-    | `S -> S.__expose min_mn
-    | `O | `N -> 0 in
-  let u_cols = S.__unexpose (job_size m (lacaml_svd_job jobu)) in
-  let vt_rows = S.__unexpose (job_size n (lacaml_svd_job jobvt)) in
+  let open Slap_size in
+  let min_mn = min m n in
+  let job_size k job = match Slap_common.__expose_svd_job job with
+    | 'A' -> __expose k
+    | 'S' -> __expose min_mn
+    | _ -> 0 in
+  let u_cols = __unexpose (job_size m jobu) in
+  let vt_rows = __unexpose (job_size n jobvt) in
   (min_mn, u_cols, vt_rows)
 
-let gesvd_opt_lwork ~jobu ~jobvt ?s ?u ?vt a =
-  let m, n, ar, ac, a = M.__expose a in
-  let min_mn, u_cols, vt_rows = gesvd_calc_sizes m n jobu jobvt in
-  let ur, uc, u = Slap_mat.opt_mat m u_cols u in
-  let vtr, vtc, vt = Slap_mat.opt_mat vt_rows n vt in
-  I.gesvd_opt_lwork ~m:(S.__expose m) ~n:(S.__expose n)
-    ~jobu:(lacaml_svd_job jobu) ~jobvt:(lacaml_svd_job jobvt)
-    ?s:(Slap_vec.opt_cnt_vec min_mn s) ?ur ?uc ?u ?vtr ?vtc ?vt ~ar ~ac a
-  |> Slap_size.unsafe_of_int
+let gesvd_err loc i =
+  assert(i <> 0);
+  if i > 0
+  then Slap_misc.failwithf
+      "%s: %d off-diagonal elements did not converge" loc i ()
+  else internal_error loc i
 
-let gesvd ~jobu ~jobvt ?s ?u ?vt ?work a =
-  let m, n, ar, ac, a = M.__expose a in
+let gesvd_opt_lwork_aux ~jobu ~jobvt ?s ?u ?vt a =
+  let m, n, ar, ac, a = Slap_mat.__expose a in
   let min_mn, u_cols, vt_rows = gesvd_calc_sizes m n jobu jobvt in
   let ur, uc, u = Slap_mat.opt_mat_alloc prec m u_cols u in
   let vtr, vtc, vt = Slap_mat.opt_mat_alloc prec vt_rows n vt in
-  let s, u, vt = I.gesvd ~m:(S.__expose m) ~n:(S.__expose n)
-      ~jobu:(lacaml_svd_job jobu) ~jobvt:(lacaml_svd_job jobvt)
-      ?s:(Slap_vec.opt_cnt_vec min_mn s) ~ur ~uc ~u ~vtr ~vtc ~vt
-      ?work:(Slap_vec.opt_work work) ~ar ~ac a in
-  (V.__unexpose min_mn 1 s,
-   M.__unexpose m u_cols ur uc u,
-   M.__unexpose vt_rows n vtr vtc vt)
+  let s = Slap_vec.opt_cnt_vec_alloc prec min_mn s in
+  let work = Array1.create prec fortran_layout 1 in
+  let i =
+    direct_gesvd ~jobu ~jobvt ~m ~n ~ar ~ac ~a ~s ~ur ~uc ~u
+      ~vtr ~vtc ~vt ~work ~lwork:(-1) in
+  if i = 0 then int_of_float work.{1} |> Slap_size.__unexpose
+  else gesvd_err "Slap.XSDCZ.gesvd_opt_lwork" i
+
+let gesvd_opt_lwork ~jobu ~jobvt ?s ?u ?vt a =
+  gesvd_opt_lwork_aux ~jobu ~jobvt ?s ?u ?vt a
+  |> Slap_size.__expose
+  |> Slap_size.unsafe_of_int
+
+let gesvd ~jobu ~jobvt ?s ?u ?vt ?work a_mat =
+  let m, n, ar, ac, a = Slap_mat.__expose a_mat in
+  let min_mn, u_cols, vt_rows = gesvd_calc_sizes m n jobu jobvt in
+  let ur, uc, u = Slap_mat.opt_mat_alloc prec m u_cols u in
+  let vtr, vtc, vt = Slap_mat.opt_mat_alloc prec vt_rows n vt in
+  let s = Slap_vec.opt_cnt_vec_alloc prec min_mn s in
+  let u_mat = Slap_mat.__unexpose m u_cols ur uc u in
+  let vt_mat = Slap_mat.__unexpose vt_rows n vtr vtc vt in
+  let s_vec = Slap_vec.__unexpose min_mn 1 s in
+  let loc = "Slap.XSDCZ.gesvd" in
+  let lwork, work =
+    Slap_vec.__alloc_work prec work ~loc
+      ~min_lwork:(gesvd_min_lwork ~m ~n)
+      ~opt_lwork:(gesvd_opt_lwork_aux
+                    ~jobu ~jobvt ~s:s_vec ~u:u_mat ~vt:vt_mat a_mat) in
+  let i =
+    direct_gesvd ~jobu ~jobvt ~m ~n ~ar ~ac ~a ~s ~ur ~uc ~u
+      ~vtr ~vtc ~vt ~work ~lwork:(-1) in
+  if i = 0 then (s_vec, u_mat, vt_mat) else gesvd_err loc i
 
 (** {4 gesdd} *)
 

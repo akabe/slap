@@ -33,28 +33,34 @@ val asum : ('n, 'x_cd) vec -> float
 
 (** {3 Level 2} *)
 
-val sbmv : k:'k Slap_size.t ->
-           ?y:('n, 'y_cd) vec ->
-           (('n, 'k) Slap_size.syband, 'n, 'a_cd) mat ->
-           ?up:bool ->
-           ?alpha:float ->
-           ?beta:float ->
-           ('n, 'x_cd) vec -> ('n, 'y_cd) vec
+val sbmv :
+  k:'k Slap_size.t ->
+  ?y:('n, 'y_cd) vec ->
+  (('n, 'k) Slap_size.syband, 'n, 'a_cd) mat ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
+  ?alpha:float ->
+  ?beta:float ->
+  ('n, 'x_cd) vec -> ('n, 'y_cd) vec
 (** [sbmv ~k ?y a ?up ?alpha ?beta x] computes [y := alpha * a * x + beta * y]
     where [a] is a ['n]-by-['n] symmetric band matrix with [k]
     super-(or sub-)diagonals, and [x] and [y] are ['n]-dimensional vectors.
     @return vector [y], which is overwritten.
     @param k the number of superdiangonals or subdiangonals
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param alpha default = [1.0]
     @param beta default = [0.0]
     @since 0.2.0
  *)
 
-val ger : ?alpha:float -> ('m, 'x_cd) vec -> ('n, 'y_cd) vec ->
-          ('m, 'n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat
+val ger :
+  ?alpha:float ->
+  ('m, 'x_cd) vec ->
+  ('n, 'y_cd) vec ->
+  ('m, 'n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat
 (** [ger ?alpha x y a] computes [a := alpha * x * y^T + a] with
     the general matrix [a], the vector [x] and
     the transposed vector [y^T] of [y].
@@ -62,15 +68,21 @@ val ger : ?alpha:float -> ('m, 'x_cd) vec -> ('n, 'y_cd) vec ->
     @param alpha default = [1.0]
  *)
 
-val syr : ?alpha:float -> ?up:bool -> ('n, 'x_cd) vec ->
-          ('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat
+val syr :
+  ?alpha:float ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
+  ('n, 'x_cd) vec ->
+  ('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat
 (** [syr ?alpha x a] computes [a := alpha * x * x^T + a] with
     the symmetric matrix [a], the vector [x] and
     the transposed vector [x^T] of [x].
     @return matrix [a], which is overwritten.
     @param alpha default = [1.0]
-    @param up    default = [true], i.e., the upper triangular part of [a] is
-                 supplied.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
  *)
 
 (** {2 LAPACK interface} *)
@@ -81,19 +93,27 @@ val syr : ?alpha:float -> ?up:bool -> ('n, 'x_cd) vec ->
 
 type ('m, 'a) lansy_min_lwork
 
-val lansy_min_lwork : 'n Slap_size.t -> 'a Slap_common.norm4 ->
-                      ('n, 'a) lansy_min_lwork Slap_size.t
+val lansy_min_lwork :
+  'n Slap_size.t ->
+  'a Slap_common.norm4 ->
+  ('n, 'a) lansy_min_lwork Slap_size.t
 (** [lansy_min_lwork n norm] computes the minimum length of workspace for
     [lansy] routine. [n] is the number of rows or columns in a matrix.
     [norm] is a matrix norm.
  *)
 
-val lansy : ?up:bool ->
-            ?norm:'norm Slap_common.norm4 ->
-            ?work:('lwork, cnt) vec -> ('n, 'n, 'cd) mat -> float
+val lansy :
+  ?up:[< `U | `L ] Slap_common.uplo ->
+  ?norm:'norm Slap_common.norm4 ->
+  ?work:('lwork, cnt) vec ->
+  ('n, 'n, 'cd) mat -> float
 (** [lansy ?up ?norm ?work a]
     @return the norm of matrix [a].
-    @param up   default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param norm default = {!Slap_common.norm_1}
       - If [norm] = {!Slap_common.norm_1}, the one norm is returned;
       - If [norm] = {!Slap_common.norm_inf}, the infinity norm is returned;
@@ -245,19 +265,22 @@ val sycon_min_liwork : 'n Slap_size.t -> 'n sycon_min_liwork Slap_size.t
     [sycon] routine. [n] is the number of rows or columns in a matrix.
  *)
 
-val sycon : ?up:bool ->
-            ?ipiv:('n, cnt) Slap_common.int32_vec ->
-            ?anorm:float ->
-            ?work:('lwork, cnt) vec ->
-            ?iwork:('liwork, cnt) Slap_common.int32_vec ->
-            ('n, 'n, 'cd) mat -> float
+val sycon :
+  ?up:[< `U | `L ] Slap_common.uplo ->
+  ?ipiv:('n, cnt) Slap_common.int32_vec ->
+  ?anorm:float ->
+  ?work:('lwork, cnt) vec ->
+  ?iwork:('liwork, cnt) Slap_common.int32_vec ->
+  ('n, 'n, 'cd) mat -> float
 (** [sycon ?up ?ipiv ?anorm ?work ?iwork a] estimates the reciprocal of the
     condition number of symmetric matrix [a]. Since [a] is symmetric, the
     1-norm is equal to the infinity norm.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
                 omitted.
     @param anorm default = the norm of matrix [a] as returned by [lange].
@@ -281,18 +304,21 @@ val pocon_min_liwork : 'n Slap_size.t -> 'n pocon_min_liwork Slap_size.t
     [pocon] routine. [n] is the number of rows or columns in a matrix.
  *)
 
-val pocon : ?up:bool ->
-            ?anorm:float ->
-            ?work:('lwork, cnt) vec ->
-            ?iwork:('liwork, cnt) Slap_common.int32_vec ->
-            ('n, 'n, 'cd) mat -> float
+val pocon :
+  ?up:[< `U | `L ] Slap_common.uplo ->
+  ?anorm:float ->
+  ?work:('lwork, cnt) vec ->
+  ?iwork:('liwork, cnt) Slap_common.int32_vec ->
+  ('n, 'n, 'cd) mat -> float
 (** [pocon ?up ?anorm ?work ?iwork a] estimates the reciprocal of the
     condition number of symmetric positive-definite matrix [a].
     Since [a] is symmetric, the 1-norm is equal to the infinity norm.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param anorm default = the norm of matrix [a] as returned by [lange].
     @param work  default = an optimum-length vector.
     @param iwork default = an optimum-length vector.

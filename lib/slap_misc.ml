@@ -27,3 +27,15 @@ type dsc
 
 (** The identity function. *)
 let identity x = x
+
+(** [failwith] + [printf]-style format *)
+let failwithf fmt = Format.ksprintf (fun s () -> failwith s) fmt
+
+(** [invalid_arg] + [printf]-style format *)
+let invalid_argf fmt = Format.ksprintf (fun s () -> invalid_arg s) fmt
+
+(** [Internal_error (location, code)] is thrown when a BLAS or LAPACK
+    function returns unexpected error. [location] is the function name
+    (containing its module name) and [code] is an error code returned by the
+    function. *)
+exception Internal_error of string * int

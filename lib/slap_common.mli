@@ -37,7 +37,7 @@ val upper : [> `U ] uplo
 
 val lower : [> `L ] uplo
 
-val both : [> `A ] uplo
+val upper_lower : [> `A ] uplo
 
 (** {3 Transpose flags} *)
 
@@ -187,6 +187,22 @@ val lacaml_diag : diag -> Lacaml.Common.diag
 (**/**)
 
 (** {2 Internal functions} *)
+
+val __expose_uplo : _ uplo -> char
+
+val __unexpose_uplo : char -> _ uplo
+
+val __expose_norm : (_, _) norm -> char
+
+val __unexpose_norm : char -> (_, _) norm
+
+val __expose_side : (_, _, _) side -> char
+
+val __unexpose_side : char -> (_, _, _) side
+
+val __expose_svd_job : (_, _, _, _, _) svd_job -> char
+
+val __unexpose_svd_job : char -> (_, _, _, _, _) svd_job
 
 val check_side_dim :
   'k Slap_size.t -> 'm Slap_size.t -> 'n Slap_size.t ->

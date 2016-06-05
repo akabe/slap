@@ -561,3 +561,11 @@ val __unexpose_with_ofs :
   int ->
   ('num, 'prec, fortran_layout) Array1.t ->
   ('n, 'num, 'prec, 'cnt_or_dsc) t
+
+val __alloc_work :
+  loc:string ->
+  min_lwork:_ Slap_size.t ->
+  opt_lwork:_ Slap_size.t ->
+  ('num, 'prec) kind ->
+  ('k, 'num, 'prec, cnt) t option ->
+  int * ('num, 'prec, fortran_layout) Array1.t

@@ -86,6 +86,18 @@ let __unexpose_with_ofs n ofsx incx x =
     else Array1.sub x ofsx ((Slap_size.__expose n - 1) * abs incx + 1) in
   __unexpose n incx x
 
+let __alloc_work ~loc ~min_lwork ~opt_lwork kind =
+  let m = Slap_size.__expose min_lwork in
+  let n = Slap_size.__expose opt_lwork in
+  function
+  | None -> (n, Array1.create kind fortran_layout n)
+  | Some ((k, _, work) as v) ->
+    let lwork = Slap_size.__expose k in
+    assert(check_vec v && check_cnt v);
+    if m > lwork
+    then invalid_argf "%s: workspace size: min=%d, given=%d" loc m lwork ();
+    (lwork, work)
+
 (** {2 Creation of vectors} *)
 
 let create kind n =

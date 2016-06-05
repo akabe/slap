@@ -108,7 +108,7 @@ val gbmv :
 val symv :
   ?beta:num_type ->
   ?y:('n, 'y_cd) vec ->
-  ?up:bool ->
+  ?up:[< `L | `U] Slap_common.uplo ->
   ?alpha:num_type ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'x_cd) vec -> ('n, 'y_cd) vec
@@ -116,16 +116,18 @@ val symv :
     [y := alpha * a * x + beta * y].
 
     @param beta default = [0.0]
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param alpha default = [1.0]
  *)
 
 val trmv :
   trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
-  ?up:bool ->
+  ?up:[< `L | `U] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'x_cd) vec -> unit
 (** [trmv ~trans ?diag ?up a x] executes [x := OP(a) * x].
@@ -135,18 +137,20 @@ val trmv :
       - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
  *)
 
 val trsv :
   trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
-  ?up:bool ->
+  ?up:[< `L | `U] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'b_cd) vec -> unit
 (** [trmv ~trans ?diag ?up a b] solves linear system [OP(a) * x = b]
@@ -157,18 +161,20 @@ val trsv :
       - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
  *)
 
 val tpmv :
   trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
-  ?up:bool ->
+  ?up:[< `L | `U] Slap_common.uplo ->
   ('n Slap_size.packed, cnt) vec ->
   ('n, 'x_cd) vec -> unit
 (** [tpmv ~trans ?diag ?up a x] executes [x := OP(a) * x]
@@ -179,12 +185,14 @@ val tpmv :
       - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
 
     @since 0.2.0
  *)
@@ -192,7 +200,7 @@ val tpmv :
 val tpsv :
   trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
-  ?up:bool ->
+  ?up:[< `L | `U] Slap_common.uplo ->
   ('n Slap_size.packed, cnt) vec ->
   ('n, 'x_cd) vec -> unit
 (** [tpsv ~trans ?diag ?up a b] solves linear system [OP(a) * x = b]
@@ -204,12 +212,14 @@ val tpsv :
       - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [trans] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
       (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
 
     @since 0.2.0
  *)
@@ -243,7 +253,7 @@ val gemm :
 
 val symm :
   side:('k, 'm, 'n) Slap_common.side ->
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?beta:num_type ->
   ?c:('m, 'n, 'c_cd) mat ->
   ?alpha:num_type ->
@@ -258,16 +268,18 @@ val symm :
 
     @param side the side flag to specify direction of multiplication of [a] and
                 [b].
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param beta default = [0.0]
     @param alpha default = [1.0]
  *)
 
 val trmm :
   side:('k, 'm, 'n) Slap_common.side ->
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
   ?alpha:num_type ->
@@ -282,23 +294,25 @@ val trmm :
 
     @param side the side flag to specify direction of multiplication of [a] and
                 [b].
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param transa the transpose flag for [a]:
       - If [transa] = {!Slap_common.normal}, then [OP(a)] = [a];
       - If [transa] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [transa] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
         (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
     @param alpha default = [1.0]
  *)
 
 val trsm :
   side:('k, 'm, 'n) Slap_common.side ->
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
   ?alpha:num_type ->
@@ -315,22 +329,24 @@ val trsm :
 
     @param side the side flag to specify direction of multiplication of [a] and
                 [b].
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param transa the transpose flag for [a]:
       - If [transa] = {!Slap_common.normal}, then [OP(a)] = [a];
       - If [transa] = {!Slap_common.trans}, then [OP(a)] = [a^T];
       - If [transa] = {!Slap_common.conjtr}, then [OP(a)] = [a^H]
         (the conjugate transpose of [a]).
-    @param diag default = [`N]
-      - If [diag] = [`U], then [a] is unit triangular;
-      - If [diag] = [`N], then [a] is not unit triangular.
+    @param diag default = {!Slap_common.non_unit}
+      - If [diag] = {!Slap_common.unit}, then [a] is unit triangular;
+      - If [diag] = {!Slap_common.non_unit}, then [a] is not unit triangular.
     @param alpha default = [1.0]
  *)
 
 val syrk :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?beta:num_type ->
   ?c:('n, 'n, 'c_cd) mat ->
   trans:(('a_n, 'a_k, 'a_cd) mat ->
@@ -344,9 +360,11 @@ val syrk :
 
     where [a] is a general matrix and [c] is a symmetric matrix.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param beta default = [0.0]
     @param trans the transpose flag for [a]
     @param alpha default = [1.0]
@@ -354,7 +372,7 @@ val syrk :
 
 
 val syr2k :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?beta:num_type ->
   ?c:('n, 'n, 'c_cd) mat ->
   trans:(('p, 'q, _) mat ->
@@ -372,9 +390,11 @@ val syr2k :
 
     with symmetric matrix [c], and general matrices [a] and [b].
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param beta default = [0.0]
     @param trans the transpose flag for [a]
     @param alpha default = [1.0]
@@ -385,15 +405,16 @@ val syr2k :
 (** {3 Auxiliary routines} *)
 
 val lacpy :
-  ?uplo:[ `L | `U ] ->
+  ?uplo:[< `A | `L | `U ] Slap_common.uplo ->
   ?b:('m, 'n, 'b_cd) mat ->
   ('m, 'n, 'a_cd) mat -> ('m, 'n, 'b_cd) mat
 (** [lacpy ?uplo ?b a] copies the matrix [a] into the matrix [b].
-    - If [uplo] is omitted, all elements in [a] is copied.
-    - If [uplo] is [`U], the upper trapezoidal part of [a] is copied.
-    - If [uplo] is [`L], the lower trapezoidal part of [a] is copied.
     @return [b], which is overwritten.
-    @param uplo default = all elements in [a] is copied.
+    @param uplo default = {!Slap_common.upper_lower}
+      - If [uplo] = {!Slap_common.upper},
+        then the upper triangular part of [a] is copied;
+      - If [uplo] = {!Slap_common.lower},
+        then the lower triangular part of [a] is copied.
     @param b    default = a fresh matrix.
  *)
 
@@ -446,16 +467,20 @@ val lange :
     @param work default = an optimum-length vector.
  *)
 
-val lauum : ?up:bool -> ('n, 'n, 'cd) mat -> unit
+val lauum : ?up:[< `U | `L ] Slap_common.uplo -> ('n, 'n, 'cd) mat -> unit
 (** [lauum ?up a] computes
 
     - [U * U^T] where [U] is the upper triangular part of matrix [a]
-      if [up] is [true].
+      if [up] is {!Slap_common.upper}.
     - [L^T * L] where [L] is the lower triangular part of matrix [a]
-      if [up] is [false].
+      if [up] is {!Slap_common.lower}.
 
     The upper or lower triangular part is overwritten.
-    @param up default = [true].
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
  *)
 
 (** {3 Linear equations (computational routines)} *)
@@ -529,7 +554,7 @@ val sytrf_min_lwork : unit -> sytrf_min_lwork Slap_size.t
  *)
 
 val sytrf_opt_lwork :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ('n, 'n, 'cd) mat -> (module Slap_size.SIZE)
 (** [sytrf_opt_lwork ?up a] computes the optimal length of workspace for [sytrf]
     routine.
@@ -540,7 +565,7 @@ val sytrf_opt_lwork :
  *)
 
 val sytrf :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?ipiv:('n, cnt) Slap_common.int32_vec ->
   ?work:('lwork, cnt) vec ->
   ('n, 'n, 'cd) mat -> ('n, 'cnt) Slap_common.int32_vec
@@ -555,14 +580,18 @@ val sytrf :
     block-diagonal matrix. The permutation matrix is returned in [ipiv].
 
     @return vector [ipiv], which is overwritten.
-    @param up default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param work default = an optimum-length vector.
 
     @raise Failure if [a] is singular.
  *)
 
 val sytrs :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?ipiv:('n, cnt) Slap_common.int32_vec ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'nrhs, 'b_cd) mat -> unit
@@ -580,7 +609,11 @@ val sytrs :
     triangular matrices with unit diagonal, and [D] is a symmetric
     block-diagonal matrix.
 
-    @param up   default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
                 omitted.
 
@@ -595,7 +628,7 @@ val sytri_min_lwork : 'n Slap_size.t -> 'n sytri_min_lwork Slap_size.t
  *)
 
 val sytri :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?ipiv:('n, cnt) Slap_common.int32_vec ->
   ?work:('lwork, cnt) vec ->
   ('n, 'n, 'cd) mat -> unit
@@ -609,7 +642,11 @@ val sytri :
     triangular matrices with unit diagonal, and [D] is a symmetric
     block-diagonal matrix.
 
-    @param up   default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
                 omitted.
     @param work default = an optimum-length vector.
@@ -618,7 +655,7 @@ val sytri :
  *)
 
 val potrf :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?jitter:num_type ->
   ('n, 'n, 'cd) mat -> unit
 (** [potrf ?up ?jitter a] computes the Cholesky factorization of symmetrix
@@ -631,14 +668,18 @@ val potrf :
     Either of them is returned in the upper or lower triangular part of [a],
     as specified by [up].
 
-    @param up default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param jitter default = nothing
 
-    @raise Failure if [a] is singular.
+    @raise Failure if [a] is not positive-definite symmetric.
  *)
 
 val potrs :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
   ?factorize:bool ->
   ?jitter:num_type ->
@@ -647,12 +688,18 @@ val potrs :
     the Cholesky factorization of symmetrix (Hermitian) positive-definite matrix
     [a]:
 
-    - [a = U^T * U] (real) or [a = U^H * U] (complex) if [up] = [true];
-    - [a = L * L^T] (real) or [a = L * L^H] (complex) if [up] = [false]
+    - [a = U^T * U] (real) or [a = U^H * U] (complex)
+      if [up] = {!Slap_common.upper};
+    - [a = L * L^T] (real) or [a = L * L^H] (complex)
+      if [up] = {!Slap_common.lower}
 
     where [U] and [L] are upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param factorize default = [true] ([potrf] is called implicitly)
     @param jitter default = nothing
 
@@ -660,19 +707,25 @@ val potrs :
  *)
 
 val potri :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?factorize:bool ->
   ?jitter:num_type ->
   ('n, 'n, 'cd) mat -> unit
 (** [potrf ?up ?jitter a] computes the inverse of symmetrix (Hermitian)
     positive-definite matrix [a] using the Cholesky factorization:
 
-    - [a = U^T * U] (real) or [a = U^H * U] (complex) if [up] = [true];
-    - [a = L * L^T] (real) or [a = L * L^H] (complex) if [up] = [false]
+    - [a = U^T * U] (real) or [a = U^H * U] (complex)
+      if [up] = {!Slap_common.upper};
+    - [a = L * L^T] (real) or [a = L * L^H] (complex)
+      if [up] = {!Slap_common.lower}
 
     where [U] and [L] are upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param factorize default = [true] ([potrf] is called implicitly)
     @param jitter default = nothing
 
@@ -680,7 +733,7 @@ val potri :
  *)
 
 val trtrs :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
   ('n, 'n, 'a_cd) mat ->
@@ -690,9 +743,11 @@ val trtrs :
     of matrix [b] is the r.h.s vector, and each column of matrix [x] is the
     corresponding solution. The solution [x] is returned in [b].
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param trans the transpose flag for [a]:
       - If [trans] = {!Slap_common.normal}, then [OP(a)] = [a];
       - If [trans] = {!Slap_common.trans}, then [OP(a)] = [a^T];
@@ -707,7 +762,7 @@ val trtrs :
 
 val tbtrs :
   kd:'kd Slap_size.t ->
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
   ?diag:Slap_common.diag ->
   (('n, 'kd) Slap_size.syband, 'n, 'a_cd) mat ->
@@ -719,9 +774,11 @@ val tbtrs :
     storage format. The solution [x] is returned in [b].
 
     @param kd the number of subdiagonals or superdiagonals in [A].
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [A] is used;
-      - If [up] = [false], then the lower triangular part of [A] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [A] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [A] is used.
     @param trans the transpose flag for [A]:
       - If [trans] = {!Slap_common.normal}, then [OP(A)] = [A];
       - If [trans] = {!Slap_common.trans}, then [OP(A)] = [A^T];
@@ -735,15 +792,18 @@ val tbtrs :
     @since 0.2.0
  *)
 
-val trtri : ?up:bool ->
-            ?diag:Slap_common.diag ->
-            ('n, 'n, 'cd) mat -> unit
+val trtri :
+  ?up:[< `U | `L ] Slap_common.uplo ->
+  ?diag:Slap_common.diag ->
+  ('n, 'n, 'cd) mat -> unit
 (** [trtri ?up ?diag a] computes the inverse of triangular matrix [a]. The
     inverse matrix is returned in [a].
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [A] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [A] is used.
     @param diag default = [`N]
       - If [diag] = [`U], then [a] is unit triangular;
       - If [diag] = [`N], then [a] is not unit triangular.
@@ -817,7 +877,7 @@ val gbsv :
  *)
 
 val posv :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'nrhs, 'b_cd) mat -> unit
 (** [posv ?up a b] solves systems of linear equations [a * x = b] where [a] is
@@ -827,21 +887,25 @@ val posv :
 
     The Cholesky decomposition is used:
 
-    - If [up] = [true], then [a = U^T * U] (real) or [a = U^H * U] (complex)
-    - If [up] = [false], then [a = L^T * L] (real) or [a = L^H * L] (complex)
+    - If [up] = {!Slap_common.upper},
+      then [a = U^T * U] (real) or [a = U^H * U] (complex)
+    - If [up] = {!Slap_common.lower},
+      then [a = L^T * L] (real) or [a = L^H * L] (complex)
 
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
 
     @raise Failure if the matrix is singular.
     @since 0.2.0
  *)
 
 val ppsv :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ('n Slap_size.packed, cnt) vec ->
   ('n, 'nrhs, 'b_cd) mat -> unit
 (** [ppsv ?up a b] solves systems of linear equations [a * x = b] where [a] is
@@ -849,23 +913,26 @@ val ppsv :
     each column of matrix [b] is the r.h.s vector, and each column of matrix [x]
     is the corresponding solution. The solution [x] is returned in [b].
 
-    The Cholesky decomposition is used:
-
-    - If [up] = [true], then [a = U^T * U] (real) or [a = U^H * U] (complex)
-    - If [up] = [false], then [a = L^T * L] (real) or [a = L^H * L] (complex)
+    - If [up] = {!Slap_common.upper},
+      then [a = U^T * U] (real) or [a = U^H * U] (complex)
+    - If [up] = {!Slap_common.lower},
+      then [a = L^T * L] (real) or [a = L^H * L] (complex)
 
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
 
     @raise Failure if the matrix is singular.
     @since 0.2.0
  *)
 
 val pbsv :
-  ?up:bool -> kd:'kd Slap_size.t ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
+  kd:'kd Slap_size.t ->
   (('n, 'kd) Slap_size.syband, 'n, 'ab_cd) mat ->
   ('n, 'nrhs, 'b_cd) mat -> unit
 (** [pbsv ?up ~kd ab b] solves systems of linear equations [ab * x = b] where
@@ -876,14 +943,18 @@ val pbsv :
 
     This routine uses the Cholesky decomposition:
 
-    - If [up] = [true], then [ab = U^T * U] (real) or [ab = U^H * U] (complex)
-    - If [up] = [false], then [ab = L^T * L] (real) or [ab = L^H * L] (complex)
+    - If [up] = {!Slap_common.upper},
+      then [a = U^T * U] (real) or [a = U^H * U] (complex)
+    - If [up] = {!Slap_common.lower},
+      then [a = L^T * L] (real) or [a = L^H * L] (complex)
 
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [ab] is used;
-      - If [up] = [false], then the lower triangular part of [ab] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param kd the number of subdiagonals or superdiagonals in [ab].
 
     @raise Failure if the matrix is singular.
@@ -907,8 +978,16 @@ val ptsv :
     @since 0.2.0
  *)
 
+type sysv_min_lwork
+
+val sysv_min_lwork :
+  unit ->
+  sysv_min_lwork Slap_size.t
+(** [sysv_min_lwork ()] computes the minimum length of workspace for [sysv]
+    routine. *)
+
 val sysv_opt_lwork :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'nrhs, 'b_cd) mat -> (module Slap_size.SIZE)
 (** [sysv_opt_lwork ?up a b] computes the optimal length of workspace for [sysv]
@@ -916,7 +995,7 @@ val sysv_opt_lwork :
  *)
 
 val sysv :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?ipiv:('n, cnt) Slap_common.int32_vec ->
   ?work:('lwork, cnt) vec ->
   ('n, 'n, 'a_cd) mat ->
@@ -927,13 +1006,15 @@ val sysv :
     solution. The solution [x] is returned in [b].
 
     The diagonal pivoting method is used:
-    - If [up] = [true], then [a = U * D * U^T]
-    - If [up] = [false], then [a = L * D * L^T]
+    - If [up] = {!Slap_common.upper}, then [a = U * D * U^T]
+    - If [up] = {!Slap_common.lower}, then [a = L * D * L^T]
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
-    @param up   default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
                 omitted.
     @param work default = an optimum-length vector.
@@ -943,7 +1024,7 @@ val sysv :
  *)
 
 val spsv :
-  ?up:bool ->
+  ?up:[< `U | `L ] Slap_common.uplo ->
   ?ipiv:('n, cnt) Slap_common.int32_vec ->
   ('n Slap_size.packed, cnt) vec ->
   ('n, 'nrhs, 'b_cd) mat -> unit
@@ -953,13 +1034,15 @@ val spsv :
     corresponding solution. The solution [x] is returned in [b].
 
     The diagonal pivoting method is used:
-    - If [up] = [true], then [a = U * D * U^T]
-    - If [up] = [false], then [a = L * D * L^T]
+    - If [up] = {!Slap_common.upper}, then [a = U * D * U^T]
+    - If [up] = {!Slap_common.lower}, then [a = L * D * L^T]
     where [U] and [L] are the upper and lower triangular matrices, respectively.
 
-    @param up default = [true]
-      - If [up] = [true], then the upper triangular part of [a] is used;
-      - If [up] = [false], then the lower triangular part of [a] is used.
+    @param up default = {!Slap_common.upper}
+      - If [up] = {!Slap_common.upper},
+        then the upper triangular part of [a] is used;
+      - If [up] = {!Slap_common.lower},
+        then the lower triangular part of [a] is used.
     @param ipiv a result of [sytrf]. It is internally computed by [sytrf] if
                 omitted.
 

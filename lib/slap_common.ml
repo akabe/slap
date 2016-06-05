@@ -38,7 +38,7 @@ let upper = 'U'
 
 let lower = 'L'
 
-let both = 'A'
+let upper_lower = 'A'
 
 (** {3 Transpose flags} *)
 
@@ -176,6 +176,22 @@ let lacaml_diag = function
   | _ -> assert(false)
 
 (** {2 Internal functions} *)
+
+let __expose_uplo = identity
+
+let __unexpose_uplo = identity
+
+let __expose_norm = identity
+
+let __unexpose_norm = identity
+
+let __expose_side = identity
+
+let __unexpose_side = identity
+
+let __expose_svd_job = identity
+
+let __unexpose_svd_job = identity
 
 let check_side_dim k m n = function
   | 'L' -> S.__expose m = S.__expose k
