@@ -258,7 +258,7 @@ struct
     let e_vec =
       apply (ident "Slap.Vec.__unexpose")
         [nolabel, size n; (* dimension *)
-         nolabel, constant (Const_int 1); (* incrementation *)
+         nolabel, constant (Const.int 1); (* incrementation *)
          nolabel, e_ba] in
     constraint_ e_vec (Typ.vec kind)
 
@@ -273,8 +273,8 @@ struct
       apply (ident "Slap.Mat.__unexpose")
         [nolabel, size m; (* dimension (#rows) *)
          nolabel, size n; (* dimension (#columns) *)
-         nolabel, constant (Const_int 1); (* offset of rows *)
-         nolabel, constant (Const_int 1); (* offset of columns *)
+         nolabel, constant (Const.int 1); (* offset of rows *)
+         nolabel, constant (Const.int 1); (* offset of columns *)
          nolabel, e_ba] in
     constraint_ e_vec (Typ.mat kind)
 
