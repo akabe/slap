@@ -175,7 +175,7 @@ external direct_gemv :
   a : ('a, 'b, fortran_layout) Array2.t ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   alpha : 'a ->
   beta : 'a ->
   ofsx : int ->
@@ -210,7 +210,7 @@ external direct_gbmv :
   n : _ Slap_size.t ->
   kl : _ Slap_size.t ->
   ku : _ Slap_size.t ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   alpha : 'a ->
   beta : 'a ->
   ofsx : int ->
@@ -276,7 +276,7 @@ external direct_trmv :
   a : ('a, 'b, fortran_layout) Array2.t ->
   n : _ Slap_size.t ->
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
   incx : int ->
@@ -303,7 +303,7 @@ external direct_trsv :
   a : ('a, 'b, fortran_layout) Array2.t ->
   n : _ Slap_size.t ->
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
   incx : int ->
@@ -329,7 +329,7 @@ external direct_tpmv :
   ap : ('a, 'b, fortran_layout) Array1.t ->
   n : _ Slap_size.t ->
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
   incx : int ->
@@ -356,7 +356,7 @@ external direct_tpsv :
   ap : ('a, 'b, fortran_layout) Array1.t ->
   n : _ Slap_size.t ->
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   ofsx : int ->
   incx : int ->
@@ -381,8 +381,8 @@ let tpsv
 (* GEMM *)
 
 external direct_gemm :
-  transa : (_, _) Slap_common.trans ->
-  transb : (_, _) Slap_common.trans ->
+  transa : (_, _, _) Slap_common.trans ->
+  transb : (_, _, _) Slap_common.trans ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
   k : _ Slap_size.t ->
@@ -459,7 +459,7 @@ let symm
 external direct_trmm :
   side : (_, _, _) Slap_common.side ->
   up : [< `U | `L ] Slap_common.uplo ->
-  transa : (_, _) Slap_common.trans ->
+  transa : (_, _, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
@@ -491,7 +491,7 @@ let trmm
 external direct_trsm :
   side : (_, _, _) Slap_common.side ->
   up : [< `U | `L ] Slap_common.uplo ->
-  transa : (_, _) Slap_common.trans ->
+  transa : (_, _, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
@@ -522,7 +522,7 @@ let trsm
 
 external direct_syrk :
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   n : _ Slap_size.t ->
   k : _ Slap_size.t ->
   ar : int ->
@@ -556,7 +556,7 @@ let syrk
 
 external direct_syr2k :
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   n : _ Slap_size.t ->
   k : _ Slap_size.t ->
   ar : int ->
@@ -686,7 +686,7 @@ let lange_min_lwork m norm =
   Slap_size.__unexpose m'
 
 external direct_lange :
-  norm : (_, _) Slap_common.norm ->
+  norm : _ Slap_common.norm ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
   ar : int ->
@@ -749,7 +749,7 @@ let getrf ?ipiv a =
 (* GETRS *)
 
 external direct_getrs :
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   n : _ Slap_size.t ->
   nrhs : _ Slap_size.t ->
   ar : int ->
@@ -1011,7 +1011,7 @@ let potri ?(up = Slap_common.__unexpose_uplo 'U')
 
 external direct_trtrs :
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   n : _ Slap_size.t ->
   nrhs : _ Slap_size.t ->
@@ -1038,7 +1038,7 @@ let trtrs ?(up = Slap_common.__unexpose_uplo 'U')
 
 external direct_tbtrs :
   up : [< `U | `L ] Slap_common.uplo ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   diag : Slap_common.diag ->
   n : _ Slap_size.t ->
   kd : _ Slap_size.t ->
@@ -1365,7 +1365,7 @@ external direct_gels :
   a : ('a, 'b, fortran_layout) Array2.t ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   work : ('a, 'b, fortran_layout) Array1.t ->
   lwork : int ->
   nrhs : _ Slap_size.t ->

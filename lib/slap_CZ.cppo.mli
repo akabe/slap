@@ -25,7 +25,8 @@ type prec = complexXBITS_elt
 
 type num_type = Complex.t
 
-type 'a trans3 = 'a Slap_common.trans3
+type (+'indim, +'outdim, +'tag) trans3 =
+  ('indim, 'outdim, 'tag) Slap_common.trans3
 (** A type of transpose parameters ({!Slap_common.normal},
     {!Slap_common.trans} or {!Slap_common.conjtr}). *)
 

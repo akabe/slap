@@ -144,7 +144,7 @@ let syr ?(alpha = 1.0) ?(up = Slap_common.__unexpose_uplo 'U') x a =
 (* LANSY *)
 
 external direct_lansy :
-  norm : (_, _) Slap_common.norm ->
+  norm : _ Slap_common.norm ->
   up : [< `U | `L ] Slap_common.uplo ->
   n : _ Slap_size.t ->
   ar : int ->
@@ -258,7 +258,7 @@ let orgqr_dyn ?work ~tau a =
 
 external direct_ormqr :
   side : (_, _, _) Slap_common.side ->
-  trans : (_, _) Slap_common.trans ->
+  trans : (_, _, _) Slap_common.trans ->
   m : _ Slap_size.t ->
   n : _ Slap_size.t ->
   k : _ Slap_size.t ->
@@ -342,7 +342,7 @@ external direct_gecon :
   a : ('a, 'b, fortran_layout) Array2.t ->
   work : ('a, 'b, fortran_layout) Array1.t ->
   iwork : (int32, int32_elt, fortran_layout) Array1.t ->
-  norm : (_, _) Slap_common.norm ->
+  norm : _ Slap_common.norm ->
   anorm : float ->
   int * float = "lacaml_XSDCZgecon_stub_bc" "lacaml_XSDCZgecon_stub"
 

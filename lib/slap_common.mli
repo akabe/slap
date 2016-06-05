@@ -23,56 +23,73 @@ open Bigarray
 
 (** {2 Flags} *)
 
+(** {3 Diagonal-element flags} *)
+
 type diag
+(** The type of diagonal-element flags *)
 
 val unit : diag
+(** A matrix is unit triagular. *)
 
 val non_unit : diag
+(** A matrix is not unit triagular. *)
 
 (** {3 Uppper/lower (triangular matrix) flags} *)
 
 type +'a uplo constraint 'a = [< `U | `L | `A ]
+(** The type of upper/lower flags. *)
 
 val upper : [> `U ] uplo
+(** Using the upper triangular (or trapezoidal) part of a matrix. *)
 
 val lower : [> `L ] uplo
+(** Using the lower triangular (or trapezoidal) part of a matrix. *)
 
 val upper_lower : [> `A ] uplo
+(** Using both of the upper and lower triangular parts (i.e., all elements) of a
+    matrix. *)
 
 (** {3 Transpose flags} *)
 
-type (+'a, +'tag) trans
+type (+'indim, +'outdim, +'tag) trans constraint 'tag = [< `N | `T | `C ]
+(** The type of transpose flags.
+    - ['indim] and ['outdim] respectively mean pairs of dimensions of an input
+      matrix and an output matrix:
+      - Not transposing: ['indim] = ['outdim] = ['m * 'n], and
+      - Transposing: ['indim] = ['m * 'n], ['outdim] = ['n * 'm]
+        (swapped from ['indim]).
+    - ['tag] is [`N] (normal, i.e. not transposing), [`T] (transpose), or
+      [`C] (conjugate transpose). *)
 
-type transNT
-
-type +'a trans2 = ('a, transNT) trans
+type (+'indim, +'outdim, +'tag) trans2 = ('indim, 'outdim, 'tag) trans
+    constraint 'tag = [< `N | `T ]
 (** Types of transpose flags for real vectors or matrices.
- Values of this type are
- - {!Slap_common.normal} and
- - {!Slap_common.trans}.
- *)
+    Values of this type are
+    - {!Slap_common.normal} and
+    - {!Slap_common.trans}. *)
 
-type transNTC
-
-type +'a trans3 = ('a, transNTC) trans
+type (+'indim, +'outdim, +'tag) trans3 = ('indim, 'outdim, 'tag) trans
 (** Types of transpose flags for complex vectors or matrices.
- Values of this type are
- - {!Slap_common.normal},
- - {!Slap_common.trans} and
- - {!Slap_common.conjtr}.
- *)
+    Values of this type are
+    - {!Slap_common.normal},
+    - {!Slap_common.trans} and
+    - {!Slap_common.conjtr}. *)
 
-val normal : (('m, 'n, 'num, 'prec, 'cd) Slap_mat.t ->
-              ('m, 'n, 'num, 'prec, 'cd) Slap_mat.t, _) trans
+val normal : ('m * 'n, 'm * 'n, [> `N ]) trans
 (** Non-transposed matrix. *)
 
-val trans : (('m, 'n, 'num, 'prec, 'cd) Slap_mat.t ->
-             ('n, 'm, 'num, 'prec, 'cd) Slap_mat.t, _) trans
+val trans : ('m * 'n, 'n * 'm, [> `N ]) trans
 (** Transpose of a matrix. *)
 
-val conjtr : (('m, 'n, 'num, 'prec, 'cd) Slap_mat.t ->
-              ('n, 'm, 'num, 'prec, 'cd) Slap_mat.t) trans3
+val conjtr : ('m * 'n, 'n * 'm, [> `C ]) trans3
 (** Conjugate transpose of a matrix. *)
+
+val get_transposed_dim :
+  ('m * 'n, 'k * 'l, _) trans ->
+  'm Slap_size.t -> 'n Slap_size.t -> 'k Slap_size.t * 'l Slap_size.t
+(** [get_transposed_dim trans m n] returns
+    - [(m * n)] if [trans] is {!Slap_common.normal};
+    - [(n * m)] if [trans] is {!Slap_common.trans} or {!Slap_common.conjtr}. *)
 
 (** {3 Direction of matrix multiplication} *)
 
@@ -81,30 +98,33 @@ type (+'k, +'m, +'n) side
     The type parameters ['k], ['m] and ['n] correspond to dimensions of two
     multiplied matrices: Let [A] be a ['k]-by-['k] square matrix
     and [B] be a ['m]-by-['n] general matrix.
- - When [A] is multiplied from the left by [B] (i.e., [A*B]), ['k] is equal to
-   ['m]; therefore the type of {!Slap_common.left} is [('m, 'm, 'n) side].
- - Conversely, if [A] is right-multiplied by [B] (i.e., [B*A]), ['k] is equal to
-   ['n]. Thus, the flag {!Slap_common.right} is given the type
-   [('n, 'm, 'n) side].
- *)
+    - When [A] is multiplied from the left by [B] (i.e., [A*B]), ['k] is equal
+      to ['m]; therefore the type of {!Slap_common.left} is [('m, 'm, 'n) side].
+    - Conversely, if [A] is right-multiplied by [B] (i.e., [B*A]), ['k] is equal
+      to ['n]. Thus, the flag {!Slap_common.right} is given the type
+      [('n, 'm, 'n) side]. *)
 
 val left : ('m, 'm, 'n) side
+(** Left multiplication *)
 
 val right : ('n, 'm, 'n) side
+(** Right multiplication *)
 
-(** {3 Slap_Mat.Trix norms} *)
+val check_side_dim :
+  'k Slap_size.t -> 'm Slap_size.t -> 'n Slap_size.t ->
+  ('k, 'm, 'n) side -> bool
+(** Auxiliary function (used internally) *)
 
-type (+'a, +'tag) norm
+(** {3 Matrix norms} *)
 
-type norm2_tag
+type +'a norm constraint 'a = [< `O | `I | `M | `F ]
+(** The type of matrix norms. *)
 
-type +'a norm2 = ('a, norm2_tag) norm
+type +'a norm2 = 'a norm constraint 'a = [< `O | `I ]
 (** Values of this type are {!Slap_common.norm_1} and {!Slap_common.norm_inf}.
  *)
 
-type norm4_tag
-
-type +'a norm4 = ('a, norm4_tag) norm
+type +'a norm4 = 'a norm
 (** Values of this type are
   - {!Slap_common.norm_1},
   - {!Slap_common.norm_inf},
@@ -112,24 +132,16 @@ type +'a norm4 = ('a, norm4_tag) norm
   - {!Slap_common.norm_frob}.
  *)
 
-type norm_1
-
-val norm_1 : (norm_1, _) norm
+val norm_1 : [> `O ] norm
 (** 1-norm of a matrix (maximum column sum). *)
 
-type norm_inf
-
-val norm_inf : (norm_inf, _) norm
+val norm_inf : [> `I ] norm
 (** Infinity-norm of a matrix (maximum row sum). *)
 
-type norm_amax
-
-val norm_amax : (norm_amax, norm4_tag) norm
+val norm_amax : [> `M ] norm
 (** Largest absolute value of a matrix. (not a matrix norm) *)
 
-type norm_frob
-
-val norm_frob : (norm_frob, norm4_tag) norm
+val norm_frob : [> `F ] norm
 (** Frobenius norm of a matrix. *)
 
 (** {3 SVD computation flags} *)
@@ -157,32 +169,11 @@ val create_int32_vec : 'n Slap_size.t -> ('n, 'cnt) int32_vec
 
 (** {2 Utilities} *)
 
-val get_transposed_dim :
-  (('m, 'n, 'num, 'prec, _) Slap_mat.t ->
-   ('k, 'l, 'num, 'prec, _) Slap_mat.t, _) trans ->
-  'm Slap_size.t -> 'n Slap_size.t -> 'k Slap_size.t * 'l Slap_size.t
-(** [get_transposed_dim trans m n] returns
-    - [(m * n)] if [trans] is {!Slap_common.normal};
-    - [(n * m)] if [trans] is {!Slap_common.trans} or {!Slap_common.conjtr}.
-*)
+val lacaml_trans2 : (_, _, _) trans -> Lacaml.Common.trans2
 
-val lacaml_trans2 : (_, _) trans -> Lacaml.Common.trans2
-
-val lacaml_trans3 : (_, _) trans -> [ `N | `T | `C ]
-
-val lacaml_side : (_, _, _) side -> Lacaml.Common.side
-
-val lacaml_norm2 : (_, _) norm -> Lacaml.Common.norm2
-
-val lacaml_norm4 : (_, _) norm -> Lacaml.Common.norm4
-
-val lacaml_norm2_opt : (_, _) norm option -> Lacaml.Common.norm2 option
-
-val lacaml_norm4_opt : (_, _) norm option -> Lacaml.Common.norm4 option
+val lacaml_trans3 : (_, _, _) trans -> [ `N | `T | `C ]
 
 val lacaml_svd_job : (_, _, _, _, _) svd_job -> Lacaml.Common.svd_job
-
-val lacaml_diag : diag -> Lacaml.Common.diag
 
 (**/**)
 
@@ -192,9 +183,9 @@ val __expose_uplo : _ uplo -> char
 
 val __unexpose_uplo : char -> _ uplo
 
-val __expose_norm : (_, _) norm -> char
+val __expose_norm : _ norm -> char
 
-val __unexpose_norm : char -> (_, _) norm
+val __unexpose_norm : char -> _ norm
 
 val __expose_side : (_, _, _) side -> char
 
@@ -203,7 +194,3 @@ val __unexpose_side : char -> (_, _, _) side
 val __expose_svd_job : (_, _, _, _, _) svd_job -> char
 
 val __unexpose_svd_job : char -> (_, _, _, _, _) svd_job
-
-val check_side_dim :
-  'k Slap_size.t -> 'm Slap_size.t -> 'n Slap_size.t ->
-  ('k, 'm, 'n) side -> bool

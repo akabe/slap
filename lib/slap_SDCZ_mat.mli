@@ -603,10 +603,10 @@ val axpy : ?alpha:num_type ->
 val gemm_diag :
   ?beta:num_type ->
   ?y:('n, cnt) vec ->
-  transa:(('a_n, 'a_k, 'a_cd) mat -> ('n, 'k, 'a_cd) mat) trans3 ->
+  transa:('a_n * 'a_k, 'n * 'k, _) trans3 ->
   ?alpha:num_type ->
   ('a_n, 'a_k, 'a_cd) mat ->
-  transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans3 ->
+  transb:('b_k * 'b_n, 'k * 'n, _) trans3 ->
   ('b_k, 'b_n, 'b_cd) mat -> ('n, 'cnt) vec
 (** [gemm_diag ?beta ?y ~transa ?alpha a ~transb b] executes
     [y := DIAG(alpha * OP(a) * OP(b)) + beta * y] where
@@ -632,7 +632,7 @@ val gemm_diag :
 val syrk_diag :
   ?beta:num_type ->
   ?y:('n, cnt) vec ->
-  trans:(('a_n, 'a_k, 'a_cd) mat -> ('n, 'k, 'a_cd) mat) trans2 ->
+  trans:('a_n * 'a_k, 'n * 'k, _) trans2 ->
   ?alpha:num_type ->
   ('a_n, 'a_k, 'a_cd) mat -> ('n, 'cnt) vec
 (** [syrk_diag ?beta ?y ~transa ?alpha a] executes
@@ -651,9 +651,9 @@ val syrk_diag :
  *)
 
 val gemm_trace :
-  transa:(('a_n, 'a_k, 'a_cd) mat -> ('n, 'k, 'a_cd) mat) trans3 ->
+  transa:('a_n * 'a_k, 'n * 'k, _) trans3 ->
   ('a_n, 'a_k, 'a_cd) mat ->
-  transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans3 ->
+  transb:('b_k * 'b_n, 'k * 'n, _) trans3 ->
   ('b_k, 'b_n, 'b_cd) mat -> num_type
 (** [gemm_trace ~transa a ~transb b]
 

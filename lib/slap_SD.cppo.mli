@@ -25,7 +25,8 @@ type prec = floatXBITS_elt
 
 type num_type = float
 
-type 'a trans3 = 'a Slap_common.trans2
+type (+'indim, +'outdim, +'tag) trans3 =
+  ('indim, 'outdim, 'tag) Slap_common.trans2
 (** A type of transpose parameters ({!Slap_common.normal} and
     {!Slap_common.trans}).
     For complex matrices, {!Slap_common.conjtr} is also offered, hence the name.

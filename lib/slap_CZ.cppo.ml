@@ -23,7 +23,8 @@ open Slap_common
 
 type prec = complexXBITS_elt
 type num_type = Complex.t
-type 'a trans3 = 'a Slap_common.trans3
+type (+'indim, +'outdim, +'tag) trans3 =
+  ('indim, 'outdim, 'tag) Slap_common.trans3
 let prec = complexXBITS
 let zero = Complex.zero
 let one = Complex.one

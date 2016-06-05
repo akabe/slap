@@ -30,6 +30,8 @@ let unit = 'U'
 
 let non_unit = 'N'
 
+let char_of_diag = identity
+
 (** {3 Uppper/lower (triangular matrix) flags} *)
 
 type +'a uplo = char constraint 'a = [< `U | `L | `A ]
@@ -42,21 +44,24 @@ let upper_lower = 'A'
 
 (** {3 Transpose flags} *)
 
-type (+'a, +'tag) trans = char
+type (+'indim, +'outdim, +'tag) trans = char constraint 'tag = [< `N | `T | `C ]
 
-type transNT
+type (+'indim, +'outdim, +'tag) trans2 = ('indim, 'outdim, 'tag) trans
+    constraint 'tag = [< `N | `T ]
 
-type +'a trans2 = ('a, transNT) trans
-
-type transNTC
-
-type +'a trans3 = ('a, transNTC) trans
+type (+'indim, +'outdim, +'tag) trans3 = ('indim, 'outdim, 'tag) trans
 
 let normal = 'N'
 
 let trans = 'T'
 
 let conjtr = 'C'
+
+let get_transposed_dim t m n =
+  let retype n = Slap_size.__unexpose (Slap_size.__expose n) in
+  match t with
+  | 'N' -> (retype m, retype n)
+  | _ -> (retype n, retype m)
 
 (** {3 Direction of multiplication of matrices} *)
 
@@ -68,29 +73,17 @@ let right = 'R'
 
 (** {3 Matrix norms} *)
 
-type (+'a, +'tag) norm = char
+type +'a norm = char constraint 'a = [< `O | `I | `M | `F ]
 
-type norm2_tag
+type +'a norm2 = 'a norm constraint 'a = [< `O | `I ]
 
-type +'a norm2 = ('a, norm2_tag) norm
-
-type norm4_tag
-
-type +'a norm4 = ('a, norm4_tag) norm
-
-type norm_1
+type +'a norm4 = 'a norm
 
 let norm_1 = 'O'
 
-type norm_inf
-
 let norm_inf = 'I'
 
-type norm_amax
-
 let norm_amax = 'M'
-
-type norm_frob
 
 let norm_frob = 'F'
 
@@ -120,12 +113,6 @@ let create_int32_vec n = Slap_vec.create int32 n
 
 (** {2 Utilities} *)
 
-let get_transposed_dim t m n =
-  let retype n = S.__unexpose (S.__expose n) in
-  match t with
-  | 'N' -> (retype m, retype n)
-  | _ -> (retype n, retype m)
-
 let lacaml_trans2 = function
   | 'N' -> `N
   | 'T' | 'C' -> `T
@@ -137,42 +124,11 @@ let lacaml_trans3 = function
   | 'C' -> `C
   | _ -> assert false
 
-let lacaml_side = function
-  | 'L' -> `L
-  | _ -> `R
-
-let lacaml_norm2 v : Lacaml.Common.norm2 =
-  match v with
-  | 'O' -> `O
-  | 'I' -> `I
-  | _ -> assert(false)
-
-let lacaml_norm4 v : Lacaml.Common.norm4 =
-  match v with
-  | 'O' -> `O
-  | 'I' -> `I
-  | 'M' -> `M
-  | 'F' -> `F
-  | _ -> assert(false)
-
-let lacaml_norm2_opt = function
-  | None -> None
-  | Some v -> Some (lacaml_norm2 v)
-
-let lacaml_norm4_opt = function
-  | None -> None
-  | Some v -> Some (lacaml_norm4 v)
-
 let lacaml_svd_job = function
   | 'A' -> `A
   | 'S' -> `S
   | 'O' -> `O
   | 'N' -> `N
-  | _ -> assert(false)
-
-let lacaml_diag = function
-  | 'N' -> `N
-  | 'U' -> `U
   | _ -> assert(false)
 
 (** {2 Internal functions} *)

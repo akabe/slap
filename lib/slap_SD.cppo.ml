@@ -23,7 +23,8 @@ open Slap_common
 
 type prec = floatXBITS_elt
 type num_type = float
-type 'a trans3 = 'a Slap_common.trans2
+type (+'indim, +'outdim, +'tag) trans3 =
+  ('indim, 'outdim, 'tag) Slap_common.trans2
 let prec = floatXBITS
 let zero = 0.0
 let one = 1.0

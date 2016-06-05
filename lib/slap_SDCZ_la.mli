@@ -63,7 +63,7 @@ val amax : ('n, 'cd) vec -> num_type
 val gemv :
   ?beta:num_type ->
   ?y:('m, 'y_cd) vec ->
-  trans:(('a_m, 'a_n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) trans3 ->
+  trans:('a_m * 'a_n, 'm * 'n, _) trans3 ->
   ?alpha:num_type ->
   ('a_m, 'a_n, 'a_cd) mat ->
   ('n, 'x_cd) vec -> ('m, 'y_cd) vec
@@ -83,7 +83,7 @@ val gbmv :
   m:'a_m Slap_size.t ->
   ?beta:num_type ->
   ?y:('m, 'y_cd) vec ->
-  trans:(('a_m, 'a_n, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) trans3 ->
+  trans:('a_m * 'a_n, 'm * 'n, _) trans3 ->
   ?alpha:num_type ->
   (('a_m, 'a_n, 'kl, 'ku) Slap_size.geband, 'a_n, 'a_cd) mat ->
   'kl Slap_size.t ->
@@ -125,7 +125,7 @@ val symv :
  *)
 
 val trmv :
-  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  trans:('n * 'n, 'n * 'n, _) trans3 ->
   ?diag:Slap_common.diag ->
   ?up:[< `L | `U] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
@@ -148,7 +148,7 @@ val trmv :
  *)
 
 val trsv :
-  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  trans:('n * 'n, 'n * 'n, _) trans3 ->
   ?diag:Slap_common.diag ->
   ?up:[< `L | `U] Slap_common.uplo ->
   ('n, 'n, 'a_cd) mat ->
@@ -172,7 +172,7 @@ val trsv :
  *)
 
 val tpmv :
-  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  trans:('n * 'n, 'n * 'n, _) trans3 ->
   ?diag:Slap_common.diag ->
   ?up:[< `L | `U] Slap_common.uplo ->
   ('n Slap_size.packed, cnt) vec ->
@@ -198,7 +198,7 @@ val tpmv :
  *)
 
 val tpsv :
-  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  trans:('n * 'n, 'n * 'n, _) trans3 ->
   ?diag:Slap_common.diag ->
   ?up:[< `L | `U] Slap_common.uplo ->
   ('n Slap_size.packed, cnt) vec ->
@@ -229,10 +229,10 @@ val tpsv :
 val gemm :
   ?beta:num_type ->
   ?c:('m, 'n, 'c_cd) mat ->
-  transa:(('a_m, 'a_k, 'a_cd) mat -> ('m, 'k, 'a_cd) mat) trans3 ->
+  transa:('a_m * 'a_k, 'm * 'k, _) trans3 ->
   ?alpha:num_type ->
   ('a_m, 'a_k, 'a_cd) mat ->
-  transb:(('b_k, 'b_n, 'b_cd) mat -> ('k, 'n, 'b_cd) mat) trans3 ->
+  transb:('b_k * 'b_n, 'k * 'n, _) trans3 ->
   ('b_k, 'b_n, 'b_cd) mat -> ('m, 'n, 'c_cd) mat
 (** [gemm ?beta ?c ~transa ?alpha a ~transb b] executes
     [c := alpha * OP(a) * OP(b) + beta * c].
@@ -280,7 +280,7 @@ val symm :
 val trmm :
   side:('k, 'm, 'n) Slap_common.side ->
   ?up:[< `U | `L ] Slap_common.uplo ->
-  transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans3 ->
+  transa:('k * 'k, 'k * 'k, _) trans3 ->
   ?diag:Slap_common.diag ->
   ?alpha:num_type ->
   a:('k, 'k, 'a_cd) mat ->
@@ -313,7 +313,7 @@ val trmm :
 val trsm :
   side:('k, 'm, 'n) Slap_common.side ->
   ?up:[< `U | `L ] Slap_common.uplo ->
-  transa:(('k, 'k, 'a_cd) mat -> ('k, 'k, 'a_cd) mat) trans3 ->
+  transa:('k * 'k, 'k * 'k, _) trans3 ->
   ?diag:Slap_common.diag ->
   ?alpha:num_type ->
   a:('k, 'k, 'a_cd) mat ->
@@ -349,8 +349,7 @@ val syrk :
   ?up:[< `U | `L ] Slap_common.uplo ->
   ?beta:num_type ->
   ?c:('n, 'n, 'c_cd) mat ->
-  trans:(('a_n, 'a_k, 'a_cd) mat ->
-         ('n, 'k, 'a_cd) mat) Slap_common.trans2 ->
+  trans:('a_n * 'a_k, 'n * 'k, _) Slap_common.trans2 ->
   ?alpha:num_type ->
   ('a_n, 'a_k, 'a_cd) mat -> ('n, 'n, 'c_cd) mat
 (** [syrk ?up ?beta ?c ~trans ?alpha a] executes
@@ -375,8 +374,7 @@ val syr2k :
   ?up:[< `U | `L ] Slap_common.uplo ->
   ?beta:num_type ->
   ?c:('n, 'n, 'c_cd) mat ->
-  trans:(('p, 'q, _) mat ->
-         ('n, 'k, _) mat) Slap_common.trans2 ->
+  trans:('p * 'q, 'n * 'k, _) Slap_common.trans2 ->
   ?alpha:num_type ->
   ('p, 'q, 'a_cd) mat ->
   ('p, 'q, 'b_cd) mat ->
@@ -501,7 +499,7 @@ val getrf :
 
 val getrs :
   ?ipiv:(('n, 'n) Slap_size.min, cnt) Slap_common.int32_vec ->
-  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  trans:('n * 'n, 'n * 'n, _) trans3 ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'n, 'b_cd) mat -> unit
 (** [getrs ?ipiv trans a b] solves systems of linear equations [OP(a) * x = b]
@@ -734,7 +732,7 @@ val potri :
 
 val trtrs :
   ?up:[< `U | `L ] Slap_common.uplo ->
-  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  trans:('n * 'n, 'n * 'n, _) trans3 ->
   ?diag:Slap_common.diag ->
   ('n, 'n, 'a_cd) mat ->
   ('n, 'nrhs, 'b_cd) mat -> unit
@@ -763,7 +761,7 @@ val trtrs :
 val tbtrs :
   kd:'kd Slap_size.t ->
   ?up:[< `U | `L ] Slap_common.uplo ->
-  trans:(('n, 'n, 'a_cd) mat -> ('n, 'n, 'a_cd) mat) trans3 ->
+  trans:('n * 'n, 'n * 'n, _) trans3 ->
   ?diag:Slap_common.diag ->
   (('n, 'kd) Slap_size.syband, 'n, 'a_cd) mat ->
   ('n, 'nrhs, 'b_cd) mat -> unit
@@ -1066,7 +1064,7 @@ val gels_min_lwork :
  *)
 
 val gels_opt_lwork :
-  trans:(('am, 'an, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) Slap_common.trans2 ->
+  trans:('am * 'an, 'm * 'n, _) Slap_common.trans2 ->
   ('am, 'an, 'a_cd) mat ->
   ('m, 'nrhs, 'b_cd) mat -> (module Slap_size.SIZE)
 (** [gels_opt_lwork ~trans a b] computes the optimum length of workspace for
@@ -1075,7 +1073,7 @@ val gels_opt_lwork :
 
 val gels :
   ?work:('work, cnt) vec ->
-  trans:(('am, 'an, 'a_cd) mat -> ('m, 'n, 'a_cd) mat) Slap_common.trans2 ->
+  trans:('am * 'an, 'm * 'n, _) Slap_common.trans2 ->
   ('am, 'an, 'a_cd) mat ->
   ('m, 'nrhs, 'b_cd) mat -> unit
 (** [gels ?work ~trans a b] solves an overdetermined or underdetermined system

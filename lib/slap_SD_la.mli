@@ -176,7 +176,7 @@ val ormqr_min_lwork : side:('r, 'm, 'n) Slap_common.side ->
  *)
 
 val ormqr_opt_lwork : side:('r, 'm, 'n) Slap_common.side ->
-                      trans:(('r, 'r, _) mat -> ('r, 'r, _) mat) Slap_common.trans2 ->
+                      trans:('r * 'r, 'r * 'r, _) Slap_common.trans2 ->
                       tau:('k, cnt) vec ->
                       ('r, 'k, 'a_cd) mat ->
                       ('m, 'n, 'c_cd) mat -> (module Slap_size.SIZE)
@@ -189,7 +189,7 @@ val ormqr_opt_lwork : side:('r, 'm, 'n) Slap_common.side ->
  *)
 
 val ormqr_dyn : side:('r, 'm, 'n) Slap_common.side ->
-                trans:(('r, 'r, _) mat -> ('r, 'r, _) mat) Slap_common.trans2 ->
+                trans:('r * 'r, 'r * 'r, _) Slap_common.trans2 ->
                 ?work:('lwork, cnt) vec ->
                 tau:('k, cnt) vec ->
                 ('r, 'k, 'a_cd) mat ->
