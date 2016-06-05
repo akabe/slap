@@ -19,6 +19,7 @@ lib/slap_C.ml
 lib/slap_Z.mli
 lib/slap_Z.ml
 lib/slap_version.ml
+ppx/compat.ml
 _build/
 /setup.data
 /setup.log

@@ -31,7 +31,9 @@ PreBuildCommand:        ocaml gen_config_h.ml; \
                         cppo lib/slap_CZ.cppo.ml  | sed 's/XSDCZ/C/g;s/XBITS/32/g' > lib/slap_C.ml; \
                         cppo lib/slap_CZ.cppo.mli | sed 's/XSDCZ/Z/g;s/XBITS/64/g' > lib/slap_Z.mli; \
                         cppo lib/slap_CZ.cppo.ml  | sed 's/XSDCZ/Z/g;s/XBITS/64/g' > lib/slap_Z.ml; \
-                        cppo -V SLAP:$(pkg_version) lib/slap_version.cppo.ml > lib/slap_version.ml
+                        cppo -V SLAP:$(pkg_version) lib/slap_version.cppo.ml > lib/slap_version.ml; \
+                        cppo -V OCAML:`ocaml -vnum` ppx/compat.cppo.ml > ppx/compat.ml
+
 PostCleanCommand:       rm -f \
                         lib/config.h \
                         lib/slap_[SDCZ].mli lib/slap_[SDCZ].ml \
@@ -44,7 +46,7 @@ Flag ppx
 Library slap
   Path:                 lib
   FindlibName:          slap
-  BuildDepends:         bigarray,lacaml (>= 7.2.3)
+  BuildDepends:         bigarray,lacaml (>= 8.0.0)
   Modules:              Slap,
                         Slap_misc,
                         Slap_common,

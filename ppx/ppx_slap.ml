@@ -23,6 +23,7 @@ open Ast_mapper
 open Asttypes
 open Parsetree
 open Longident
+open Compat (* for compatibility *)
 
 type kind =
   | Default
@@ -178,7 +179,7 @@ struct
   include Ast_helper.Exp
 
   let ident ?loc ?attrs name = ident ?loc ?attrs (Li.mk name)
-  let int ?loc ?attrs n = constant ?loc ?attrs (Const_int n)
+  let int ?loc ?attrs n = constant ?loc ?attrs (Const.int n)
 
   let rev_sequence_list ?loc ?attrs ~last el =
     List.fold_left (fun acc x -> sequence ?loc ?attrs x acc) last el
@@ -211,18 +212,18 @@ struct
     let fun_name = "Bigarray.Array"
                    ^ (string_of_int (List.length dims))
                    ^ ".create" in
-    let args = ("", bigarray_kind ?loc ?attrs kind)
-               :: ("", bigarray_layout  ?loc ?attrs ())
-               :: List.map (fun n -> ("", int ?loc ?attrs n)) dims in
+    let args = (nolabel, bigarray_kind ?loc ?attrs kind)
+               :: (nolabel, bigarray_layout  ?loc ?attrs ())
+               :: List.map (fun n -> (nolabel, int ?loc ?attrs n)) dims in
     apply ?loc ?attrs (ident ?loc ?attrs fun_name) args
 
   let bigarray_unsafe_set ?loc ?attrs e_ba indices e_elm =
     let fun_name = "Bigarray.Array"
                    ^ (string_of_int (List.length indices))
                    ^ ".unsafe_set" in
-    let args = ("", e_ba)
-               :: List.map (fun i -> ("", int ?loc ?attrs i)) indices
-               @ [("", e_elm)] in
+    let args = (nolabel, e_ba)
+               :: List.map (fun i -> (nolabel, int ?loc ?attrs i)) indices
+               @ [(nolabel, e_elm)] in
     apply ?loc ?attrs (ident ?loc ?attrs fun_name) args
 
   let bigarray =
@@ -247,7 +248,7 @@ struct
 
   let size n =
     let e_size = apply (ident "Slap.Size.__unexpose")
-        ["", constant (Const_int n)] in
+        [nolabel, constant (Const.int n)] in
     constraint_ e_size (Typ.size n)
 
   let vec kind el =
@@ -256,9 +257,9 @@ struct
     let e_ba = bigarray kind [n] items in
     let e_vec =
       apply (ident "Slap.Vec.__unexpose")
-        ["", size n; (* dimension *)
-         "", constant (Const_int 1); (* incrementation *)
-         "", e_ba] in
+        [nolabel, size n; (* dimension *)
+         nolabel, constant (Const_int 1); (* incrementation *)
+         nolabel, e_ba] in
     constraint_ e_vec (Typ.vec kind)
 
   let mat kind ell =
@@ -270,18 +271,18 @@ struct
     let e_ba = bigarray kind [m; n] items in
     let e_vec =
       apply (ident "Slap.Mat.__unexpose")
-        ["", size m; (* dimension (#rows) *)
-         "", size n; (* dimension (#columns) *)
-         "", constant (Const_int 1); (* offset of rows *)
-         "", constant (Const_int 1); (* offset of columns *)
-         "", e_ba] in
+        [nolabel, size m; (* dimension (#rows) *)
+         nolabel, size n; (* dimension (#columns) *)
+         nolabel, constant (Const_int 1); (* offset of rows *)
+         nolabel, constant (Const_int 1); (* offset of columns *)
+         nolabel, e_ba] in
     constraint_ e_vec (Typ.mat kind)
 
   (* For errors *)
 
   (* error report: [%ocaml.error "message"] *)
   let error ?(loc = !default_loc) ?attrs msg =
-    let e_str = Exp.constant ~loc ?attrs (Const_string (msg, None)) in
+    let e_str = Exp.constant ~loc ?attrs (Const.string msg) in
     Exp.extension ({ txt = "ocaml.error"; loc },
                    PStr [Str.eval ~loc ?attrs e_str])
 end
