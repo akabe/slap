@@ -78,7 +78,7 @@ type (+'indim, +'outdim, +'tag) trans3 = ('indim, 'outdim, 'tag) trans
 val normal : ('m * 'n, 'm * 'n, [> `N ]) trans
 (** Non-transposed matrix. *)
 
-val trans : ('m * 'n, 'n * 'm, [> `N ]) trans
+val trans : ('m * 'n, 'n * 'm, [> `T ]) trans
 (** Transpose of a matrix. *)
 
 val conjtr : ('m * 'n, 'n * 'm, [> `C ]) trans3
