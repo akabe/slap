@@ -42,6 +42,8 @@ let lower = 'L'
 
 let upper_lower = 'A'
 
+let char_of_uplo = identity
+
 (** {3 Transpose flags} *)
 
 type (+'indim, +'outdim, +'tag) trans = char constraint 'tag = [< `N | `T | `C ]
@@ -63,6 +65,8 @@ let get_transposed_dim t m n =
   | 'N' -> (retype m, retype n)
   | _ -> (retype n, retype m)
 
+let char_of_trans = identity
+
 (** {3 Direction of multiplication of matrices} *)
 
 type (+'k, +'m, +'n) side = char
@@ -70,6 +74,12 @@ type (+'k, +'m, +'n) side = char
 let left = 'L'
 
 let right = 'R'
+
+let check_side_dim k m n = function
+  | 'L' -> S.__expose m = S.__expose k
+  | _ -> S.__expose n = S.__expose k
+
+let char_of_side = identity
 
 (** {3 Matrix norms} *)
 
@@ -87,6 +97,8 @@ let norm_amax = 'M'
 
 let norm_frob = 'F'
 
+let char_of_norm = identity
+
 (** {3 SVD computation flags} *)
 
 type (+'a, +'b, +'c, +'d, +'e) svd_job = char
@@ -98,6 +110,8 @@ let svd_top = 'S'
 let svd_overwrite = 'O'
 
 let svd_no = 'N'
+
+let char_of_svd_job = identity
 
 (** {2 Integer vectors} *)
 
@@ -133,22 +147,10 @@ let lacaml_svd_job = function
 
 (** {2 Internal functions} *)
 
-let __expose_uplo = identity
-
 let __unexpose_uplo = identity
-
-let __expose_norm = identity
 
 let __unexpose_norm = identity
 
-let __expose_side = identity
-
 let __unexpose_side = identity
 
-let __expose_svd_job = identity
-
 let __unexpose_svd_job = identity
-
-let check_side_dim k m n = function
-  | 'L' -> S.__expose m = S.__expose k
-  | _ -> S.__expose n = S.__expose k

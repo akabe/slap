@@ -34,6 +34,9 @@ val unit : diag
 val non_unit : diag
 (** A matrix is not unit triagular. *)
 
+val char_of_diag : diag -> char
+(** Return a character of a flag (for BLAS/LAPACK). *)
+
 (** {3 Uppper/lower (triangular matrix) flags} *)
 
 type +'a uplo constraint 'a = [< `U | `L | `A ]
@@ -48,6 +51,9 @@ val lower : [> `L ] uplo
 val upper_lower : [> `A ] uplo
 (** Using both of the upper and lower triangular parts (i.e., all elements) of a
     matrix. *)
+
+val char_of_uplo : _ uplo -> char
+(** Return a character of a flag (for BLAS/LAPACK). *)
 
 (** {3 Transpose flags} *)
 
@@ -91,6 +97,9 @@ val get_transposed_dim :
     - [(m * n)] if [trans] is {!Slap_common.normal};
     - [(n * m)] if [trans] is {!Slap_common.trans} or {!Slap_common.conjtr}. *)
 
+val char_of_trans : ('indim, 'outdim, 'tag) trans -> char
+(** Return a character of a flag (for BLAS/LAPACK). *)
+
 (** {3 Direction of matrix multiplication} *)
 
 type (+'k, +'m, +'n) side
@@ -114,6 +123,9 @@ val check_side_dim :
   'k Slap_size.t -> 'm Slap_size.t -> 'n Slap_size.t ->
   ('k, 'm, 'n) side -> bool
 (** Auxiliary function (used internally) *)
+
+val char_of_side : ('k, 'm, 'n) side -> char
+(** Return a character of a flag (for BLAS/LAPACK). *)
 
 (** {3 Matrix norms} *)
 
@@ -144,6 +156,9 @@ val norm_amax : [> `M ] norm
 val norm_frob : [> `F ] norm
 (** Frobenius norm of a matrix. *)
 
+val char_of_norm : _ norm -> char
+(** Return a character of a flag (for BLAS/LAPACK). *)
+
 (** {3 SVD computation flags} *)
 
 type (+'a, +'b, +'c, +'d, +'e) svd_job
@@ -155,6 +170,9 @@ val svd_top : ('b, 'a, 'b, 'c, 'd) svd_job
 val svd_overwrite : ('c, 'a, 'b, 'c, 'd) svd_job
 
 val svd_no : ('d, 'a, 'b, 'c, 'd) svd_job
+
+val char_of_svd_job : (_, _, _, _, _) svd_job -> char
+(** Return a character of a flag (for BLAS/LAPACK). *)
 
 (** {2 Integer vectors} *)
 
@@ -179,18 +197,10 @@ val lacaml_svd_job : (_, _, _, _, _) svd_job -> Lacaml.Common.svd_job
 
 (** {2 Internal functions} *)
 
-val __expose_uplo : _ uplo -> char
-
 val __unexpose_uplo : char -> _ uplo
-
-val __expose_norm : _ norm -> char
 
 val __unexpose_norm : char -> _ norm
 
-val __expose_side : (_, _, _) side -> char
-
 val __unexpose_side : char -> (_, _, _) side
-
-val __expose_svd_job : (_, _, _, _, _) svd_job -> char
 
 val __unexpose_svd_job : char -> (_, _, _, _, _) svd_job

@@ -156,7 +156,7 @@ external direct_lansy :
 type ('m, 'a) lansy_min_lwork
 
 let lansy_min_lwork n norm =
-  let lwork = match Slap_common.__expose_norm norm with
+  let lwork = match Slap_common.char_of_norm norm with
     | 'I' | 'O' -> Slap_size.__expose n
     | _ -> 0 in
   Slap_size.__unexpose lwork
@@ -279,7 +279,7 @@ let check_ormqr ~loc ~side ~r ~m ~n ~k ~k' =
   let m = Slap_size.__expose m in
   let n = Slap_size.__expose n in
   let k = Slap_size.__expose k in
-  assert(match Slap_common.__expose_side side with
+  assert(match Slap_common.char_of_side side with
       | 'L' -> r = m
       | _ -> r = n);
   if k > m
@@ -290,7 +290,7 @@ type ('r, 'm, 'n) ormqr_min_lwork
 
 let ormqr_min_lwork ~side ~m ~n =
   begin
-    match Slap_common.__expose_side side with
+    match Slap_common.char_of_side side with
     | 'L' -> max 1 (Slap_size.__expose n)
     | _ -> max 1 (Slap_size.__expose m)
   end
@@ -715,7 +715,7 @@ let gesvd_min_lwork ~m ~n =
 let gesvd_calc_sizes m n jobu jobvt =
   let open Slap_size in
   let min_mn = min m n in
-  let job_size k job = match Slap_common.__expose_svd_job job with
+  let job_size k job = match Slap_common.char_of_svd_job job with
     | 'A' -> __expose k
     | 'S' -> __expose min_mn
     | _ -> 0 in

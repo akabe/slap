@@ -680,7 +680,7 @@ let larnv ?(idist = `Normal) ?iseed ~x () =
 type ('m, 'a) lange_min_lwork
 
 let lange_min_lwork m norm =
-  let m' = match Slap_common.__expose_norm norm with
+  let m' = match Slap_common.char_of_norm norm with
     | 'I' -> Slap_size.__expose m
     | _ -> 0 in
   Slap_size.__unexpose m'
