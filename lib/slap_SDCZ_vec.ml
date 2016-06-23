@@ -113,6 +113,24 @@ let replace_dyn = Slap_vec.replace_dyn
 
 (** {2 Basic operations} *)
 
+let cons = Slap_vec.cons
+
+let hd = Slap_vec.hd
+
+let hd_dyn = Slap_vec.hd_dyn
+
+let last = Slap_vec.last
+
+let last_dyn = Slap_vec.last_dyn
+
+let tl = Slap_vec.tl
+
+let tl_dyn = Slap_vec.tl_dyn
+
+let intro = Slap_vec.intro
+
+let intro_dyn = Slap_vec.intro_dyn
+
 let copy ?y x = wrap2opt I.copy ?y x
 
 let fill = Slap_vec.fill

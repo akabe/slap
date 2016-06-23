@@ -77,6 +77,10 @@ let ten = 10
 
 let succ = Pervasives.succ
 
+let pred n =
+  assert(n >= 1);
+  Pervasives.pred n
+
 type 'n p
 
 let pred_dyn n =

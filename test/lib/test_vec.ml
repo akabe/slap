@@ -82,6 +82,86 @@ let test_of_list_dyn () =
   in
   "exn" @! (fun () -> of_list_dyn five [1;2;3;4])
 
+(* test of Slap.Vec.hd *)
+let test_hd () =
+  "v_sgl"  @? (hd v_sgl  = 42);
+  "v_ord"  @? (hd v_ord  = 1);
+  "sv_cfe" @? (hd sv_cfe = 1);
+  "sv_cle" @? (hd sv_cle = 7);
+  "sv_dfe" @? (hd sv_dfe = 1);
+  "sv_dle" @? (hd sv_dle = 4);
+  "sv_dng" @? (hd sv_dng = 10)
+
+(* test of Slap.Vec.hd_dyn *)
+let test_hd_dyn () =
+  "v_sgl"  @? (hd_dyn v_sgl  = 42);
+  "v_ord"  @? (hd_dyn v_ord  = 1);
+  "sv_cfe" @? (hd_dyn sv_cfe = 1);
+  "sv_cle" @? (hd_dyn sv_cle = 7);
+  "sv_dfe" @? (hd_dyn sv_dfe = 1);
+  "sv_dle" @? (hd_dyn sv_dle = 4);
+  "sv_dng" @? (hd_dyn sv_dng = 10)
+
+(* test of Slap.Vec.last *)
+let test_last () =
+  "v_sgl"  @? (last v_sgl  = 42);
+  "v_ord"  @? (last v_ord  = 10);
+  "sv_cfe" @? (last sv_cfe = 4);
+  "sv_cle" @? (last sv_cle = 10);
+  "sv_dfe" @? (last sv_dfe = 7);
+  "sv_dle" @? (last sv_dle = 10);
+  "sv_dng" @? (last sv_dng = 1)
+
+(* test of Slap.Vec.last_dyn *)
+let test_last_dyn () =
+  "v_sgl"  @? (last_dyn v_sgl  = 42);
+  "v_ord"  @? (last_dyn v_ord  = 10);
+  "sv_cfe" @? (last_dyn sv_cfe = 4);
+  "sv_cle" @? (last_dyn sv_cle = 10);
+  "sv_dfe" @? (last_dyn sv_dfe = 7);
+  "sv_dle" @? (last_dyn sv_dle = 10);
+  "sv_dng" @? (last_dyn sv_dng = 1)
+
+(* test of Slap.Vec.tl *)
+let test_tl () =
+  "v_sgl"  @? (to_list (tl v_sgl)  = []);
+  "v_ord"  @? (to_list (tl v_ord)  = [2;3;4;5;6;7;8;9;10]);
+  "sv_cfe" @? (to_list (tl sv_cfe) = [2;3;4]);
+  "sv_cle" @? (to_list (tl sv_cle) = [8;9;10]);
+  "sv_dfe" @? (to_list (tl sv_dfe) = [3;5;7]);
+  "sv_dle" @? (to_list (tl sv_dle) = [6;8;10]);
+  "sv_dng" @? (to_list (tl sv_dng) = [7;4;1])
+
+(* test of Slap.Vec.tl_dyn *)
+let test_tl_dyn () =
+  "v_sgl"  @? (to_list (tl_dyn v_sgl)  = []);
+  "v_ord"  @? (to_list (tl_dyn v_ord)  = [2;3;4;5;6;7;8;9;10]);
+  "sv_cfe" @? (to_list (tl_dyn sv_cfe) = [2;3;4]);
+  "sv_cle" @? (to_list (tl_dyn sv_cle) = [8;9;10]);
+  "sv_dfe" @? (to_list (tl_dyn sv_dfe) = [3;5;7]);
+  "sv_dle" @? (to_list (tl_dyn sv_dle) = [6;8;10]);
+  "sv_dng" @? (to_list (tl_dyn sv_dng) = [7;4;1])
+
+(* test of Slap.Vec.intro *)
+let test_intro () =
+  "v_sgl"  @? (to_list (intro v_sgl)  = []);
+  "v_ord"  @? (to_list (intro v_ord)  = [1;2;3;4;5;6;7;8;9]);
+  "sv_cfe" @? (to_list (intro sv_cfe) = [1;2;3]);
+  "sv_cle" @? (to_list (intro sv_cle) = [7;8;9]);
+  "sv_dfe" @? (to_list (intro sv_dfe) = [1;3;5]);
+  "sv_dle" @? (to_list (intro sv_dle) = [4;6;8]);
+  "sv_dng" @? (to_list (intro sv_dng) = [10;7;4])
+
+(* test of Slap.Vec.intro_dyn *)
+let test_intro_dyn () =
+  "v_sgl"  @? (to_list (intro_dyn v_sgl)  = []);
+  "v_ord"  @? (to_list (intro_dyn v_ord)  = [1;2;3;4;5;6;7;8;9]);
+  "sv_cfe" @? (to_list (intro_dyn sv_cfe) = [1;2;3]);
+  "sv_cle" @? (to_list (intro_dyn sv_cle) = [7;8;9]);
+  "sv_dfe" @? (to_list (intro_dyn sv_dfe) = [1;3;5]);
+  "sv_dle" @? (to_list (intro_dyn sv_dle) = [4;6;8]);
+  "sv_dng" @? (to_list (intro_dyn sv_dng) = [10;7;4])
+
 (* test of Slap.Vec.copy *)
 let test_copy () =
   "v_emp"  @? (to_list (copy v_emp)  = []);
@@ -340,6 +420,14 @@ let suite =
      "to_list"      >:: test_to_list;
      "of_array_dyn" >:: test_of_array_dyn;
      "of_list_dyn"  >:: test_of_list_dyn;
+     "hd"           >:: test_hd;
+     "hd_dyn"       >:: test_hd_dyn;
+     "last"         >:: test_last;
+     "last_dyn"     >:: test_last_dyn;
+     "tl"           >:: test_tl;
+     "tl_dyn"       >:: test_tl_dyn;
+     "intro"        >:: test_intro;
+     "intro_dyn"    >:: test_intro_dyn;
      "copy"         >:: test_copy;
      "fill"         >:: test_fill;
      "fold_lefti"   >:: test_fold_lefti;

@@ -322,6 +322,63 @@ let copy ?y (n, incx, x) =
   copy_stub ~n ~ofsx:1 ~incx x ~ofsy:1 ~incy y;
   (n, incy, y)
 
+let cons ?y e (n, incx, x) =
+  let m = Slap_size.succ n in
+  let incy, y = opt_vec_alloc (Array1.kind x) m y in
+  Array1.unsafe_set y 1 e;
+  copy_stub ~n ~ofsx:1 ~incx x ~ofsy:2 ~incy y;
+  (m, incy, y)
+
+let hd x =
+  let n = Slap_size.to_int (dim x) in
+  assert(n >= 1);
+  unsafe_get x 1
+
+let hd_dyn x =
+  if Slap_size.to_int (dim x) >= 1 then hd x
+  else failwith "Slap.Vec.hd_dyn: an empty vector"
+
+let last x =
+  let n = Slap_size.to_int (dim x) in
+  assert(n >= 1);
+  unsafe_get x n
+
+let last_dyn x =
+  if Slap_size.to_int (dim x) >= 1 then last x
+  else failwith "Slap.Vec.last_dyn: an empty vector"
+
+let internal_tl ?y ~m ~n ~incx ~x =
+  let incy, y = opt_vec_alloc (Array1.kind x) m y in
+  if incx > 0
+  then copy_stub ~n:m ~ofsx:(1 + incx) ~incx x ~ofsy:1 ~incy y
+  else copy_stub ~n:m ~ofsx:1 ~incx x ~ofsy:1 ~incy y;
+  (m, incy, y)
+
+let tl ?y (n, incx, x) =
+  assert(Slap_size.to_int n >= 1);
+  internal_tl ?y ~m:(Slap_size.pred n) ~n ~incx ~x
+
+let tl_dyn ?y (n, incx, x) =
+  if Slap_size.to_int n >= 1
+  then internal_tl ?y ~m:(Slap_size.pred_dyn n) ~n ~incx ~x
+  else failwith "Slap.Vec.tl_dyn: an empty vector"
+
+let internal_intro ?y ~m ~n ~incx ~x =
+  let incy, y = opt_vec_alloc (Array1.kind x) m y in
+  if incx > 0
+  then copy_stub ~n:m ~ofsx:1 ~incx x ~ofsy:1 ~incy y
+  else copy_stub ~n:m ~ofsx:(1 - incx) ~incx x ~ofsy:1 ~incy y;
+  (m, incy, y)
+
+let intro ?y (n, incx, x) =
+  assert(Slap_size.to_int n >= 1);
+  internal_intro ?y ~m:(Slap_size.pred n) ~n ~incx ~x
+
+let intro_dyn ?y (n, incx, x) =
+  if Slap_size.to_int n >= 1
+  then internal_intro ?y ~m:(Slap_size.pred_dyn n) ~n ~incx ~x
+  else failwith "Slap.Vec.init_dyn: an empty vector"
+
 external fill_stub :
   n:'n S.t ->
   ofsx:int -> incx:int ->

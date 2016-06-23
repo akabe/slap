@@ -99,6 +99,61 @@ val replace_dyn : ('n, 'cd) vec -> int -> (num_type -> num_type) -> unit
 
 (** {2 Basic operations} *)
 
+val cons :
+  ?y:('n Slap_size.s, 'y_cd) vec ->
+  num_type ->
+  ('n, 'x_cd) vec ->
+  ('n Slap_size.s, 'y_cd) vec
+(** [cons ?y e x] adds element [e] at the beginning of vector [x], and copies
+    it into [y].
+    @return the vector [y], which is overwritten.
+    @param y default = a fresh vector.
+    @since 4.0.0 *)
+
+val hd :
+  ('n Slap_size.s, 'x_cd) vec -> num_type
+(** @return the first element of a given vector. (typesafe)
+    @since 4.0.0 *)
+
+val hd_dyn :
+  ('n, 'x_cd) vec -> num_type
+(** @return the first element of a given vector.
+    @since 4.0.0 *)
+
+val last :
+  ('n Slap_size.s, 'x_cd) vec -> num_type
+(** @return the last element of a given vector. (typesafe)
+    @since 4.0.0 *)
+
+val last_dyn :
+  ('n, 'x_cd) vec -> num_type
+(** @return the last element of a given vector.
+    @since 4.0.0 *)
+
+val tl :
+  ?y:('n, 'y_cd) vec -> ('n Slap_size.s, 'x_cd) vec -> ('n, 'x_cd) vec
+(** @return a given vector without the first element. (typesafe)
+    @since 4.0.0 *)
+
+val tl_dyn :
+  ?y:('n Slap_size.p, 'y_cd) vec ->
+  ('n, 'x_cd) vec -> ('n Slap_size.p, 'x_cd) vec
+(** @return a given vector without the first element.
+    @since 4.0.0 *)
+
+val intro :
+  ?y:('n, 'y_cd) vec -> ('n Slap_size.s, 'x_cd) vec -> ('n, 'x_cd) vec
+(** @return a given vector without the first element. (typesafe)
+    This is the same as {i init} in Haskell.
+    @since 4.0.0 *)
+
+val intro_dyn :
+  ?y:('n Slap_size.p, 'y_cd) vec ->
+  ('n, 'x_cd) vec -> ('n Slap_size.p, 'x_cd) vec
+(** @return a given vector without the first element.
+    This is the same as {i init} in Haskell.
+    @since 4.0.0 *)
+
 val copy : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
 (** [copy ?y x] copies the vector [x] to the vector [y] with the BLAS-1
     function [[sdcz]copy].

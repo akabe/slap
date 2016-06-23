@@ -376,6 +376,63 @@ val mem :
 
 (** {2 Basic operations} *)
 
+val cons :
+  ?y:('n Slap_size.s, 'num, 'prec, 'y_cd) t ->
+  'num ->
+  ('n, 'num, 'prec, 'x_cd) t ->
+  ('n Slap_size.s, 'num, 'prec, 'y_cd) t
+(** [cons ?y e x] adds element [e] at the beginning of vector [x], and copies
+    it into [y].
+    @return the vector [y], which is overwritten.
+    @param y default = a fresh vector.
+    @since 4.0.0 *)
+
+val hd :
+  ('n Slap_size.s, 'num, 'prec, 'x_cd) t -> 'num
+(** @return the first element of a given vector. (typesafe)
+    @since 4.0.0 *)
+
+val hd_dyn :
+  ('n, 'num, 'prec, 'x_cd) t -> 'num
+(** @return the first element of a given vector.
+    @since 4.0.0 *)
+
+val last :
+  ('n Slap_size.s, 'num, 'prec, 'x_cd) t -> 'num
+(** @return the last element of a given vector. (typesafe)
+    @since 4.0.0 *)
+
+val last_dyn :
+  ('n, 'num, 'prec, 'x_cd) t -> 'num
+(** @return the last element of a given vector.
+    @since 4.0.0 *)
+
+val tl :
+  ?y:('n, 'num, 'prec, 'y_cd) t ->
+  ('n Slap_size.s, 'num, 'prec, 'x_cd) t -> ('n, 'num, 'prec, 'x_cd) t
+(** @return a given vector without the first element. (typesafe)
+    @since 4.0.0 *)
+
+val tl_dyn :
+  ?y:('n Slap_size.p, 'num, 'prec, 'y_cd) t ->
+  ('n, 'num, 'prec, 'x_cd) t -> ('n Slap_size.p, 'num, 'prec, 'x_cd) t
+(** @return a given vector without the first element.
+    @since 4.0.0 *)
+
+val intro :
+  ?y:('n, 'num, 'prec, 'y_cd) t ->
+  ('n Slap_size.s, 'num, 'prec, 'x_cd) t -> ('n, 'num, 'prec, 'x_cd) t
+(** @return a given vector without the first element. (typesafe)
+    This is the same as {i init} in Haskell.
+    @since 4.0.0 *)
+
+val intro_dyn :
+  ?y:('n Slap_size.p, 'num, 'prec, 'y_cd) t ->
+  ('n, 'num, 'prec, 'x_cd) t -> ('n Slap_size.p, 'num, 'prec, 'x_cd) t
+(** @return a given vector without the first element.
+    This is the same as {i init} in Haskell.
+    @since 4.0.0 *)
+
 val copy :
   ?y:('n, 'num, 'prec, 'y_cd) t ->
   ('n, 'num, 'prec, 'x_cd) t -> ('n, 'num, 'prec, 'y_cd) t

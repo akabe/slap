@@ -88,6 +88,11 @@ val succ : 'n t -> 'n s t
     @return [n] + [1]
  *)
 
+val pred : 'n s t -> 'n t
+(** [pred n] returns
+    @return [n - 1]
+    @since 4.0.0 *)
+
 type 'n p
 
 val pred_dyn : 'n t -> 'n p t
