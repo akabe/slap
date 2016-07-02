@@ -610,7 +610,7 @@ let gelsd aa ?(rcond = -1.0) ?s ?work ?iwork bb =
     let loc = "Slap.XSDCZ.gelsd" in
     let s = Slap_vec.opt_cnt_vec_alloc prec mn s in
     let min_liwork = gelsd_min_iwork m n in
-    let _, iwork = Slap_vec.__alloc_work prec work ~loc
+    let _, iwork = Slap_vec.__alloc_work prec iwork ~loc
         ~min_lwork:min_liwork ~opt_lwork:min_liwork in
     let lwork, work = Slap_vec.__alloc_work prec work ~loc
         ~min_lwork:(gelsd_min_lwork ~m ~n ~nrhs)
@@ -765,7 +765,7 @@ let gesvd ~jobu ~jobvt ?s ?u ?vt ?work a_mat =
                     ~jobu ~jobvt ~s:s_vec ~u:u_mat ~vt:vt_mat a_mat) in
   let i =
     direct_gesvd ~jobu ~jobvt ~m ~n ~ar ~ac ~a ~s ~ur ~uc ~u
-      ~vtr ~vtc ~vt ~work ~lwork:(-1) in
+      ~vtr ~vtc ~vt ~work ~lwork in
   if i = 0 then (s_vec, u_mat, vt_mat) else gesvd_err loc i
 
 (** {4 gesdd} *)
