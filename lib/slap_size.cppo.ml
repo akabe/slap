@@ -175,6 +175,14 @@ struct
     N.value
 end
 
+#if OCAML_MAJOR >= 4
+
+type dyn = SIZE : 'n t -> dyn
+
+let of_int_gadt_dyn n = SIZE n
+
+#endif
+
 (** {2 Iterators on integers} *)
 
 let fold_lefti f init n =

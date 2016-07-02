@@ -23,19 +23,22 @@ XStdFilesREADME:        false
 BuildTools:             ocamlbuild,ocamldoc,cppo
 
 PreBuildCommand:        ocaml gen_config_h.ml; \
-                        cppo lib/slap_SD.cppo.mli | sed 's/XSDCZ/S/g;s/XBITS/32/g' > lib/slap_S.mli; \
-                        cppo lib/slap_SD.cppo.ml  | sed 's/XSDCZ/S/g;s/XBITS/32/g' > lib/slap_S.ml; \
-                        cppo lib/slap_SD.cppo.mli | sed 's/XSDCZ/D/g;s/XBITS/64/g' > lib/slap_D.mli; \
-                        cppo lib/slap_SD.cppo.ml  | sed 's/XSDCZ/D/g;s/XBITS/64/g' > lib/slap_D.ml; \
-                        cppo lib/slap_CZ.cppo.mli | sed 's/XSDCZ/C/g;s/XBITS/32/g' > lib/slap_C.mli; \
-                        cppo lib/slap_CZ.cppo.ml  | sed 's/XSDCZ/C/g;s/XBITS/32/g' > lib/slap_C.ml; \
-                        cppo lib/slap_CZ.cppo.mli | sed 's/XSDCZ/Z/g;s/XBITS/64/g' > lib/slap_Z.mli; \
-                        cppo lib/slap_CZ.cppo.ml  | sed 's/XSDCZ/Z/g;s/XBITS/64/g' > lib/slap_Z.ml; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_size.cppo.mli > lib/slap_size.mli; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_size.cppo.ml > lib/slap_size.ml; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_SD.cppo.mli | sed 's/XSDCZ/S/g;s/XBITS/32/g' > lib/slap_S.mli; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_SD.cppo.ml  | sed 's/XSDCZ/S/g;s/XBITS/32/g' > lib/slap_S.ml; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_SD.cppo.mli | sed 's/XSDCZ/D/g;s/XBITS/64/g' > lib/slap_D.mli; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_SD.cppo.ml  | sed 's/XSDCZ/D/g;s/XBITS/64/g' > lib/slap_D.ml; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_CZ.cppo.mli | sed 's/XSDCZ/C/g;s/XBITS/32/g' > lib/slap_C.mli; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_CZ.cppo.ml  | sed 's/XSDCZ/C/g;s/XBITS/32/g' > lib/slap_C.ml; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_CZ.cppo.mli | sed 's/XSDCZ/Z/g;s/XBITS/64/g' > lib/slap_Z.mli; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_CZ.cppo.ml  | sed 's/XSDCZ/Z/g;s/XBITS/64/g' > lib/slap_Z.ml; \
                         cppo -V SLAP:$(pkg_version) lib/slap_version.cppo.ml > lib/slap_version.ml; \
-                        cppo -V OCAML:`ocaml -vnum` ppx/compat.cppo.ml > ppx/compat.ml
+                        cppo -V OCAML:$(ocaml_version) ppx/compat.cppo.ml > ppx/compat.ml
 
 PostCleanCommand:       rm -f \
                         lib/config.h \
+                        lib/slap_size.mli lib/slap_size.ml \
                         lib/slap_[SDCZ].mli lib/slap_[SDCZ].ml \
                         lib/slap_version.ml
 

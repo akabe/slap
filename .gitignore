@@ -10,6 +10,8 @@
 *.cmxa
 
 lib/config.h
+lib/slap_size.mli
+lib/slap_size.ml
 lib/slap_S.mli
 lib/slap_S.ml
 lib/slap_D.mli

@@ -273,6 +273,19 @@ module Of_int_dyn :
 functor (N : sig val value : int end) -> SIZE
 (** A functor version of [of_int_dyn]. *)
 
+#if OCAML_MAJOR >= 4
+
+type dyn = SIZE : 'n t -> dyn
+
+val of_int_gadt_dyn : int -> dyn
+(** [let SIZE n = of_int_gadt_dyn i]
+    @return a constructor that has the size [n] (= [i]) that has the existential
+    quantified sized type [exists n. n Size.t]. This function is available in
+    OCaml 4.00 or above.
+    @raise Invalid_argument the given size is negative. *)
+
+#endif
+
 (** {2 Iterators on sizes}
 
     The following functions are iterators over [[1; 2; ...; n]] where [n] is a
