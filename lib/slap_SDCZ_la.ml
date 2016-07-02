@@ -914,7 +914,7 @@ let sytri ?(up = Slap_common.__unexpose_uplo 'U') ?ipiv ?work aa =
   let n, n', ar, ac, a = Slap_mat.__expose aa in
   assert(n = n');
   if Slap_size.nonzero n then begin
-    let lwork, work =
+    let _, work =
       Slap_vec.__alloc_work prec work ~loc:"Slap.XSDCZ.sytri"
         ~min_lwork:(sytri_min_lwork n) ~opt_lwork:(sytri_min_lwork n) in
     let ipiv = match ipiv with None -> sytrf ~up aa | Some ipiv -> ipiv in

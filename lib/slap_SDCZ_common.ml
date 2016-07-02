@@ -19,8 +19,6 @@
 
 module I = Lacaml.XSDCZ
 
-let module_name = "Slap.XSDCZ"
-
 module S = Slap_size
 module V = Slap_vec
 module M = Slap_mat
