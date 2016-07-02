@@ -127,9 +127,9 @@ let tl = Slap_vec.tl
 
 let tl_dyn = Slap_vec.tl_dyn
 
-let intro = Slap_vec.intro
+let inits = Slap_vec.inits
 
-let intro_dyn = Slap_vec.intro_dyn
+let inits_dyn = Slap_vec.inits_dyn
 
 let copy ?y x = wrap2opt I.copy ?y x
 

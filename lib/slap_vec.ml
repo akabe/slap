@@ -370,11 +370,11 @@ let internal_intro ?y ~m ~n ~incx ~x =
   else copy_stub ~n:m ~ofsx:(1 - incx) ~incx x ~ofsy:1 ~incy y;
   (m, incy, y)
 
-let intro ?y (n, incx, x) =
+let inits ?y (n, incx, x) =
   assert(Slap_size.to_int n >= 1);
   internal_intro ?y ~m:(Slap_size.pred n) ~n ~incx ~x
 
-let intro_dyn ?y (n, incx, x) =
+let inits_dyn ?y (n, incx, x) =
   if Slap_size.to_int n >= 1
   then internal_intro ?y ~m:(Slap_size.pred_dyn n) ~n ~incx ~x
   else failwith "Slap.Vec.init_dyn: an empty vector"

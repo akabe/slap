@@ -419,14 +419,14 @@ val tl_dyn :
 (** @return a given vector without the first element.
     @since 4.0.0 *)
 
-val intro :
+val inits :
   ?y:('n, 'num, 'prec, 'y_cd) t ->
   ('n Slap_size.s, 'num, 'prec, 'x_cd) t -> ('n, 'num, 'prec, 'x_cd) t
 (** @return a given vector without the first element. (typesafe)
     This is the same as {i init} in Haskell.
     @since 4.0.0 *)
 
-val intro_dyn :
+val inits_dyn :
   ?y:('n Slap_size.p, 'num, 'prec, 'y_cd) t ->
   ('n, 'num, 'prec, 'x_cd) t -> ('n Slap_size.p, 'num, 'prec, 'x_cd) t
 (** @return a given vector without the first element.

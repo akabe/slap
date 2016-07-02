@@ -142,25 +142,25 @@ let test_tl_dyn () =
   "sv_dle" @? (to_list (tl_dyn sv_dle) = [6;8;10]);
   "sv_dng" @? (to_list (tl_dyn sv_dng) = [7;4;1])
 
-(* test of Slap.Vec.intro *)
-let test_intro () =
-  "v_sgl"  @? (to_list (intro v_sgl)  = []);
-  "v_ord"  @? (to_list (intro v_ord)  = [1;2;3;4;5;6;7;8;9]);
-  "sv_cfe" @? (to_list (intro sv_cfe) = [1;2;3]);
-  "sv_cle" @? (to_list (intro sv_cle) = [7;8;9]);
-  "sv_dfe" @? (to_list (intro sv_dfe) = [1;3;5]);
-  "sv_dle" @? (to_list (intro sv_dle) = [4;6;8]);
-  "sv_dng" @? (to_list (intro sv_dng) = [10;7;4])
+(* test of Slap.Vec.inits *)
+let test_inits () =
+  "v_sgl"  @? (to_list (inits v_sgl)  = []);
+  "v_ord"  @? (to_list (inits v_ord)  = [1;2;3;4;5;6;7;8;9]);
+  "sv_cfe" @? (to_list (inits sv_cfe) = [1;2;3]);
+  "sv_cle" @? (to_list (inits sv_cle) = [7;8;9]);
+  "sv_dfe" @? (to_list (inits sv_dfe) = [1;3;5]);
+  "sv_dle" @? (to_list (inits sv_dle) = [4;6;8]);
+  "sv_dng" @? (to_list (inits sv_dng) = [10;7;4])
 
-(* test of Slap.Vec.intro_dyn *)
-let test_intro_dyn () =
-  "v_sgl"  @? (to_list (intro_dyn v_sgl)  = []);
-  "v_ord"  @? (to_list (intro_dyn v_ord)  = [1;2;3;4;5;6;7;8;9]);
-  "sv_cfe" @? (to_list (intro_dyn sv_cfe) = [1;2;3]);
-  "sv_cle" @? (to_list (intro_dyn sv_cle) = [7;8;9]);
-  "sv_dfe" @? (to_list (intro_dyn sv_dfe) = [1;3;5]);
-  "sv_dle" @? (to_list (intro_dyn sv_dle) = [4;6;8]);
-  "sv_dng" @? (to_list (intro_dyn sv_dng) = [10;7;4])
+(* test of Slap.Vec.inits_dyn *)
+let test_inits_dyn () =
+  "v_sgl"  @? (to_list (inits_dyn v_sgl)  = []);
+  "v_ord"  @? (to_list (inits_dyn v_ord)  = [1;2;3;4;5;6;7;8;9]);
+  "sv_cfe" @? (to_list (inits_dyn sv_cfe) = [1;2;3]);
+  "sv_cle" @? (to_list (inits_dyn sv_cle) = [7;8;9]);
+  "sv_dfe" @? (to_list (inits_dyn sv_dfe) = [1;3;5]);
+  "sv_dle" @? (to_list (inits_dyn sv_dle) = [4;6;8]);
+  "sv_dng" @? (to_list (inits_dyn sv_dng) = [10;7;4])
 
 (* test of Slap.Vec.copy *)
 let test_copy () =
@@ -426,8 +426,8 @@ let suite =
      "last_dyn"     >:: test_last_dyn;
      "tl"           >:: test_tl;
      "tl_dyn"       >:: test_tl_dyn;
-     "intro"        >:: test_intro;
-     "intro_dyn"    >:: test_intro_dyn;
+     "inits"        >:: test_inits;
+     "inits_dyn"    >:: test_inits_dyn;
      "copy"         >:: test_copy;
      "fill"         >:: test_fill;
      "fold_lefti"   >:: test_fold_lefti;
