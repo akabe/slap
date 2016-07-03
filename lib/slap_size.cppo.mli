@@ -275,13 +275,16 @@ functor (N : sig val value : int end) -> SIZE
 
 #if OCAML_MAJOR >= 4
 
+(** The type of packages of existential quantified sized type:
+    [dyn] = [exists n. n Size.t]. *)
 type dyn = SIZE : 'n t -> dyn
 
-val of_int_gadt_dyn : int -> dyn
-(** [let SIZE n = of_int_gadt_dyn i]
-    @return a constructor that has the size [n] (= [i]) that has the existential
-    quantified sized type [exists n. n Size.t]. This function is available in
-    OCaml 4.00 or above.
+val of_int_c_dyn : int -> dyn
+(** [let SIZE n = of_int_c_dyn i]
+    @return a constructor [SIZE] that has the size [n] (= [i]) that has the
+    existential quantified sized type [exists n. n Size.t].
+    "c" of [of_int_c_dyn] means a "c"onstructor of GADT. This function is
+    available in OCaml 4.00 or above.
     @raise Invalid_argument the given size is negative. *)
 
 #endif

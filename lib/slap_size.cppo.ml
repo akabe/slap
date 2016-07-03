@@ -179,7 +179,7 @@ end
 
 type dyn = SIZE : 'n t -> dyn
 
-let of_int_gadt_dyn n = SIZE n
+let of_int_c_dyn n = SIZE n
 
 #endif
 
