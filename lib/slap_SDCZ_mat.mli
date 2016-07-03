@@ -306,6 +306,45 @@ val unsafe_of_bigarray :
 (** Like [of_bigarray_dyn], but size checking is not always performed.
     @since 1.0.0 *)
 
+
+#if OCAML_MAJOR >= 4
+
+val of_array_c :
+  num_type array array -> (num_type, prec, 'cnt) Slap_mat.dyn
+(** [let Slap.Mat.MAT n = of_array_c arr]
+    @return a constructor [MAT] that has a matrix (initialized from the given
+    array of arrays) that has the existential quantified sized type
+    [exists m, n. (n, 'num, 'prec, 'cnt_or_dsc) Mat.t].
+    "c" of [of_array_c] means a "c"onstructor of GADT. This function is
+    available in OCaml 4.00 or above.
+    @since 4.0.0 *)
+
+val of_list_c :
+  num_type list list -> (num_type, prec, 'cnt) Slap_mat.dyn
+(** [let Slap.Mat.MAT n = of_list_c kind lst]
+    @return a constructor [MAT] that has a matrix (initialized from the given
+    list of lists) that has the existential quantified sized type
+    [exists m, n. (n, 'num, 'prec, 'cnt_or_dsc) Mat.t].
+    "c" of [of_list_c] means a "c"onstructor of GADT. This function is available
+    in OCaml 4.00 or above.
+    @since 4.0.0 *)
+
+val of_bigarray_c :
+  ?share:bool ->
+  (num_type, prec, fortran_layout) Array2.t ->
+  (num_type, prec, 'cnt) Slap_mat.dyn
+(** [let Slap.Mat.MAT n = of_bigarray_c ?share ba]
+    @return a constructor [MAT] that has a matrix (initialized from the given
+    big array) that has the existential quantified sized type
+    [exists m, n. (n, 'num, 'prec, 'cnt_or_dsc) Mat.t].
+    "c" of [of_bigarray_c] means a "c"onstructor of GADT. This function is
+    available in OCaml 4.00 or above.
+    @param share [true] if data are shared. (default = [false])
+    @since 4.0.0 *)
+
+#endif
+
+
 (** {2 Iterators} *)
 
 val map :

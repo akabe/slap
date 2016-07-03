@@ -1,4 +1,3 @@
-# 1 "lib/slap_mat.cppo.mli"
 (* Sized Linear Algebra Package (SLAP)
 
   Copyright (C) 2013- Akinori ABE <abe@kb.ecei.tohoku.ac.jp>
@@ -504,8 +503,8 @@ val unsafe_of_bigarray :
     @since 1.0.0 *)
 
 
+#if OCAML_MAJOR >= 4
 
-# 508
 (** The type of packages of existential quantified sized type:
     [('num, 'prec, 'cnt_or_dsc) dyn] =
     [exists m, n. (m, n, 'num, 'prec, 'cnt_or_dsc) Vec.t].
@@ -547,9 +546,9 @@ val of_bigarray_c :
     @param share [true] if data are shared. (default = [false])
     @since 4.0.0 *)
 
+#endif
 
 
-# 552
 (** {2 Submatrices} *)
 
 val submat_dyn :

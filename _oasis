@@ -25,6 +25,10 @@ BuildTools:             ocamlbuild,ocamldoc,cppo
 PreBuildCommand:        ocaml gen_config_h.ml; \
                         cppo -V OCAML:$(ocaml_version) lib/slap_size.cppo.mli > lib/slap_size.mli; \
                         cppo -V OCAML:$(ocaml_version) lib/slap_size.cppo.ml > lib/slap_size.ml; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_vec.cppo.mli > lib/slap_vec.mli; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_vec.cppo.ml > lib/slap_vec.ml; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_mat.cppo.mli > lib/slap_mat.mli; \
+                        cppo -V OCAML:$(ocaml_version) lib/slap_mat.cppo.ml > lib/slap_mat.ml; \
                         cppo -V OCAML:$(ocaml_version) lib/slap_SD.cppo.mli | sed 's/XSDCZ/S/g;s/XBITS/32/g' > lib/slap_S.mli; \
                         cppo -V OCAML:$(ocaml_version) lib/slap_SD.cppo.ml  | sed 's/XSDCZ/S/g;s/XBITS/32/g' > lib/slap_S.ml; \
                         cppo -V OCAML:$(ocaml_version) lib/slap_SD.cppo.mli | sed 's/XSDCZ/D/g;s/XBITS/64/g' > lib/slap_D.mli; \

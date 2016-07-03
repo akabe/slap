@@ -175,6 +175,19 @@ let of_bigarray ba =
 
 let unsafe_of_bigarray = Slap_mat.unsafe_of_bigarray
 
+
+
+#if OCAML_MAJOR >= 4
+
+let of_array_c aa = Slap_mat.of_array_c prec aa
+
+let of_list_c ll = Slap_mat.of_list_c prec ll
+
+let of_bigarray_c ?(share=false) ba = Slap_mat.of_bigarray_c ~share ba
+
+#endif
+
+
 (** {2 Iterators} *)
 
 let map f ?b a = Slap_mat.map prec f ?b a

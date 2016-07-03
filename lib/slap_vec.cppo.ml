@@ -1,4 +1,3 @@
-# 1 "lib/slap_vec.cppo.ml"
 (* Sized Linear Algebra Package (SLAP)
 
    Copyright (C) 2013- Akinori ABE <abe@kb.ecei.tohoku.ac.jp>
@@ -446,26 +445,26 @@ let of_bigarray_dyn ?(share=false) n ba =
   if S.__expose n <> Array1.dim ba then invalid_arg "Slap.Vec.of_bigarray_dyn";
   unsafe_of_bigarray ~share n ba
 
+#if OCAML_MAJOR >= 4
 
-# 450
 type ('num, 'prec, 'cnt_or_dsc) dyn =
   | VEC : ('n, 'num, 'prec, 'cnt_or_dsc) t -> ('num, 'prec, 'cnt_or_dsc) dyn
 
 let of_array_c kind arr =
-  let Slap_size.SIZE n = Slap_size.of_int_c_dyn (Array.length arr) in
+  let n = Slap_size.__unexpose (Array.length arr) in
   VEC (unsafe_of_array kind n arr)
 
 let of_list_c kind lst =
-  let Slap_size.SIZE n = Slap_size.of_int_c_dyn (List.length lst) in
+  let n = Slap_size.__unexpose (List.length lst) in
   VEC (unsafe_of_list kind n lst)
 
 let of_bigarray_c ?(share=false) ba =
-  let Slap_size.SIZE n = Slap_size.of_int_c_dyn (Array1.dim ba) in
+  let n = Slap_size.__unexpose (Array1.dim ba) in
   VEC (unsafe_of_bigarray ~share n ba)
 
+#endif
 
 
-# 468
 (** {2 Subvectors} *)
 
 let subcntvec_dyn n ?(ofsx = 1) ((n', _, x) as vx) =

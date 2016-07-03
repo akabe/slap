@@ -283,6 +283,45 @@ val unsafe_of_bigarray :
 (** Like [of_bigarray_dyn], but size checking is not always performed.
     @since 1.0.0 *)
 
+
+#if OCAML_MAJOR >= 4
+
+val of_array_c :
+  num_type array -> (num_type, prec, 'cnt) Slap_vec.dyn
+(** [let Slap.Vec.VEC n = of_array_c [|a1; ...; an|]]
+    @return a constructor [VEC] that has a vector [(a1, ..., an)] that has the
+    existential quantified sized type
+    [exists n. (n, 'num, 'prec, 'cnt_or_dsc) Vec.t].
+    "c" of [of_array_c] means a "c"onstructor of GADT. This function is
+    available in OCaml 4.00 or above.
+    @since 4.0.0 *)
+
+val of_list_c :
+  num_type list -> (num_type, prec, 'cnt) Slap_vec.dyn
+(** [let Slap.Vec.VEC n = of_list_c [a1; ...; an]]
+    @return a constructor [VEC] that has a vector [(a1, ..., an)] that has the
+    existential quantified sized type
+    [exists n. (n, 'num, 'prec, 'cnt_or_dsc) Vec.t].
+    "c" of [of_list_c] means a "c"onstructor of GADT. This function is available
+    in OCaml 4.00 or above.
+    @since 4.0.0 *)
+
+val of_bigarray_c :
+  ?share:bool ->
+  (num_type, prec, fortran_layout) Array1.t ->
+  (num_type, prec, 'cnt) Slap_vec.dyn
+(** [let Slap.Vec.VEC n = of_bigarray_c ?share ba]
+    @return a constructor [VEC] that has a vector (of all the elements of big
+    array [ba]) that has the existential quantified sized type
+    [exists n. (n, 'num, 'prec, 'cnt_or_dsc) Vec.t].
+    "c" of [of_bigarray_c] means a "c"onstructor of GADT. This function is
+    available in OCaml 4.00 or above.
+    @param share [true] if data are shared. (default = [false])
+    @since 4.0.0 *)
+
+#endif
+
+
 (** {2 Iterators} *)
 
 val map :

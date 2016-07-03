@@ -1,4 +1,3 @@
-# 1 "lib/slap_mat.cppo.ml"
 (* Sized Linear Algebra Package (SLAP)
 
   Copyright (C) 2013- Akinori ABE <abe@kb.ecei.tohoku.ac.jp>
@@ -442,8 +441,8 @@ let of_bigarray_dyn ?(share=false) m n ba =
   unsafe_of_bigarray ~share m n ba
 
 
+#if OCAML_MAJOR >= 4
 
-# 446
 type ('num, 'prec, 'cnt_or_dsc) dyn =
   | MAT : ('m, 'n, 'num, 'prec, 'cnt_or_dsc) t -> ('num, 'prec, 'cnt_or_dsc) dyn
 
@@ -466,9 +465,9 @@ let of_bigarray_c ?(share=false) ba =
   let n = Slap_size.__unexpose (Array2.dim2 ba) in
   MAT (unsafe_of_bigarray ~share m n ba)
 
+#endif
 
 
-# 471
 (** {2 Submatrices} *)
 
 let submat_dyn m n ?(ar=1) ?(ac=1) (m', n', ar', ac', a) =

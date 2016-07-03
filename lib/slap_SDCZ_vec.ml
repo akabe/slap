@@ -198,6 +198,18 @@ let of_bigarray ?(share=false) ba =
 
 let unsafe_of_bigarray = Slap_vec.unsafe_of_bigarray
 
+
+#if OCAML_MAJOR >= 4
+
+let of_array_c arr = Slap_vec.of_array_c prec arr
+
+let of_list_c lst = Slap_vec.of_list_c prec lst
+
+let of_bigarray_c ?(share=false) ba = Slap_vec.of_bigarray_c ~share ba
+
+#endif
+
+
 (** {2 Iterators} *)
 
 let map f ?y x = Slap_vec.map prec f ?y x
