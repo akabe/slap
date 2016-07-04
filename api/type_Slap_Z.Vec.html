@@ -3,6 +3,7 @@
 <meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
 <link rel="Start" href="index.html">
 <link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
 <link title="Index of values" rel=Appendix href="index_values.html">
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
@@ -44,6 +45,26 @@
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;replace_dyn&nbsp;:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="constructor">Slap_Z</span>.num_type&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Slap_Z</span>.num_type)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;cons&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?y:(<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.s,&nbsp;<span class="keywordsign">'</span>y_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Slap_Z</span>.num_type&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.s,&nbsp;<span class="keywordsign">'</span>y_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;hd&nbsp;:&nbsp;(<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.s,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Slap_Z</span>.num_type<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;hd_dyn&nbsp;:&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Slap_Z</span>.num_type<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;last&nbsp;:&nbsp;(<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.s,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Slap_Z</span>.num_type<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;last_dyn&nbsp;:&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Slap_Z</span>.num_type<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;tl&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?y:(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>y_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.s,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;tl_dyn&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?y:(<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.p,&nbsp;<span class="keywordsign">'</span>y_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.p,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;inits&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?y:(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>y_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.s,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;inits_dyn&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?y:(<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.p,&nbsp;<span class="keywordsign">'</span>y_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.p,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;copy&nbsp;:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;?y:(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>y_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>x_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>y_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec<br>
@@ -95,6 +116,15 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">Slap_Z</span>.num_type,&nbsp;<span class="constructor">Slap_Z</span>.prec,&nbsp;<span class="constructor">Bigarray</span>.fortran_layout)&nbsp;<span class="constructor">Bigarray</span>.<span class="constructor">Array1</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>cnt)&nbsp;<span class="constructor">Slap_Z</span>.vec<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;of_array_c&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Slap_Z</span>.num_type&nbsp;array&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">Slap_Z</span>.num_type,&nbsp;<span class="constructor">Slap_Z</span>.prec,&nbsp;<span class="keywordsign">'</span>cnt)&nbsp;<span class="constructor">Slap_vec</span>.dyn<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;of_list_c&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Slap_Z</span>.num_type&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="constructor">Slap_Z</span>.num_type,&nbsp;<span class="constructor">Slap_Z</span>.prec,&nbsp;<span class="keywordsign">'</span>cnt)&nbsp;<span class="constructor">Slap_vec</span>.dyn<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;of_bigarray_c&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?share:bool&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">Slap_Z</span>.num_type,&nbsp;<span class="constructor">Slap_Z</span>.prec,&nbsp;<span class="constructor">Bigarray</span>.fortran_layout)&nbsp;<span class="constructor">Bigarray</span>.<span class="constructor">Array1</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">Slap_Z</span>.num_type,&nbsp;<span class="constructor">Slap_Z</span>.prec,&nbsp;<span class="keywordsign">'</span>cnt)&nbsp;<span class="constructor">Slap_vec</span>.dyn<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;map&nbsp;:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">Slap_Z</span>.num_type&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Slap_Z</span>.num_type)&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;?y:(<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>y_cd)&nbsp;<span class="constructor">Slap_Z</span>.vec&nbsp;<span class="keywordsign">-&gt;</span><br>

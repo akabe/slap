@@ -4,6 +4,7 @@
 <meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
 <link rel="Start" href="index.html">
 <link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
 <link title="Index of values" rel=Appendix href="index_values.html">
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
@@ -26,6 +27,8 @@
 <h1>Index of values</h1>
 <table>
 <tr><td align="left"><br></td></tr>
+<tr><td><a href="Slap_vec.html#VAL__alloc_work">__alloc_work</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td></td></tr>
 <tr><td><a href="Slap_mat.html#VAL__expose">__expose</a> [<a href="Slap_mat.html">Slap_mat</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap_vec.html#VAL__expose">__expose</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
@@ -37,6 +40,16 @@
 <tr><td><a href="Slap_vec.html#VAL__unexpose">__unexpose</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap_size.html#VAL__unexpose">__unexpose</a> [<a href="Slap_size.html">Slap_size</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_common.html#VAL__unexpose_norm">__unexpose_norm</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_common.html#VAL__unexpose_side">__unexpose_side</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_common.html#VAL__unexpose_svd_job">__unexpose_svd_job</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_common.html#VAL__unexpose_uplo">__unexpose_uplo</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td></td></tr>
+<tr><td><a href="Slap_vec.html#VAL__unexpose_with_ofs">__unexpose_with_ofs</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
 <td></td></tr>
 <tr><td align="left"><br>A</td></tr>
 <tr><td><a href="Slap_C.Vec.html#VALadd">add</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
@@ -233,12 +246,45 @@ Concatenate two vectors.
 </div>
 </td></tr>
 <tr><td align="left"><br>C</td></tr>
+<tr><td><a href="Slap_common.html#VALchar_of_diag">char_of_diag</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td><div class="info">
+Return a character of a flag (for BLAS/LAPACK).
+</div>
+</td></tr>
+<tr><td><a href="Slap_common.html#VALchar_of_norm">char_of_norm</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td><div class="info">
+Return a character of a flag (for BLAS/LAPACK).
+</div>
+</td></tr>
+<tr><td><a href="Slap_common.html#VALchar_of_side">char_of_side</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td><div class="info">
+Return a character of a flag (for BLAS/LAPACK).
+</div>
+</td></tr>
+<tr><td><a href="Slap_common.html#VALchar_of_svd_job">char_of_svd_job</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td><div class="info">
+Return a character of a flag (for BLAS/LAPACK).
+</div>
+</td></tr>
+<tr><td><a href="Slap_common.html#VALchar_of_trans">char_of_trans</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td><div class="info">
+Return a character of a flag (for BLAS/LAPACK).
+</div>
+</td></tr>
+<tr><td><a href="Slap_common.html#VALchar_of_uplo">char_of_uplo</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td><div class="info">
+Return a character of a flag (for BLAS/LAPACK).
+</div>
+</td></tr>
 <tr><td><a href="Slap_mat.html#VALcheck_cnt">check_cnt</a> [<a href="Slap_mat.html">Slap_mat</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap_vec.html#VALcheck_cnt">check_cnt</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap_common.html#VALcheck_side_dim">check_side_dim</a> [<a href="Slap_common.html">Slap_common</a>]</td>
-<td></td></tr>
+<td><div class="info">
+Auxiliary function (used internally)
+</div>
+</td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALcnt">cnt</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
 <td><div class="info">
 Recover polymorphism of the fifth type parameter.
@@ -317,6 +363,36 @@ Recover polymorphism of the fourth type parameter.
 <tr><td><a href="Slap_common.html#VALconjtr">conjtr</a> [<a href="Slap_common.html">Slap_common</a>]</td>
 <td><div class="info">
 Conjugate transpose of a matrix.
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALcons">cons</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">cons ?y e x</code> adds element <code class="code">e</code> at the beginning of vector <code class="code">x</code>, and copies
+    it into <code class="code">y</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALcons">cons</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">cons ?y e x</code> adds element <code class="code">e</code> at the beginning of vector <code class="code">x</code>, and copies
+    it into <code class="code">y</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALcons">cons</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">cons ?y e x</code> adds element <code class="code">e</code> at the beginning of vector <code class="code">x</code>, and copies
+    it into <code class="code">y</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALcons">cons</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">cons ?y e x</code> adds element <code class="code">e</code> at the beginning of vector <code class="code">x</code>, and copies
+    it into <code class="code">y</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALcons">cons</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+<code class="code">cons ?y e x</code> adds element <code class="code">e</code> at the beginning of vector <code class="code">x</code>, and copies
+    it into <code class="code">y</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALcopy">copy</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
@@ -885,6 +961,11 @@ An empty vector.
 </div>
 </td></tr>
 <tr><td align="left"><br>F</td></tr>
+<tr><td><a href="Slap_misc.html#VALfailwithf">failwithf</a> [<a href="Slap_misc.html">Slap_misc</a>]</td>
+<td><div class="info">
+<code class="code">failwith</code> + <code class="code">printf</code>-style format
+</div>
+</td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALfill">fill</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
 <td><div class="info">
 Fill the given matrix with the given value.
@@ -2491,6 +2572,46 @@ Fill the given vector with the given value.
 </div>
 </td></tr>
 <tr><td align="left"><br>H</td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALhd">hd</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALhd">hd</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALhd">hd</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALhd">hd</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALhd">hd</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALhd_dyn">hd_dyn</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALhd_dyn">hd_dyn</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALhd_dyn">hd_dyn</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALhd_dyn">hd_dyn</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALhd_dyn">hd_dyn</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
 <tr><td><a href="Slap_io.Context.html#VALhorizontal_default">horizontal_default</a> [<a href="Slap_io.Context.html">Slap_io.Context</a>]</td>
 <td><div class="info">
 - If <code class="code">Some n</code>, the first <code class="code">n</code> columns and the last <code class="code">n</code> columns of a table
@@ -2651,6 +2772,51 @@ An alias of <code class="code">init_cols</code>.
 <td><div class="info">
 <code class="code">init_rows kind m n f</code> returns a fresh <code class="code">m</code>-by-<code class="code">n</code> matrix whose
     the <code class="code">(i,j)</code> element is initialized by the result of calling <code class="code">f i j</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALinits">inits</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALinits">inits</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALinits">inits</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALinits">inits</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALinits">inits</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALinits_dyn">inits_dyn</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALinits_dyn">inits_dyn</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALinits_dyn">inits_dyn</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALinits_dyn">inits_dyn</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALinits_dyn">inits_dyn</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_misc.html#VALinvalid_argf">invalid_argf</a> [<a href="Slap_misc.html">Slap_misc</a>]</td>
+<td><div class="info">
+<code class="code">invalid_arg</code> + <code class="code">printf</code>-style format
 </div>
 </td></tr>
 <tr><td><a href="Slap_size.html#VALiszero">iszero</a> [<a href="Slap_size.html">Slap_size</a>]</td>
@@ -2848,16 +3014,6 @@ An alias of <code class="code">init_cols</code>.
 </div>
 </td></tr>
 <tr><td align="left"><br>L</td></tr>
-<tr><td><a href="Slap_common.html#VALlacaml_norm2">lacaml_norm2</a> [<a href="Slap_common.html">Slap_common</a>]</td>
-<td></td></tr>
-<tr><td><a href="Slap_common.html#VALlacaml_norm2_opt">lacaml_norm2_opt</a> [<a href="Slap_common.html">Slap_common</a>]</td>
-<td></td></tr>
-<tr><td><a href="Slap_common.html#VALlacaml_norm4">lacaml_norm4</a> [<a href="Slap_common.html">Slap_common</a>]</td>
-<td></td></tr>
-<tr><td><a href="Slap_common.html#VALlacaml_norm4_opt">lacaml_norm4_opt</a> [<a href="Slap_common.html">Slap_common</a>]</td>
-<td></td></tr>
-<tr><td><a href="Slap_common.html#VALlacaml_side">lacaml_side</a> [<a href="Slap_common.html">Slap_common</a>]</td>
-<td></td></tr>
 <tr><td><a href="Slap_common.html#VALlacaml_svd_job">lacaml_svd_job</a> [<a href="Slap_common.html">Slap_common</a>]</td>
 <td></td></tr>
 <tr><td><a href="Slap_common.html#VALlacaml_trans2">lacaml_trans2</a> [<a href="Slap_common.html">Slap_common</a>]</td>
@@ -3004,6 +3160,46 @@ An alias of <code class="code">init_cols</code>.
 <code class="code">lassq ?scale ?sumsq x</code>
 </div>
 </td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALlast">last</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALlast">last</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALlast">last</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALlast">last</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALlast">last</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALlast_dyn">last_dyn</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALlast_dyn">last_dyn</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALlast_dyn">last_dyn</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALlast_dyn">last_dyn</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALlast_dyn">last_dyn</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
 <tr><td><a href="Slap_C.html#VALlauum">lauum</a> [<a href="Slap_C.html">Slap_C</a>]</td>
 <td><div class="info">
 <code class="code">lauum ?up a</code> computes
@@ -3025,7 +3221,10 @@ An alias of <code class="code">init_cols</code>.
 </div>
 </td></tr>
 <tr><td><a href="Slap_common.html#VALleft">left</a> [<a href="Slap_common.html">Slap_common</a>]</td>
-<td></td></tr>
+<td><div class="info">
+Left multiplication
+</div>
+</td></tr>
 <tr><td><a href="Slap_S.Vec.html#VALlog">log</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
 <td><div class="info">
 <code class="code">log ?y (x1, x2, ..., xn)</code> returns <code class="code">(log x1, log x2, ..., log xn)</code>.
@@ -3034,6 +3233,11 @@ An alias of <code class="code">init_cols</code>.
 <tr><td><a href="Slap_D.Vec.html#VALlog">log</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
 <td><div class="info">
 <code class="code">log ?y (x1, x2, ..., xn)</code> returns <code class="code">(log x1, log x2, ..., log xn)</code>.
+</div>
+</td></tr>
+<tr><td><a href="Slap_common.html#VALlower">lower</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td><div class="info">
+Using the lower triangular (or trapezoidal) part of a matrix.
 </div>
 </td></tr>
 <tr><td><a href="Slap_io.Toplevel.html#VALlsc">lsc</a> [<a href="Slap_io.Toplevel.html">Slap_io.Toplevel</a>]</td>
@@ -3530,6 +3734,11 @@ The minor version of SLAP.
 </td></tr>
 <tr><td><a href="Slap_size.html#VALnine">nine</a> [<a href="Slap_size.html">Slap_size</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap_common.html#VALnon_unit">non_unit</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td><div class="info">
+A matrix is not unit triagular.
+</div>
+</td></tr>
 <tr><td><a href="Slap_size.html#VALnonzero">nonzero</a> [<a href="Slap_size.html">Slap_size</a>]</td>
 <td><div class="info">
 <code class="code">nonzero n</code> returns <code class="code">true</code> if size <code class="code">n</code> is not zero.
@@ -3619,6 +3828,56 @@ Non-transposed matrix.
 <tr><td><a href="Slap_D.Vec.html#VALof_array">of_array</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
 <td><div class="info">
 <code class="code">module V = (val of_array [|a1; ...; an|] : CNTVEC)</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.Mat.html#VALof_array_c">of_array_c</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_array_c arr</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALof_array_c">of_array_c</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_array_c [|a1; ...; an|]</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Mat.html#VALof_array_c">of_array_c</a> [<a href="Slap_Z.Mat.html">Slap_Z.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_array_c arr</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALof_array_c">of_array_c</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_array_c [|a1; ...; an|]</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Mat.html#VALof_array_c">of_array_c</a> [<a href="Slap_S.Mat.html">Slap_S.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_array_c arr</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALof_array_c">of_array_c</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_array_c [|a1; ...; an|]</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Mat.html#VALof_array_c">of_array_c</a> [<a href="Slap_D.Mat.html">Slap_D.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_array_c arr</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALof_array_c">of_array_c</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_array_c [|a1; ...; an|]</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_mat.html#VALof_array_c">of_array_c</a> [<a href="Slap_mat.html">Slap_mat</a>]</td>
+<td><div class="info">
+<code class="code">let MAT n = of_array_c kind arr</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALof_array_c">of_array_c</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+<code class="code">let VEC n = of_array_c kind [|a1; ...; an|]</code>
 </div>
 </td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALof_array_dyn">of_array_dyn</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
@@ -3711,6 +3970,56 @@ Build a matrix initialized from the given array of arrays.
 <code class="code">module V = (val of_bigarray ?share n ba : CNTVEC)</code>
 </div>
 </td></tr>
+<tr><td><a href="Slap_C.Mat.html#VALof_bigarray_c">of_bigarray_c</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_bigarray_c ?share ba</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALof_bigarray_c">of_bigarray_c</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_bigarray_c ?share ba</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Mat.html#VALof_bigarray_c">of_bigarray_c</a> [<a href="Slap_Z.Mat.html">Slap_Z.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_bigarray_c ?share ba</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALof_bigarray_c">of_bigarray_c</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_bigarray_c ?share ba</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Mat.html#VALof_bigarray_c">of_bigarray_c</a> [<a href="Slap_S.Mat.html">Slap_S.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_bigarray_c ?share ba</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALof_bigarray_c">of_bigarray_c</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_bigarray_c ?share ba</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Mat.html#VALof_bigarray_c">of_bigarray_c</a> [<a href="Slap_D.Mat.html">Slap_D.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_bigarray_c ?share ba</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALof_bigarray_c">of_bigarray_c</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_bigarray_c ?share ba</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_mat.html#VALof_bigarray_c">of_bigarray_c</a> [<a href="Slap_mat.html">Slap_mat</a>]</td>
+<td><div class="info">
+<code class="code">let MAT n = of_bigarray_c ?share ba</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALof_bigarray_c">of_bigarray_c</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+<code class="code">let VEC n = of_bigarray_c ?share ba</code>
+</div>
+</td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALof_bigarray_dyn">of_bigarray_dyn</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
 <td><div class="info">
 <code class="code">of_bigarray_dyn ?share m n ba</code>
@@ -3769,6 +4078,11 @@ Build a matrix initialized from the given array of arrays.
 <td></td></tr>
 <tr><td><a href="Slap_D.Mat.html#VALof_col_vecs_dyn">of_col_vecs_dyn</a> [<a href="Slap_D.Mat.html">Slap_D.Mat</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap_size.html#VALof_int_c_dyn">of_int_c_dyn</a> [<a href="Slap_size.html">Slap_size</a>]</td>
+<td><div class="info">
+<code class="code">let SIZE n = of_int_c_dyn i</code>
+</div>
+</td></tr>
 <tr><td><a href="Slap_size.html#VALof_int_dyn">of_int_dyn</a> [<a href="Slap_size.html">Slap_size</a>]</td>
 <td><div class="info">
 <code class="code">module N = (val of_int_dyn n : SIZE)</code>
@@ -3812,6 +4126,56 @@ Build a matrix initialized from the given array of arrays.
 <tr><td><a href="Slap_D.Vec.html#VALof_list">of_list</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
 <td><div class="info">
 <code class="code">module V = (val of_list [a1; ...; an] : CNTVEC)</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.Mat.html#VALof_list_c">of_list_c</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_list_c kind lst</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALof_list_c">of_list_c</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_list_c [a1; ...; an]</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Mat.html#VALof_list_c">of_list_c</a> [<a href="Slap_Z.Mat.html">Slap_Z.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_list_c kind lst</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALof_list_c">of_list_c</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_list_c [a1; ...; an]</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Mat.html#VALof_list_c">of_list_c</a> [<a href="Slap_S.Mat.html">Slap_S.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_list_c kind lst</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALof_list_c">of_list_c</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_list_c [a1; ...; an]</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Mat.html#VALof_list_c">of_list_c</a> [<a href="Slap_D.Mat.html">Slap_D.Mat</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Mat.MAT n = of_list_c kind lst</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALof_list_c">of_list_c</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+<code class="code">let Slap.Vec.VEC n = of_list_c [a1; ...; an]</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_mat.html#VALof_list_c">of_list_c</a> [<a href="Slap_mat.html">Slap_mat</a>]</td>
+<td><div class="info">
+<code class="code">let MAT n = of_list_c kind lst</code>
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALof_list_c">of_list_c</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+<code class="code">let VEC n = of_list_c kind [a1; ...; an]</code>
 </div>
 </td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALof_list_dyn">of_list_dyn</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
@@ -4338,6 +4702,11 @@ A generator of pretty printers for (column) vectors.
 <td></td></tr>
 <tr><td><a href="Slap_D.html#VALprec">prec</a> [<a href="Slap_D.html">Slap_D</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap_size.html#VALpred">pred</a> [<a href="Slap_size.html">Slap_size</a>]</td>
+<td><div class="info">
+<code class="code">pred n</code> returns
+</div>
+</td></tr>
 <tr><td><a href="Slap_size.html#VALpred_dyn">pred_dyn</a> [<a href="Slap_size.html">Slap_size</a>]</td>
 <td><div class="info">
 <code class="code">pred_dyn n</code>
@@ -4648,7 +5017,10 @@ A generator of pretty printers for (column) vectors.
 </div>
 </td></tr>
 <tr><td><a href="Slap_common.html#VALright">right</a> [<a href="Slap_common.html">Slap_common</a>]</td>
-<td></td></tr>
+<td><div class="info">
+Right multiplication
+</div>
+</td></tr>
 <tr><td><a href="Slap_size.html#VALriter">riter</a> [<a href="Slap_size.html">Slap_size</a>]</td>
 <td><div class="info">
 <code class="code">riter f n</code> is <code class="code">f n; ...; f 2; f 1</code>.
@@ -5733,6 +6105,30 @@ An alias of <code class="code">subdscvec_dyn</code>.
     the r.h.s.
 </div>
 </td></tr>
+<tr><td><a href="Slap_C.html#VALsysv_min_lwork">sysv_min_lwork</a> [<a href="Slap_C.html">Slap_C</a>]</td>
+<td><div class="info">
+<code class="code">sysv_min_lwork ()</code> computes the minimum length of workspace for <code class="code">sysv</code>
+    routine.
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.html#VALsysv_min_lwork">sysv_min_lwork</a> [<a href="Slap_Z.html">Slap_Z</a>]</td>
+<td><div class="info">
+<code class="code">sysv_min_lwork ()</code> computes the minimum length of workspace for <code class="code">sysv</code>
+    routine.
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.html#VALsysv_min_lwork">sysv_min_lwork</a> [<a href="Slap_S.html">Slap_S</a>]</td>
+<td><div class="info">
+<code class="code">sysv_min_lwork ()</code> computes the minimum length of workspace for <code class="code">sysv</code>
+    routine.
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.html#VALsysv_min_lwork">sysv_min_lwork</a> [<a href="Slap_D.html">Slap_D</a>]</td>
+<td><div class="info">
+<code class="code">sysv_min_lwork ()</code> computes the minimum length of workspace for <code class="code">sysv</code>
+    routine.
+</div>
+</td></tr>
 <tr><td><a href="Slap_C.html#VALsysv_opt_lwork">sysv_opt_lwork</a> [<a href="Slap_C.html">Slap_C</a>]</td>
 <td><div class="info">
 <code class="code">sysv_opt_lwork ?up a b</code> computes the optimal length of workspace for <code class="code">sysv</code>
@@ -5938,6 +6334,46 @@ An alias of <code class="code">subdscvec_dyn</code>.
 <td></td></tr>
 <tr><td><a href="Slap_size.html#VALthree">three</a> [<a href="Slap_size.html">Slap_size</a>]</td>
 <td></td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALtl">tl</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALtl">tl</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALtl">tl</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALtl">tl</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALtl">tl</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_C.Vec.html#VALtl_dyn">tl_dyn</a> [<a href="Slap_C.Vec.html">Slap_C.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_Z.Vec.html#VALtl_dyn">tl_dyn</a> [<a href="Slap_Z.Vec.html">Slap_Z.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_S.Vec.html#VALtl_dyn">tl_dyn</a> [<a href="Slap_S.Vec.html">Slap_S.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_D.Vec.html#VALtl_dyn">tl_dyn</a> [<a href="Slap_D.Vec.html">Slap_D.Vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
+<tr><td><a href="Slap_vec.html#VALtl_dyn">tl_dyn</a> [<a href="Slap_vec.html">Slap_vec</a>]</td>
+<td><div class="info">
+</div>
+</td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALto_array">to_array</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
 <td><div class="info">
 <code class="code">to_array a</code>
@@ -6363,6 +6799,11 @@ Transpose of a matrix.
     a matrix stored in the normal order.
 </div>
 </td></tr>
+<tr><td><a href="Slap_common.html#VALunit">unit</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td><div class="info">
+A matrix is unit triagular.
+</div>
+</td></tr>
 <tr><td><a href="Slap_C.Mat.html#VALunluband">unluband</a> [<a href="Slap_C.Mat.html">Slap_C.Mat</a>]</td>
 <td><div class="info">
 <code class="code">unluband m kl ku ?a ab</code> converts matrix <code class="code">ab</code> stored in band storage for LU
@@ -6712,6 +7153,17 @@ Like <a href="Slap_vec.html#VALset_dyn"><code class="code">Slap_vec.set_dyn</cod
 <td><div class="info">
 <code class="code">unsyband kd ?a b</code> converts matrix <code class="code">b</code> stored in symmetric or Hermitian
     band storage into a matrix stored in the normal order.
+</div>
+</td></tr>
+<tr><td><a href="Slap_common.html#VALupper">upper</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td><div class="info">
+Using the upper triangular (or trapezoidal) part of a matrix.
+</div>
+</td></tr>
+<tr><td><a href="Slap_common.html#VALupper_lower">upper_lower</a> [<a href="Slap_common.html">Slap_common</a>]</td>
+<td><div class="info">
+Using both of the upper and lower triangular parts (i.e., all elements) of a
+    matrix.
 </div>
 </td></tr>
 <tr><td align="left"><br>V</td></tr>

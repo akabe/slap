@@ -8,6 +8,7 @@
 <link rel="next" href="Slap_C.html">
 <link rel="Up" href="index.html">
 <link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
 <link title="Index of values" rel=Appendix href="index_values.html">
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
@@ -68,7 +69,9 @@
 <h1>Module <a href="type_Slap_D.html">Slap_D</a></h1>
 
 <pre><span class="keyword">module</span> Slap_D: <code class="code">sig</code> <a href="Slap_D.html">..</a> <code class="code">end</code></pre><div class="info module top">
-<a href="Slap.D.html"><code class="code">Slap.D</code></a> provides 64-bit real BLAS and LAPACK functions.<br>
+A type of transpose parameters (<a href="Slap_common.html#VALnormal"><code class="code">Slap_common.normal</code></a> and
+    <a href="Slap_common.html#VALtrans"><code class="code">Slap_common.trans</code></a>).
+    For complex matrices, <a href="Slap_common.html#VALconjtr"><code class="code">Slap_common.conjtr</code></a> is also offered, hence the name.<br>
 </div>
 <hr width="100%">
 
@@ -78,7 +81,7 @@
 <pre><span id="TYPEnum_type"><span class="keyword">type</span> <code class="type"></code>num_type</span> = <code class="type">float</code> </pre>
 
 
-<pre><span id="TYPEtrans3"><span class="keyword">type</span> <code class="type">'a</code> trans3</span> = <code class="type">'a <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a></code> </pre>
+<pre><span id="TYPEtrans3"><span class="keyword">type</span> <code class="type">('indim, 'outdim, [< `N | `T ])</code> trans3</span> = <code class="type">('indim, 'outdim, [< `N | `T ] as 'a) <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a></code> </pre>
 <div class="info ">
 A type of transpose parameters (<a href="Slap_common.html#VALnormal"><code class="code">Slap_common.normal</code></a> and
     <a href="Slap_common.html#VALtrans"><code class="code">Slap_common.trans</code></a>).
@@ -163,7 +166,7 @@ A pretty-printer for matrices.<br>
 <br>
 <h3 id="3_Level2">Level 2</h3><br>
 
-<pre><span id="VALgemv"><span class="keyword">val</span> gemv</span> : <code class="type">?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?y:('m, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       trans:(('a_m, 'a_n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('a_m, 'a_n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> ('m, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a></code></pre><div class="info ">
+<pre><span id="VALgemv"><span class="keyword">val</span> gemv</span> : <code class="type">?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?y:('m, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       trans:('a_m * 'a_n, 'm * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('a_m, 'a_n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> ('m, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a></code></pre><div class="info ">
 <code class="code">gemv ?beta ?y ~trans ?alpha a x</code> executes
     <code class="code">y := alpha * OP(a) * x + beta * y</code>.<br>
 </div>
@@ -177,7 +180,7 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
 
-<pre><span id="VALgbmv"><span class="keyword">val</span> gbmv</span> : <code class="type">m:'a_m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?y:('m, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       trans:(('a_m, 'a_n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       (('a_m, 'a_n, 'kl, 'ku) <a href="Slap_size.html#TYPEgeband">Slap_size.geband</a>, 'a_n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       'kl <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'ku <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> ('m, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a></code></pre><div class="info ">
+<pre><span id="VALgbmv"><span class="keyword">val</span> gbmv</span> : <code class="type">m:'a_m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?y:('m, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       trans:('a_m * 'a_n, 'm * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       (('a_m, 'a_n, 'kl, 'ku) <a href="Slap_size.html#TYPEgeband">Slap_size.geband</a>, 'a_n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       'kl <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'ku <a href="Slap_size.html#TYPEt">Slap_size.t</a> -> ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> ('m, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a></code></pre><div class="info ">
 <code class="code">gbmv ~m ?beta ?y ~trans ?alpha a kl ku x</code> computes
     <code class="code">y := alpha * OP(a) * x + beta * y</code> where <code class="code">a</code> is a band matrix stored in
     band storage.<br>
@@ -194,19 +197,21 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
 
-<pre><span id="VALsymv"><span class="keyword">val</span> symv</span> : <code class="type">?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?y:('n, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ?up:bool -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a></code></pre><div class="info ">
+<pre><span id="VALsymv"><span class="keyword">val</span> symv</span> : <code class="type">?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?y:('n, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a></code></pre><div class="info ">
 <code class="code">symv ?beta ?y ?up ?alpha a x</code> executes
     <code class="code">y := alpha * a * x + beta * y</code>.<br>
 </div>
 <div class="param_info"><code class="code">beta</code> : default = <code class="code">0.0</code></div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
 
-<pre><span id="VALtrmv"><span class="keyword">val</span> trmv</span> : <code class="type">trans:(('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?up:bool -> ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALtrmv"><span class="keyword">val</span> trmv</span> : <code class="type">trans:('n * 'n, 'n * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
 <code class="code">trmv ~trans ?diag ?up a x</code> executes <code class="code">x := OP(a) * x</code>.<br>
 </div>
 <div class="param_info"><code class="code">trans</code> : the transpose flag for <code class="code">a</code>:<ul>
@@ -216,18 +221,20 @@ A pretty-printer for matrices.<br>
       (the conjugate transpose of <code class="code">a</code>).</li>
 </ul>
 </div>
-<div class="param_info"><code class="code">diag</code> : default = <code class="code">`N</code><ul>
-<li>If <code class="code">diag</code> = <code class="code">`U</code>, then <code class="code">a</code> is unit triangular;</li>
-<li>If <code class="code">diag</code> = <code class="code">`N</code>, then <code class="code">a</code> is not unit triangular.</li>
+<div class="param_info"><code class="code">diag</code> : default = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a><ul>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALunit"><code class="code">Slap_common.unit</code></a>, then <code class="code">a</code> is unit triangular;</li>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a>, then <code class="code">a</code> is not unit triangular.</li>
 </ul>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 
-<pre><span id="VALtrsv"><span class="keyword">val</span> trsv</span> : <code class="type">trans:(('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?up:bool -> ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'b_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALtrsv"><span class="keyword">val</span> trsv</span> : <code class="type">trans:('n * 'n, 'n * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'b_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
 <code class="code">trmv ~trans ?diag ?up a b</code> solves linear system <code class="code">OP(a) * x = b</code>
     and destructively assigns <code class="code">x</code> to <code class="code">b</code>.<br>
 </div>
@@ -238,18 +245,20 @@ A pretty-printer for matrices.<br>
       (the conjugate transpose of <code class="code">a</code>).</li>
 </ul>
 </div>
-<div class="param_info"><code class="code">diag</code> : default = <code class="code">`N</code><ul>
-<li>If <code class="code">diag</code> = <code class="code">`U</code>, then <code class="code">a</code> is unit triangular;</li>
-<li>If <code class="code">diag</code> = <code class="code">`N</code>, then <code class="code">a</code> is not unit triangular.</li>
+<div class="param_info"><code class="code">diag</code> : default = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a><ul>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALunit"><code class="code">Slap_common.unit</code></a>, then <code class="code">a</code> is unit triangular;</li>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a>, then <code class="code">a</code> is not unit triangular.</li>
 </ul>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 
-<pre><span id="VALtpmv"><span class="keyword">val</span> tpmv</span> : <code class="type">trans:(('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?up:bool -><br>       ('n <a href="Slap_size.html#TYPEpacked">Slap_size.packed</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALtpmv"><span class="keyword">val</span> tpmv</span> : <code class="type">trans:('n * 'n, 'n * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ('n <a href="Slap_size.html#TYPEpacked">Slap_size.packed</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
 <code class="code">tpmv ~trans ?diag ?up a x</code> executes <code class="code">x := OP(a) * x</code>
     where <code class="code">a</code> is a packed triangular matrix.<br>
 <b>Since</b> 0.2.0<br>
@@ -261,18 +270,20 @@ A pretty-printer for matrices.<br>
       (the conjugate transpose of <code class="code">a</code>).</li>
 </ul>
 </div>
-<div class="param_info"><code class="code">diag</code> : default = <code class="code">`N</code><ul>
-<li>If <code class="code">diag</code> = <code class="code">`U</code>, then <code class="code">a</code> is unit triangular;</li>
-<li>If <code class="code">diag</code> = <code class="code">`N</code>, then <code class="code">a</code> is not unit triangular.</li>
+<div class="param_info"><code class="code">diag</code> : default = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a><ul>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALunit"><code class="code">Slap_common.unit</code></a>, then <code class="code">a</code> is unit triangular;</li>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a>, then <code class="code">a</code> is not unit triangular.</li>
 </ul>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 
-<pre><span id="VALtpsv"><span class="keyword">val</span> tpsv</span> : <code class="type">trans:(('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?up:bool -><br>       ('n <a href="Slap_size.html#TYPEpacked">Slap_size.packed</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALtpsv"><span class="keyword">val</span> tpsv</span> : <code class="type">trans:('n * 'n, 'n * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ('n <a href="Slap_size.html#TYPEpacked">Slap_size.packed</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> unit</code></pre><div class="info ">
 <code class="code">tpsv ~trans ?diag ?up a b</code> solves linear system <code class="code">OP(a) * x = b</code>
     and destructively assigns <code class="code">x</code> to <code class="code">b</code> where <code class="code">a</code> is a packed triangular
     matrix.<br>
@@ -285,20 +296,22 @@ A pretty-printer for matrices.<br>
       (the conjugate transpose of <code class="code">a</code>).</li>
 </ul>
 </div>
-<div class="param_info"><code class="code">diag</code> : default = <code class="code">`N</code><ul>
-<li>If <code class="code">diag</code> = <code class="code">`U</code>, then <code class="code">a</code> is unit triangular;</li>
-<li>If <code class="code">diag</code> = <code class="code">`N</code>, then <code class="code">a</code> is not unit triangular.</li>
+<div class="param_info"><code class="code">diag</code> : default = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a><ul>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALunit"><code class="code">Slap_common.unit</code></a>, then <code class="code">a</code> is unit triangular;</li>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a>, then <code class="code">a</code> is not unit triangular.</li>
 </ul>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <br>
 <h3 id="3_Level3">Level 3</h3><br>
 
-<pre><span id="VALgemm"><span class="keyword">val</span> gemm</span> : <code class="type">?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?c:('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       transa:(('a_m, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>              <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('a_m, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       transb:(('b_k, 'b_n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('k, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>              <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ('b_k, 'b_n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
+<pre><span id="VALgemm"><span class="keyword">val</span> gemm</span> : <code class="type">?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?c:('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       transa:('a_m * 'a_k, 'm * 'k, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('a_m, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       transb:('b_k * 'b_n, 'k * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ('b_k, 'b_n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
 <code class="code">gemm ?beta ?c ~transa ?alpha a ~transb b</code> executes
     <code class="code">c := alpha * OP(a) * OP(b) + beta * c</code>.<br>
 </div>
@@ -319,7 +332,7 @@ A pretty-printer for matrices.<br>
 </ul>
 </div>
 
-<pre><span id="VALsymm"><span class="keyword">val</span> symm</span> : <code class="type">side:('k, 'm, 'n) <a href="Slap_common.html#TYPEside">Slap_common.side</a> -><br>       ?up:bool -><br>       ?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?c:('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('k, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
+<pre><span id="VALsymm"><span class="keyword">val</span> symm</span> : <code class="type">side:('k, 'm, 'n) <a href="Slap_common.html#TYPEside">Slap_common.side</a> -><br>       ?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?c:('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('k, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
 <code class="code">symm ~side ?up ?beta ?c ?alpha a b</code> executes
 <p>
 <ul>
@@ -331,15 +344,17 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">side</code> : the side flag to specify direction of multiplication of <code class="code">a</code> and
                 <code class="code">b</code>.</div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">beta</code> : default = <code class="code">0.0</code></div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
 
-<pre><span id="VALtrmm"><span class="keyword">val</span> trmm</span> : <code class="type">side:('k, 'm, 'n) <a href="Slap_common.html#TYPEside">Slap_common.side</a> -><br>       ?up:bool -><br>       transa:(('k, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('k, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>              <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       a:('k, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALtrmm"><span class="keyword">val</span> trmm</span> : <code class="type">side:('k, 'm, 'n) <a href="Slap_common.html#TYPEside">Slap_common.side</a> -><br>       ?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       transa:('k * 'k, 'k * 'k, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       a:('k, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">trmm ~side ?up ~transa ?diag ?alpha ~a b</code> executes
 <p>
 <ul>
@@ -351,9 +366,11 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">side</code> : the side flag to specify direction of multiplication of <code class="code">a</code> and
                 <code class="code">b</code>.</div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">transa</code> : the transpose flag for <code class="code">a</code>:<ul>
@@ -363,14 +380,14 @@ A pretty-printer for matrices.<br>
         (the conjugate transpose of <code class="code">a</code>).</li>
 </ul>
 </div>
-<div class="param_info"><code class="code">diag</code> : default = <code class="code">`N</code><ul>
-<li>If <code class="code">diag</code> = <code class="code">`U</code>, then <code class="code">a</code> is unit triangular;</li>
-<li>If <code class="code">diag</code> = <code class="code">`N</code>, then <code class="code">a</code> is not unit triangular.</li>
+<div class="param_info"><code class="code">diag</code> : default = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a><ul>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALunit"><code class="code">Slap_common.unit</code></a>, then <code class="code">a</code> is unit triangular;</li>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a>, then <code class="code">a</code> is not unit triangular.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
 
-<pre><span id="VALtrsm"><span class="keyword">val</span> trsm</span> : <code class="type">side:('k, 'm, 'n) <a href="Slap_common.html#TYPEside">Slap_common.side</a> -><br>       ?up:bool -><br>       transa:(('k, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('k, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>              <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       a:('k, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALtrsm"><span class="keyword">val</span> trsm</span> : <code class="type">side:('k, 'm, 'n) <a href="Slap_common.html#TYPEside">Slap_common.side</a> -><br>       ?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       transa:('k * 'k, 'k * 'k, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       a:('k, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">trsm ~side ?up ~transa ?diag ?alpha ~a b</code> solves a system of linear
     equations
 <p>
@@ -384,9 +401,11 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">side</code> : the side flag to specify direction of multiplication of <code class="code">a</code> and
                 <code class="code">b</code>.</div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">transa</code> : the transpose flag for <code class="code">a</code>:<ul>
@@ -396,14 +415,14 @@ A pretty-printer for matrices.<br>
         (the conjugate transpose of <code class="code">a</code>).</li>
 </ul>
 </div>
-<div class="param_info"><code class="code">diag</code> : default = <code class="code">`N</code><ul>
-<li>If <code class="code">diag</code> = <code class="code">`U</code>, then <code class="code">a</code> is unit triangular;</li>
-<li>If <code class="code">diag</code> = <code class="code">`N</code>, then <code class="code">a</code> is not unit triangular.</li>
+<div class="param_info"><code class="code">diag</code> : default = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a><ul>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALunit"><code class="code">Slap_common.unit</code></a>, then <code class="code">a</code> is unit triangular;</li>
+<li>If <code class="code">diag</code> = <a href="Slap_common.html#VALnon_unit"><code class="code">Slap_common.non_unit</code></a>, then <code class="code">a</code> is not unit triangular.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
 
-<pre><span id="VALsyrk"><span class="keyword">val</span> syrk</span> : <code class="type">?up:bool -><br>       ?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?c:('n, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       trans:(('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
+<pre><span id="VALsyrk"><span class="keyword">val</span> syrk</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?c:('n, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       trans:('a_n * 'a_k, 'n * 'k, [< `N | `T ]) <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
 <code class="code">syrk ?up ?beta ?c ~trans ?alpha a</code> executes
 <p>
 <ul>
@@ -413,16 +432,18 @@ A pretty-printer for matrices.<br>
 
     where <code class="code">a</code> is a general matrix and <code class="code">c</code> is a symmetric matrix.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">beta</code> : default = <code class="code">0.0</code></div>
 <div class="param_info"><code class="code">trans</code> : the transpose flag for <code class="code">a</code></div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
 
-<pre><span id="VALsyr2k"><span class="keyword">val</span> syr2k</span> : <code class="type">?up:bool -><br>       ?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?c:('n, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       trans:(('p, 'q, 'a) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'k, 'b) <a href="Slap_D.html#TYPEmat">mat</a>) <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('p, 'q, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('p, 'q, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
+<pre><span id="VALsyr2k"><span class="keyword">val</span> syr2k</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?beta:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ?c:('n, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       trans:('p * 'q, 'n * 'k, [< `N | `T ]) <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">num_type</a> -><br>       ('p, 'q, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('p, 'q, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
 <code class="code">syr2k ?up ?beta ?c ~trans ?alpha a b</code> computes
 <p>
 <ul>
@@ -434,9 +455,11 @@ A pretty-printer for matrices.<br>
 
     with symmetric matrix <code class="code">c</code>, and general matrices <code class="code">a</code> and <code class="code">b</code>.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">beta</code> : default = <code class="code">0.0</code></div>
@@ -449,16 +472,17 @@ A pretty-printer for matrices.<br>
 <br>
 <h3 id="3_Auxiliaryroutines">Auxiliary routines</h3><br>
 
-<pre><span id="VALlacpy"><span class="keyword">val</span> lacpy</span> : <code class="type">?uplo:[ `L | `U ] -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
-<code class="code">lacpy ?uplo ?b a</code> copies the matrix <code class="code">a</code> into the matrix <code class="code">b</code>.<ul>
-<li>If <code class="code">uplo</code> is omitted, all elements in <code class="code">a</code> is copied.</li>
-<li>If <code class="code">uplo</code> is <code class="code">`U</code>, the upper trapezoidal part of <code class="code">a</code> is copied.</li>
-<li>If <code class="code">uplo</code> is <code class="code">`L</code>, the lower trapezoidal part of <code class="code">a</code> is copied.</li>
-</ul>
-<br>
+<pre><span id="VALlacpy"><span class="keyword">val</span> lacpy</span> : <code class="type">?uplo:[< `A | `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?b:('m, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
+<code class="code">lacpy ?uplo ?b a</code> copies the matrix <code class="code">a</code> into the matrix <code class="code">b</code>.<br>
 <b>Returns</b> <code class="code">b</code>, which is overwritten.<br>
 </div>
-<div class="param_info"><code class="code">uplo</code> : default = all elements in <code class="code">a</code> is copied.</div>
+<div class="param_info"><code class="code">uplo</code> : default = <a href="Slap_common.html#VALupper_lower"><code class="code">Slap_common.upper_lower</code></a><ul>
+<li>If <code class="code">uplo</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is copied;</li>
+<li>If <code class="code">uplo</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is copied.</li>
+</ul>
+</div>
 <div class="param_info"><code class="code">b</code> : default = a fresh matrix.</div>
 
 <pre><span id="VALlassq"><span class="keyword">val</span> lassq</span> : <code class="type">?scale:float -> ?sumsq:float -> ('n, 'cd) <a href="Slap_D.html#TYPEvec">vec</a> -> float * float</code></pre><div class="info ">
@@ -483,13 +507,13 @@ A pretty-printer for matrices.<br>
 <pre><span id="TYPElange_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'a)</code> lange_min_lwork</span> </pre>
 
 
-<pre><span id="VALlange_min_lwork"><span class="keyword">val</span> lange_min_lwork</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'a <a href="Slap_common.html#TYPEnorm4">Slap_common.norm4</a> -> ('m, 'a) <a href="Slap_D.html#TYPElange_min_lwork">lange_min_lwork</a> <a href="Slap_size.html#TYPEt">Slap_size.t</a></code></pre><div class="info ">
+<pre><span id="VALlange_min_lwork"><span class="keyword">val</span> lange_min_lwork</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ([< `F | `I | `M | `O ] as 'a) <a href="Slap_common.html#TYPEnorm4">Slap_common.norm4</a> -><br>       ('m, 'a) <a href="Slap_D.html#TYPElange_min_lwork">lange_min_lwork</a> <a href="Slap_size.html#TYPEt">Slap_size.t</a></code></pre><div class="info ">
 <code class="code">lange_min_lwork m norm</code> computes the minimum length of workspace for
     <code class="code">lange</code> routine. <code class="code">m</code> is the number of rows in a matrix, and <code class="code">norm</code> is
     the sort of matrix norms.<br>
 </div>
 
-<pre><span id="VALlange"><span class="keyword">val</span> lange</span> : <code class="type">?norm:'a <a href="Slap_common.html#TYPEnorm4">Slap_common.norm4</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPErvec">rvec</a> -><br>       ('m, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
+<pre><span id="VALlange"><span class="keyword">val</span> lange</span> : <code class="type">?norm:[< `F | `I | `M | `O ] <a href="Slap_common.html#TYPEnorm4">Slap_common.norm4</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPErvec">rvec</a> -><br>       ('m, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
 <code class="code">lange ?norm ?work a</code><br>
 <b>Returns</b> the norm of matrix <code class="code">a</code>.<br>
 </div>
@@ -503,19 +527,25 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 
-<pre><span id="VALlauum"><span class="keyword">val</span> lauum</span> : <code class="type">?up:bool -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALlauum"><span class="keyword">val</span> lauum</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">lauum ?up a</code> computes
 <p>
 <ul>
 <li><code class="code">U * U^T</code> where <code class="code">U</code> is the upper triangular part of matrix <code class="code">a</code>
-      if <code class="code">up</code> is <code class="code">true</code>.</li>
+      if <code class="code">up</code> is <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>.</li>
 <li><code class="code">L^T * L</code> where <code class="code">L</code> is the lower triangular part of matrix <code class="code">a</code>
-      if <code class="code">up</code> is <code class="code">false</code>.</li>
+      if <code class="code">up</code> is <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>.</li>
 </ul>
 
     The upper or lower triangular part is overwritten.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code>.</div>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
+</ul>
+</div>
 <br>
 <h3 id="3_Linearequationscomputationalroutines">Linear equations (computational routines)</h3><br>
 
@@ -528,7 +558,7 @@ A pretty-printer for matrices.<br>
 <b>Returns</b> vector <code class="code">ipiv</code>, which is overwritten.<br>
 </div>
 
-<pre><span id="VALgetrs"><span class="keyword">val</span> getrs</span> : <code class="type">?ipiv:(('n, 'n) <a href="Slap_size.html#TYPEmin">Slap_size.min</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       trans:(('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALgetrs"><span class="keyword">val</span> getrs</span> : <code class="type">?ipiv:(('n, 'n) <a href="Slap_size.html#TYPEmin">Slap_size.min</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       trans:('n * 'n, 'n * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">getrs ?ipiv trans a b</code> solves systems of linear equations <code class="code">OP(a) * x = b</code>
     where <code class="code">a</code> a <code class="code">'n</code>-by-<code class="code">'n</code> general matrix, each column of matrix <code class="code">b</code> is the
     r.h.s. vector, and each column of matrix <code class="code">x</code> is the corresponding solution.
@@ -575,7 +605,7 @@ A pretty-printer for matrices.<br>
     routine.<br>
 </div>
 
-<pre><span id="VALsytrf_opt_lwork"><span class="keyword">val</span> sytrf_opt_lwork</span> : <code class="type">?up:bool -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> (module Slap_size.SIZE)</code></pre><div class="info ">
+<pre><span id="VALsytrf_opt_lwork"><span class="keyword">val</span> sytrf_opt_lwork</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> (module Slap_size.SIZE)</code></pre><div class="info ">
 <code class="code">sytrf_opt_lwork ?up a</code> computes the optimal length of workspace for <code class="code">sytrf</code>
     routine.<br>
 </div>
@@ -585,7 +615,7 @@ A pretty-printer for matrices.<br>
 </ul>
 </div>
 
-<pre><span id="VALsytrf"><span class="keyword">val</span> sytrf</span> : <code class="type">?up:bool -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'cnt) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a></code></pre><div class="info ">
+<pre><span id="VALsytrf"><span class="keyword">val</span> sytrf</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'cnt) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a></code></pre><div class="info ">
 <code class="code">sytrf ?up ?ipiv ?work a</code> factorizes symmetric matrix <code class="code">a</code> using the
     Bunch-Kaufman diagonal pivoting method:
 <p>
@@ -600,10 +630,16 @@ A pretty-printer for matrices.<br>
 <b>Raises</b> <code>Failure</code> if <code class="code">a</code> is singular.<br>
 <b>Returns</b> vector <code class="code">ipiv</code>, which is overwritten.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code></div>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
+</ul>
+</div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 
-<pre><span id="VALsytrs"><span class="keyword">val</span> sytrs</span> : <code class="type">?up:bool -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALsytrs"><span class="keyword">val</span> sytrs</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">sytrs ?up ?ipiv a b</code> solves systems of linear equations <code class="code">a * x = b</code> where
     <code class="code">a</code> is a symmetric matrix, each column of matrix <code class="code">b</code> is the r.h.s. vector,
     and each column of matrix <code class="code">x</code> is the corresponding solution.
@@ -622,7 +658,13 @@ A pretty-printer for matrices.<br>
     block-diagonal matrix.<br>
 <b>Raises</b> <code>Failure</code> if <code class="code">a</code> is singular.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code></div>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
+</ul>
+</div>
 <div class="param_info"><code class="code">ipiv</code> : a result of <code class="code">sytrf</code>. It is internally computed by <code class="code">sytrf</code> if
                 omitted.</div>
 
@@ -634,7 +676,7 @@ A pretty-printer for matrices.<br>
     routine.<br>
 </div>
 
-<pre><span id="VALsytri"><span class="keyword">val</span> sytri</span> : <code class="type">?up:bool -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALsytri"><span class="keyword">val</span> sytri</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">sytri ?up ?ipiv ?work a</code> computes the inverse of symmetric matrix <code class="code">a</code> using
     the Bunch-Kaufman diagonal pivoting method:
 <p>
@@ -648,12 +690,18 @@ A pretty-printer for matrices.<br>
     block-diagonal matrix.<br>
 <b>Raises</b> <code>Failure</code> if <code class="code">a</code> is singular.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code></div>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
+</ul>
+</div>
 <div class="param_info"><code class="code">ipiv</code> : a result of <code class="code">sytrf</code>. It is internally computed by <code class="code">sytrf</code> if
                 omitted.</div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 
-<pre><span id="VALpotrf"><span class="keyword">val</span> potrf</span> : <code class="type">?up:bool -> ?jitter:<a href="Slap_D.html#TYPEnum_type">num_type</a> -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALpotrf"><span class="keyword">val</span> potrf</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?jitter:<a href="Slap_D.html#TYPEnum_type">num_type</a> -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">potrf ?up ?jitter a</code> computes the Cholesky factorization of symmetrix
     (Hermitian) positive-definite matrix <code class="code">a</code>:
 <p>
@@ -665,54 +713,78 @@ A pretty-printer for matrices.<br>
     where <code class="code">U</code> and <code class="code">L</code> are upper and lower triangular matrices, respectively.
     Either of them is returned in the upper or lower triangular part of <code class="code">a</code>,
     as specified by <code class="code">up</code>.<br>
-<b>Raises</b> <code>Failure</code> if <code class="code">a</code> is singular.<br>
+<b>Raises</b> <code>Failure</code> if <code class="code">a</code> is not positive-definite symmetric.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code></div>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
+</ul>
+</div>
 <div class="param_info"><code class="code">jitter</code> : default = nothing</div>
 
-<pre><span id="VALpotrs"><span class="keyword">val</span> potrs</span> : <code class="type">?up:bool -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ?factorize:bool -><br>       ?jitter:<a href="Slap_D.html#TYPEnum_type">num_type</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALpotrs"><span class="keyword">val</span> potrs</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ?factorize:bool -><br>       ?jitter:<a href="Slap_D.html#TYPEnum_type">num_type</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">potrf ?up a ?jitter b</code> solves systems of linear equations <code class="code">a * x = b</code> using
     the Cholesky factorization of symmetrix (Hermitian) positive-definite matrix
     <code class="code">a</code>:
 <p>
 <ul>
-<li><code class="code">a = U^T * U</code> (real) or <code class="code">a = U^H * U</code> (complex) if <code class="code">up</code> = <code class="code">true</code>;</li>
-<li><code class="code">a = L * L^T</code> (real) or <code class="code">a = L * L^H</code> (complex) if <code class="code">up</code> = <code class="code">false</code></li>
+<li><code class="code">a = U^T * U</code> (real) or <code class="code">a = U^H * U</code> (complex)
+      if <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>;</li>
+<li><code class="code">a = L * L^T</code> (real) or <code class="code">a = L * L^H</code> (complex)
+      if <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a></li>
 </ul>
 
     where <code class="code">U</code> and <code class="code">L</code> are upper and lower triangular matrices, respectively.<br>
 <b>Raises</b> <code>Failure</code> if <code class="code">a</code> is singular.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code></div>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
+</ul>
+</div>
 <div class="param_info"><code class="code">factorize</code> : default = <code class="code">true</code> (<code class="code">potrf</code> is called implicitly)</div>
 <div class="param_info"><code class="code">jitter</code> : default = nothing</div>
 
-<pre><span id="VALpotri"><span class="keyword">val</span> potri</span> : <code class="type">?up:bool -><br>       ?factorize:bool -><br>       ?jitter:<a href="Slap_D.html#TYPEnum_type">num_type</a> -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALpotri"><span class="keyword">val</span> potri</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?factorize:bool -><br>       ?jitter:<a href="Slap_D.html#TYPEnum_type">num_type</a> -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">potrf ?up ?jitter a</code> computes the inverse of symmetrix (Hermitian)
     positive-definite matrix <code class="code">a</code> using the Cholesky factorization:
 <p>
 <ul>
-<li><code class="code">a = U^T * U</code> (real) or <code class="code">a = U^H * U</code> (complex) if <code class="code">up</code> = <code class="code">true</code>;</li>
-<li><code class="code">a = L * L^T</code> (real) or <code class="code">a = L * L^H</code> (complex) if <code class="code">up</code> = <code class="code">false</code></li>
+<li><code class="code">a = U^T * U</code> (real) or <code class="code">a = U^H * U</code> (complex)
+      if <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>;</li>
+<li><code class="code">a = L * L^T</code> (real) or <code class="code">a = L * L^H</code> (complex)
+      if <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a></li>
 </ul>
 
     where <code class="code">U</code> and <code class="code">L</code> are upper and lower triangular matrices, respectively.<br>
 <b>Raises</b> <code>Failure</code> if <code class="code">a</code> is singular.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code></div>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
+</ul>
+</div>
 <div class="param_info"><code class="code">factorize</code> : default = <code class="code">true</code> (<code class="code">potrf</code> is called implicitly)</div>
 <div class="param_info"><code class="code">jitter</code> : default = nothing</div>
 
-<pre><span id="VALtrtrs"><span class="keyword">val</span> trtrs</span> : <code class="type">?up:bool -><br>       trans:(('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALtrtrs"><span class="keyword">val</span> trtrs</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       trans:('n * 'n, 'n * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">trtrs ?up trans ?diag a b</code> solves systems of linear equations
     <code class="code">OP(a) * x = b</code> where <code class="code">a</code> is a triangular matrix of order <code class="code">'n</code>, each column
     of matrix <code class="code">b</code> is the r.h.s vector, and each column of matrix <code class="code">x</code> is the
     corresponding solution. The solution <code class="code">x</code> is returned in <code class="code">b</code>.<br>
 <b>Raises</b> <code>Failure</code> if <code class="code">a</code> is singular.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">trans</code> : the transpose flag for <code class="code">a</code>:<ul>
@@ -728,7 +800,7 @@ A pretty-printer for matrices.<br>
 </ul>
 </div>
 
-<pre><span id="VALtbtrs"><span class="keyword">val</span> tbtrs</span> : <code class="type">kd:'kd <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?up:bool -><br>       trans:(('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       (('n, 'kd) <a href="Slap_size.html#TYPEsyband">Slap_size.syband</a>, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALtbtrs"><span class="keyword">val</span> tbtrs</span> : <code class="type">kd:'kd <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       trans:('n * 'n, 'n * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">trans3</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -><br>       (('n, 'kd) <a href="Slap_size.html#TYPEsyband">Slap_size.syband</a>, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">tbtrs ~kd ?up ~trans ?diag ab b</code> solves systems of linear equations
     <code class="code">OP(A) * x = b</code> where <code class="code">A</code> is a triangular band matrix with <code class="code">kd</code> subdiagonals,
     each column of matrix <code class="code">b</code> is the r.h.s vector, and each column of matrix <code class="code">x</code>
@@ -738,9 +810,11 @@ A pretty-printer for matrices.<br>
 <b>Raises</b> <code>Failure</code> if the matrix <code class="code">A</code> is singular.<br>
 </div>
 <div class="param_info"><code class="code">kd</code> : the number of subdiagonals or superdiagonals in <code class="code">A</code>.</div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">A</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">A</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">A</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">A</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">trans</code> : the transpose flag for <code class="code">A</code>:<ul>
@@ -756,15 +830,17 @@ A pretty-printer for matrices.<br>
 </ul>
 </div>
 
-<pre><span id="VALtrtri"><span class="keyword">val</span> trtri</span> : <code class="type">?up:bool -> ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALtrtri"><span class="keyword">val</span> trtri</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?diag:<a href="Slap_common.html#TYPEdiag">Slap_common.diag</a> -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">trtri ?up ?diag a</code> computes the inverse of triangular matrix <code class="code">a</code>. The
     inverse matrix is returned in <code class="code">a</code>.<br>
 <b>Since</b> 0.2.0<br>
 <b>Raises</b> <code>Failure</code> if the matrix <code class="code">a</code> is singular.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">A</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">A</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">diag</code> : default = <code class="code">`N</code><ul>
@@ -827,7 +903,7 @@ A pretty-printer for matrices.<br>
 <b>Raises</b> <code>Failure</code> if the matrix is singular.<br>
 </div>
 
-<pre><span id="VALposv"><span class="keyword">val</span> posv</span> : <code class="type">?up:bool -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALposv"><span class="keyword">val</span> posv</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">posv ?up a b</code> solves systems of linear equations <code class="code">a * x = b</code> where <code class="code">a</code> is
     a <code class="code">'n</code>-by-<code class="code">'n</code> symmetric positive-definite matrix, each column of matrix <code class="code">b</code>
     is the r.h.s vector, and each column of matrix <code class="code">x</code> is the corresponding
@@ -837,45 +913,50 @@ A pretty-printer for matrices.<br>
     The Cholesky decomposition is used:
 <p>
 <ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then <code class="code">a = U^T * U</code> (real) or <code class="code">a = U^H * U</code> (complex)</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then <code class="code">a = L^T * L</code> (real) or <code class="code">a = L^H * L</code> (complex)</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+      then <code class="code">a = U^T * U</code> (real) or <code class="code">a = U^H * U</code> (complex)</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+      then <code class="code">a = L^T * L</code> (real) or <code class="code">a = L^H * L</code> (complex)</li>
 </ul>
 
     where <code class="code">U</code> and <code class="code">L</code> are the upper and lower triangular matrices, respectively.<br>
 <b>Since</b> 0.2.0<br>
 <b>Raises</b> <code>Failure</code> if the matrix is singular.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 
-<pre><span id="VALppsv"><span class="keyword">val</span> ppsv</span> : <code class="type">?up:bool -><br>       ('n <a href="Slap_size.html#TYPEpacked">Slap_size.packed</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALppsv"><span class="keyword">val</span> ppsv</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ('n <a href="Slap_size.html#TYPEpacked">Slap_size.packed</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">ppsv ?up a b</code> solves systems of linear equations <code class="code">a * x = b</code> where <code class="code">a</code> is
     a <code class="code">'n</code>-by-<code class="code">'n</code> symmetric positive-definite matrix stored in packed format,
     each column of matrix <code class="code">b</code> is the r.h.s vector, and each column of matrix <code class="code">x</code>
     is the corresponding solution. The solution <code class="code">x</code> is returned in <code class="code">b</code>.
 <p>
-
-    The Cholesky decomposition is used:
-<p>
 <ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then <code class="code">a = U^T * U</code> (real) or <code class="code">a = U^H * U</code> (complex)</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then <code class="code">a = L^T * L</code> (real) or <code class="code">a = L^H * L</code> (complex)</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+      then <code class="code">a = U^T * U</code> (real) or <code class="code">a = U^H * U</code> (complex)</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+      then <code class="code">a = L^T * L</code> (real) or <code class="code">a = L^H * L</code> (complex)</li>
 </ul>
 
     where <code class="code">U</code> and <code class="code">L</code> are the upper and lower triangular matrices, respectively.<br>
 <b>Since</b> 0.2.0<br>
 <b>Raises</b> <code>Failure</code> if the matrix is singular.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 
-<pre><span id="VALpbsv"><span class="keyword">val</span> pbsv</span> : <code class="type">?up:bool -><br>       kd:'kd <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       (('n, 'kd) <a href="Slap_size.html#TYPEsyband">Slap_size.syband</a>, 'n, 'ab_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALpbsv"><span class="keyword">val</span> pbsv</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       kd:'kd <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       (('n, 'kd) <a href="Slap_size.html#TYPEsyband">Slap_size.syband</a>, 'n, 'ab_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">pbsv ?up ~kd ab b</code> solves systems of linear equations <code class="code">ab * x = b</code> where
     <code class="code">ab</code> is a <code class="code">'n</code>-by-<code class="code">'n</code> symmetric positive-definite band matrix with <code class="code">kd</code>
     subdiangonals, stored in band storage format, each column of matrix <code class="code">b</code> is
@@ -886,17 +967,21 @@ A pretty-printer for matrices.<br>
     This routine uses the Cholesky decomposition:
 <p>
 <ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then <code class="code">ab = U^T * U</code> (real) or <code class="code">ab = U^H * U</code> (complex)</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then <code class="code">ab = L^T * L</code> (real) or <code class="code">ab = L^H * L</code> (complex)</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+      then <code class="code">a = U^T * U</code> (real) or <code class="code">a = U^H * U</code> (complex)</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+      then <code class="code">a = L^T * L</code> (real) or <code class="code">a = L^H * L</code> (complex)</li>
 </ul>
 
     where <code class="code">U</code> and <code class="code">L</code> are the upper and lower triangular matrices, respectively.<br>
 <b>Since</b> 0.2.0<br>
 <b>Raises</b> <code>Failure</code> if the matrix is singular.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">ab</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">ab</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">kd</code> : the number of subdiagonals or superdiagonals in <code class="code">ab</code>.</div>
@@ -915,12 +1000,20 @@ A pretty-printer for matrices.<br>
 <b>Raises</b> <code>Failure</code> if the matrix is singular.<br>
 </div>
 
-<pre><span id="VALsysv_opt_lwork"><span class="keyword">val</span> sysv_opt_lwork</span> : <code class="type">?up:bool -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> (module Slap_size.SIZE)</code></pre><div class="info ">
+<pre><span id="TYPEsysv_min_lwork"><span class="keyword">type</span> <code class="type"></code>sysv_min_lwork</span> </pre>
+
+
+<pre><span id="VALsysv_min_lwork"><span class="keyword">val</span> sysv_min_lwork</span> : <code class="type">unit -> <a href="Slap_D.html#TYPEsysv_min_lwork">sysv_min_lwork</a> <a href="Slap_size.html#TYPEt">Slap_size.t</a></code></pre><div class="info ">
+<code class="code">sysv_min_lwork ()</code> computes the minimum length of workspace for <code class="code">sysv</code>
+    routine.<br>
+</div>
+
+<pre><span id="VALsysv_opt_lwork"><span class="keyword">val</span> sysv_opt_lwork</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> (module Slap_size.SIZE)</code></pre><div class="info ">
 <code class="code">sysv_opt_lwork ?up a b</code> computes the optimal length of workspace for <code class="code">sysv</code>
     routine.<br>
 </div>
 
-<pre><span id="VALsysv"><span class="keyword">val</span> sysv</span> : <code class="type">?up:bool -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALsysv"><span class="keyword">val</span> sysv</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">sysv ?up ?ipiv ?work a b</code> solves systems of linear equations <code class="code">a * x = b</code>
     where <code class="code">a</code> is a <code class="code">'n</code>-by-<code class="code">'n</code> symmetric matrix, each column of matrix <code class="code">b</code> is
     the r.h.s. vector, and each column of matrix <code class="code">x</code> is the corresponding
@@ -928,24 +1021,26 @@ A pretty-printer for matrices.<br>
 <p>
 
     The diagonal pivoting method is used:<ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then <code class="code">a = U * D * U^T</code></li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then <code class="code">a = L * D * L^T</code>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>, then <code class="code">a = U * D * U^T</code></li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>, then <code class="code">a = L * D * L^T</code>
     where <code class="code">U</code> and <code class="code">L</code> are the upper and lower triangular matrices, respectively.</li>
 </ul>
 <br>
 <b>Since</b> 0.2.0<br>
 <b>Raises</b> <code>Failure</code> if the matrix is singular.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">ipiv</code> : a result of <code class="code">sytrf</code>. It is internally computed by <code class="code">sytrf</code> if
                 omitted.</div>
 <div class="param_info"><code class="code">work</code> : default = an optimum-length vector.</div>
 
-<pre><span id="VALspsv"><span class="keyword">val</span> spsv</span> : <code class="type">?up:bool -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n <a href="Slap_size.html#TYPEpacked">Slap_size.packed</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALspsv"><span class="keyword">val</span> spsv</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n <a href="Slap_size.html#TYPEpacked">Slap_size.packed</a>, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">spsv ?up a b</code> solves systems of linear equations <code class="code">a * x = b</code> where <code class="code">a</code> is
     a <code class="code">'n</code>-by-<code class="code">'n</code> symmetric matrix stored in packed format, each column of
     matrix <code class="code">b</code> is the r.h.s. vector, and each column of matrix <code class="code">x</code> is the
@@ -953,17 +1048,19 @@ A pretty-printer for matrices.<br>
 <p>
 
     The diagonal pivoting method is used:<ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then <code class="code">a = U * D * U^T</code></li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then <code class="code">a = L * D * L^T</code>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>, then <code class="code">a = U * D * U^T</code></li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>, then <code class="code">a = L * D * L^T</code>
     where <code class="code">U</code> and <code class="code">L</code> are the upper and lower triangular matrices, respectively.</li>
 </ul>
 <br>
 <b>Since</b> 0.2.0<br>
 <b>Raises</b> <code>Failure</code> if the matrix is singular.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">ipiv</code> : a result of <code class="code">sytrf</code>. It is internally computed by <code class="code">sytrf</code> if
@@ -982,12 +1079,12 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">n</code> : the number of columns in a matrix.</div>
 <div class="param_info"><code class="code">nrhs</code> : the number of right hand sides.</div>
 
-<pre><span id="VALgels_opt_lwork"><span class="keyword">val</span> gels_opt_lwork</span> : <code class="type">trans:(('am, 'an, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ('am, 'an, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('m, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> (module Slap_size.SIZE)</code></pre><div class="info ">
+<pre><span id="VALgels_opt_lwork"><span class="keyword">val</span> gels_opt_lwork</span> : <code class="type">trans:('am * 'an, 'm * 'n, [< `N | `T ]) <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ('am, 'an, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('m, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> (module Slap_size.SIZE)</code></pre><div class="info ">
 <code class="code">gels_opt_lwork ~trans a b</code> computes the optimum length of workspace for
     <code class="code">gels</code> routine.<br>
 </div>
 
-<pre><span id="VALgels"><span class="keyword">val</span> gels</span> : <code class="type">?work:('work, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       trans:(('am, 'an, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a>)<br>             <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ('am, 'an, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALgels"><span class="keyword">val</span> gels</span> : <code class="type">?work:('work, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       trans:('am * 'an, 'm * 'n, [< `N | `T ]) <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ('am, 'an, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'nrhs, 'b_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">gels ?work ~trans a b</code> solves an overdetermined or underdetermined system
     of linear equations using QR or LU factorization.
 <p>
@@ -1024,7 +1121,7 @@ A pretty-printer for matrices.<br>
 <br>
 <h3 id="3_Level2">Level 2</h3><br>
 
-<pre><span id="VALsbmv"><span class="keyword">val</span> sbmv</span> : <code class="type">k:'k <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?y:('n, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       (('n, 'k) <a href="Slap_size.html#TYPEsyband">Slap_size.syband</a>, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ?up:bool -><br>       ?alpha:float -><br>       ?beta:float -> ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a></code></pre><div class="info ">
+<pre><span id="VALsbmv"><span class="keyword">val</span> sbmv</span> : <code class="type">k:'k <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ?y:('n, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       (('n, 'k) <a href="Slap_size.html#TYPEsyband">Slap_size.syband</a>, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?alpha:float -><br>       ?beta:float -> ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -> ('n, 'y_cd) <a href="Slap_D.html#TYPEvec">vec</a></code></pre><div class="info ">
 <code class="code">sbmv ~k ?y a ?up ?alpha ?beta x</code> computes <code class="code">y := alpha * a * x + beta * y</code>
     where <code class="code">a</code> is a <code class="code">'n</code>-by-<code class="code">'n</code> symmetric band matrix with <code class="code">k</code>
     super-(or sub-)diagonals, and <code class="code">x</code> and <code class="code">y</code> are <code class="code">'n</code>-dimensional vectors.<br>
@@ -1032,9 +1129,11 @@ A pretty-printer for matrices.<br>
 <b>Returns</b> vector <code class="code">y</code>, which is overwritten.<br>
 </div>
 <div class="param_info"><code class="code">k</code> : the number of superdiangonals or subdiangonals</div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
@@ -1048,15 +1147,20 @@ A pretty-printer for matrices.<br>
 </div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
 
-<pre><span id="VALsyr"><span class="keyword">val</span> syr</span> : <code class="type">?alpha:float -><br>       ?up:bool -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
+<pre><span id="VALsyr"><span class="keyword">val</span> syr</span> : <code class="type">?alpha:float -><br>       ?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('n, 'n, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a></code></pre><div class="info ">
 <code class="code">syr ?alpha x a</code> computes <code class="code">a := alpha * x * x^T + a</code> with
     the symmetric matrix <code class="code">a</code>, the vector <code class="code">x</code> and
     the transposed vector <code class="code">x^T</code> of <code class="code">x</code>.<br>
 <b>Returns</b> matrix <code class="code">a</code>, which is overwritten.<br>
 </div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code>, i.e., the upper triangular part of <code class="code">a</code> is
-                 supplied.</div>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
+</ul>
+</div>
 <br>
 <h2 id="2_LAPACKinterface">LAPACK interface</h2><br>
 <br>
@@ -1073,17 +1177,23 @@ A pretty-printer for matrices.<br>
 <pre><span id="TYPElansy_min_lwork"><span class="keyword">type</span> <code class="type">('m, 'a)</code> lansy_min_lwork</span> </pre>
 
 
-<pre><span id="VALlansy_min_lwork"><span class="keyword">val</span> lansy_min_lwork</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'a <a href="Slap_common.html#TYPEnorm4">Slap_common.norm4</a> -> ('n, 'a) <a href="Slap_D.html#TYPElansy_min_lwork">lansy_min_lwork</a> <a href="Slap_size.html#TYPEt">Slap_size.t</a></code></pre><div class="info ">
+<pre><span id="VALlansy_min_lwork"><span class="keyword">val</span> lansy_min_lwork</span> : <code class="type">'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ([< `F | `I | `M | `O ] as 'a) <a href="Slap_common.html#TYPEnorm4">Slap_common.norm4</a> -><br>       ('n, 'a) <a href="Slap_D.html#TYPElansy_min_lwork">lansy_min_lwork</a> <a href="Slap_size.html#TYPEt">Slap_size.t</a></code></pre><div class="info ">
 <code class="code">lansy_min_lwork n norm</code> computes the minimum length of workspace for
     <code class="code">lansy</code> routine. <code class="code">n</code> is the number of rows or columns in a matrix.
     <code class="code">norm</code> is a matrix norm.<br>
 </div>
 
-<pre><span id="VALlansy"><span class="keyword">val</span> lansy</span> : <code class="type">?up:bool -><br>       ?norm:'norm <a href="Slap_common.html#TYPEnorm4">Slap_common.norm4</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
+<pre><span id="VALlansy"><span class="keyword">val</span> lansy</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?norm:[< `F | `I | `M | `O ] <a href="Slap_common.html#TYPEnorm4">Slap_common.norm4</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -> ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
 <code class="code">lansy ?up ?norm ?work a</code><br>
 <b>Returns</b> the norm of matrix <code class="code">a</code>.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code></div>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
+</ul>
+</div>
 <div class="param_info"><code class="code">norm</code> : default = <a href="Slap_common.html#VALnorm_1"><code class="code">Slap_common.norm_1</code></a><ul>
 <li>If <code class="code">norm</code> = <a href="Slap_common.html#VALnorm_1"><code class="code">Slap_common.norm_1</code></a>, the one norm is returned;</li>
 <li>If <code class="code">norm</code> = <a href="Slap_common.html#VALnorm_inf"><code class="code">Slap_common.norm_inf</code></a>, the infinity norm is returned;</li>
@@ -1142,7 +1252,7 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">m</code> : the number of rows in a matrix.</div>
 <div class="param_info"><code class="code">n</code> : the number of columns in a matrix.</div>
 
-<pre><span id="VALormqr_opt_lwork"><span class="keyword">val</span> ormqr_opt_lwork</span> : <code class="type">side:('r, 'm, 'n) <a href="Slap_common.html#TYPEside">Slap_common.side</a> -><br>       trans:(('r, 'r, 'a) <a href="Slap_D.html#TYPEmat">mat</a> -> ('r, 'r, 'b) <a href="Slap_D.html#TYPEmat">mat</a>) <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       tau:('k, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('r, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> (module Slap_size.SIZE)</code></pre><div class="info ">
+<pre><span id="VALormqr_opt_lwork"><span class="keyword">val</span> ormqr_opt_lwork</span> : <code class="type">side:('r, 'm, 'n) <a href="Slap_common.html#TYPEside">Slap_common.side</a> -><br>       trans:('r * 'r, 'r * 'r, [< `N | `T ]) <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       tau:('k, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('r, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -><br>       ('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> (module Slap_size.SIZE)</code></pre><div class="info ">
 <code class="code">ormqr_opt_lwork ~side ~trans ~tau a c</code> computes the optimum length of
     workspace for <code class="code">ormqr</code> routine.<br>
 </div>
@@ -1150,7 +1260,7 @@ A pretty-printer for matrices.<br>
 <div class="param_info"><code class="code">trans</code> : the transpose flag for orthogonal matrix <code class="code">Q</code>.</div>
 <div class="param_info"><code class="code">tau</code> : a result of <code class="code">geqrf</code>.</div>
 
-<pre><span id="VALormqr_dyn"><span class="keyword">val</span> ormqr_dyn</span> : <code class="type">side:('r, 'm, 'n) <a href="Slap_common.html#TYPEside">Slap_common.side</a> -><br>       trans:(('r, 'r, 'a) <a href="Slap_D.html#TYPEmat">mat</a> -> ('r, 'r, 'b) <a href="Slap_D.html#TYPEmat">mat</a>) <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       tau:('k, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('r, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
+<pre><span id="VALormqr_dyn"><span class="keyword">val</span> ormqr_dyn</span> : <code class="type">side:('r, 'm, 'n) <a href="Slap_common.html#TYPEside">Slap_common.side</a> -><br>       trans:('r * 'r, 'r * 'r, [< `N | `T ]) <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       tau:('k, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ('r, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> ('m, 'n, 'c_cd) <a href="Slap_D.html#TYPEmat">mat</a> -> unit</code></pre><div class="info ">
 <code class="code">ormqr_dyn ~side ~trans ?work ~tau a c</code> multiplies a matrix <code class="code">c</code> by the
     orthogonal matrix <code class="code">Q</code> of the QR factorization formed by <code class="code">geqrf</code>/<code class="code">geqpf</code>:
 <p>
@@ -1195,7 +1305,7 @@ A pretty-printer for matrices.<br>
     <code class="code">gecon</code> routine. <code class="code">n</code> is the number of rows or columns in a matrix.<br>
 </div>
 
-<pre><span id="VALgecon"><span class="keyword">val</span> gecon</span> : <code class="type">?norm:'a <a href="Slap_common.html#TYPEnorm2">Slap_common.norm2</a> -><br>       ?anorm:float -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
+<pre><span id="VALgecon"><span class="keyword">val</span> gecon</span> : <code class="type">?norm:[< `I | `O ] <a href="Slap_common.html#TYPEnorm2">Slap_common.norm2</a> -><br>       ?anorm:float -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
 <code class="code">gecon ?norm ?anorm ?work ?iwork a</code> estimates the reciprocal of the
     condition number of general matrix <code class="code">a</code>.<br>
 </div>
@@ -1226,14 +1336,16 @@ A pretty-printer for matrices.<br>
     <code class="code">sycon</code> routine. <code class="code">n</code> is the number of rows or columns in a matrix.<br>
 </div>
 
-<pre><span id="VALsycon"><span class="keyword">val</span> sycon</span> : <code class="type">?up:bool -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ?anorm:float -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
+<pre><span id="VALsycon"><span class="keyword">val</span> sycon</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?ipiv:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ?anorm:float -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
 <code class="code">sycon ?up ?ipiv ?anorm ?work ?iwork a</code> estimates the reciprocal of the
     condition number of symmetric matrix <code class="code">a</code>. Since <code class="code">a</code> is symmetric, the
     1-norm is equal to the infinity norm.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">ipiv</code> : a result of <code class="code">sytrf</code>. It is internally computed by <code class="code">sytrf</code> if
@@ -1260,14 +1372,16 @@ A pretty-printer for matrices.<br>
     <code class="code">pocon</code> routine. <code class="code">n</code> is the number of rows or columns in a matrix.<br>
 </div>
 
-<pre><span id="VALpocon"><span class="keyword">val</span> pocon</span> : <code class="type">?up:bool -><br>       ?anorm:float -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
+<pre><span id="VALpocon"><span class="keyword">val</span> pocon</span> : <code class="type">?up:[< `L | `U ] <a href="Slap_common.html#TYPEuplo">Slap_common.uplo</a> -><br>       ?anorm:float -><br>       ?work:('lwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">vec</a> -><br>       ?iwork:('liwork, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_common.html#TYPEint32_vec">Slap_common.int32_vec</a> -><br>       ('n, 'n, 'cd) <a href="Slap_D.html#TYPEmat">mat</a> -> float</code></pre><div class="info ">
 <code class="code">pocon ?up ?anorm ?work ?iwork a</code> estimates the reciprocal of the
     condition number of symmetric positive-definite matrix <code class="code">a</code>.
     Since <code class="code">a</code> is symmetric, the 1-norm is equal to the infinity norm.<br>
 </div>
-<div class="param_info"><code class="code">up</code> : default = <code class="code">true</code><ul>
-<li>If <code class="code">up</code> = <code class="code">true</code>, then the upper triangular part of <code class="code">a</code> is used;</li>
-<li>If <code class="code">up</code> = <code class="code">false</code>, then the lower triangular part of <code class="code">a</code> is used.</li>
+<div class="param_info"><code class="code">up</code> : default = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a><ul>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALupper"><code class="code">Slap_common.upper</code></a>,
+        then the upper triangular part of <code class="code">a</code> is used;</li>
+<li>If <code class="code">up</code> = <a href="Slap_common.html#VALlower"><code class="code">Slap_common.lower</code></a>,
+        then the lower triangular part of <code class="code">a</code> is used.</li>
 </ul>
 </div>
 <div class="param_info"><code class="code">anorm</code> : default = the norm of matrix <code class="code">a</code> as returned by <code class="code">lange</code>.</div>

@@ -7,6 +7,7 @@
 <link rel="next" href="Slap_D.Mat.html">
 <link rel="Up" href="Slap_D.html">
 <link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
 <link title="Index of values" rel=Appendix href="index_values.html">
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
@@ -115,6 +116,56 @@ Like <code class="code">set_dyn</code>, but size checking is not always performe
 </div>
 <br>
 <h2 id="2_Basicoperations">Basic operations</h2><br>
+
+<pre><span id="VALcons"><span class="keyword">val</span> cons</span> : <code class="type">?y:('n <a href="Slap_size.html#TYPEs">Slap_size.s</a>, 'y_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -><br>       <a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -> ('n <a href="Slap_size.html#TYPEs">Slap_size.s</a>, 'y_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a></code></pre><div class="info ">
+<code class="code">cons ?y e x</code> adds element <code class="code">e</code> at the beginning of vector <code class="code">x</code>, and copies
+    it into <code class="code">y</code>.<br>
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> the vector <code class="code">y</code>, which is overwritten.<br>
+</div>
+<div class="param_info"><code class="code">y</code> : default = a fresh vector.</div>
+
+<pre><span id="VALhd"><span class="keyword">val</span> hd</span> : <code class="type">('n <a href="Slap_size.html#TYPEs">Slap_size.s</a>, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -> <a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a></code></pre><div class="info ">
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> the first element of a given vector. (typesafe)<br>
+</div>
+
+<pre><span id="VALhd_dyn"><span class="keyword">val</span> hd_dyn</span> : <code class="type">('n, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -> <a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a></code></pre><div class="info ">
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> the first element of a given vector.<br>
+</div>
+
+<pre><span id="VALlast"><span class="keyword">val</span> last</span> : <code class="type">('n <a href="Slap_size.html#TYPEs">Slap_size.s</a>, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -> <a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a></code></pre><div class="info ">
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> the last element of a given vector. (typesafe)<br>
+</div>
+
+<pre><span id="VALlast_dyn"><span class="keyword">val</span> last_dyn</span> : <code class="type">('n, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -> <a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a></code></pre><div class="info ">
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> the last element of a given vector.<br>
+</div>
+
+<pre><span id="VALtl"><span class="keyword">val</span> tl</span> : <code class="type">?y:('n, 'y_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -><br>       ('n <a href="Slap_size.html#TYPEs">Slap_size.s</a>, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -> ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a></code></pre><div class="info ">
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a given vector without the first element. (typesafe)<br>
+</div>
+
+<pre><span id="VALtl_dyn"><span class="keyword">val</span> tl_dyn</span> : <code class="type">?y:('n <a href="Slap_size.html#TYPEp">Slap_size.p</a>, 'y_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -> ('n <a href="Slap_size.html#TYPEp">Slap_size.p</a>, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a></code></pre><div class="info ">
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a given vector without the first element.<br>
+</div>
+
+<pre><span id="VALinits"><span class="keyword">val</span> inits</span> : <code class="type">?y:('n, 'y_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -><br>       ('n <a href="Slap_size.html#TYPEs">Slap_size.s</a>, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -> ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a></code></pre><div class="info ">
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a given vector without the first element. (typesafe)
+    This is the same as <i>init</i> in Haskell.<br>
+</div>
+
+<pre><span id="VALinits_dyn"><span class="keyword">val</span> inits_dyn</span> : <code class="type">?y:('n <a href="Slap_size.html#TYPEp">Slap_size.p</a>, 'y_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -><br>       ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -> ('n <a href="Slap_size.html#TYPEp">Slap_size.p</a>, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a></code></pre><div class="info ">
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a given vector without the first element.
+    This is the same as <i>init</i> in Haskell.<br>
+</div>
 
 <pre><span id="VALcopy"><span class="keyword">val</span> copy</span> : <code class="type">?y:('n, 'y_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -> ('n, 'x_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -> ('n, 'y_cd) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a></code></pre><div class="info ">
 <code class="code">copy ?y x</code> copies the vector <code class="code">x</code> to the vector <code class="code">y</code> with the BLAS-1
@@ -233,6 +284,37 @@ A functor version of <code class="code">of_bigarray</code>.
 Like <code class="code">of_bigarray_dyn</code>, but size checking is not always performed.<br>
 <b>Since</b> 1.0.0<br>
 </div>
+
+<pre><span id="VALof_array_c"><span class="keyword">val</span> of_array_c</span> : <code class="type"><a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> array -> (<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a>, <a href="Slap_D.html#TYPEprec">Slap_D.prec</a>, 'cnt) <a href="Slap_vec.html#TYPEdyn">Slap_vec.dyn</a></code></pre><div class="info ">
+<code class="code">let Slap.Vec.VEC n = of_array_c [|a1; ...; an|]</code><br>
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a constructor <code class="code">VEC</code> that has a vector <code class="code">(a1, ..., an)</code> that has the
+    existential quantified sized type
+    <code class="code">exists n. (n, 'num, 'prec, 'cnt_or_dsc) Vec.t</code>.
+    "c" of <code class="code">of_array_c</code> means a "c"onstructor of GADT. This function is
+    available in OCaml 4.00 or above.<br>
+</div>
+
+<pre><span id="VALof_list_c"><span class="keyword">val</span> of_list_c</span> : <code class="type"><a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> list -> (<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a>, <a href="Slap_D.html#TYPEprec">Slap_D.prec</a>, 'cnt) <a href="Slap_vec.html#TYPEdyn">Slap_vec.dyn</a></code></pre><div class="info ">
+<code class="code">let Slap.Vec.VEC n = of_list_c [a1; ...; an]</code><br>
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a constructor <code class="code">VEC</code> that has a vector <code class="code">(a1, ..., an)</code> that has the
+    existential quantified sized type
+    <code class="code">exists n. (n, 'num, 'prec, 'cnt_or_dsc) Vec.t</code>.
+    "c" of <code class="code">of_list_c</code> means a "c"onstructor of GADT. This function is available
+    in OCaml 4.00 or above.<br>
+</div>
+
+<pre><span id="VALof_bigarray_c"><span class="keyword">val</span> of_bigarray_c</span> : <code class="type">?share:bool -><br>       (<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a>, <a href="Slap_D.html#TYPEprec">Slap_D.prec</a>, Bigarray.fortran_layout) Bigarray.Array1.t -><br>       (<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a>, <a href="Slap_D.html#TYPEprec">Slap_D.prec</a>, 'cnt) <a href="Slap_vec.html#TYPEdyn">Slap_vec.dyn</a></code></pre><div class="info ">
+<code class="code">let Slap.Vec.VEC n = of_bigarray_c ?share ba</code><br>
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a constructor <code class="code">VEC</code> that has a vector (of all the elements of big
+    array <code class="code">ba</code>) that has the existential quantified sized type
+    <code class="code">exists n. (n, 'num, 'prec, 'cnt_or_dsc) Vec.t</code>.
+    "c" of <code class="code">of_bigarray_c</code> means a "c"onstructor of GADT. This function is
+    available in OCaml 4.00 or above.<br>
+</div>
+<div class="param_info"><code class="code">share</code> : <code class="code">true</code> if data are shared. (default = <code class="code">false</code>)</div>
 <br>
 <h2 id="2_Iterators">Iterators</h2><br>
 

@@ -8,6 +8,7 @@
 <link rel="next" href="Slap_io.html">
 <link rel="Up" href="index.html">
 <link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
 <link title="Index of values" rel=Appendix href="index_values.html">
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
@@ -389,6 +390,54 @@ Like <code class="code">of_list_dyn</code>, but size checking is not always perf
 Like <code class="code">of_bigarray_dyn</code>, but size checking is not always performed.<br>
 <b>Since</b> 1.0.0<br>
 </div>
+
+<pre><code><span id="TYPEdyn"><span class="keyword">type</span> <code class="type">('num, 'prec, 'cnt_or_dsc)</code> dyn</span> = </code></pre><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTdyn.MAT"><span class="constructor">MAT</span></span> <span class="keyword">:</span> <code class="type">('m, 'n, 'num0, 'prec0, 'cnt_or_dsc0) <a href="Slap_mat.html#TYPEt">t</a></code> <span class="keyword">-></span> <code class="type">('num0, 'prec0, 'cnt_or_dsc0) <a href="Slap_mat.html#TYPEdyn">dyn</a></code></code></td>
+
+</tr></table>
+
+<div class="info ">
+The type of packages of existential quantified sized type:
+    <code class="code">('num, 'prec, 'cnt_or_dsc) dyn</code> =
+    <code class="code">exists m, n. (m, n, 'num, 'prec, 'cnt_or_dsc) Vec.t</code>.<br>
+<b>Since</b> 4.0.0<br>
+</div>
+
+
+<pre><span id="VALof_array_c"><span class="keyword">val</span> of_array_c</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'num array array -> ('num, 'prec, 'cnt) <a href="Slap_mat.html#TYPEdyn">dyn</a></code></pre><div class="info ">
+<code class="code">let MAT n = of_array_c kind arr</code><br>
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a constructor <code class="code">MAT</code> that has a matrix (initialized from the given
+    array of arrays) that has the existential quantified sized type
+    <code class="code">exists m, n. (n, 'num, 'prec, 'cnt_or_dsc) Mat.t</code>.
+    "c" of <code class="code">of_array_c</code> means a "c"onstructor of GADT. This function is
+    available in OCaml 4.00 or above.<br>
+</div>
+
+<pre><span id="VALof_list_c"><span class="keyword">val</span> of_list_c</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'num list list -> ('num, 'prec, 'cnt) <a href="Slap_mat.html#TYPEdyn">dyn</a></code></pre><div class="info ">
+<code class="code">let MAT n = of_list_c kind lst</code><br>
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a constructor <code class="code">MAT</code> that has a matrix (initialized from the given
+    list of lists) that has the existential quantified sized type
+    <code class="code">exists m, n. (n, 'num, 'prec, 'cnt_or_dsc) Mat.t</code>.
+    "c" of <code class="code">of_list_c</code> means a "c"onstructor of GADT. This function is available
+    in OCaml 4.00 or above.<br>
+</div>
+
+<pre><span id="VALof_bigarray_c"><span class="keyword">val</span> of_bigarray_c</span> : <code class="type">?share:bool -><br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array2.t -><br>       ('num, 'prec, 'cnt) <a href="Slap_mat.html#TYPEdyn">dyn</a></code></pre><div class="info ">
+<code class="code">let MAT n = of_bigarray_c ?share ba</code><br>
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a constructor <code class="code">MAT</code> that has a matrix (initialized from the given
+    big array) that has the existential quantified sized type
+    <code class="code">exists m, n. (n, 'num, 'prec, 'cnt_or_dsc) Mat.t</code>.
+    "c" of <code class="code">of_bigarray_c</code> means a "c"onstructor of GADT. This function is
+    available in OCaml 4.00 or above.<br>
+</div>
+<div class="param_info"><code class="code">share</code> : <code class="code">true</code> if data are shared. (default = <code class="code">false</code>)</div>
 <br>
 <h2 id="2_Submatrices">Submatrices</h2><br>
 
@@ -424,4 +473,4 @@ Like <code class="code">of_bigarray_dyn</code>, but size checking is not always 
 <pre><span id="VALopt_mat"><span class="keyword">val</span> opt_mat</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">t</a> option -><br>       int option * int option *<br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array2.t option</code></pre>
 <pre><span id="VALopt_mat_alloc"><span class="keyword">val</span> opt_mat_alloc</span> : <code class="type">('num, 'prec) Bigarray.kind -><br>       'm <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       ('m, 'n, 'num, 'prec, 'cd) <a href="Slap_mat.html#TYPEt">t</a> option -><br>       int * int * ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array2.t</code></pre>
 <pre><span id="VAL__expose"><span class="keyword">val</span> __expose</span> : <code class="type">('m, 'n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap_mat.html#TYPEt">t</a> -><br>       'm <a href="Slap_size.html#TYPEt">Slap_size.t</a> * 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> * int * int *<br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array2.t</code></pre>
-<pre><span id="VAL__unexpose"><span class="keyword">val</span> __unexpose</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> * 'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> * int * int *<br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array2.t -><br>       ('m, 'n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap_mat.html#TYPEt">t</a></code></pre></body></html>
+<pre><span id="VAL__unexpose"><span class="keyword">val</span> __unexpose</span> : <code class="type">'m <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       'n <a href="Slap_size.html#TYPEt">Slap_size.t</a> -><br>       int -><br>       int -><br>       ('num, 'prec, Bigarray.fortran_layout) Bigarray.Array2.t -><br>       ('m, 'n, 'num, 'prec, 'cnt_or_dsc) <a href="Slap_mat.html#TYPEt">t</a></code></pre></body></html>

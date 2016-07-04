@@ -7,6 +7,7 @@
 <link rel="previous" href="Slap_D.Vec.html">
 <link rel="Up" href="Slap_D.html">
 <link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
 <link title="Index of values" rel=Appendix href="index_values.html">
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
@@ -290,6 +291,37 @@ A functor vesion of <code class="code">of_bigarray</code>.
 Like <code class="code">of_bigarray_dyn</code>, but size checking is not always performed.<br>
 <b>Since</b> 1.0.0<br>
 </div>
+
+<pre><span id="VALof_array_c"><span class="keyword">val</span> of_array_c</span> : <code class="type"><a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> array array -><br>       (<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a>, <a href="Slap_D.html#TYPEprec">Slap_D.prec</a>, 'cnt) <a href="Slap_mat.html#TYPEdyn">Slap_mat.dyn</a></code></pre><div class="info ">
+<code class="code">let Slap.Mat.MAT n = of_array_c arr</code><br>
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a constructor <code class="code">MAT</code> that has a matrix (initialized from the given
+    array of arrays) that has the existential quantified sized type
+    <code class="code">exists m, n. (n, 'num, 'prec, 'cnt_or_dsc) Mat.t</code>.
+    "c" of <code class="code">of_array_c</code> means a "c"onstructor of GADT. This function is
+    available in OCaml 4.00 or above.<br>
+</div>
+
+<pre><span id="VALof_list_c"><span class="keyword">val</span> of_list_c</span> : <code class="type"><a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> list list -><br>       (<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a>, <a href="Slap_D.html#TYPEprec">Slap_D.prec</a>, 'cnt) <a href="Slap_mat.html#TYPEdyn">Slap_mat.dyn</a></code></pre><div class="info ">
+<code class="code">let Slap.Mat.MAT n = of_list_c kind lst</code><br>
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a constructor <code class="code">MAT</code> that has a matrix (initialized from the given
+    list of lists) that has the existential quantified sized type
+    <code class="code">exists m, n. (n, 'num, 'prec, 'cnt_or_dsc) Mat.t</code>.
+    "c" of <code class="code">of_list_c</code> means a "c"onstructor of GADT. This function is available
+    in OCaml 4.00 or above.<br>
+</div>
+
+<pre><span id="VALof_bigarray_c"><span class="keyword">val</span> of_bigarray_c</span> : <code class="type">?share:bool -><br>       (<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a>, <a href="Slap_D.html#TYPEprec">Slap_D.prec</a>, Bigarray.fortran_layout) Bigarray.Array2.t -><br>       (<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a>, <a href="Slap_D.html#TYPEprec">Slap_D.prec</a>, 'cnt) <a href="Slap_mat.html#TYPEdyn">Slap_mat.dyn</a></code></pre><div class="info ">
+<code class="code">let Slap.Mat.MAT n = of_bigarray_c ?share ba</code><br>
+<b>Since</b> 4.0.0<br>
+<b>Returns</b> a constructor <code class="code">MAT</code> that has a matrix (initialized from the given
+    big array) that has the existential quantified sized type
+    <code class="code">exists m, n. (n, 'num, 'prec, 'cnt_or_dsc) Mat.t</code>.
+    "c" of <code class="code">of_bigarray_c</code> means a "c"onstructor of GADT. This function is
+    available in OCaml 4.00 or above.<br>
+</div>
+<div class="param_info"><code class="code">share</code> : <code class="code">true</code> if data are shared. (default = <code class="code">false</code>)</div>
 <br>
 <h2 id="2_Iterators">Iterators</h2><br>
 
@@ -503,7 +535,7 @@ A row-wise <code class="code">scal</code> function for matrices.<br>
 <code class="code">axpy ?alpha x y</code> computes <code class="code">y := alpha * x + y</code>.<br>
 </div>
 
-<pre><span id="VALgemm_diag"><span class="keyword">val</span> gemm_diag</span> : <code class="type">?beta:<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> -><br>       ?y:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -><br>       transa:(('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -> ('n, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a>)<br>              <a href="Slap_D.html#TYPEtrans3">Slap_D.trans3</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -><br>       transb:(('b_k, 'b_n, 'b_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -> ('k, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a>)<br>              <a href="Slap_D.html#TYPEtrans3">Slap_D.trans3</a> -><br>       ('b_k, 'b_n, 'b_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -> ('n, 'cnt) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a></code></pre><div class="info ">
+<pre><span id="VALgemm_diag"><span class="keyword">val</span> gemm_diag</span> : <code class="type">?beta:<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> -><br>       ?y:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -><br>       transa:('a_n * 'a_k, 'n * 'k, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">Slap_D.trans3</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -><br>       transb:('b_k * 'b_n, 'k * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">Slap_D.trans3</a> -><br>       ('b_k, 'b_n, 'b_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -> ('n, 'cnt) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a></code></pre><div class="info ">
 <code class="code">gemm_diag ?beta ?y ~transa ?alpha a ~transb b</code> executes
     <code class="code">y := DIAG(alpha * OP(a) * OP(b)) + beta * y</code> where
     <code class="code">DIAG(x)</code> is the vector of the diagonal elements in matrix <code class="code">x</code>, and
@@ -527,7 +559,7 @@ A row-wise <code class="code">scal</code> function for matrices.<br>
 </ul>
 </div>
 
-<pre><span id="VALsyrk_diag"><span class="keyword">val</span> syrk_diag</span> : <code class="type">?beta:<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> -><br>       ?y:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -><br>       trans:(('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -> ('n, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a>)<br>             <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -> ('n, 'cnt) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a></code></pre><div class="info ">
+<pre><span id="VALsyrk_diag"><span class="keyword">val</span> syrk_diag</span> : <code class="type">?beta:<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> -><br>       ?y:('n, <a href="Slap_misc.html#TYPEcnt">Slap_misc.cnt</a>) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a> -><br>       trans:('a_n * 'a_k, 'n * 'k, [< `N | `T ]) <a href="Slap_common.html#TYPEtrans2">Slap_common.trans2</a> -><br>       ?alpha:<a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -> ('n, 'cnt) <a href="Slap_D.html#TYPEvec">Slap_D.vec</a></code></pre><div class="info ">
 <code class="code">syrk_diag ?beta ?y ~transa ?alpha a</code> executes
 <p>
 <ul>
@@ -543,7 +575,7 @@ A row-wise <code class="code">scal</code> function for matrices.<br>
 <div class="param_info"><code class="code">beta</code> : default = <code class="code">0.0</code></div>
 <div class="param_info"><code class="code">alpha</code> : default = <code class="code">1.0</code></div>
 
-<pre><span id="VALgemm_trace"><span class="keyword">val</span> gemm_trace</span> : <code class="type">transa:(('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -> ('n, 'k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a>)<br>              <a href="Slap_D.html#TYPEtrans3">Slap_D.trans3</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -><br>       transb:(('b_k, 'b_n, 'b_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -> ('k, 'n, 'b_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a>)<br>              <a href="Slap_D.html#TYPEtrans3">Slap_D.trans3</a> -><br>       ('b_k, 'b_n, 'b_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -> <a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a></code></pre><div class="info ">
+<pre><span id="VALgemm_trace"><span class="keyword">val</span> gemm_trace</span> : <code class="type">transa:('a_n * 'a_k, 'n * 'k, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">Slap_D.trans3</a> -><br>       ('a_n, 'a_k, 'a_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -><br>       transb:('b_k * 'b_n, 'k * 'n, [< `N | `T ]) <a href="Slap_D.html#TYPEtrans3">Slap_D.trans3</a> -><br>       ('b_k, 'b_n, 'b_cd) <a href="Slap_D.html#TYPEmat">Slap_D.mat</a> -> <a href="Slap_D.html#TYPEnum_type">Slap_D.num_type</a></code></pre><div class="info ">
 <code class="code">gemm_trace ~transa a ~transb b</code><br>
 <b>Returns</b> the trace of <code class="code">OP(a) * OP(b)</code>.<br>
 </div>

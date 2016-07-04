@@ -3,6 +3,7 @@
 <meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
 <link rel="Start" href="index.html">
 <link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
 <link title="Index of values" rel=Appendix href="index_values.html">
 <link title="Index of modules" rel=Appendix href="index_modules.html">
 <link title="Index of module types" rel=Appendix href="index_module_types.html">
@@ -216,6 +217,21 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="constructor">Bigarray</span>.fortran_layout)&nbsp;<span class="constructor">Bigarray</span>.<span class="constructor">Array2</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cnt)&nbsp;<span class="constructor">Slap_mat</span>.t<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;dyn&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">MAT</span>&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;<span class="constructor">Slap_mat</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>cnt_or_dsc)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Slap_mat</span>.dyn<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;of_array_c&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec)&nbsp;<span class="constructor">Bigarray</span>.kind&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>num&nbsp;array&nbsp;array&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cnt)&nbsp;<span class="constructor">Slap_mat</span>.dyn<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;of_list_c&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec)&nbsp;<span class="constructor">Bigarray</span>.kind&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>num&nbsp;list&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cnt)&nbsp;<span class="constructor">Slap_mat</span>.dyn<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;of_bigarray_c&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?share:bool&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="constructor">Bigarray</span>.fortran_layout)&nbsp;<span class="constructor">Bigarray</span>.<span class="constructor">Array2</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cnt)&nbsp;<span class="constructor">Slap_mat</span>.dyn<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;submat_dyn&nbsp;:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>m&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
@@ -247,7 +263,10 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>m&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;*&nbsp;<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;*&nbsp;int&nbsp;*&nbsp;int&nbsp;*<br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="constructor">Bigarray</span>.fortran_layout)&nbsp;<span class="constructor">Bigarray</span>.<span class="constructor">Array2</span>.t<br>
 &nbsp;&nbsp;<span class="keyword">val</span>&nbsp;__unexpose&nbsp;:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>m&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;*&nbsp;<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;*&nbsp;int&nbsp;*&nbsp;int&nbsp;*<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>m&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">'</span>n&nbsp;<span class="constructor">Slap_size</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="constructor">Bigarray</span>.fortran_layout)&nbsp;<span class="constructor">Bigarray</span>.<span class="constructor">Array2</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;(<span class="keywordsign">'</span>m,&nbsp;<span class="keywordsign">'</span>n,&nbsp;<span class="keywordsign">'</span>num,&nbsp;<span class="keywordsign">'</span>prec,&nbsp;<span class="keywordsign">'</span>cnt_or_dsc)&nbsp;<span class="constructor">Slap_mat</span>.t<br>
 <span class="keyword">end</span></code></body></html>
