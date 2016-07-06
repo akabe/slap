@@ -450,7 +450,7 @@ val append :
   (('m, 'n) Slap_size.add, 'num, 'prec, 'cnt) t
 (** Concatenate two vectors. *)
 
-val shared_rev : ('n, 'num, 'prec, 'cd) t -> ('n, 'num, 'prec, 'cd) t
+val shared_rev : ('n, 'num, 'prec, 'cd) t -> ('n, 'num, 'prec, Slap_misc.dsc) t
 (** [shared_rev (x1, x2, ..., xn)]
     @return reversed vector [(xn, ..., x2, x1)]. The data are shared.
  *)
