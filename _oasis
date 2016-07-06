@@ -43,6 +43,8 @@ PreBuildCommand:        ocaml gen_config_h.ml; \
 PostCleanCommand:       rm -f \
                         lib/config.h \
                         lib/slap_size.mli lib/slap_size.ml \
+                        lib/slap_vec.mli lib/slap_vec.ml \
+                        lib/slap_mat.mli lib/slap_mat.ml \
                         lib/slap_[SDCZ].mli lib/slap_[SDCZ].ml \
                         lib/slap_version.ml
 
