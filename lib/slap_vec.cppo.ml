@@ -474,9 +474,11 @@ let subcntvec_dyn n ?(ofsx = 1) ((n', _, x) as vx) =
 let subdscvec_dyn nx ?(ofsx = 1) ?(incx = 1) (ny, incy, y) =
   if S.__expose nx = 0 then (nx, 1, y)
   else begin
+    let last_idx = Slap_size.__expose nx - 1 in
     let incz = incx * incy in
-    let ofsz = index ny incy ofsx in
-    let (i, j) = (ofsz, ofsz + abs incz * (S.__expose nx - 1)) in
+    let ofsz = index ny incy ofsx
+               - abs incz * (if incy > 0 then 0 else last_idx) in
+    let (i, j) = (ofsz, ofsz + abs incz * last_idx) in
     if (i < 1 || i > Array1.dim y) || (j < 1 || j > Array1.dim y)
     then failwith "Slap.Vec.subdscvec_dyn";
     (nx, incz, Array1.sub y ofsz ((S.__expose nx - 1) * abs incz + 1))
