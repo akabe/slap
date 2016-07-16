@@ -307,6 +307,27 @@ let exists2 p vx vy = not (for_all2 (fun xi yi -> not (p xi yi)) vx vy)
 
 let mem ?(equal=(=)) a = exists (equal a)
 
+(** {2 Subvectors} *)
+
+let subcntvec_dyn n ?(ofsx = 1) ((n', _, x) as vx) =
+  assert(S.__expose n' >= S.__expose n && check_cnt vx);
+  (n, 1, Array1.sub x ofsx (S.__expose n))
+
+let subdscvec_dyn nx ?(ofsx = 1) ?(incx = 1) (ny, incy, y) =
+  if S.__expose nx = 0 then (nx, 1, y)
+  else begin
+    let last_idx = Slap_size.__expose nx - 1 in
+    let incz = incx * incy in
+    let ofsz = index ny incy ofsx
+               - abs incz * (if incy > 0 then 0 else last_idx) in
+    let (i, j) = (ofsz, ofsz + abs incz * last_idx) in
+    if (i < 1 || i > Array1.dim y) || (j < 1 || j > Array1.dim y)
+    then failwith "Slap.Vec.subdscvec_dyn";
+    (nx, incz, Array1.sub y ofsz ((S.__expose nx - 1) * abs incz + 1))
+  end
+
+let subvec_dyn = subdscvec_dyn
+
 (** {2 Basic operations} *)
 
 external copy_stub :
@@ -347,37 +368,31 @@ let last_dyn x =
   if Slap_size.to_int (dim x) >= 1 then last x
   else failwith "Slap.Vec.last_dyn: an empty vector"
 
-let internal_tl ?y ~m ~n ~incx ~x =
-  let incy, y = opt_vec_alloc (Array1.kind x) m y in
-  if incx > 0
-  then copy_stub ~n:m ~ofsx:(1 + incx) ~incx x ~ofsy:1 ~incy y
-  else copy_stub ~n:m ~ofsx:1 ~incx x ~ofsy:1 ~incy y;
-  (m, incy, y)
+let internal_tl ~share n x =
+  let y = subdscvec_dyn n ~ofsx:2 x in
+  if share then y else copy y
 
-let tl ?y (n, incx, x) =
+let tl ?(share = false) ((n, _, _) as x) =
   assert(Slap_size.to_int n >= 1);
-  internal_tl ?y ~m:(Slap_size.pred n) ~n ~incx ~x
+  internal_tl ~share (Slap_size.pred n) x
 
-let tl_dyn ?y (n, incx, x) =
+let tl_dyn ?(share = false) ((n, _, _) as x) =
   if Slap_size.to_int n >= 1
-  then internal_tl ?y ~m:(Slap_size.pred_dyn n) ~n ~incx ~x
+  then internal_tl ~share (Slap_size.pred_dyn n) x
   else failwith "Slap.Vec.tl_dyn: an empty vector"
 
-let internal_intro ?y ~m ~n ~incx ~x =
-  let incy, y = opt_vec_alloc (Array1.kind x) m y in
-  if incx > 0
-  then copy_stub ~n:m ~ofsx:1 ~incx x ~ofsy:1 ~incy y
-  else copy_stub ~n:m ~ofsx:(1 - incx) ~incx x ~ofsy:1 ~incy y;
-  (m, incy, y)
+let internal_inits ~share n x =
+  let y = subdscvec_dyn n ~ofsx:1 x in
+  if share then y else copy y
 
-let inits ?y (n, incx, x) =
+let inits ?(share = false) ((n, _, _) as x) =
   assert(Slap_size.to_int n >= 1);
-  internal_intro ?y ~m:(Slap_size.pred n) ~n ~incx ~x
+  internal_inits ~share (Slap_size.pred n) x
 
-let inits_dyn ?y (n, incx, x) =
+let inits_dyn ?(share = false) ((n, _, _) as x) =
   if Slap_size.to_int n >= 1
-  then internal_intro ?y ~m:(Slap_size.pred_dyn n) ~n ~incx ~x
-  else failwith "Slap.Vec.init_dyn: an empty vector"
+  then internal_inits ~share (Slap_size.pred_dyn n) x
+  else failwith "Slap.Vec.inits_dyn: an empty vector"
 
 external fill_stub :
   n:'n S.t ->
@@ -463,25 +478,3 @@ let of_bigarray_c ?(share=false) ba =
   VEC (unsafe_of_bigarray ~share n ba)
 
 #endif
-
-
-(** {2 Subvectors} *)
-
-let subcntvec_dyn n ?(ofsx = 1) ((n', _, x) as vx) =
-  assert(S.__expose n' >= S.__expose n && check_cnt vx);
-  (n, 1, Array1.sub x ofsx (S.__expose n))
-
-let subdscvec_dyn nx ?(ofsx = 1) ?(incx = 1) (ny, incy, y) =
-  if S.__expose nx = 0 then (nx, 1, y)
-  else begin
-    let last_idx = Slap_size.__expose nx - 1 in
-    let incz = incx * incy in
-    let ofsz = index ny incy ofsx
-               - abs incz * (if incy > 0 then 0 else last_idx) in
-    let (i, j) = (ofsz, ofsz + abs incz * last_idx) in
-    if (i < 1 || i > Array1.dim y) || (j < 1 || j > Array1.dim y)
-    then failwith "Slap.Vec.subdscvec_dyn";
-    (nx, incz, Array1.sub y ofsz ((S.__expose nx - 1) * abs incz + 1))
-  end
-
-let subvec_dyn = subdscvec_dyn

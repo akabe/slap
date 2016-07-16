@@ -408,29 +408,37 @@ val last_dyn :
     @since 4.0.0 *)
 
 val tl :
-  ?y:('n, 'num, 'prec, 'y_cd) t ->
+  ?share:bool ->
   ('n Slap_size.s, 'num, 'prec, 'x_cd) t -> ('n, 'num, 'prec, 'x_cd) t
 (** @return a given vector without the first element. (typesafe)
+    @param share [true] if a returned subvector refers a given vector
+           (default = [false])
     @since 4.0.0 *)
 
 val tl_dyn :
-  ?y:('n Slap_size.p, 'num, 'prec, 'y_cd) t ->
+  ?share:bool ->
   ('n, 'num, 'prec, 'x_cd) t -> ('n Slap_size.p, 'num, 'prec, 'x_cd) t
 (** @return a given vector without the first element.
+    @param share [true] if a returned subvector refers a given vector
+           (default = [false])
     @since 4.0.0 *)
 
 val inits :
-  ?y:('n, 'num, 'prec, 'y_cd) t ->
+  ?share:bool ->
   ('n Slap_size.s, 'num, 'prec, 'x_cd) t -> ('n, 'num, 'prec, 'x_cd) t
 (** @return a given vector without the first element. (typesafe)
     This is the same as {i init} in Haskell.
+    @param share [true] if a returned subvector refers a given vector
+           (default = [false])
     @since 4.0.0 *)
 
 val inits_dyn :
-  ?y:('n Slap_size.p, 'num, 'prec, 'y_cd) t ->
+  ?share:bool ->
   ('n, 'num, 'prec, 'x_cd) t -> ('n Slap_size.p, 'num, 'prec, 'x_cd) t
 (** @return a given vector without the first element.
     This is the same as {i init} in Haskell.
+    @param share [true] if a returned subvector refers a given vector
+           (default = [false])
     @since 4.0.0 *)
 
 val copy :

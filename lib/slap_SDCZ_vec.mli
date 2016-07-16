@@ -131,27 +131,37 @@ val last_dyn :
     @since 4.0.0 *)
 
 val tl :
-  ?y:('n, 'y_cd) vec -> ('n Slap_size.s, 'x_cd) vec -> ('n, 'x_cd) vec
+  ?share:bool ->
+  ('n Slap_size.s, 'x_cd) vec -> ('n, 'x_cd) vec
 (** @return a given vector without the first element. (typesafe)
+    @param share [true] if a returned subvector refers a given vector
+           (default = [false])
     @since 4.0.0 *)
 
 val tl_dyn :
-  ?y:('n Slap_size.p, 'y_cd) vec ->
+  ?share:bool ->
   ('n, 'x_cd) vec -> ('n Slap_size.p, 'x_cd) vec
 (** @return a given vector without the first element.
+    @param share [true] if a returned subvector refers a given vector
+           (default = [false])
     @since 4.0.0 *)
 
 val inits :
-  ?y:('n, 'y_cd) vec -> ('n Slap_size.s, 'x_cd) vec -> ('n, 'x_cd) vec
+  ?share:bool ->
+  ('n Slap_size.s, 'x_cd) vec -> ('n, 'x_cd) vec
 (** @return a given vector without the first element. (typesafe)
     This is the same as {i init} in Haskell.
+    @param share [true] if a returned subvector refers a given vector
+           (default = [false])
     @since 4.0.0 *)
 
 val inits_dyn :
-  ?y:('n Slap_size.p, 'y_cd) vec ->
+  ?share:bool ->
   ('n, 'x_cd) vec -> ('n Slap_size.p, 'x_cd) vec
 (** @return a given vector without the first element.
     This is the same as {i init} in Haskell.
+    @param share [true] if a returned subvector refers a given vector
+           (default = [false])
     @since 4.0.0 *)
 
 val copy : ?y:('n, 'y_cd) vec -> ('n, 'x_cd) vec -> ('n, 'y_cd) vec
