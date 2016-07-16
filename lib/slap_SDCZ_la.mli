@@ -501,7 +501,7 @@ val getrs :
   ?ipiv:(('n, 'n) Slap_size.min, cnt) Slap_common.int32_vec ->
   trans:('n * 'n, 'n * 'n, _) trans3 ->
   ('n, 'n, 'a_cd) mat ->
-  ('n, 'n, 'b_cd) mat -> unit
+  ('n, 'nrhs, 'b_cd) mat -> unit
 (** [getrs ?ipiv trans a b] solves systems of linear equations [OP(a) * x = b]
     where [a] a ['n]-by-['n] general matrix, each column of matrix [b] is the
     r.h.s. vector, and each column of matrix [x] is the corresponding solution.
