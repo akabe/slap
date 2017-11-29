@@ -1,0 +1,41 @@
+(jbuild_version 1)
+
+(library
+ ((name        slap)
+  (public_name slap)
+  (modules     (Slap
+                S
+                Io
+                Mat
+                Vec
+                Size
+                Common
+                Misc))
+  (flags       (:standard
+                -w A-4-31-33-34-39-41-42-43-44-45-48-49-50-58
+                -safe-string -strict-sequence -strict-formats
+                -short-paths))
+  (libraries   (bigarray
+                lacaml))))
+
+(rule
+ ((targets (S.mli))
+  (deps    (SD.cppo.mli
+            SDCZ_common.mli
+            SDCZ_vec.mli SD_vec.mli
+            SDCZ_mat.mli SD_mat.mli
+            SDCZ_la.mli SD_la.mli))
+  (action  (run ${bin:cppo} ${<} -o ${@}
+                -V OCAML:${ocaml_version}
+                -D "XSDCZ S" -D "XBITS 32"))))
+
+(rule
+ ((targets (S.ml))
+  (deps    (SD.cppo.ml
+            SDCZ_common.ml
+            SDCZ_vec.ml SD_vec.ml
+            SDCZ_mat.ml SD_mat.ml
+            SDCZ_la.ml SD_la.ml))
+  (action  (run ${bin:cppo} ${<} -o ${@}
+                -V OCAML:${ocaml_version}
+                -D "XSDCZ S" -D "XBITS 32"))))
