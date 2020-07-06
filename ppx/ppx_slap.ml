@@ -282,7 +282,7 @@ struct
 
   (* error report: [%ocaml.error "message"] *)
   let error ?(loc = !default_loc) ?attrs msg =
-    let e_str = Exp.constant ~loc ?attrs (Const.string msg) in
+    let e_str = Exp.constant ~loc ?attrs (Const.string ~loc msg) in
     Exp.extension ({ txt = "ocaml.error"; loc },
                    PStr [Str.eval ~loc ?attrs e_str])
 end
