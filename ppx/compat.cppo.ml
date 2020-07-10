@@ -10,7 +10,11 @@ let nolabel = Nolabel (* Asttypes.arg_label for 4.03 only *)
 module Const =
 struct
   let int ?suffix n = Pconst_integer (string_of_int n, suffix)
-  let string ?quot s = Pconst_string (s, quot)
+#if OCAML_VERSION >= (4, 11, 0)
+  let string ~loc ?quot s = Pconst_string (s, loc, quot)
+#else
+  let string ~loc:_ ?quot s = Pconst_string (s, quot)
+#endif
 end
 
 #else
@@ -22,7 +26,7 @@ let nolabel = ""
 module Const =
 struct
   let int ?suffix n = Const_int n
-  let string ?quot s = Const_string (s, quot)
+  let string ~loc:_ ?quot s = Const_string (s, quot)
 end
 
 #endif
